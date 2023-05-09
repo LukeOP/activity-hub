@@ -1,0 +1,24 @@
+
+// $ah-primary: #3b657f;
+
+$ah-primary: #3B6580;
+$ah-primary-alt: #3C7DA6;
+$ah-primary-light: lighten($ah-primary, 8%);
+$ah-primary-dark: darken($ah-primary, 8%);
+$ah-primary-background: lighten($ah-primary, 55%);
+
+
+$ah-secondary: #FFAE33;
+$ah-secondary-alt: #F2C894;
+$ah-secondary-light: lighten($ah-secondary, 8%);
+$ah-secondary-dark: darken($ah-secondary, 8%);
+$ah-secondary-background: lighten($ah-secondary, 30%);
+
+$ah-background: #F1F1F1;
+$ah-background-dark: darken($ah-background, 20%);
+
+$ah-green: #0c6112;
+$ah-green-light: lighten($ah-green, 8%);
+$ah-green-dark: darken($ah-green, 8%);
+$ah-green-background: lighten($ah-green, 55%);
+
