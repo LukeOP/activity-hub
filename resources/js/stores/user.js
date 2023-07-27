@@ -8,9 +8,11 @@ function getState(){
         id: 0,
         first_name: "",
         last_name: "",
+        image: "",
         email: '',
         // admin: false,
       },
+      permissions: [],
       token: '',
     }
 }
@@ -24,31 +26,19 @@ export const useUserStore = defineStore('user', {
     },
     async login(userObject){
       const res = await axiosClient.post('/login', userObject)
-      if(res.data.data.user.is_admin.length < 1) this.setUser(res)
-      else this.setAdmin(res)
+      this.setUser(res)
     },
     setUser(res){
-      console.log('Logging In Tutor User')
       let user = res.data.data.user
       this.user.id = user.id
       this.user.first_name = user.first_name
       this.user.last_name = user.last_name
+      this.user.image = user.image
       this.user.email = user.email
       this.user.schools = user.schools
-      // this.user.admin = false
+      // this.user.schoolAdmin = user.is_admin
+      this.permissions = user.permissions
       this.token = res.data.data.token
-    },
-    setAdmin(res){
-      console.log('Logging In Admin User')
-      let user = res.data.data.user
-      this.user.id = user.id
-      this.user.first_name = user.first_name
-      this.user.last_name = user.last_name
-      this.user.email = user.email
-      this.user.schools = user.schools
-      this.user.schoolAdmin = user.is_admin[0]
-      this.token = res.data.data.token
-      // this.user.admin = true
     },
     async logout(){
       const res = await axiosClient.post('/logout')

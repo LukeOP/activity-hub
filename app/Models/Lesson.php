@@ -2,13 +2,26 @@
 
 namespace App\Models;
 
-use App\Http\Resources\StudentsResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Lesson extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'student_id',
+        'instrument',
+        'status',
+        'start',
+        'end',
+        'day',
+        'start_date',
+        'end_date',
+        'funding_type',
+        'fee'
+    ];
 
     public function user()
     {
@@ -25,13 +38,13 @@ class Lesson extends Model
         return $this->hasMany(LessonNotes::class)->orderBy('id', 'desc');
     }
 
-    // public function contacts()
-    // {
-    //     return $this->hasOne(Contacts::class);
-    // }
-
     public function school()
     {
         return $this->belongsTo(School::class);
+    }
+
+    public function attendance()
+    {
+        return $this->hasMany(LessonAttendance::class);
     }
 }

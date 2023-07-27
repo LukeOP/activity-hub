@@ -21,7 +21,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../../stores/user'
-import Calendar from '../Calendar.vue'
+import Calendar from '../Restricted/Dashboard/Calendar.vue'
 
 import {useToast} from 'vue-toast-notification';
 

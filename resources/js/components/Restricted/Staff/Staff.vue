@@ -1,5 +1,5 @@
 <template>
-  <h1>Edit Lesson</h1>
+  <h1>Staff</h1>
 </template>
 
 <script>

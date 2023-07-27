@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Http\Resources\ContactsResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Contacts;
@@ -19,5 +18,10 @@ class Student extends Model
     public function school()
     {
         return $this->belongsTo(School::class);
+    }
+
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TutorResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,11 +20,15 @@ class UsersController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a list of users from a particular school
      */
-    public function create()
+    public function getUsersInSchool($schoolId)
     {
-        //
+        $users = User::whereHas('schools', function ($query) use ($schoolId) {
+            $query->where('schools.id', $schoolId);
+        })->get();
+
+        return TutorResource::collection($users)->resolve();
     }
 
     /**
@@ -38,14 +43,6 @@ class UsersController extends Controller
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
     {
         //
     }

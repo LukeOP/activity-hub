@@ -11,6 +11,18 @@ class CalendarEvent extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'school_id',
+        'user_id',
+        'title',
+        'start',
+        'end',
+        'allDay',
+        'className',
+        'reference_type',
+        'reference_type_id',
+    ];
+
     public function lesson($id)
     {
         return LessonsResource::collection(

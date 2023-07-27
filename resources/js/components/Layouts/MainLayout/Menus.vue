@@ -1,20 +1,30 @@
 <template>
   <div class="menus">
     <img id="logo-img" src="/images/ActivityHub-Logo-Icon.png" alt="Activity Hub Logo">
+    <top-bar />
+    <profile-menu />
     <nav-bar @setState="stateControl" :state="currentState" />
     <action-bar @setState="stateControl" :state="currentState" />
+    <filter-bar @setState="stateControl" :state="currentState" />
   </div>
 </template>
 
 <script>
 import NavBar from './NavBar.vue'
 import ActionBar from './ActionBar.vue'
-import { ref, watch } from 'vue'
+import FilterBar from './FilterBar.vue'
+import ProfileMenu from './ProfileMenu.vue'
+import TopBar from './TopBar.vue'
+import { ref } from 'vue'
+
 
 export default {
   components: {
     NavBar,
-    ActionBar
+    ActionBar,
+    FilterBar,
+    ProfileMenu,
+    TopBar,
   },
   setup(){
 
@@ -22,9 +32,10 @@ export default {
 
     function stateControl(state){
       if(state === 'action true') currentState.value = 'action'
-      if(state === 'menu true') currentState.value = 'menu'
+      if(state === 'nav true') currentState.value = 'nav'
+      if(state === 'filter true') currentState.value = 'filter'
     }
-
+    
       return { currentState, stateControl }
   }
 }

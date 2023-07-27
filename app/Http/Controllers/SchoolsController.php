@@ -18,8 +18,11 @@ class SchoolsController extends Controller
     public function index()
     {
         return SchoolsResource::collection(
-            School::where('id', Auth::user()->school_id)->get()
+            School::all()
         );
+        // return SchoolsResource::collection(
+        //     School::where('id', Auth::user()->school_id)->get()
+        // );
     }
 
     /**
@@ -71,8 +74,8 @@ class SchoolsController extends Controller
 
     private function isNotAuthorized(School $school)
     {
-        if (Auth::user()->school_id != $school->id) {
-            return $this->error('', 'You are not authorized to make this request', 403);
-        }
+        // if (Auth::user()->school_id != $school->id) {
+        //     return $this->error('', 'You are not authorized to make this request', 403);
+        // }
     }
 }

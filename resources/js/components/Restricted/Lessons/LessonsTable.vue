@@ -7,24 +7,24 @@
     <table role="table" id="lesson-table">
       <thead role="rowgroup" id="table-head">
         <tr role="row" class="table-heading">
-        <th role="columnheader" style="width: 1%">Student Name:</th>
-        <th role="columnheader">Year:</th>
-        <th role="columnheader">Instrument:</th>
-        <th role="columnheader">Lesson Day:</th>
-        <th role="columnheader">Time:</th>
-        <th role="columnheader" class="d-none d-md-table-cell">Tutor:</th>
-        <th role="columnheader" class="d-none d-md-table-cell">Funding:</th>
-        <th role="columnheader" class="d-none d-md-table-cell">Status:</th>
-        <th role="columnheader" class="d-none d-md-table-cell" v-if="user.user.schools">School:</th>
+        <th role="columnheader" @click="sortData('student.last_name')" style="width: 1%">Student Name:</th>
+        <th role="columnheader" @click="sortData('student.year_level')">Year:</th>
+        <th role="columnheader" @click="sortData('attributes.instrument')">Instrument:</th>
+        <th role="columnheader" @click="sortData('attributes.day')">Lesson Day:</th>
+        <th role="columnheader" @click="sortData('attributes.start')">Time:</th>
+        <th role="columnheader" @click="sortData('tutor.last_name')" class="d-none d-md-table-cell">Tutor:</th>
+        <th role="columnheader" @click="sortData('attributes.funding_type')" class="d-none d-md-table-cell">Funding:</th>
+        <th role="columnheader" @click="sortData('attributes.status')" class="d-none d-md-table-cell">Status:</th>
+        <th role="columnheader" @click="sortData('school.name')" class="d-none d-md-table-cell" v-if="user.user.schools">School:</th>
         </tr>
       </thead>
       <tbody role="rowgroup" id="lesson-data">
         <tr role="row" class="lesson-row" v-for="lesson in lessons" :key="lesson.id" @click="handleLessonClick(lesson)">
           <td role="cell">{{lesson.student.first_name}} {{lesson.student.last_name}}</td>
-          <td role="cell">{{lesson.student.year_level}}</td>
+          <td role="cell"><span v-if="lesson.student.year_level">{{lesson.student.year_level}}</span></td>
           <td role="cell">{{lesson.attributes.instrument}}</td>
-          <td role="cell">{{lesson.attributes.day}}</td>
-          <td role="cell">{{formatTime(lesson.attributes.start)}}</td>
+          <td role="cell"><span v-if="lesson.attributes.day != 'Not Set'">{{lesson.attributes.day}}</span></td>
+          <td role="cell"><span v-if="lesson.attributes.start != null">{{formatTime(lesson.attributes.start)}}</span></td>
           <td role="cell" class="d-none d-md-table-cell">{{lesson.tutor.first_name}} {{lesson.tutor.last_name}}</td>
           <td role="cell" class="d-none d-md-table-cell"><span class="special"
           :class="{
@@ -41,6 +41,12 @@
         </tr>
       </tbody>
     </table>
+    <div>
+      <span class="tally">Total: {{getNum('total')}}</span>
+      <span class="tally">Active: {{getNum('Active')}}</span>
+      <span class="tally">New/Pending: {{getNum('Pending')}}</span>
+      <span class="tally">Waiting List: {{getNum('Waiting')}}</span>
+    </div>
   </div>
   
 </template>
@@ -48,14 +54,16 @@
 import { onMounted, ref } from 'vue'
 import axiosClient from '../../../axios'
 import { useRouter } from 'vue-router'
-import { useGeneralStore } from '../../../stores/general'
+ 
 import moment from 'moment'
 import { useUserStore } from '../../../stores/user'
+import useSorter from '../../../composables/useSorter'
 
 export default {
   setup(){
     const router = useRouter()
-    const general = useGeneralStore()
+    const sorter = useSorter()
+     
     const lessons = ref()
     const user = useUserStore()
 
@@ -69,13 +77,33 @@ export default {
       })
     }
 
+    function setActions(){
+      const actions = [
+        { header: 'New Lesson', to: { name: 'LessonCreate' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'},
+        { header: 'Attendance', to: { name: 'LessonAttendanceOverview' }, showSubItems: false, icon: 'fa-solid fa-user-check'},
+      ]
+      actions.setItems(actions)
+    }
+
     function formatTime(time){
       return moment(time, 'HH:mm:ss').format('h:mm A')
+    }
+
+    function getNum(type){
+      if(type != 'total'){
+        return lessons.value.filter(l => l.attributes.status == type).length
+      }
+      return lessons.value.length
+    }
+
+    function sortData(field){
+      sorter.sort(lessons.value, field)
     }
 
     onMounted(() => {
       axiosClient.get('lessons').then(res => {
         lessons.value = res.data.data
+        setActions()
       })
     })
 
@@ -84,6 +112,8 @@ export default {
       lessons,
       handleLessonClick,
       formatTime,
+      getNum,
+      sortData
     }
   }
 
@@ -136,6 +166,9 @@ export default {
         }
       }
     }
+  }
+  .tally {
+    margin-right: 2rem;
   }
   thead, tbody, tfoot, tr, td, th {
     width: 100%;
@@ -209,7 +242,7 @@ export default {
     You could also use a data-* attribute and content for this. That way "bloats" the HTML, this way means you need to keep HTML and CSS in sync. Lea Verou has a clever way to handle with text-shadow.
 		*/
 		td:nth-of-type(1):before { content: "Student Name"; }
-		td:nth-of-type(2):before { content: "Year"; }
+		// td:nth-of-type(2):before { content: "Year"; }
 		td:nth-of-type(3):before { content: "Instrument"; }
 		td:nth-of-type(4):before { content: "Lesson Day"; }
 		td:nth-of-type(5):before { content: "Time"; }

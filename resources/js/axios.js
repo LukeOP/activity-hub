@@ -13,7 +13,6 @@ const axiosClient = axios.create({
   headers: {
     'Accept': 'application/vnd.api+json',
     'Content-Type': "application/vnd.api+json",
-    'Access-Control-Allow-Origin': url,
   }
 })
 

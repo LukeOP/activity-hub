@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\ContactsController;
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\LessonAttendanceController;
 use App\Http\Controllers\LessonNotesController;
 use App\Http\Controllers\LessonsController;
 use App\Http\Controllers\SchoolsController;
@@ -27,12 +29,18 @@ Route::post('/register', [AuthController::class, 'register']);
 // Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/image/{path}/{filename}', [ImageController::class, 'getImage']);
+    Route::post('/image', [ImageController::class, 'storeImage']);
     Route::resource('/users', UsersController::class);
+    Route::get('school-users/{schoolId}', [UsersController::class, 'getUsersInSchool']);
     Route::resource('/tasks', TasksController::class);
     Route::resource('/students', StudentsController::class);
+    Route::get('school-students/{schoolId}', [StudentsController::class, 'getStudentsInSchool']);
     Route::resource('/student-contacts', ContactsController::class);
     Route::resource('/schools', SchoolsController::class);
     Route::resource('/lessons', LessonsController::class);
     Route::resource('/lesson-notes', LessonNotesController::class);
+    Route::resource('/lessonAttendance', LessonAttendanceController::class);
+    Route::get('lesson-attendance/{id}/{date}', [LessonAttendanceController::class, 'getAttendanceRecordByIdAndDate']);
     Route::resource('/calendar-events', CalendarEventController::class);
 });

@@ -1,9 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import { useUserStore } from "../stores/user";
-import { useGeneralStore } from "../stores/general";
 import publicRoutes from "./publicRoutes";
-import authRoutes from "./authRoutes";
+import authRoutes from "./authRoutes/authRoutes";
 
 import Test from '../components/Public/Test.vue'
 

@@ -15,8 +15,22 @@ class StudentsController extends Controller
     public function index()
     {
         return StudentsResource::collection(
-            Student::where('school_id', Auth::user()->isAdmin[0]->id)->get()
+            Student::where('school_id', Auth::user()->isAdmin[0]->id)->orderBy('last_name')->get()
         );
+    }
+
+    /**
+     * Display a list of students from a particular school
+     */
+    public function getStudentsInSchool($schoolId)
+    {
+        $students = Student::whereHas('school', function ($query) use ($schoolId) {
+            $query->where('schools.id', $schoolId);
+        })->get();
+
+        // Return the students or pass them to a resource for transformation.
+
+        return $students;
     }
 
     /**

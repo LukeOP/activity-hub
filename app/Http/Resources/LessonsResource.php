@@ -25,8 +25,10 @@ class LessonsResource extends JsonResource
                 'funding_type' => $this->funding_type,
                 'fee' => $this->fee,
                 'startDate' => $this->start_date,
+                'endDate' => $this->end_date,
             ],
-            'notes' => $this->notes,
+            'attendance' => $this->attendance,
+            'notes' => LessonNotesResource::collection($this->notes),
             'school' => [
                 'id' => $this->student->school->id,
                 'name' => $this->student->school->name,

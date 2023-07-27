@@ -1,57 +1,33 @@
 <template>
   <div class="row">
-    <div class="col col-12 col-md-6">
-      <h1>Your Day</h1>
-      <calendar :events="events" :headerToolbar="headerToolbar" v-if="ready" />
+    <div class="col col-12">
+      <h2>Lessons</h2>
+      <calendar class="calendar" />
+    </div>
+
+    <div class="modal-route">
+        <router-view></router-view>
     </div>
   </div>
 </template>
 
-<script>
-import { onMounted, ref } from 'vue'
-import Calendar from '../../Calendar.vue'
-import axiosClient from '../../../axios'
+<script setup>
+import { useActionsStore } from '../../../stores/actions'
+import Calendar from './Calendar.vue'
 
-import { useCalendarEventFormatter } from '../../../composables/useCalendarEventFormatter'
-import { useWindowSize } from '../../../composables/useWindowSize'
+const actions = useActionsStore()
 
-export default {
-  components: {
-    Calendar
-  },
-  setup(){
-    const formatEvent = useCalendarEventFormatter()
-    const windowSize = useWindowSize()
-    const events = ref([])
-    const headerToolbar = ref({
-        left: 'title',
-        right: 'today prev,next'
-      })
-    const ready = ref(false)
-
-    
-    onMounted(()=> {
-      axiosClient.get('/calendar-events').then(res => {
-        events.value = formatEvent(res.data.data)
-        if(windowSize < 768){
-        headerToolbar.value = {
-          left: 'prev,next,today'
-        }
-      }
-        ready.value = true
-      })
-    })
-
-    return {
-      ready,
-      events,
-      headerToolbar
-    }
-  }
-
-}
+const actionArray = [
+  { header: 'New Lesson', to: { name: 'LessonCreate' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'},
+  { header: 'Lesson Attendance', to: { name: 'LessonAttendanceOverview' }, showSubItems: false, icon: 'fa-solid fa-user-check'},
+]
+actions.setItems(actionArray)
 </script>
 
-<style>
+<style lang="scss" scoped>
+  .calendar {
+    height: calc(100vh - 150px);
+    max-height: 710px;
+  }
 
 </style>

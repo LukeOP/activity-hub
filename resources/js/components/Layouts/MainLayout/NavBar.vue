@@ -1,125 +1,138 @@
 <template>
   <div class="menu-container">
-    <div class="menu-toggle" @click="toggleMenu">
+    <!-- <div class="menu-toggle" @click="toggleMenu">
       <span class="btn btn-primary">
         <i class="fa-solid" :class="[getMenuIcon(), {rotate: !menuVisible}]"></i>
       </span>
-    </div>
-    <nav class="menu" :class="{ 'menu--visible': menuVisible }">
+    </div> -->
+    <nav class="menu" :class="{ 'menu-visible': navVisible }">
       
       <div id="sideBar">
+        <img id="logo-img" src="/images/ActivityHub-Logo.png" alt="Activity Hub Logo">
 
-    <img id="logo-img" src="/images/ActivityHub-Logo.png" alt="Activity Hub Logo">
+        <div id="nav">
+          <router-link v-for="item in navItems" :key="item" :to="item.to" class="link" @click="menu.navActive = false" :class="{ active: isActive(item) }">
+            <span class="linkText"><i class="me-3 icon" :class="item.icon"></i>{{item.header}}</span>
+              <div v-show="item.subItems && item.showSubItems" class="subItemContainer">
+                <router-link v-for="subItem in item.subItems" :key="subItem.header" :to="subItem.to" class="subLink" :class="{ activeSub: isActive(subItem) }">
+                  {{ subItem.header}}
+                </router-link>
+              </div>
+          </router-link>
+        </div>
 
-    <div id="nav">
-      <router-link v-for="item in navItems" :key="item" :to="item.to" class="link" @click="menuVisible = false" :class="{ active: isActive(item) }" @mouseover="item.showSubItems = true" @mouseleave="item.showSubItems = false">
-        <span class="linkText"><i class="me-3 icon" :class="item.icon"></i>{{item.header}}</span>
-          <div v-show="item.subItems && item.showSubItems">
-            <router-link v-for="subItem in item.subItems" :key="subItem.header" :to="subItem.to" class="subLink" :class="{ active: isActive(subItem) }">
-              {{ subItem.header}}
-            </router-link>
+        <div id="settings">
+          <div v-if="navVisible">
+            <span id="user-img" @click="handleProfile">
+              <img v-if="userImage" :src="userImage" alt="Profile Image">
+              <img v-else src="/storage/userImages/user.png" alt="Profile Image">
+              <p>Profile</p>
+            </span>
+            <p @click="handleLogout"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Logout</p>
           </div>
-      </router-link>
+          
+        </div>
 
-    </div>
-
-    <div id="settings">
-      <!-- <p @click="handleSchools">Linked Schools</p> -->
-      <p @click="handleLogout"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Logout</p>
-    </div>
-
-  </div>
-
-
+      </div>
 
     </nav>
-    <div class="menu-overlay" v-if="menuVisible" @click="hideMenu"></div>
+    <div class="menu-overlay" v-if="navVisible" @click="menu.navActive = false"></div>
   </div>
 </template>
 
-<script>
-import { ref, watch } from 'vue'
+<script setup>
+import { computed, ref, watch } from 'vue'
 import { useUserStore } from '../../../stores/user'
+import { useMenuStore } from '../../../stores/menu'
 import { useRoute, useRouter } from 'vue-router'
-
 import { useWindowSize } from '../../../composables/useWindowSize'
-import axiosClient from '../../../axios'
+import { useFilterStore } from '../../../stores/filter'
 
-export default {
-  emits: ['setState'],
-  props: ['state'],
-  setup(props, context) {
-    const router = useRouter()
-    const route = useRoute()
-    const user = useUserStore()
-    const windowSize = useWindowSize()
+const props = defineProps({state: String})
+const emit = defineEmits(['setState'])
 
-    const navItems = ref([
-      { header: 'Dashboard', to: { name: 'YourDay' }, showSubItems: false, icon: 'fa-solid fa-house'},
-      { header: 'Lessons', to: { name: 'LessonsTable' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'},
-    ])
+const router = useRouter()
+const route = useRoute()
+const user = useUserStore()
+const menu = useMenuStore()
+const windowSize = useWindowSize()
+const userImage = ref(null)
+const navVisible = ref(false)
 
-    const isActive = (item) => {
-      if (item.subItems) {
-        return item.subItems.some(subItem => subItem.to.name === route.name)
-      } else {
-        return item.to.name === route.name
-      }
-    }
-
-    watch(windowSize,(newSize, oldSize) => {
-      if(newSize.width > 768) menuVisible.value = false
-    })
-
-    watch(() => props.state, (newValue, oldValue) => {
-        if(newValue === 'action') menuVisible.value = false;
-      }
-    );
-
-    const menuVisible = ref(false)
-
-    const toggleMenu = () => {
-      menuVisible.value = !menuVisible.value
-      context.emit('setState', 'menu ' + menuVisible.value)
-    }
-
-    function getMenuIcon(){
-      if(menuVisible.value === true) return 'fa-xmark'
-      return 'fa-bars'
-    }
-
-    const hideMenu = () => {
-      menuVisible.value = false
-    }
-
-    function handleLogout(){
-      user.logout().then(()=>{
-        router.push({
-          name: 'home'
-        })
-      })
-    }
-
-    function handleSchools(){
-      user.user.schools.forEach(school => {
-        console.log(school.name)
-      });
-    }
-
-    return {
-      user: user.user,
-      navItems,
-      isActive,
-      menuVisible,
-      toggleMenu,
-      getMenuIcon,
-      hideMenu,
-      handleLogout,
-      handleSchools
-    }
-  },
+function getUserImage(){
+  let path = '/storage/userImages/'
+  if(user.user.image != 'user.png'){
+    userImage.value = path + user.user.image
+  }
 }
+getUserImage()
+
+function handleProfile(){
+  router.push({
+    name: 'Profile',
+    params: {
+      id: user.user.id
+    }
+  })
+  hideMenu()
+}
+
+const navItems = ref([
+  { header: 'Dashboard', to: { name: 'YourDay' }, showSubItems: false, icon: 'fa-solid fa-house'},
+  { header: 'Lessons', to: { name: 'LessonsList' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'},
+])
+
+if(user.permissions.find(p => p.type === 'administrator')) {
+  // navItems.value.push({ header: 'Staff', to: { name: 'StaffTable' }, showSubItems: false, icon: 'fa-solid fa-user-group'})
+} 
+
+const isActive = (item) => {
+  if (item.subItems) {
+    return item.subItems.some(subItem => subItem.to.name === route.name)
+  } else {
+    return item.to.name === route.name
+  }
+}
+
+watch(() => props.state, (newValue, oldValue) => {
+    if(newValue === 'action' || newValue === 'filter') menu.navActive = false;
+  }
+);
+watch(() => route.path, () => {
+  resetNav()
+  if(route.path.includes('lessons')){
+    let item = navItems.value.filter(i => i.header === 'Lessons')
+    item[0].showSubItems = true
+  }
+})
+
+function resetNav(){
+  navItems.value.forEach(item => {
+    item.showSubItems = false
+  });
+}
+
+watch(() => menu.navActive, (newValue) => {
+  navVisible.value = newValue
+  emit('setState', 'nav ' + navVisible.value)
+})
+
+function handleLogout(){
+  user.logout().then(()=>{
+    router.push({
+      name: 'home'
+    })
+  })
+}
+
+function handleSchools(){
+  user.user.schools.forEach(school => {
+    console.log(school.name)
+  });
+}
+
 </script>
+
 
 <style lang="scss" scoped>
 /* Menu container styles */
@@ -161,17 +174,17 @@ export default {
     }
     .subLink {
       display: block;
-      background-color: lighten($ah-primary, 60%);
       text-decoration: none;
       padding: 10px 20px;
-      color: $ah-primary;
+      color: white;
+      font-weight: 400;
 
       &:hover {
-        background-color: $ah-primary;
-        color: lighten($ah-primary, 55%);
+        background: $ah-primary-light;
+        font-weight: bold;
       }
     }
-    .router-link-exact-active, .active {
+    .active {
       background-color: $ah-primary;
       border-left: 8px solid $ah-primary-light;
       color: lighten($ah-primary, 55%);
@@ -181,12 +194,35 @@ export default {
         padding: 12px;
       }
     }
+    .activeSub {
+      font-weight: bold;
+    }
   }
 
   #settings {
   height: 150px;
   background-color: $ah-primary;
   padding-top: 10px;
+
+    #user-img {
+      display: block;
+      height: fit-content;
+      width: 100%;
+      border-bottom: 1px solid $ah-primary-dark;
+      cursor: pointer;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+      img{
+        height: 40px;
+        width: 40px;
+        margin-left: 10px;
+        border-radius: 50%;
+      }
+      p {
+        display: inline;
+      }
+      
+    }
     p {
       color: white;
       padding-left: 10px;
@@ -230,7 +266,7 @@ export default {
 }
 
 /* Menu visible state */
-.menu--visible {
+.menu-visible {
   transform: translateX(260px); /* end position */
 }
 /* action toggle rotate */
@@ -279,6 +315,12 @@ export default {
   opacity: 1;
   pointer-events: auto;
 }
+
+.subItemContainer {
+  background: $ah-primary;
+  box-shadow: inset 5px 5px 10px $ah-primary-dark;
+}
+
 /* Styles for mobile */
 @media (max-width: 768px) {
   .menu {

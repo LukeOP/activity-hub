@@ -5,6 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Http\Resources\SchoolsResource;
+use App\Http\Resources\SubjectResource;
+use App\Http\Resources\UserPermissionsResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -23,6 +25,7 @@ class User extends Authenticatable
         // 'name',
         'first_name',
         'last_name',
+        'image',
         'email',
         'password',
         'school_id'
@@ -54,18 +57,29 @@ class User extends Authenticatable
 
     public function userSchools()
     {
-        $schools = $this->belongsToMany(School::class, 'user_schools', 'user_id', 'school_id')->get();
+        $schools = $this->belongsToMany(School::class, 'user_schools', 'user_id', 'school_id')->orderBy('name')->get();
         return SchoolsResource::collection($schools);
     }
 
     public function isAdmin()
     {
-        return $this->belongsToMany(School::class, 'school_administrators', 'user_id', 'school_id');
+        return $this->userPermissions()->where('permission_type', 'administrator');
     }
 
-    public function adminSchools()
+    public function userPermissions()
     {
-        $schools = $this->belongsToMany(School::class, 'school_administrators', 'user_id', 'school_id')->get();
-        return SchoolsResource::collection($schools);
+        return $this->hasMany(UserPermissions::class, 'user_id');
+    }
+
+    public function permissionsForSchool($schoolId)
+    {
+        $permissions = $this->userPermissions()->where('school_id', $schoolId)->get();
+        return UserPermissionsResource::collection($permissions);
+    }
+
+    public function getSubjects()
+    {
+        $subjects = $this->belongsToMany(Subject::class, 'user_subjects', 'user_id')->get();
+        return SubjectResource::collection($subjects);
     }
 }

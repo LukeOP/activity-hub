@@ -3,7 +3,13 @@
     <menus />
     <div id="main-container">
       <div class="container">
-        <router-view />
+
+        <router-view v-slot="{ Component }">
+          <transition name="route" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
+
       </div>
     </div>
   </div>
@@ -34,6 +40,25 @@ export default {
     width: 100%;
     left: 0px;
   }
+}
+
+
+
+/* route transitions */
+
+.route-enter-from {
+  opacity: 0;
+  transform: translateX(100px);
+}
+.route-enter-active {
+  transition: all 0.3s ease-out;
+}
+.route-leave-to {
+  opacity: 0;
+  transform: translateX(-100px);
+}
+.route-leave-active {
+  transition: all 0.3s ease-in;
 }
 
 </style>

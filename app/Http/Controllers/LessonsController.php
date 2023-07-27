@@ -15,18 +15,22 @@ class LessonsController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+
         // User is not an admin
-        if (count(Auth::user()->isAdmin) < 1) {
+        if (!$user->isAdmin) {
             return LessonsResource::collection(
-                Lesson::where('user_id', Auth::user()->id)->get()
+                Lesson::where('user_id', $user->id)->get()
             );
         } else {
+            $schoolIds = $user->isAdmin->pluck('school_id')->toArray();
+
             return LessonsResource::collection(
-                // Lesson::whereHas('student', fn ($query) => $query->where('school_id', Auth::user()->isAdmin[0]->id))->get()
-                Lesson::whereHas('student', fn ($query) =>
-                $query->where('school_id', Auth::user()->isAdmin[0]->id)
-                    ->orWhere('user_id', Auth::user()->id))
-                    ->get()
+                Lesson::where(function ($query) use ($schoolIds, $user) {
+                    $query->whereHas('student', function ($query) use ($schoolIds) {
+                        $query->whereIn('school_id', $schoolIds);
+                    })->orWhere('user_id', $user->id);
+                })->get()
             );
         }
     }
@@ -36,7 +40,14 @@ class LessonsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $lesson = Lesson::create([
+            'user_id' => $request->tutor,
+            'student_id' => $request->student,
+            'instrument' => $request->instrument,
+        ]);
+
+        return new LessonsResource($lesson);
     }
 
     /**
@@ -51,9 +62,14 @@ class LessonsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update($id, Request $request)
     {
-        //
+        $lesson = Lesson::findOrFail($id);
+
+        $lesson->fill($request->all());
+        $lesson->save();
+
+        return response()->json(['message' => 'lesson updated successfully', 'lesson' => new LessonsResource(Lesson::where('id', $lesson['id'])->first())]);
     }
 
     /**
