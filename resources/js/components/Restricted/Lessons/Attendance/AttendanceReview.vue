@@ -1,5 +1,5 @@
 <template>
-<div v-if="!loading && lessons.length > 0">
+<div v-if="!loading">
   <section id="table-header-section">
     <table>
       <thead>
@@ -16,7 +16,7 @@
     </table>
   </section>
 
-  <section id="table-body-section" style="overflow-y:auto">
+  <section id="table-body-section" style="overflow-y:auto" v-if="lessons.length > 0">
     <table>
       <tbody>
         <tr v-for="record in lessons" :key="record">
@@ -30,6 +30,9 @@
         </tr>
       </tbody>
     </table>
+  </section>
+  <section v-else>
+    <p id="no-records">No records for this time period</p>
   </section>
     
 </div>
@@ -87,6 +90,15 @@ table {
 }
 #table-body-section {
   max-height: calc(100vh - 200px);
+  border-bottom: 5px solid $ah-primary;
+}
+#no-records {
+  width: 100%;
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-size: 1.25rem;
+  color: $ah-primary;
   border-bottom: 5px solid $ah-primary;
 }
 .attendance {

@@ -122,6 +122,47 @@
   box-shadow: none;
 }
 
+// Secondary Outline Button
+.btn.btn-outline-secondary {
+  color: $ah-secondary;
+  background-color: white;
+  border-color: $ah-secondary;
+}
+.btn.btn-outline-secondary.focus,
+.btn.btn-outline-secondary:focus {
+  color: #fff;
+  background-color: $ah-secondary-dark;
+  border-color: $ah-secondary-dark;
+  outline: none;
+  box-shadow: none;
+}
+.btn.btn-outline-secondary:hover {
+  color: #fff;
+  background-color: $ah-secondary-dark;
+  border-color: $ah-secondary-dark;
+  outline: none;
+  box-shadow: none;
+}
+.btn.btn-outline-secondary.active,
+.btn.btn-outline-secondary:active {
+  color: #fff;
+  background-color: $ah-secondary-dark;
+  border-color: $ah-secondary-dark;
+  outline: none;
+}
+.btn.btn-outline-secondary.active.focus,
+.btn.btn-outline-secondary.active:focus,
+.btn.btn-outline-secondary.active:hover,
+.btn.btn-outline-secondary:active.focus,
+.btn.btn-outline-secondary:active:focus,
+.btn.btn-outline-secondary:active:hover {
+  color: #fff;
+  background-color: $ah-secondary-dark;
+  border-color: $ah-secondary-dark;
+  outline: none;
+  box-shadow: none;
+}
+
 // Grey Button
 .btn.btn-grey {
   color: #fff;
@@ -166,9 +207,9 @@
 // Grey Outline Button
 .btn-outline-grey {
   
-  color: $ah-grey-dark;
+  color: darken($ah-grey-dark, 20%);
   border-color: $ah-grey;
-  background-color: white;
+  background-color: lighten($ah-grey-light, 7%);
 }
 .btn-outline-grey.focus,
 .btn-outline-grey:focus {
@@ -180,7 +221,7 @@
 }
 .btn-outline-grey:hover {
   background-color: $ah-grey-dark;
-  border-color: $ah-grey-dark;
+  border-color: white;
   color: white;
   outline: none;
   box-shadow: none;

@@ -3,9 +3,9 @@ import { useUserStore } from './stores/user'
 
 
 let url = ''
-// if(process.env.MIX_APP_ENV === 'production') url = 'https://activityhub.co.nz'
-// else url = 'http://localhost:8000'
-url = 'http://localhost:8000'
+if(process.env.MIX_APP_ENV === 'production') url = 'http://activityhub.co.nz'
+else url = 'http://localhost:8000'
+// url = 'http://localhost:8000'
 
 
 const axiosClient = axios.create({
@@ -13,6 +13,7 @@ const axiosClient = axios.create({
   headers: {
     'Accept': 'application/vnd.api+json',
     'Content-Type': "application/vnd.api+json",
+    'Access-Control-Allow-Origin': url
   }
 })
 

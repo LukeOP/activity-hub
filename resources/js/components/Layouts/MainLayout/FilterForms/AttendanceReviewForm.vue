@@ -18,8 +18,16 @@
   <label for="end-date" class="ms-1">To</label>
   <input type="date" name="end-date" v-model="filtering.end_date" class="form-control" :min="filtering.start_date">
 
-  <div class="btn btn-primary form-control mt-2" @click="returnFiltered">Filter</div>
-  <div class="btn btn-outline-grey form-control mt-2" id="clear-btn" @click="clearFilter">Clear Filter</div>
+  <div class="btn btn-primary form-control mt-4" @click="returnFiltered">Filter</div>
+  <div class="btn btn-outline-grey form-control mt-2 mb-5" id="clear-btn" @click="clearFilter">Clear Filter</div>
+
+  <div>
+    <div class="mb-2" style="width:100%; text-align:center; border-bottom:1px solid white">Quick Options</div>
+    <button class="btn btn-primary form-control mb-2" @click="quickOption('today')">Today</button>
+    <button class="btn btn-primary form-control mb-2" @click="quickOption('yesterday')">Yesterday</button>
+    <button class="btn btn-primary form-control mb-2" @click="quickOption('last 7')">Last 7 Days</button>
+    <button class="btn btn-primary form-control mb-2" @click="quickOption('last 14')">Last 14 Days</button>
+  </div>
 </div>
   
   
@@ -53,10 +61,9 @@ const tutorArray = computed(()=>{
 const filtering = ref({
   attendance: '',
   tutor: '',
-  start_date: moment().subtract(7,'d').format('YYYY-MM-DD'),
-  end_date: moment().format('YYYY-MM-DD')
+  start_date: formatDate(moment().subtract(7,'d')),
+  end_date: formatDate(moment())
 })
-console.log(filtering.value)
 
 function returnFiltered(){
   let filteredAttendance = originalData.value
@@ -64,7 +71,10 @@ function returnFiltered(){
   if(filtering.value.attendance != '') filteredAttendance = filteredAttendance.filter(att => att.lesson.attendance == filtering.value.attendance)
   if(filtering.value.tutor != '') filteredAttendance = filteredAttendance.filter(d => d.tutor.id == filtering.value.tutor)
   sorter.sort(filteredAttendance, 'lesson.date', 'desc')
-  filter.setReturned(filteredAttendance)
+  Object.keys(filteredAttendance).length > 0 
+  ? filter.setReturned(filteredAttendance)
+  : filter.setReturned({id: 0})
+  
 }
 
 returnFiltered()
@@ -73,10 +83,22 @@ function clearFilter(){
   filtering.value = {
     attendance: '',
     tutor: '',
-    start_date: moment().subtract(7,'d').format('YYYY-MM-DD'),
-    end_date: moment().format('YYYY-MM-DD')
+    start_date: formatDate(moment().subtract(7,'d')),
+    end_date: formatDate(moment())
   }
-  filter.setReturned({})
+  returnFiltered()
+}
+
+function formatDate(date){
+  return moment(date).format('YYYY-MM-DD')
+}
+
+function quickOption(option){
+  if(option === 'today') {filtering.value.start_date = formatDate(moment()); filtering.value.end_date = formatDate(moment())}
+  if(option === 'yesterday') {filtering.value.start_date = formatDate(moment().subtract(1,'d')); filtering.value.end_date = formatDate(moment().subtract(1,'d'))}
+  if(option === 'last 7') {filtering.value.start_date = formatDate(moment().subtract(7,'d')); filtering.value.end_date = formatDate(moment())}
+  if(option === 'last 14') {filtering.value.start_date = formatDate(moment().subtract(14,'d')); filtering.value.end_date = formatDate(moment())}
+  returnFiltered()
 }
 </script>
 
