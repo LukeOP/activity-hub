@@ -18,4 +18,9 @@ class LessonAttendance extends Model
         'time',
         'user_id'
     ];
+
+    public function lesson()
+    {
+        return $this->belongsTo(Lesson::class);
+    }
 }

@@ -22,11 +22,12 @@
   import { ref, shallowRef, watch } from 'vue'
   import { useUserStore } from '../../../stores/user'
   import { useRoute } from 'vue-router'
+import { useFilterStore } from '../../../stores/filter'
+import { useMenuStore } from '../../../stores/menu'
 
   import LessonsForm from './FilterForms/LessonsForm.vue'
   import AttendanceSingleForm from './FilterForms/AttendanceSingleForm.vue'
-import { useFilterStore } from '../../../stores/filter'
-import { useMenuStore } from '../../../stores/menu'
+  import AttendanceReviewForm from './FilterForms/AttendanceReviewForm.vue'
 
   const props = defineProps({state: String})
   const emit = defineEmits(['setState'])
@@ -41,6 +42,7 @@ import { useMenuStore } from '../../../stores/menu'
   watch(() => filter.type, (newValue) => {
     if(newValue == 'LessonsForm') activeComponent.value = LessonsForm
     else if(newValue == 'AttendanceSingleForm') activeComponent.value = AttendanceSingleForm
+    else if(newValue == 'AttendanceReviewForm') activeComponent.value = AttendanceReviewForm
     else activeComponent.value = null
   })
 

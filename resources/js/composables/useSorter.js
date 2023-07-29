@@ -1,19 +1,22 @@
 export default function useSorter() {
-  function sort(value, propertyName) {
-    // console.log('Values:' ,value);
-
+  function sort(value, propertyName, sortOrder = 'asc') {
     value.sort((a, b) => {
       const propertyA = getProperty(a, propertyName).toUpperCase();
       const propertyB = getProperty(b, propertyName).toUpperCase();
 
+      let result = 0;
       if (propertyA < propertyB) {
-        return -1;
-      }
-      if (propertyA > propertyB) {
-        return 1;
+        result = -1;
+      } else if (propertyA > propertyB) {
+        result = 1;
       }
 
-      return 0;
+      // Apply descending order if sortOrder is 'desc'
+      if (sortOrder === 'desc') {
+        result *= -1;
+      }
+
+      return result;
     });
   }
 

@@ -13,7 +13,8 @@ class LessonAttendanceController extends Controller
      */
     public function index()
     {
-        //
+        $attendance = LessonAttendanceResource::collection(LessonAttendance::all());
+        return $attendance;
     }
 
     /**
