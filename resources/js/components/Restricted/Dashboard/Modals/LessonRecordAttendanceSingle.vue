@@ -1,5 +1,8 @@
 <template>
-<modal-template-vue title="Record Lesson Attendance" :push='returnDetails' v-if="lesson != null">
+<ModalTemplate :modalActive="true">
+
+</ModalTemplate>
+<!-- <modal-template-vue title="Record Lesson Attendance" :push='returnDetails' v-if="lesson != null">
   <span style="height:fit-content; background:blue">
     <form style="padding:1rem" @submit.prevent="handleClick('custom')">
       <div class="row">
@@ -32,14 +35,14 @@
       </div>
     </form>
   </span>
-</modal-template-vue>
+</modal-template-vue> -->
 
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import ModalTemplateVue from '../../../ModalTemplate.vue'
+import ModalTemplate from '../../../Modal.vue'
 import useApi from '../../../../composables/useApi'
 import moment from 'moment'
 import { useUserStore } from '../../../../stores/user'
@@ -63,7 +66,7 @@ const attendanceData = ref({
   attendance: "",
   date: moment(currentCalendar.dateTime).format('YYYY-MM-DD'),
   time: moment(currentCalendar.dateTime).format('hh:mm'),
-  tutor_id: user.user.id
+  tutor_id: user.attributes.id
 })
 
 const customData = ref({

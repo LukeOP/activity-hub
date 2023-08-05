@@ -9,7 +9,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import NavBar from './NavBar.vue'
 import ActionBar from './ActionBar.vue'
 import FilterBar from './FilterBar.vue'
@@ -18,26 +18,12 @@ import TopBar from './TopBar.vue'
 import { ref } from 'vue'
 
 
-export default {
-  components: {
-    NavBar,
-    ActionBar,
-    FilterBar,
-    ProfileMenu,
-    TopBar,
-  },
-  setup(){
+const currentState = ref('')
 
-    const currentState = ref('')
-
-    function stateControl(state){
-      if(state === 'action true') currentState.value = 'action'
-      if(state === 'nav true') currentState.value = 'nav'
-      if(state === 'filter true') currentState.value = 'filter'
-    }
-    
-      return { currentState, stateControl }
-  }
+function stateControl(state){
+  if(state === 'action true') currentState.value = 'action'
+  if(state === 'nav true') currentState.value = 'nav'
+  if(state === 'filter true') currentState.value = 'filter'
 }
 </script>
 

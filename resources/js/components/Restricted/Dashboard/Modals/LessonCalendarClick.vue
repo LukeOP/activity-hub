@@ -1,37 +1,40 @@
 <template>
-<modal-template-vue title="What would you like to do?" :push='returnDetails'>
-  <span style="text-align:center; height:fit-content; background:blue">
-    <form class="mt-3 row" style="padding:1rem">
-      <div class="col-12 col-md-6 icon" @click="handleClick('Attendance')" v-if="!futureEvent && !attendanceRecorded()">
-        <i class="fa-solid fa-user-check fa-8x mb-3"></i>
-        <input type="button" value="Mark Attendance" class="btn btn-primary form-control">
-      </div>
+  <h2 class="mb-4">What would you like to do?</h2>
+  <div class="options">
+    <div class="col-12 col-md-6 icon" @click="handleClick('Attendance')" v-if="!futureEvent && !attendanceRecorded()">
+      <i class="fa-solid fa-user-check fa-8x mb-3"></i>
+      <input type="button" value="Mark Attendance" class="btn btn-primary form-control">
+    </div>
 
-      <div class="col-12 col-md-6 icon" @click="handleClick('Review')" v-else-if="!futureEvent && attendanceRecorded()">
-        <i class="fa-solid fa-user-check fa-8x mb-3"></i>
-        <input type="button" value="Review Attendance" class="btn btn-primary form-control">
-      </div>
+    <div class="col-12 col-md-6 icon" @click="handleClick('Review')" v-else-if="!futureEvent && attendanceRecorded()">
+      <i class="fa-solid fa-user-check fa-8x mb-3"></i>
+      <input type="button" value="Review Attendance" class="btn btn-primary form-control">
+    </div>
 
-      <div class="col-12 col-md-6 icon" @click="handleClick('Details')">
-        <i class="fa-solid fa-graduation-cap fa-8x mb-3"></i>
-        <input type="button" value="View Lesson Details" class="btn btn-primary form-control">
-      </div>
-    </form>
-  </span>
-</modal-template-vue>
+    <div class="col-12 col-md-6 icon" @click="handleClick('Details')">
+      <i class="fa-solid fa-graduation-cap fa-8x mb-3"></i>
+      <input type="button" value="View Lesson Details" class="btn btn-primary form-control">
+    </div>
+
+    <div class="col-12 col-md-6 icon" @click="handleClick('notes')">
+      <i class="fa-solid fa-pen-to-square fa-8x mb-3"></i>
+      <input type="button" value="Write Lesson Notes" class="btn btn-primary form-control">
+    </div>
+  </div>
+  
 
 </template>
 
 <script>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import ModalTemplateVue from '../../../ModalTemplate.vue'
+import ModalTemplate from '../../../Modal.vue'
 import moment from 'moment'
 import { useCalendarStore } from '../../../../stores/calendar'
 
 export default {
   components: {
-    ModalTemplateVue
+    ModalTemplate
   },
   setup(){
     const router = useRouter()
@@ -72,7 +75,7 @@ export default {
 
     return {
       handleClick, returnDetails, futureEvent, 
-      attendanceRecorded
+      attendanceRecorded, changeRoute, calendarData
     }
   }
 
@@ -80,12 +83,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+h2 {
+  text-align: center;
+}
+.options {
+  display: flex;
+  justify-content: space-around;
+}
 .icon {
-  cursor: pointer;
-  margin: auto;
-
-  &:hover {
+  max-width: 150px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  &:hover{
     color: $ah-primary;
+    cursor: pointer;
   }
 }
 </style>

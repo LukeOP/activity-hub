@@ -23,6 +23,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const user = useUserStore()
+  if(sessionStorage.getItem('AHT') && user.attributes.id === 0){
+    user.resetUserWithToken()
+  }
   if(to.meta.requiresAuth && !user.token){
     next({name: 'home'})
   } else {

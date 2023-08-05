@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\TutorResource;
+use App\Http\Resources\UserPermissionsResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -29,6 +30,25 @@ class UsersController extends Controller
         })->get();
 
         return TutorResource::collection($users)->resolve();
+    }
+
+    public function getUserOfToken($localToken)
+    {
+        $token = \Laravel\Sanctum\PersonalAccessToken::findToken($localToken);
+
+        if (!$token) {
+            return null;
+        }
+
+        $user = $token->tokenable;
+
+        if (!$user) {
+            return null;
+        }
+
+        $permissions = UserPermissionsResource::collection($user->userPermissions);
+
+        return ['user' => new UserResource($user), 'permissions' => $permissions];
     }
 
     /**

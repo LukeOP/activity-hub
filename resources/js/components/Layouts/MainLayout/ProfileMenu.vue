@@ -1,7 +1,9 @@
 <template>
   <div v-if="!hideMenu" id="profile-container" @mouseenter="showDropDown = true" @mouseleave="showDropDown = false">
-    <img v-if="userImage" id="user-img" :src="userImage" alt="Profile Image" @click="handleProfile">
-    <img v-else id="user-img" src="/storage/userImages/user.png" alt="Profile Image" @click="handleProfile">
+    <div id="user-img" @click="handleProfile">
+      <span id="icon-text">{{initials}}</span>
+    </div>
+
     <div id="profile-drop-down" v-if="showDropDown">
       <div class="drop-down-item" @click="handleProfile">Profile</div>
       <div class="drop-down-item" @click="handleLogout">Log Out</div>
@@ -9,58 +11,52 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed, ref, watch } from 'vue'
 import { useUserStore } from '../../../stores/user'
 import { useRouter } from 'vue-router'
 import { useWindowSize } from '../../../composables/useWindowSize'
-export default {
-  setup(){
-    const router = useRouter()
-    const user = useUserStore()
-    const userImage = ref(null)
-    const showDropDown = ref(false)
-    const windowSize = useWindowSize()
+import useApi from '../../../composables/useApi'
 
-    function getUserImage(){
-      let path = '/storage/userImages/'
-      if(user.user.image != 'user.png'){
-        userImage.value = path + user.user.image
-      }
-    }
-    getUserImage()
+const router = useRouter()
+const user = useUserStore()
+const showDropDown = ref(false)
+const windowSize = useWindowSize()
 
-    function handleProfile(){
-      router.push({
-        name: 'Profile',
-        params: {
-          id: user.user.id
-        }
-      })
-    }
+const initials = computed(()=>{
+  if(user.attributes.first_name) return getFirstLetter(user.attributes.first_name) + getFirstLetter(user.attributes.last_name)
+  return ''
+})
 
-    function handleLogout(){
-      user.logout().then(()=>{
-        router.push({
-          name: 'home'
-        })
-      })
-    }
-
-    const hideMenu = ref(true)
-    if(windowSize.value.width > 768) hideMenu.value = false
-    
-    watch(windowSize,(newSize, oldSize) => {
-      if(newSize.width > 768) hideMenu.value = false
-      else hideMenu.value = true
-    })
-
-    
-
-    return { userImage, showDropDown, handleProfile, handleLogout, hideMenu }
-  }
-
+function getFirstLetter(string){
+  return string[0]
 }
+
+function handleProfile(){
+  router.push({
+    name: 'Profile',
+    params: {
+      id: user.attributes.id
+    }
+  })
+}
+
+function handleLogout(){
+  user.logout().then(()=>{
+    router.push({
+      name: 'home'
+    })
+  })
+}
+
+const hideMenu = ref(true)
+if(windowSize.value.width > 768) hideMenu.value = false
+
+watch(windowSize,(newSize, oldSize) => {
+  if(newSize.width > 768) hideMenu.value = false
+  else hideMenu.value = true
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -72,6 +68,17 @@ export default {
       right: 40px;
       border-radius: 50%;
       cursor: pointer;
+      background: $ah-primary;
+    }
+    #icon-text {
+      display: block;
+      position: relative;
+      font-size: 1.25rem;
+      width: 40px;
+      color: white;
+      text-align: center;
+      top: 50%;
+      transform: translateY(-50%);
     }
     #profile-drop-down {
       position: absolute;

@@ -4,7 +4,7 @@ import axiosClient from "../axios";
 
 function getState(){
     return {
-      user: {
+      attributes: {
         id: 0,
         first_name: "",
         last_name: "",
@@ -13,7 +13,7 @@ function getState(){
         // admin: false,
       },
       permissions: [],
-      token: '',
+      token: sessionStorage.getItem('AHT') || '',
     }
 }
 
@@ -26,24 +26,40 @@ export const useUserStore = defineStore('user', {
     },
     async login(userObject){
       const res = await axiosClient.post('/login', userObject)
-      this.setUser(res)
+      console.log('login: ', res.data.data)
+      this.setUser(res.data.data.user)
+      this.setToken(res.data.data.token)
+      this.setPermissions(res.data.data.user.permissions)
     },
-    setUser(res){
-      let user = res.data.data.user
-      this.user.id = user.id
-      this.user.first_name = user.first_name
-      this.user.last_name = user.last_name
-      this.user.image = user.image
-      this.user.email = user.email
-      this.user.schools = user.schools
-      // this.user.schoolAdmin = user.is_admin
-      this.permissions = user.permissions
-      this.token = res.data.data.token
+    setUser(user){
+      this.attributes.id = user.id
+      this.attributes.first_name = user.first_name
+      this.attributes.last_name = user.last_name
+      this.attributes.image = user.image
+      this.attributes.email = user.email
+      this.attributes.schools = user.schools
+    },
+    setPermissions(permissions){
+      this.permissions = permissions
+    },
+    setToken(token){
+      this.token = token
+      sessionStorage.setItem('AHT', token)
+    },
+    async resetUserWithToken(){
+      if(sessionStorage.getItem('AHT')) {
+        const res = await axiosClient.get('token-user/' + sessionStorage.getItem('AHT'))
+        // console.log('reset: ', res.data.permissions)
+        this.setUser(res.data.user)
+        this.setPermissions(res.data.permissions)
+        this.setToken(sessionStorage.getItem('AHT'))
+      }
     },
     async logout(){
       const res = await axiosClient.post('/logout')
-      this.user = {}
+      this.attributes = {}
       this.token = ''
+      sessionStorage.removeItem('AHT')
     }
   },
   getters: {

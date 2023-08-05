@@ -69,7 +69,7 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axiosClient from '../../../../axios'
-import ModalTemplateVue from '../../../ModalTemplate.vue'
+import ModalTemplateVue from '../../../Modal.vue'
 import moment from 'moment'
 import { useUserStore } from '../../../../stores/user'
 import { useToast } from 'vue-toast-notification'

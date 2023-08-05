@@ -3,7 +3,7 @@
   <!-- <i class="fa-solid fa-arrows-rotate" placement="right" v-b-tooltip.hover title="Switch Schools" style="cursor:pointer"></i> -->
   <div v-if="staff">
     <!-- <pre>
-      {{user.user}}
+      {{user.attributes}}
     </pre> -->
     <table role="table" id="staff-table">
       <thead role="rowgroup" id="table-head">
@@ -42,7 +42,7 @@ export default {
      
     const staff = ref()
     const user = useUserStore()
-    const currentSchool = ref(user.user.schoolAdmin[0])
+    const currentSchool = ref(user.attributes.schoolAdmin[0])
 
     function handleLessonClick(lesson){
       general.setRouteData({lesson: lesson})
@@ -56,7 +56,7 @@ export default {
 
 
     onMounted(() => {
-      // currentSchool.value = user.user.schoolAdmin[0]
+      // currentSchool.value = user.attributes.schoolAdmin[0]
       // axiosClient.get('school-users/' + currentSchool.value.id).then(res => {
       //   staff.value = res.data.data
       // })

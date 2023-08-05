@@ -61,8 +61,8 @@ const navVisible = ref(false)
 
 function getUserImage(){
   let path = '/storage/userImages/'
-  if(user.user.image != 'user.png'){
-    userImage.value = path + user.user.image
+  if(user.attributes.image != 'user.png'){
+    userImage.value = path + user.attributes.image
   }
 }
 getUserImage()
@@ -71,7 +71,7 @@ function handleProfile(){
   router.push({
     name: 'Profile',
     params: {
-      id: user.user.id
+      id: user.attributes.id
     }
   })
   hideMenu()
@@ -126,7 +126,7 @@ function handleLogout(){
 }
 
 function handleSchools(){
-  user.user.schools.forEach(school => {
+  user.attributes.schools.forEach(school => {
     console.log(school.name)
   });
 }

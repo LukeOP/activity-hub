@@ -2,7 +2,7 @@
   <h1>Lessons:</h1>
   <div v-if="lessons">
     <!-- <pre>
-      {{user.user}}
+      {{user.attributes}}
     </pre> -->
     <table role="table" id="lesson-table">
       <thead role="rowgroup" id="table-head">
@@ -15,7 +15,7 @@
         <th role="columnheader" @click="sortData('tutor.last_name')" class="d-none d-md-table-cell">Tutor:</th>
         <th role="columnheader" @click="sortData('attributes.funding_type')" class="d-none d-md-table-cell">Funding:</th>
         <th role="columnheader" @click="sortData('attributes.status')" class="d-none d-md-table-cell">Status:</th>
-        <th role="columnheader" @click="sortData('school.name')" class="d-none d-md-table-cell" v-if="user.user.schools">School:</th>
+        <th role="columnheader" @click="sortData('school.name')" class="d-none d-md-table-cell" v-if="user.attributes.schools">School:</th>
         </tr>
       </thead>
       <tbody role="rowgroup" id="lesson-data">
@@ -37,7 +37,7 @@
             primary: lesson.attributes.status === 'Waiting', 
             secondary: lesson.attributes.status === 'Pending'}"
             >{{lesson.attributes.status}}</span></td>
-          <td role="cell" class="d-none d-md-table-cell" v-if="user.user.schools">{{lesson.school.name}}</td>
+          <td role="cell" class="d-none d-md-table-cell" v-if="user.attributes.schools">{{lesson.school.name}}</td>
         </tr>
       </tbody>
     </table>

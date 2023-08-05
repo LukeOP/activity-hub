@@ -11,7 +11,7 @@
           <th @click="sortData('tutor.last_name')">Tutor:</th>
           <th @click="sortData('attributes.funding_type')">Funding:</th>
           <th @click="sortData('attributes.status')">Status:</th>
-          <th @click="sortData('school.name')" v-if="user.user.schools">School:</th>
+          <th @click="sortData('school.name')" v-if="user.attributes.schools">School:</th>
         </tr>
       </thead>
     </table>
@@ -28,8 +28,8 @@
           <td>{{formatTime(lesson.attributes.start) || '-'}}</td>
           <td>{{lesson.tutor.first_name}} {{lesson.tutor.last_name}}</td>
           <td><span :class="lesson.attributes.funding_type">{{lesson.attributes.funding_type || '-'}}</span></td>
-          <td><span class="status" :class="lesson.attributes.status + '-td'">{{lesson.attributes.status}}</span></td>
-          <td v-if="user.user.schools">{{lesson.school.name}}</td>
+          <td><span class="status btn" :class="lesson.attributes.status + '-td'">{{lesson.attributes.status}}</span></td>
+          <td v-if="user.attributes.schools">{{lesson.school.name}}</td>
         </tr>
       </tbody>
     </table>
@@ -140,9 +140,6 @@ export default {
     justify-content: space-between;
   }
   .status {
-    text-align: center;
-    display: block;
-    border-radius: 1rem;
     width: 90px;
     padding: 5px;
     border: 1px solid black;

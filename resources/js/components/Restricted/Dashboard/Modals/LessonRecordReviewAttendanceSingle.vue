@@ -34,7 +34,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import ModalTemplateVue from '../../../ModalTemplate.vue'
+import ModalTemplateVue from '../../../Modal.vue'
 import moment from 'moment'
 import axiosClient from '../../../../axios'
 import { ref } from 'vue'

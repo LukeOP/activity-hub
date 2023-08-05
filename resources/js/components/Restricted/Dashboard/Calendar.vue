@@ -1,5 +1,10 @@
 <template>
+<div>
   <FullCalendar :options="calendarOptions" v-if="!loading && eventsLoaded" />
+  <Modal :modalActive="modalActive" @close="closeModal" >
+    <LessonCalendarClickVue v-if="modalActive" />
+  </Modal>
+</div>
 </template>
 
 <script>
@@ -18,11 +23,15 @@ import { useWindowSize } from '../../../composables/useWindowSize';
 import { useCalendarEventFormatter } from '../../../composables/useCalendarEventFormatter';
 import { useCalendarStore } from '../../../stores/calendar';
 import { useUserStore } from '../../../stores/user';
+import Modal from '../../Modal.vue';
+import LessonCalendarClickVue from './Modals/LessonCalendarClick.vue';
 
 
 export default {
   components: {
-    FullCalendar 
+    FullCalendar,
+    Modal,
+    LessonCalendarClickVue
   },
   props: {
     events: Object,
@@ -88,6 +97,8 @@ export default {
       }
       return ''
     }
+    
+    const modalActive = ref(false)
 
     function handleEventClick(info) {
       if(info.event.extendedProps.reference_type === 'lesson'){
@@ -97,11 +108,17 @@ export default {
             lesson_id: info.event.extendedProps.reference_type_id, 
             dateTime: info.event.start,
             lesson: lessonData.value.data})
-          router.push({
-            name: 'LessonCalendarClick',
-          })
+      modalActive.value = !modalActive.value
+
+          // router.push({
+          //   name: 'LessonCalendarClick',
+          // })
         })
       }
+    }
+
+    function closeModal(){
+      modalActive.value = false
     }
 
     watch(toRef(calendar.data, 'calendarData'), (newData) => {
@@ -112,18 +129,19 @@ export default {
 
     onMounted(async () => {
       await fetchData();
-      events.value = formatEvent(events.value.data, user.user.id);
+      events.value = formatEvent(events.value.data, user.attributes.id);
       calendarOptions.value.events = events.value;
       calendar.setData(events.value);
       eventsLoaded.value = true;
     });
-    
 
     return {
       loading,
       calendarOptions,
       handleEventClick,
       eventsLoaded,
+      modalActive,
+      closeModal
     }
   }
 }

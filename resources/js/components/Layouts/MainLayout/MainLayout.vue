@@ -15,14 +15,12 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Menus from './Menus.vue' 
+import TestOne from '../../Testing/TestOne.vue'
+import { useModalStore } from '../../../stores/modal'
+import { computed } from 'vue'
 
-export default {
-  components: {
-    Menus
-  }
-}
 </script>
 
 <style lang="scss" scoped>

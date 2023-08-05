@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\ImageController;
@@ -23,6 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/login-admin', [AuthController::class, 'loginAdmin']);
 Route::post('/register', [AuthController::class, 'register']);
+Route::get('token-user/{localToken}', [UsersController::class, 'getUserOfToken']);
 
 
 
@@ -31,6 +33,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/image/{path}/{filename}', [ImageController::class, 'getImage']);
     Route::post('/image', [ImageController::class, 'storeImage']);
+    Route::resource('/avatar', AvatarController::class);
     Route::resource('/users', UsersController::class);
     Route::get('school-users/{schoolId}', [UsersController::class, 'getUsersInSchool']);
     Route::resource('/tasks', TasksController::class);
