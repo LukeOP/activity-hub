@@ -92,7 +92,13 @@ class User extends Authenticatable
 
     public function getSubjects()
     {
-        $subjects = $this->belongsToMany(Subject::class, 'user_subjects', 'user_id')->get();
+        $subjects = $this->hasMany(UserSubject::class, 'user_id')->get();
+        return SubjectResource::collection($subjects);
+    }
+
+    public function getSubjectsForSchool($schoolId)
+    {
+        $subjects = $this->hasMany(UserSubject::class, 'user_id')->where('school_id', $schoolId)->get();
         return SubjectResource::collection($subjects);
     }
 }

@@ -1,10 +1,10 @@
-import StaffTable from '../../components/Restricted/Staff/StaffTable.vue'
+import StaffList from '../../components/Restricted/Staff/StaffList.vue'
 
 
 const staffRoutes = [
-  {path: 'staff', name: 'Staff', meta: { title: 'Staff', breadcrumb: 'Staff'}, redirect: 'StaffTable',
+  {path: 'staff', name: 'Staff', meta: { title: 'Staff', breadcrumb: 'Staff'}, redirect: 'StaffList',
       children: [
-        { path: '', name: 'StaffTable', component: StaffTable, meta: { title: 'Staff'}}
+        { path: '', name: 'StaffList', component: StaffList, meta: { title: 'Staff'}}
   ]},
 ] 
 
