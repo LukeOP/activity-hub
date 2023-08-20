@@ -1,22 +1,22 @@
 <template>
   <h2 class="mb-4">What would you like to do?</h2>
   <div class="options">
-    <div class="col-12 col-md-6 icon" @click="handleClick('Attendance')" v-if="!futureEvent && !attendanceRecorded()">
+    <div class="col-12 col-md-6 icon" @click="handleClick('LessonRecordAttendanceSingle')" v-if="!futureEvent && !attendanceRecorded()">
       <i class="fa-solid fa-user-check fa-8x mb-3"></i>
       <input type="button" value="Mark Attendance" class="btn btn-primary form-control">
     </div>
 
-    <div class="col-12 col-md-6 icon" @click="handleClick('Review')" v-else-if="!futureEvent && attendanceRecorded()">
+    <div class="col-12 col-md-6 icon" @click="handleClick('LessonRecordReviewAttendanceSingle')" v-else-if="!futureEvent && attendanceRecorded()">
       <i class="fa-solid fa-user-check fa-8x mb-3"></i>
       <input type="button" value="Review Attendance" class="btn btn-primary form-control">
     </div>
 
-    <div class="col-12 col-md-6 icon" @click="handleClick('Details')">
+    <div class="col-12 col-md-6 icon" @click="changeRoute({name: 'LessonDetails', params: {id: calendarData.lesson_id}})">
       <i class="fa-solid fa-graduation-cap fa-8x mb-3"></i>
       <input type="button" value="View Lesson Details" class="btn btn-primary form-control">
     </div>
 
-    <div class="col-12 col-md-6 icon" @click="handleClick('notes')">
+    <div class="col-12 col-md-6 icon" @click="handleClick('LessonCreateNote')" v-if="!futureEvent && attendanceRecorded()">
       <i class="fa-solid fa-pen-to-square fa-8x mb-3"></i>
       <input type="button" value="Write Lesson Notes" class="btn btn-primary form-control">
     </div>
@@ -26,11 +26,14 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import ModalTemplate from '../../../Modal.vue'
+import ModalTemplate from '../../../../Modal.vue'
 import moment from 'moment'
-import { useCalendarStore } from '../../../../stores/calendar'
+import { useCalendarStore } from '../../../../../stores/calendar'
+import { useModalStore } from '../../../../../stores/modal'
+import useApi from '../../../../../composables/useApi'
+import { useLessonsStore } from '../../../../../stores/lessons'
 
 export default {
   components: {
@@ -39,13 +42,13 @@ export default {
   setup(){
     const router = useRouter()
     const calendar = useCalendarStore()
+    const modal = useModalStore()
     const calendarData = calendar.getEventData
+    const lessonStore = useLessonsStore()
 
     // Checks click value and assigns route 'name' to direct user.
     function handleClick(click){
-      if(click === 'Attendance') changeRoute({name: 'LessonRecordAttendanceSingle',})
-      if(click === 'Review') changeRoute({name: 'LessonRecordReviewAttendanceSingle'})
-      if(click === 'Details') changeRoute({name: 'LessonDetails', params: {id: calendarData.lesson_id}})
+      modal.open(click)
     }
 
     // Check if clicked event is in the future.
@@ -70,8 +73,16 @@ export default {
 
     // function to change route
     function changeRoute(route){
-        router.push(route)
+      modal.close()
+      router.push(route)
     }
+
+    onMounted(() => {
+      const {data:lessonResponse, fetchData: fetchLesson} = useApi('lessons/' + calendarData.lesson_id)
+      fetchLesson().then(()=>{
+        lessonStore.setLesson(lessonResponse.value.data)
+      })
+    })
 
     return {
       handleClick, returnDetails, futureEvent, 

@@ -1,9 +1,6 @@
 <template>
 <div>
   <FullCalendar :options="calendarOptions" v-if="!loading && eventsLoaded" />
-  <Modal :modalActive="modalActive" @close="closeModal" >
-    <LessonCalendarClickVue v-if="modalActive" />
-  </Modal>
 </div>
 </template>
 
@@ -24,7 +21,8 @@ import { useCalendarEventFormatter } from '../../../composables/useCalendarEvent
 import { useCalendarStore } from '../../../stores/calendar';
 import { useUserStore } from '../../../stores/user';
 import Modal from '../../Modal.vue';
-import LessonCalendarClickVue from './Modals/LessonCalendarClick.vue';
+import LessonCalendarClickVue from '../Lessons/Modals/Calendar/LessonCalendarClick.vue';
+import { useModalStore } from '../../../stores/modal';
 
 
 export default {
@@ -37,9 +35,11 @@ export default {
     events: Object,
   },
   setup(props) {
+    const currentComponent = ref(null)
+    currentComponent.value = LessonCalendarClickVue
     const formatEvent = useCalendarEventFormatter()
     const user = useUserStore()
-    const router = useRouter()
+    const modal = useModalStore()
     const calendar = useCalendarStore()
     const windowSize = useWindowSize()
     const { data: events, loading, fetchData } = useApi('/calendar-events')
@@ -98,8 +98,6 @@ export default {
       return ''
     }
     
-    const modalActive = ref(false)
-
     function handleEventClick(info) {
       if(info.event.extendedProps.reference_type === 'lesson'){
         const {data:lessonData, fetchData} = useApi('lessons/' + info.event.extendedProps.reference_type_id)
@@ -108,17 +106,13 @@ export default {
             lesson_id: info.event.extendedProps.reference_type_id, 
             dateTime: info.event.start,
             lesson: lessonData.value.data})
-      modalActive.value = !modalActive.value
+          modal.open('LessonCalendarClick')
 
           // router.push({
           //   name: 'LessonCalendarClick',
           // })
         })
       }
-    }
-
-    function closeModal(){
-      modalActive.value = false
     }
 
     watch(toRef(calendar.data, 'calendarData'), (newData) => {
@@ -140,8 +134,6 @@ export default {
       calendarOptions,
       handleEventClick,
       eventsLoaded,
-      modalActive,
-      closeModal
     }
   }
 }

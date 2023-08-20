@@ -26,7 +26,7 @@ export const useUserStore = defineStore('user', {
     },
     async login(userObject){
       const res = await axiosClient.post('/login', userObject)
-      console.log('login: ', res.data.data)
+      // console.log('login: ', res.data.data)
       this.setUser(res.data.data.user)
       this.setToken(res.data.data.token)
       this.setPermissions(res.data.data.user.permissions)

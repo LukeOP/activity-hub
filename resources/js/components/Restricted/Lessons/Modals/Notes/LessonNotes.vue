@@ -1,5 +1,4 @@
 <template>
- <modal-template title="Lesson Notes" :data="allNotes" :push='returnDetails'>
   <div class="container body-notes">
     <div v-for="comment in allNotes" :key="comment.id" class="comment-container" style="display:flex">
       <span style="flex-grow:1">
@@ -9,16 +8,16 @@
       <span class="trash" @click="handleNoteDelete(comment)"><i class="fa-solid fa-trash"></i></span>
     </div>
   </div>
-</modal-template> 
 </template>
 
 <script>
 import moment from 'moment'
 import { useToast } from 'vue-toast-notification'
-import axiosClient from '../../../../axios'
+import axiosClient from '../../../../../axios'
 import { ref } from 'vue'
 
-import ModalTemplate from '../../../Modal.vue'
+import ModalTemplate from '../../../../Modal.vue'
+import { useLessonsStore } from '../../../../../stores/lessons'
 
 export default {
   components: {
@@ -27,8 +26,10 @@ export default {
   emits: ["close"],
   setup(props, context){
     const toast = useToast()
+    const lessonStore = useLessonsStore()
+    const lesson = lessonStore.getLessonData
      
-    const allNotes = ref(general.routeData.lesson.notes)
+    const allNotes = ref(lesson.notes)
 
     function convertDate(date){
       return moment(date).format('LL')

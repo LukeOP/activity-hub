@@ -1,24 +1,34 @@
 import { defineStore } from "pinia";
 
-function getState(){
-    return {
-      type: null
-    }
+function getState() {
+  return {
+    type: '',
+    active: false
+  };
 }
 
 export const useModalStore = defineStore('modal', {
   state: () => (getState()),
   actions: {
-    openModal(state){
-      this.active = state
+    open(type) {
+      this.type = type
+      this.active = true;
     },
-    closeModal(){
-      this.type = null
+    close() {
+      this.type = '';
+      this.active = false;
+    },
+    setActive(value) {
+      console.log('reached');
+      this.active = value;
     }
-    },
+  },
   getters: {
-    getType(){
-      return this.type
+    getType() {
+      return this.type;
+    },
+    getActiveState() {
+      return this.active;
     }
   }
-})
+});

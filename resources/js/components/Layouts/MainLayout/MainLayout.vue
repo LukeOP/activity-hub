@@ -1,14 +1,16 @@
 <template>
   <div id="mainLayout">
-    <menus />
+    <Menus />
     <div id="main-container">
       <div class="container">
 
-        <router-view v-slot="{ Component }">
+        <RouterView v-slot="{ Component }">
           <transition name="route" mode="out-in">
             <component :is="Component" />
           </transition>
-        </router-view>
+        </RouterView>
+
+        <Modals />
 
       </div>
     </div>
@@ -17,9 +19,8 @@
 
 <script setup>
 import Menus from './Menus.vue' 
-import TestOne from '../../Testing/TestOne.vue'
-import { useModalStore } from '../../../stores/modal'
 import { computed } from 'vue'
+import Modals from './Modals.vue'
 
 </script>
 

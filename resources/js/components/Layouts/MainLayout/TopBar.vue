@@ -8,6 +8,7 @@
         </span>
       </div>
     </span>
+    <BreadCrumbs />
   </div>
 </template>
 
@@ -18,6 +19,7 @@ import { useWindowSize } from "../../../composables/useWindowSize";
 import { useFilterStore } from "../../../stores/filter";
 import { useMenuStore } from "../../../stores/menu";
 import { useActionsStore } from "../../../stores/actions";
+import BreadCrumbs from "./BreadCrumbs.vue";
 const menu = useMenuStore()
 const filter = useFilterStore()
 const actions = useActionsStore()

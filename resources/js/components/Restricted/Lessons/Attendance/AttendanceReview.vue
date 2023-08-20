@@ -45,7 +45,7 @@ import useApi from '../../../../composables/useApi'
 import { useFilterStore } from '../../../../stores/filter'
 
 const filter = useFilterStore()
-const { data: attendanceRecords, loading, fetchData } = useApi('lessonAttendance')
+const { data: attendanceRecords, loading, fetchData } = useApi('lesson-attendance')
 fetchData().then(()=>{
   filter.setType('AttendanceReviewForm')
   filter.setData(attendanceRecords.value.data)

@@ -1,20 +1,20 @@
 <template>
-  <modal-template title="Create A Note" :push='returnDetails'>
-    <div class="container body-notes">
-      <textarea v-model="noteData.comment" rows="10" placeholder="Today we worked on..." style="resize:none"></textarea>
-      <button class="btn btn-primary mt-2" @click="handleCreateNote">Submit</button>
-    </div>
-  </modal-template>
+  <h2>Create A Note</h2>
+  <div class="container body-notes">
+    <textarea v-model="noteData.comment" rows="10" placeholder="Today we worked on..." style="resize:none"></textarea>
+    <button class="btn btn-primary mt-2" @click="handleCreateNote">Submit</button>
+  </div>
 </template>
 
 <script>
 import moment from 'moment'
 import { ref } from 'vue'
-import axiosClient from '../../../../axios'
+import axiosClient from '../../../../../axios'
 import { useToast } from 'vue-toast-notification'
 import { useRouter } from 'vue-router'
 
-import ModalTemplate from '../../../Modal.vue'
+import ModalTemplate from '../../../../Modal.vue'
+import { useLessonsStore } from '../../../../../stores/lessons'
 
 export default {
   props: {
@@ -26,11 +26,13 @@ export default {
   emits: ["close", "refresh-notes"],
   setup(props, context){
     const toast = useToast()
+    const lessonStore = useLessonsStore()
+    const currentLesson = lessonStore.getLessonData
      
     const router = useRouter()
 
     const noteData = ref({
-      lesson_id: general.routeData.lesson.id,
+      lesson_id: currentLesson.id,
       comment: ''
     })
 
@@ -47,7 +49,7 @@ export default {
       })
     }
 
-    const returnDetails = { name: 'LessonDetails', params: { id: general.routeData.lesson.id } }
+    const returnDetails = { name: 'LessonDetails', params: { id: currentLesson.id } }
 
     function close(){
       router.push(returnDetails)

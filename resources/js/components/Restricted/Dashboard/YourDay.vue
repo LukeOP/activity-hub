@@ -2,10 +2,8 @@
   <div class="row">
     <div class="col col-12">
       <h2>Lessons</h2>
-      <calendar class="calendar" />
+      <Calendar class="calendar" />
     </div>
-
-    <router-view />
 
   </div>
 </template>

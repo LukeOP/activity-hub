@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Staff</h1>
+    Add New Student
   </div>
 </template>
 

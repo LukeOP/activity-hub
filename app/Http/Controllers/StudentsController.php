@@ -14,10 +14,14 @@ class StudentsController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+        $schoolIds = $user->schools->pluck('id')->toArray();
+
         return StudentsResource::collection(
-            Student::where('school_id', Auth::user()->isAdmin[0]->id)->orderBy('last_name')->get()
+            Student::whereIn('school_id', $schoolIds)->orderBy('last_name')->get()
         );
     }
+
 
     /**
      * Display a list of students from a particular school

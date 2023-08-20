@@ -1,10 +1,5 @@
 <template>
   <div class="menu-container">
-    <!-- <div class="menu-toggle" @click="toggleMenu">
-      <span class="btn btn-primary">
-        <i class="fa-solid" :class="[getMenuIcon(), {rotate: !menuVisible}]"></i>
-      </span>
-    </div> -->
     <nav class="menu" :class="{ 'menu-visible': navVisible }">
       
       <div id="sideBar">
@@ -80,11 +75,9 @@ function handleProfile(){
 const navItems = ref([
   { header: 'Dashboard', to: { name: 'YourDay' }, showSubItems: false, icon: 'fa-solid fa-house'},
   { header: 'Lessons', to: { name: 'LessonsList' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'},
+  { header: 'Staff', to: { name: 'StaffTable' }, showSubItems: false, icon: 'fa-solid fa-user-group'},
+  { header: 'Students', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-children'}
 ])
-
-if(user.permissions.find(p => p.type === 'administrator')) {
-  // navItems.value.push({ header: 'Staff', to: { name: 'StaffTable' }, showSubItems: false, icon: 'fa-solid fa-user-group'})
-} 
 
 const isActive = (item) => {
   if (item.subItems) {
