@@ -2,7 +2,7 @@
   <div>
 
     <Modal :modalActive="modalActive" @close="closeModal" >
-      <component :is="LessonCreateNote" />
+      <component :is="currentComponent" />
     </Modal>
 
   </div>
@@ -15,6 +15,7 @@ import LessonCalendarClick from "../../Restricted/Lessons/Modals/Calendar/Lesson
 import LessonRecordAttendanceSingle from "../../Restricted/Lessons/Modals/Attendance/LessonRecordAttendanceSingle.vue"
 import LessonRecordReviewAttendanceSingle from "../../Restricted/Lessons/Modals/Attendance/LessonRecordReviewAttendanceSingle.vue"
 import LessonCreateNote from "../../Restricted/Lessons/Modals/Notes/LessonCreateNote.vue"
+import StaffDeleteSubject from '../../Restricted/Staff/Modals/Details/DeleteSubject.vue'
 import { useModalStore } from '../../../stores/modal'
 
 const modal = useModalStore()
@@ -26,6 +27,7 @@ const currentComponent = computed(()=>{
     case 'LessonRecordAttendanceSingle': return LessonRecordAttendanceSingle
     case 'LessonRecordReviewAttendanceSingle': return LessonRecordReviewAttendanceSingle
     case 'LessonCreateNote': return LessonCreateNote
+    case 'StaffDeleteSubject': return StaffDeleteSubject
     default: return null
   }
 })

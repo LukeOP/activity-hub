@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\TutorResource;
+use App\Http\Resources\StaffResource;
 use App\Http\Resources\UserPermissionsResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
@@ -15,8 +16,11 @@ class UsersController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+        $schoolIds = $user->schools->pluck('id')->toArray();
+
         return UserResource::collection(
-            User::get()
+            User::whereIn()
         );
     }
 
@@ -29,7 +33,15 @@ class UsersController extends Controller
             $query->where('schools.id', $schoolId);
         })->get();
 
-        return TutorResource::collection($users)->resolve();
+        $userArray = [];
+        foreach ($users as $user) {
+            $user->permissions = $user->permissionsForSchool($schoolId);
+            $user->subjects = $user->getSubjectsForSchool($schoolId);
+            array_push($userArray, $user);
+        }
+
+
+        return StaffResource::collection($userArray)->resolve();
     }
 
     public function getUserOfToken($localToken)

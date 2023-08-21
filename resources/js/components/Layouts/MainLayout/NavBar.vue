@@ -75,7 +75,7 @@ function handleProfile(){
 const navItems = ref([
   { header: 'Dashboard', to: { name: 'YourDay' }, showSubItems: false, icon: 'fa-solid fa-house'},
   { header: 'Lessons', to: { name: 'LessonsList' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'},
-  { header: 'Staff', to: { name: 'StaffTable' }, showSubItems: false, icon: 'fa-solid fa-user-group'},
+  { header: 'Staff', to: { name: 'StaffList' }, showSubItems: false, icon: 'fa-solid fa-user-group'},
   { header: 'Students', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-children'}
 ])
 

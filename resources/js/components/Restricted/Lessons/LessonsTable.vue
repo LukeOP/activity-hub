@@ -1,9 +1,6 @@
 <template>
   <h1>Lessons:</h1>
   <div v-if="lessons">
-    <!-- <pre>
-      {{user.attributes}}
-    </pre> -->
     <table role="table" id="lesson-table">
       <thead role="rowgroup" id="table-head">
         <tr role="row" class="table-heading">

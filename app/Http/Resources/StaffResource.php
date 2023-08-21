@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TutorResource extends JsonResource
+class StaffResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,7 +19,10 @@ class TutorResource extends JsonResource
             'id' => $this->id,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
-            'subjects' => $this->getSubjects(),
+            'email' => $this->email,
+            'image' => $this->image,
+            'subjects' => $this->subjects,
+            'permissions' => $this->permissions
         ];
     }
 }

@@ -14,7 +14,6 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-
         return [
             'id' => $this->id,
             'first_name' => $this->first_name,
@@ -22,7 +21,6 @@ class UserResource extends JsonResource
             'image' => $this->image,
             'email' => $this->email,
             'schools' => $this->userSchools(),
-            // 'is_admin' => $this->isAdmin(),
         ];
     }
 }

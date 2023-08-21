@@ -13,6 +13,7 @@ use App\Http\Controllers\SchoolsController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\UserSubjectsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -57,4 +58,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/tasks', TasksController::class);
 
     Route::resource('/users', UsersController::class);
+    Route::resource('/user-subjects', UserSubjectsController::class);
 });

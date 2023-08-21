@@ -17,12 +17,13 @@ class SchoolsController extends Controller
      */
     public function index()
     {
+
+        $user = Auth::user();
+        $schoolIds = $user->isAdmin->pluck('school_id')->toArray();
+
         return SchoolsResource::collection(
-            School::all()
+            School::whereIn('id', $schoolIds)->orderBy('name')->get()
         );
-        // return SchoolsResource::collection(
-        //     School::where('id', Auth::user()->school_id)->get()
-        // );
     }
 
     /**
