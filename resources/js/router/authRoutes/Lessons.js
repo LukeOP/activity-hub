@@ -13,7 +13,6 @@ import LessonAttendanceSingle from '../../components/Restricted/Lessons/Attendan
 import LessonAttendanceOverview from '../../components/Restricted/Lessons/Attendance/AttendanceOverview.vue'
 import LessonAttendanceReview from '../../components/Restricted/Lessons/Attendance/AttendanceReview.vue'
 
-import RequestsList from '../../components/Restricted/Lessons/Requests/Requestslist.vue'
 import RequestReview from '../../components/Restricted/Lessons/Requests/RequestReview.vue'
 
 
