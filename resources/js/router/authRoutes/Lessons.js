@@ -14,6 +14,7 @@ import LessonAttendanceOverview from '../../components/Restricted/Lessons/Attend
 import LessonAttendanceReview from '../../components/Restricted/Lessons/Attendance/AttendanceReview.vue'
 
 import RequestReview from '../../components/Restricted/Lessons/Requests/RequestReview.vue'
+import RequestsList from '../../components/Restricted/Lessons/Requests/RequestsList.vue'
 
 
 const lessonsRoutes = [
