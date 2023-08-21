@@ -3,15 +3,15 @@
      <table role="table" id="staff-table">
       <thead role="rowgroup" id="table-head">
         <tr role="row" class="table-heading">
-          <th role="columnheader" @click="sortData('student.first_name')" style="width: 1%">First Name:</th>
-          <th role="columnheader" @click="sortData('student.last_name')" style="width: 1%">Last Name:</th>
-          <th role="columnheader" @click="sortData('tutor.last_name')" style="width: 1%" >Email:</th>
+          <th role="columnheader" @click="sortData('first_name')" style="width: 1%">First Name:</th>
+          <th role="columnheader" @click="sortData('last_name')" style="width: 1%">Last Name:</th>
+          <th role="columnheader" @click="sortData('email')" style="width: 1%" >Email:</th>
           <!-- <th role="columnheader" @click="sortData('tutor.last_name')" style="width: 1%" >Lessons Assigned:</th> -->
-          <th role="columnheader" @click="sortData('tutor.last_name')" style="width: 1%" >Administrator:</th>
+          <th role="columnheader" style="width: 1%" >Administrator:</th>
         </tr>
       </thead>
       <tbody role="rowgroup" id="staff-data">
-        <tr role="row" class="staff-row" v-for="member in staff" :key="member.id">
+        <tr role="row" class="staff-row" v-for="member in staff" :key="member.id" @click="handleRowClick(member)">
           <td role="cell">{{member.first_name}}</td>
           <td role="cell">{{member.last_name}}</td>
           <td role="cell">{{member.email}}</td>
@@ -26,12 +26,17 @@
 </template>
 
 <script setup>
-import { computed, watchEffect } from 'vue'
+import { useRouter } from 'vue-router'
 import useApi from '../../../../composables/useApi'
+import useSorter from '../../../../composables/useSorter'
+import { useSchoolStore } from '../../../../stores/schools'
 import { useStaffStore } from '../../../../stores/staff'
 
 const props = defineProps({school_id: String})
 const staffStore = useStaffStore()
+const schoolStore = useSchoolStore()
+const sorter = useSorter()
+const router = useRouter()
 
 const { data: staff, fetchData: fetchStaff } = useApi('school-users/' + props.school_id)
 fetchStaff().then(()=>{
@@ -40,6 +45,18 @@ fetchStaff().then(()=>{
 
 function isAdmin(member){
   return member.permissions.find(m => m.type === 'administrator') ? 'Yes' : ''
+}
+
+function sortData(field){
+  sorter.sort(staff.value, field)
+}
+
+function handleRowClick(staff){
+  staffStore.setStaff(staff)
+  schoolStore.setSchool({name: staff.permissions[0].name, id: staff.permissions[0].school_id})
+  router.push({
+    name: 'StaffDetails',
+  })
 }
 
 

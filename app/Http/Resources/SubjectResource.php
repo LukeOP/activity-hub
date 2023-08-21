@@ -16,6 +16,7 @@ class SubjectResource extends JsonResource
     {
         // return parent::toArray($request);
         return [
+            'id' => $this->id,
             'title' => $this->subject,
             'school' => $this->school($this->school_id)
         ];

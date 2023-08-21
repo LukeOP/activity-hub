@@ -3,7 +3,8 @@ import { defineStore } from "pinia";
 function getState(){
     return {
       singleStaff: {},
-      staffList: []
+      staffList: [],
+      subject: {}
     }
 }
 
@@ -16,6 +17,9 @@ export const useStaffStore = defineStore('staff', {
     setStaffList(staffArray){
       this.staffList = staffArray
     },
+    setSubject(subject){
+      this.subject = subject
+    },
   },
   getters: {
     getStaff(){
@@ -23,6 +27,9 @@ export const useStaffStore = defineStore('staff', {
     },
     getStaffList(){
       return this.staffList
+    },
+    getSubject(){
+      return this.subject
     }
   }
 })
