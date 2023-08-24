@@ -30,7 +30,7 @@ function stateControl(state){
 <style lang="scss" scoped>
 .menus {
   position:fixed;
-  height: 70px;
+  height: 50px;
   width: 100vw;
   z-index: 100;
   margin-bottom: 1rem;

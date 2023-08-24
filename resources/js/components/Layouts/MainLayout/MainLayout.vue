@@ -2,8 +2,9 @@
   <div id="mainLayout">
     <Menus />
     <div id="main-container">
+      <BreadCrumbs />
       <div class="container">
-
+        
         <RouterView v-slot="{ Component }">
           <transition name="route" mode="out-in">
             <component :is="Component" />
@@ -21,6 +22,7 @@
 import Menus from './Menus.vue' 
 import { computed } from 'vue'
 import Modals from './Modals.vue'
+import BreadCrumbs from './BreadCrumbs.vue'
 
 </script>
 

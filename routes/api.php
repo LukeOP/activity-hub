@@ -12,6 +12,8 @@ use App\Http\Controllers\LessonsController;
 use App\Http\Controllers\SchoolsController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TasksController;
+use App\Http\Controllers\UserPermissionsController;
+use App\Http\Controllers\UserPositionController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\UserSubjectsController;
 use Illuminate\Http\Request;
@@ -59,4 +61,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::resource('/users', UsersController::class);
     Route::resource('/user-subjects', UserSubjectsController::class);
+    Route::resource('/user-permissions', UserPermissionsController::class);
+    Route::resource('/user-position', UserPositionController::class);
+    Route::get('/user-position/{user}/{school}', [UserPositionController::class, 'getUserPositionAtSchool']);
 });

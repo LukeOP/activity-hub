@@ -37,6 +37,7 @@ class UsersController extends Controller
         foreach ($users as $user) {
             $user->permissions = $user->permissionsForSchool($schoolId);
             $user->subjects = $user->getSubjectsForSchool($schoolId);
+            $user->position = $user->getPositionAtSchool($schoolId);
             array_push($userArray, $user);
         }
 

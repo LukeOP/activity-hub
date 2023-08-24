@@ -1,4 +1,3 @@
-import { forEach } from "lodash";
 import { defineStore } from "pinia";
 import axiosClient from "../axios";
 
@@ -60,6 +59,12 @@ export const useUserStore = defineStore('user', {
       this.attributes = {}
       this.token = ''
       sessionStorage.removeItem('AHT')
+    },
+    hasPermission(permission, school){
+      if(this.permissions.find(p => (p.type === permission && p.school_id === school))){
+        return true
+      }
+      else return false
     }
   },
   getters: {

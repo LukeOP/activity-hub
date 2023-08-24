@@ -20,9 +20,11 @@ class StaffResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'email' => $this->email,
+            'phone' => $this->phone,
             'image' => $this->image,
             'subjects' => $this->subjects,
-            'permissions' => $this->permissions
+            'permissions' => $this->permissions,
+            'position' => $this->position
         ];
     }
 }

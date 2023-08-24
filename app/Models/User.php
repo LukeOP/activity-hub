@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Http\Resources\SchoolsResource;
 use App\Http\Resources\SubjectResource;
 use App\Http\Resources\UserPermissionsResource;
+use App\Http\Resources\UserPositionResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -81,13 +82,18 @@ class User extends Authenticatable
 
     public function userPermissions()
     {
-        return $this->hasMany(UserPermissions::class, 'user_id');
+        return $this->hasMany(UserPermission::class, 'user_id');
     }
 
     public function permissionsForSchool($schoolId)
     {
         $permissions = $this->userPermissions()->where('school_id', $schoolId)->get();
         return UserPermissionsResource::collection($permissions);
+    }
+
+    public function hasPermissionForSchool($schoolId, $permission)
+    {
+        return $this->userPermissions()->where('school_id', $schoolId)->where('permission_type', $permission)->first() ? true : false;
     }
 
     public function getSubjects()
@@ -100,5 +106,11 @@ class User extends Authenticatable
     {
         $subjects = $this->hasMany(UserSubject::class, 'user_id')->where('school_id', $schoolId)->get();
         return SubjectResource::collection($subjects);
+    }
+
+    public function getPositionAtSchool($schoolId)
+    {
+        $position = $this->hasOne(UserPosition::class, 'user_id')->where('school_id', $schoolId)->first();
+        return new UserPositionResource($position);
     }
 }

@@ -6,10 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class UserPermissions extends Model
+class UserPermission extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    // use SoftDeletes;
+
+    protected $fillable = [
+        'school_id',
+        'user_id',
+        'permission_type'
+    ];
 
     public function school()
     {
