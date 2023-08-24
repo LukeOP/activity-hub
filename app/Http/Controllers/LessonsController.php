@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\LessonsResource;
+use App\Http\Resources\SchoolsResource;
 use App\Models\Lesson;
-use App\Models\Student;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,23 +18,42 @@ class LessonsController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $userSchools = $user->schools;
+        $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
+        $lessonCollection = new Collection();
+
+        foreach ($userSchools as $school) {
+            $hasPermission = $user->hasPermissionForSchool($school->id, 'LESSONS_V');
+
+            if ($hasPermission || in_array($school->id, $userAdmin)) {
+                $lessonsAtSchool = LessonsResource::collection(Lesson::whereHas('student', function ($query) use ($school) {
+                    $query->where('school_id', $school->id);
+                })->get());
+            } else {
+                $lessonsAtSchool = LessonsResource::collection(Lesson::where('user_id', $user->id)->get());
+            }
+            $lessonCollection = $lessonCollection->concat($lessonsAtSchool);
+        }
+
+        return $lessonCollection;
+
 
         // User is not an admin
-        if (!$user->isAdmin) {
-            return LessonsResource::collection(
-                Lesson::where('user_id', $user->id)->get()
-            );
-        } else {
-            $schoolIds = $user->isAdmin->pluck('school_id')->toArray();
+        // if (!$user->isAdmin) {
+        //     return LessonsResource::collection(
+        //         Lesson::where('user_id', $user->id)->get()
+        //     );
+        // } else {
+        //     $schoolIds = $user->isAdmin->pluck('school_id')->toArray();
 
-            return LessonsResource::collection(
-                Lesson::where(function ($query) use ($schoolIds, $user) {
-                    $query->whereHas('student', function ($query) use ($schoolIds) {
-                        $query->whereIn('school_id', $schoolIds);
-                    })->orWhere('user_id', $user->id);
-                })->get()
-            );
-        }
+        //     return LessonsResource::collection(
+        //         Lesson::where(function ($query) use ($schoolIds, $user) {
+        //             $query->whereHas('student', function ($query) use ($schoolIds) {
+        //                 $query->whereIn('school_id', $schoolIds);
+        //             })->orWhere('user_id', $user->id);
+        //         })->get()
+        //     );
+        // }
     }
 
     /**

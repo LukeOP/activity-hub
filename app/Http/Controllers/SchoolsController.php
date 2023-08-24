@@ -19,7 +19,7 @@ class SchoolsController extends Controller
     {
 
         $user = Auth::user();
-        $schoolIds = $user->isAdmin->pluck('school_id')->toArray();
+        $schoolIds = $user->schools->pluck('id')->toArray();
 
         return SchoolsResource::collection(
             School::whereIn('id', $schoolIds)->orderBy('name')->get()

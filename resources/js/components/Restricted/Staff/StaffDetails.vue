@@ -1,8 +1,10 @@
 <template>
-  <div>
+  <div class="mt-1">
     <div class="header">
-      <h2>{{staff.first_name}} {{staff.last_name}}<span>{{schoolStore.getSchool.name}}</span></h2>
+      <span class="name">{{staff.first_name}} {{staff.last_name}}</span>
+      <span class="school">{{schoolStore.getSchool.name}}</span>
     </div>
+    
     <div class="body row">
       <div class="col col-12 col-md-6">
         <section>
@@ -14,20 +16,15 @@
       <div class="col col-12 col-md-6">
         <section>
           <h3>School Details:</h3>
-          <h4>Position:<span></span></h4>
+          <h4>Position:<span>{{staff.position.title}}</span></h4>
           <h4>Subjects:</h4>
           <div v-for="subject in staff.subjects" :key="subject.index" class="subject">{{subject.title}}<span class="delete"><i class="fa-solid fa-trash" @click="deleteSubject(subject)"></i></span></div>
           <input type="text" class="form-control" placeholder="Add subject..." @keyup.enter="addSubject" v-model="newSubject">
         </section>
       </div>
-      <!-- <div class="col col-12 col-md-6">
-        <section>
-          <h3>School Permissions:</h3>
-          <h4>Position:<span>{{staff.permissions[0].name}}</span></h4>
-          <h4>Subjects:</h4>
-          <span v-for="subject in subjects" :key="subject.index" class="subject">{{subject}}</span>
-        </section>
-      </div> -->
+      <section>
+        <SchoolPermissions />
+      </section>
       
      
     </div>
@@ -42,6 +39,7 @@ import { useStaffStore } from "../../../stores/staff";
 import { useSchoolStore } from "../../../stores/schools";
 import axiosClient from "../../../axios";
 import { useModalStore } from "../../../stores/modal";
+import SchoolPermissions from './Details/Permissions.vue'
 
 const staffStore = useStaffStore()
 const staff = staffStore.getStaff
@@ -66,17 +64,17 @@ function deleteSubject(subject){
 
 <style lang="scss" scoped>
 .header{
-  background: $ah-primary;
-  color: white;
-  padding: 10px;
-  // border-radius: 0.75rem;
-  h2 {
-    margin: 0;
+  border-bottom: 3px solid $ah-primary;
+  display: flex;
+  justify-content:space-between;
+  align-items: flex-end;
+  .name {
+    font-size: 2rem;
+    color: $ah-primary;
+    margin-left: 10px;
   }
-  span {
-    font-size: 1rem;
-    float: right;
-    padding-top: 7px;
+  .school {
+    color: $ah-primary;
   }
 }
 .body {

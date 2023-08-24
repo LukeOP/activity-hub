@@ -33,8 +33,8 @@ const breadcrumbs = computed(() => {
 
 <style lang="scss" scoped>
 .breadcrumbs {
-  position: absolute;
-  top: 38px;
+  // position: absolute;
+  // top: 38px;
   // color: $ah-grey;
   color: $ah-primary;
 }

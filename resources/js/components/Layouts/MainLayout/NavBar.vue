@@ -74,10 +74,36 @@ function handleProfile(){
 
 const navItems = ref([
   { header: 'Dashboard', to: { name: 'YourDay' }, showSubItems: false, icon: 'fa-solid fa-house'},
-  { header: 'Lessons', to: { name: 'LessonsList' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'},
-  { header: 'Staff', to: { name: 'StaffList' }, showSubItems: false, icon: 'fa-solid fa-user-group'},
-  { header: 'Students', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-children'}
 ])
+
+const navOptions = [
+  { header: 'Lessons', to: { name: 'LessonsList' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard', permission: 'LESSONS_V', additional_permission: 'LESSONS_R'},
+  // { header: 'Events', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-circle', permission: 'EVENTS_V'},
+  // { header: 'Hires', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-moon', permission: 'HIRES_V'},
+  // { header: 'Rooms', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-book', permission: 'ROOMS_V'},
+  // { header: 'Instruments', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-car', permission: 'INSTRUMENTS_V'},
+  { header: 'Students', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-children', permission: 'STUDENTS_V'},
+  { header: 'Staff', to: { name: 'StaffList' }, showSubItems: false, icon: 'fa-solid fa-user-group', permission: 'STAFF_V'},
+]
+function setNavItems(){
+  navOptions.forEach(option => {
+    if(hasPermission(option.permission || hasPermission(option.additional_permission))){
+      navItems.value.push(option)
+    }
+    // if(option.additional_permission){
+    //   hasPermission(option.additional_permission) ? navItems.value.push(option) : null
+    // }
+  });
+}
+
+function hasPermission(value){
+  if(user.permissions.find(p => p.type === 'administrator')) return true
+  return user.permissions.find(p => p.type === value)
+}
+setNavItems()
+watch(() => user.permissions, () => {
+setNavItems()
+})
 
 const isActive = (item) => {
   if (item.subItems) {

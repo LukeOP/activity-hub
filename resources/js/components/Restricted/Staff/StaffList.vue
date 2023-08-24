@@ -1,14 +1,14 @@
 <template>
   <div>
     <h1>Staff</h1>
-    <div v-if="schools" class="tab-header">
+    <div v-if="schools" class="tab-header mb-3">
       <span class="school-tile unselectable" 
-      :class="{active: currentSchool === school.id}" 
+      :class="{active: selectedSchool === school.id}" 
       v-for="school in schools.data" :key="school.id" 
-      @click="currentSchool = school.id; key++">{{school.name}}</span>
+      @click="selectedSchool = school.id; key++">{{school.name}}</span>
     </div>
-    <div v-if="currentSchool.length > 0">
-      <StaffTable :school_id="currentSchool" :key="key" />
+    <div v-if="selectedSchool">
+      <StaffTable :school_id="selectedSchool" :key="key" />
     </div>
     
     
@@ -18,46 +18,44 @@
 <script setup>
 import { ref } from "vue";
 import useApi from "../../../composables/useApi";
+import { useSchoolStore } from "../../../stores/schools";
 import { useUserStore } from "../../../stores/user";
 import StaffTable from './ListComponents/StaffTable.vue'
 
-const currentSchool = ref('')
+const schoolStore = useSchoolStore()
+const currentSchool = schoolStore.getSchool
+
+const selectedSchool = ref('')
 const key = ref(0)
 
 
 const { data: schools, fetchData: fetchSchools } = useApi('schools')
 fetchSchools().then(()=>{
-  currentSchool.value = schools.value.data[0].id
+  if(Object.keys(currentSchool).length > 0) {selectedSchool.value = currentSchool.id}
+  else {selectedSchool.value = schools.value.data[0].id}
 });
 
 </script>
 
 <style lang="scss" scoped>
-.tab-header {
-  width: fit-content;
-  padding-top: 7px;
-  padding-bottom: 7px;
-  background: $ah-grey;
-  border-top-right-radius: 0.5rem;
-  border-top-left-radius: 0.5rem;
-}
 .school-tile {
   background: $ah-grey;
   color: white;
   padding: 10px;
   cursor: pointer;
-  &:first-child {
-    border-top-left-radius: 0.5rem;
-  }
-  &:last-child {
-    border-top-right-radius: 0.5rem;
+  margin-right: 0.5rem;
+  border-radius: 0.5rem;
+  &:hover {
+    background: $ah-grey-dark;
   }
 }
 .active {
   background: $ah-primary;
   // box-shadow: 5px 5px 5px $ah-grey;
-  border-top-right-radius: 0.5rem;
-  border-top-left-radius: 0.5rem;
+  &:hover {
+    background: $ah-primary;
+    cursor: default;
+  }
 }
 
 </style>
