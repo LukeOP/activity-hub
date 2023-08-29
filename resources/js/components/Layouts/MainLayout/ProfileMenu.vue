@@ -1,14 +1,18 @@
 <template>
-  <div v-if="!hideMenu" id="profile-container" @mouseenter="showDropDown = true" @mouseleave="showDropDown = false">
-    <div id="user-img" @click="handleProfile">
+  <div :class="{background: showDropDown}" @click.self="showDropDown = false">
+    <div v-if="!hideMenu" id="profile-container" @click="showDropDown = !showDropDown">
+    <div id="user-img" @mouseenter="showDropDown = true">
       <span id="icon-text">{{initials}}</span>
     </div>
 
     <div id="profile-drop-down" v-if="showDropDown">
+      <div id="triangle"></div>
       <div class="drop-down-item" @click="handleProfile">Profile</div>
       <div class="drop-down-item" @click="handleLogout">Log Out</div>
     </div>
   </div>
+  </div>
+  
 </template>
 
 <script setup>
@@ -16,7 +20,6 @@ import { computed, ref, watch } from 'vue'
 import { useUserStore } from '../../../stores/user'
 import { useRouter } from 'vue-router'
 import { useWindowSize } from '../../../composables/useWindowSize'
-import useApi from '../../../composables/useApi'
 
 const router = useRouter()
 const user = useUserStore()
@@ -60,44 +63,68 @@ watch(windowSize,(newSize, oldSize) => {
 </script>
 
 <style lang="scss" scoped>
-    #user-img {
-      position: absolute;
-      height: 40px;
-      width: 40px;
-      top: 10px;
-      right: 40px;
-      border-radius: 50%;
-      cursor: pointer;
-      background: $ah-primary;
-    }
-    #icon-text {
-      display: block;
-      position: relative;
-      font-size: 1.25rem;
-      width: 40px;
-      color: white;
-      text-align: center;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    #profile-drop-down {
-      position: absolute;
-      right: 20px;
-      top: 50px;
-      width: 130px;
-      min-height: fit-content;
-      background-color: white;
-      box-shadow: 0px 0px 5px grey;
-      border-radius: 0.25rem;
+.background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+#user-img {
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  top: 10px;
+  right: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  background: $ah-primary;
+}
+#icon-text {
+  display: block;
+  position: relative;
+  font-size: 1.25rem;
+  width: 40px;
+  color: white;
+  text-align: center;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
-      .drop-down-item {
-        padding: 5px 10px;
-        color: $ah-primary;
+#profile-drop-down {
+  position: absolute;
+  right: 20px;
+  top: 65px;
+  width: 130px;
+  min-height: fit-content;
+  background-color: white;
+  box-shadow: 0px 0px 5px grey;
+  border-radius: 0.25rem;
 
-        &:hover {
-          cursor: pointer;
-          text-decoration: underline;
-        }
-      }
-    }
+  #triangle {
+    position: relative;
+    right: 25px;
+    width: 20px;
+    height: 15px;
+    float: right;
+    border-bottom: solid 15px white;
+    border-left: solid 15px transparent;
+    border-right: solid 15px transparent;
+    transform: translateY(-15px);
+  }
+}
+
+.drop-down-item {
+  padding: 5px 10px;
+  color: $ah-primary;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
 </style>
