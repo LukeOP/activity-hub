@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import axiosClient from "../axios";
+import { useMainStore } from './main'
+
 
 function getState(){
     return {
@@ -9,6 +11,7 @@ function getState(){
         last_name: "",
         image: "",
         email: '',
+        phone: ''
         // admin: false,
       },
       permissions: [],
@@ -36,6 +39,7 @@ export const useUserStore = defineStore('user', {
       this.attributes.last_name = user.last_name
       this.attributes.image = user.image
       this.attributes.email = user.email
+      this.attributes.phone = user.phone
       this.attributes.schools = user.schools
     },
     setPermissions(permissions){
@@ -59,12 +63,17 @@ export const useUserStore = defineStore('user', {
       this.attributes = {}
       this.token = ''
       sessionStorage.removeItem('AHT')
+      this.resetStores()
     },
     hasPermission(permission, school){
-      if(this.permissions.find(p => (p.type === permission && p.school_id === school))){
+      if(this.permissions.find(p => ((p.type === permission || p.type === 'administrator') && p.school_id === school))){
         return true
       }
       else return false
+    },
+    resetStores(){
+      const mainStore = useMainStore()
+      mainStore.resetStores()
     }
   },
   getters: {

@@ -5,7 +5,8 @@ function getState(){
     return {
       singleStaff: {},
       staffList: [],
-      subject: {}
+      subject: {},
+      schoolInvites: []
     }
 }
 
@@ -33,6 +34,19 @@ export const useStaffStore = defineStore('staff', {
           this.singleStaff.permissions.splice(permissionIndex, 1)
         }
       })
+    },
+    setSchoolInvites(value){
+      this.schoolInvites = value
+    },
+    updateSchoolInvites(school_id){
+      axiosClient.get('school-invitations/' + school_id).then((res)=>{
+        this.setSchoolInvites(res.data)
+      })
+    },
+    reset(){
+      this.singleStaff = {},
+      this.staffList = [],
+      this.subject = {}
     }
   },
   getters: {
@@ -44,6 +58,9 @@ export const useStaffStore = defineStore('staff', {
     },
     getSubject(){
       return this.subject
+    },
+    getSchoolInvites(){
+      return this.schoolInvites
     }
   }
 })

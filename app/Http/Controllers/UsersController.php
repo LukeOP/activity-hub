@@ -64,6 +64,14 @@ class UsersController extends Controller
         return ['user' => new UserResource($user), 'permissions' => $permissions];
     }
 
+    public function searchForUser($search)
+    {
+        $users = User::where('first_name', 'LIKE', '%' . $search . '%')
+            ->orWhere('last_name', 'LIKE', '%' . $search . '%')
+            ->get(['first_name', 'last_name', 'id', 'email', 'image',]);
+        return $users;
+    }
+
     /**
      * Store a newly created resource in storage.
      */

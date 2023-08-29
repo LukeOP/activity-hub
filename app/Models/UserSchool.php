@@ -12,8 +12,13 @@ class UserSchool extends Model
     use SoftDeletes;
 
     protected $table = "user_schools";
+    protected $fillable = [
+        'user_id',
+        'school_id'
+    ];
 
-    public function school(){
+    public function school()
+    {
         return $this->belongsTo(School::class, 'id', 'school_id');
     }
 }
