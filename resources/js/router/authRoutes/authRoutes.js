@@ -9,9 +9,9 @@ import studentsRoutes from './Students';
 const authRoutes = [
   {
     path: '/manage',
-    name: 'Home',
+    name: 'MainAuth',
     component: MainLayout,  
-    redirect: { name: 'YourDay' },
+    redirect: { name: 'Dashboard' },
     meta: {
       requiresAuth: true,
       breadcrumb: 'Dashboard'

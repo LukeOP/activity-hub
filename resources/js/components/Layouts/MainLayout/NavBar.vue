@@ -73,7 +73,7 @@ function handleProfile(){
 }
 
 const navItems = ref([
-  { header: 'Dashboard', to: { name: 'YourDay' }, showSubItems: false, icon: 'fa-solid fa-house'},
+  { header: 'Dashboard', to: { name: 'Dashboard' }, showSubItems: false, icon: 'fa-solid fa-house'},
 ])
 
 const navOptions = [

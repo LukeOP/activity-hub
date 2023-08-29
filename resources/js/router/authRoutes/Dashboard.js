@@ -1,9 +1,9 @@
-import YourDay from '../../components/Restricted/Dashboard/YourDay.vue'
+import Dashboard from '../../components/Restricted/Dashboard/Dashboard.vue'
 import Profile from '../../components/Restricted/Dashboard/Profile/Profile.vue'
 
 
 const dashboardRoutes = [
-  {path: 'your-day', name: 'YourDay', component: YourDay, meta: { title: 'Dashboard'}},
+  {path: 'dashboard', name: 'Dashboard', component: Dashboard, meta: { title: 'Dashboard'}},
   {path: 'profile/:id', name: 'Profile', component: Profile, meta: { title: 'Profile'}},
 ] 
 

@@ -70,7 +70,7 @@ const customData = ref({
   time: null
 })
 
-const returnDetails = { name: 'YourDay' }
+const returnDetails = { name: 'Dashboard' }
 
 function handleClick(result){
   attendanceData.value.attendance = result
@@ -84,7 +84,7 @@ function handleClick(result){
 function submitRecord(){
   axiosClient.post('/lessonAttendance', attendanceData.value).then(res => {
     calendar.addAttendanceRecord(res.data.data)
-    router.push({ name: 'YourDay'})
+    router.push({ name: 'Dashboard'})
   })
 }
 
