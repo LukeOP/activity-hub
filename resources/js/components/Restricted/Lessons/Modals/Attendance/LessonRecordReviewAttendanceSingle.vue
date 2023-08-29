@@ -50,7 +50,7 @@ const attendanceData = ref({
   time: attendance.time,
 })
 
-const returnDetails = { name: 'YourDay' }
+const returnDetails = { name: 'Dashboard' }
 
 function submitRecord(){
   axiosClient.patch('/lessonAttendance/' + attendance.id, attendanceData.value).then(res => {

@@ -44,7 +44,7 @@ function handleProfile(){
 function handleLogout(){
   user.logout().then(()=>{
     router.push({
-      name: 'home'
+      name: 'Login'
     })
   })
 }

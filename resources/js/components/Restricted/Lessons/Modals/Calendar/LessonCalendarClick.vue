@@ -69,7 +69,7 @@ export default {
     }
 
     // Set return route for 'close' click on modal
-    const returnDetails = { name: 'YourDay' }
+    const returnDetails = { name: 'Dashboard' }
 
     // function to change route
     function changeRoute(route){

@@ -27,7 +27,7 @@ router.beforeEach((to, from, next) => {
     user.resetUserWithToken()
   }
   if(to.meta.requiresAuth && !user.token){
-    next({name: 'home'})
+    next({name: 'Login'})
   } else {
     next()
   }

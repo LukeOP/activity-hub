@@ -1,5 +1,6 @@
 <template>
-<div>
+<div v-if="eventsLoaded && Object.keys(events).length > 0">
+  <h2>Lessons</h2>
   <FullCalendar :options="calendarOptions" v-if="!loading && eventsLoaded" />
 </div>
 </template>
@@ -134,6 +135,7 @@ export default {
       calendarOptions,
       handleEventClick,
       eventsLoaded,
+      events
     }
   }
 }
