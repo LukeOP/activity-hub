@@ -38,6 +38,10 @@ export const useCalendarStore = defineStore('calendar', {
           Object.assign(attendanceToUpdate, updatedAttendance)
         }
       }
+    },
+    reset(){
+      this.data = [],
+      this.eventData = []
     }
   },
   getters: {

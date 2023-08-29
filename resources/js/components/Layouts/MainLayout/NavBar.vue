@@ -87,12 +87,11 @@ const navOptions = [
 ]
 function setNavItems(){
   navOptions.forEach(option => {
-    if(hasPermission(option.permission || hasPermission(option.additional_permission))){
-      navItems.value.push(option)
+    if(hasPermission(option.permission) || hasPermission(option.additional_permission)){
+      if(!navItems.value.find(i => i.header === option.header)){
+        navItems.value.push(option)
+      }
     }
-    // if(option.additional_permission){
-    //   hasPermission(option.additional_permission) ? navItems.value.push(option) : null
-    // }
   });
 }
 

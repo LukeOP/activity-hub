@@ -2,7 +2,7 @@
   <div class="mt-1">
     <div class="header">
       <span class="name">{{staff.first_name}} {{staff.last_name}}</span>
-      <span class="school">{{schoolStore.getSchool.name}}</span>
+      <span class="school">{{currentSchool.name}}</span>
     </div>
     
     <div class="body row">
@@ -16,10 +16,19 @@
       <div class="col col-12 col-md-6">
         <section>
           <h3>School Details:</h3>
-          <h4>Position:<span>{{staff.position.title}}</span></h4>
+          <h4>Position:
+            <span v-if="!editingPosition">{{staff.position.title}}</span>
+            <i v-if="user.hasPermission('STAFF_E', currentSchool.id)" @click="editingPosition = !editingPosition" class="fa-solid fa-pen-to-square ms-2 float-end" />
+            <form v-if="editingPosition" @submit.prevent="handlePositionEdit(staff.position.title)" class="d-flex">
+              <input type="text" class="form-control" style="border-radius:0.5rem 0 0 0.5rem" v-model="staff.position.title">
+              <button class="btn btn-primary unselectable" style="border-radius:0 0.5rem 0.5rem 0; width:100px">save</button>
+            </form>
+            
+            </h4>
           <h4>Subjects:</h4>
-          <div v-for="subject in staff.subjects" :key="subject.index" class="subject">{{subject.title}}<span class="delete"><i class="fa-solid fa-trash" @click="deleteSubject(subject)"></i></span></div>
-          <input type="text" class="form-control" placeholder="Add subject..." @keyup.enter="addSubject" v-model="newSubject">
+          <div v-for="subject in staff.subjects" :key="subject.index" class="subject">{{subject.title}}<span class="delete" v-if="user.hasPermission('STAFF_E', currentSchool.id)"><i class="fa-solid fa-trash" @click="deleteSubject(subject)"></i></span></div>
+          <input v-if="user.hasPermission('STAFF_E', currentSchool.id)"
+          type="text" class="form-control" placeholder="Add subject..." @keyup.enter="addSubject" v-model="newSubject">
         </section>
       </div>
       <section>
@@ -28,7 +37,6 @@
       
      
     </div>
-    <!-- <pre>{{staff}}</pre> -->
 
   </div>
 </template>
@@ -40,16 +48,21 @@ import { useSchoolStore } from "../../../stores/schools";
 import axiosClient from "../../../axios";
 import { useModalStore } from "../../../stores/modal";
 import SchoolPermissions from './Details/Permissions.vue'
+import { useUserStore } from "../../../stores/user";
 
 const staffStore = useStaffStore()
 const staff = staffStore.getStaff
 const schoolStore = useSchoolStore()
+const currentSchool = schoolStore.getSchool
 const modal = useModalStore()
+const user = useUserStore()
+
+const editingPosition = ref(false)
 
 // Subject Adding and Removing
 const newSubject = ref('')
 function addSubject(){
-  axiosClient.post('user-subjects', {user_id: staff.id, school_id: schoolStore.getSchool.id, subject: newSubject.value})
+  axiosClient.post('user-subjects', {user_id: staff.id, school_id: currentSchool.id, subject: newSubject.value})
   .then(res => {
     staff.subjects.push(res.data.data)
   })
@@ -58,6 +71,12 @@ function addSubject(){
 function deleteSubject(subject){
   staffStore.setSubject(subject)
   modal.open('StaffDeleteSubject')
+}
+
+function handlePositionEdit(position){
+  axiosClient.patch(`user-position/${staff.position.id}/`, {position: position}).then(res =>{
+    editingPosition.value = false
+  })
 }
 
 </script>

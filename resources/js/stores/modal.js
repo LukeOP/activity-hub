@@ -15,8 +15,11 @@ export const useModalStore = defineStore('modal', {
       this.active = true;
     },
     close() {
-      this.type = '';
       this.active = false;
+      setTimeout(()=>{
+        this.type = ''
+      }, 200)
+      ;
     },
     setActive(value) {
       console.log('reached');

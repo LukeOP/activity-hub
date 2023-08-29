@@ -1,6 +1,7 @@
 <template>
   <transition name="modal-animation">
-    <div v-show="modalActive" class="modal" @click.self="close">
+    <!-- <div v-show="modalActive" class="modal" @click.self="close"> -->
+    <div v-show="modalActive" class="modal">
       <transition name="modal-animation-inner">
         <div v-show="modalActive" class="modal-inner">
           <i @click="close" class="far fa-times-circle"></i>
@@ -93,6 +94,13 @@ export default {
       background-color: $ah-primary;
       color: #fff;
       cursor: pointer;
+    }
+  }
+}
+@media (max-width: 768px) {
+  .modal {
+    .modal-inner {
+      width: 99%;
     }
   }
 }

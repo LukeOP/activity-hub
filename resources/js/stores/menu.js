@@ -31,8 +31,16 @@ export const useMenuStore = defineStore('menu', {
     },
     setNavActive(state){
       this.navActive = state
-    }
     },
+    resetMenu(){
+      this.actions = false,
+      this.actionsActive = false,
+      this.filter = false,
+      this.filterActive = false,
+      this.nav = false,
+      this.navActive = false
+    }
+  },
   getters: {
     getActionState(){
       return this.actions

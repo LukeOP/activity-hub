@@ -14,6 +14,8 @@ use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\UserPermissionsController;
 use App\Http\Controllers\UserPositionController;
+use App\Http\Controllers\UserSchoolInvitationsController;
+use App\Http\Controllers\UserSchoolsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\UserSubjectsController;
 use Illuminate\Http\Request;
@@ -60,8 +62,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/tasks', TasksController::class);
 
     Route::resource('/users', UsersController::class);
+    Route::get('user/search/{search}', [UsersController::class, 'searchForUser']);
     Route::resource('/user-subjects', UserSubjectsController::class);
     Route::resource('/user-permissions', UserPermissionsController::class);
     Route::resource('/user-position', UserPositionController::class);
     Route::get('/user-position/{user}/{school}', [UserPositionController::class, 'getUserPositionAtSchool']);
+
+    Route::get('/school-invitations/{school}', [UserSchoolInvitationsController::class, 'getInvitesForSchool']);
+    Route::get('/school-invitation/{code}', [UserSchoolInvitationsController::class, 'getInviteByCode']);
+    Route::resource('school-invitations', UserSchoolInvitationsController::class);
+
+    Route::resource('user-school', UserSchoolsController::class);
 });

@@ -12,6 +12,9 @@ export const useSchoolStore = defineStore('school', {
     setSchool(schoolObject){
       this.currentSchool = schoolObject
     },
+    reset(){
+      this.currentSchool = {}
+    }
   },
   getters: {
     getSchool(){

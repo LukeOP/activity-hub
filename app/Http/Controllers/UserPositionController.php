@@ -28,18 +28,20 @@ class UserPositionController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $position = UserPosition::create([
+            'user_id' => $request->user_id,
+            'school_id' => $request->school_id,
+            'position' => 'Basic User'
+        ]);
+        if ($position) {
+            return ['message' => 'success', 'result' => $position];
+        } else {
+            return ['message' => 'error: User Position not created'];
+        }
     }
 
     /**
@@ -51,19 +53,13 @@ class UserPositionController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(UserPosition $userPosition)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, UserPosition $userPosition)
+    public function update($id, Request $request)
     {
-        //
+        $userPosition = UserPosition::findOrFail($id);
+        $userPosition->update($request->all());
+        return $userPosition;
     }
 
     /**

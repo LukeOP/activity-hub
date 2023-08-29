@@ -46,7 +46,6 @@ const filteredLessons = ref([])
 const {data:lessons, fetchData} = useApi('lessons')
 
 fetchData().then(() => {
-  console.log(lessons.value)
   filteredLessons.value = lessons.value
   filter.setData(lessons.value)
   filter.setType('LessonsForm')

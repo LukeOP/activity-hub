@@ -6,19 +6,19 @@ use App\Http\Resources\SchoolsResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserPosition extends Model
+class UserSchoolInvitation extends Model
 {
     use HasFactory;
 
-    protected $table = 'user_positions';
     protected $fillable = [
-        'user_id',
         'school_id',
-        'position'
+        'reference',
+        'email',
+        'code'
     ];
 
-    public function School($schoolId)
+    public function school($school_id)
     {
-        return new SchoolsResource(School::where('id', $schoolId)->first());
+        return new SchoolsResource(School::where('id', $school_id)->first());
     }
 }
