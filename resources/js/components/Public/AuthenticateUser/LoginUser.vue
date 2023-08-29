@@ -111,9 +111,6 @@ export default {
     background: rgba(166, 0, 0, 0.1);
     border: 1px solid rgb(166, 0, 0);
     padding: 5px;
-    position: fixed;
-    margin-left: auto;
-    margin-right: auto;
   }
   #register-btn {
     color: $ah-primary;
