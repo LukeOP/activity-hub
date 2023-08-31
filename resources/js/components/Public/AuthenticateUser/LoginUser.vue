@@ -12,83 +12,71 @@
     <router-link :to="{name: 'Register'}" id="register-btn">Or register an account.</router-link>
 
   </div>
-  <button class="btn btn-primary" style="position:fixed; bottom:20px; left:40%" @click="loginTutor">Log In Tutor</button>
-  <button class="btn btn-secondary" style="position:fixed; bottom:20px; left:20%" @click="loginUser">Log In User/Admin</button>
-  <button class="btn btn-primary" style="position:fixed; bottom:20px; right:20%" @click="loginAdmin">Log In Admin</button>
+  <button @click="loginUser">Log In User/Admin</button>
+  <button @click="loginTutor">Log In Tutor</button>
+  <button @click="loginAdmin">Log In Admin</button>
+  <button @click="loginNew">Log In New Member</button>
 </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../../../stores/user'
-import Calendar from '../../Restricted/Dashboard/Calendar.vue'
 
-import {useToast} from 'vue-toast-notification';
+const user = useUserStore()
+const router = useRouter()
+const error = ref('')
 
-export default {
-  components: {
-    Calendar
-  },
-  setup(){
-    const user = useUserStore()
-    const router = useRouter()
-    const error = ref('')
+const login = ref({
+  login: '',
+  password: ''
+})
 
-    const login = ref({
-      login: '',
-      password: ''
+function handleLogin(){
+  error.value = ''
+  user.login({
+    email: login.value.email,
+    password: login.value.password,
+    remember: true,
+  }).then(() => {
+    router.push({
+      name: 'Dashboard'
     })
+  }).catch(err => {
+    error.value = setError(err.response)
+  })
+}
 
-    function handleLogin(){
-      error.value = ''
-      user.login({
-        email: login.value.email,
-        password: login.value.password,
-        remember: true,
-      }).then(() => {
-        router.push({
-          name: 'Dashboard'
-        })
-      }).catch(err => {
-        error.value = setError(err.response)
-      })
-    }
+function setError(statusVal){
+  if(statusVal === 401) return 'Invalid login'
+  if(statusVal === 422) return 'All fields are required'
+  if(statusVal === 500) return 'Error in fetching user'
+  else return 'An unexpected error has occured'
+}
 
-    function setError(statusVal){
-      if(statusVal === 401) return 'Invalid login'
-      if(statusVal === 422) return 'All fields are required'
-      if(statusVal === 500) return 'Error in fetching user'
-      else return 'An unexpected error has occured'
-    }
+function loginUser(){
+  login.value.email = 'j.smith@this.com'
+  login.value.password = 'Test1234!'
+  handleLogin()
+}
 
-    function loginUser(){
-      login.value.email = 'j.smith@this.com'
-      login.value.password = 'Test1234!'
-      handleLogin()
-    }
+function loginAdmin(){
+  login.value.email = 'l.williams@this.com'
+  login.value.password = 'Test1234!'
+  handleLogin()
+}
 
-    function loginAdmin(){
-      login.value.email = 'l.williams@this.com'
-      login.value.password = 'Test1234!'
-      handleLogin()
-    }
+function loginTutor(){
+  login.value.email = 't.tutor@this.com'
+  login.value.password = 'Test1234!'
+  handleLogin()
+}
 
-    function loginTutor(){
-      login.value.email = 't.tutor@this.com'
-      login.value.password = 'Test1234!'
-      handleLogin()
-    }
-
-    return { 
-      handleLogin, 
-      login, 
-      loginUser,
-      loginAdmin,
-      loginTutor,
-      error}
-  }
-
+function loginNew(){
+  login.value.email = 'p.smith@this.com'
+  login.value.password = 'Test1234!'
+  handleLogin()
 }
 </script>
 
