@@ -138,7 +138,7 @@ watch(() => menu.navActive, (newValue) => {
 function handleLogout(){
   user.logout().then(()=>{
     router.push({
-      name: 'home'
+      name: 'Login'
     })
   })
 }

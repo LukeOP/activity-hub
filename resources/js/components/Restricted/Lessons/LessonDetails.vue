@@ -58,7 +58,7 @@ export default {
       { header: 'Add Lesson Notes', to: { name: 'LessonCreateNote' }, showSubItems: false, icon: 'fa-solid fa-file-circle-plus', additional: true},
       { header: 'View Lesson Notes', to: { name: 'LessonNotes' }, showSubItems: false, icon: 'fa-solid fa-eye', additional: true},
       { header: 'View Attendance', to: { name: 'LessonAttendanceSingle' }, showSubItems: false, icon: 'fa-solid fa-user-check', additional: true},
-      { header: 'Delete Lesson', to: { name: 'home' }, showSubItems: false, icon: 'fa-solid fa-trash', additional: true, red: true}
+      { header: 'Delete Lesson', to: { name: 'Login' }, showSubItems: false, icon: 'fa-solid fa-trash', additional: true, red: true}
       ]
       if(lesson.value.attributes.status != 'Active' && lessonDetailsSet()){
         actionsArray.unshift({ header: 'Set Lesson as Active', to: { name: 'LessonConfirmActive' }, showSubItems: false, icon: 'fa-solid fa-circle-check', additional: true, green: true})
