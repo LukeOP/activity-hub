@@ -47,9 +47,12 @@ const {data:lessons, fetchData} = useApi('lessons')
 
 fetchData().then(() => {
   filteredLessons.value = lessons.value
-  filter.setData(lessons.value)
-  filter.setType('LessonsForm')
   lessonStore.setLessons(lessons.value)
+  setTimeout(()=>{
+    filter.setData(lessons.value)
+    filter.setType('LessonsForm')
+  },300)
+  
 })
 
 

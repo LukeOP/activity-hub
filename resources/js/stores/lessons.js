@@ -18,6 +18,16 @@ export const useLessonsStore = defineStore('lessons', {
     },
     addAttendanceRecord(record){
       this.singleLesson.attendance = [record, ...this.singleLesson.attendance]
+    },
+    addNote(note){
+      this.singleLesson.notes = [note, ...this.singleLesson.notes]
+    },
+    updateNotes(notes){
+      this.singleLesson.notes = notes
+    },
+    deleteNote(note){
+      let notes = this.singleLesson.notes.filter(n => n.id != note.id)
+      this.updateNotes(notes)
     }
   },
   getters: {

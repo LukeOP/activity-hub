@@ -1,7 +1,7 @@
 <template>
   <div id="lesson-notes" class="section row">
       <h2 style="width:fit-content; flex-grow:1">Lesson Notes:</h2>
-      <router-link :to="{ name: 'LessonCreateNote' }" class="btn btn-secondary add-btn float-end" style="margin-right:20px"><i class="fa-solid fa-add"></i></router-link>
+      <div class="btn btn-secondary add-btn float-end" @click="handleAddNote" style="margin-right:20px"><i class="add-icon" v-html="icons.add"></i></div>
       <h3>Recent Notes:</h3>
       <div id="recent-comments" v-if="lesson.notes.length > 0">
         <span>
@@ -20,22 +20,22 @@
     </div>
 </template>
 
-<script>
-export default {
-  props: {
-    lesson: Object
-  },
-  setup(){
+<script setup>
+import moment from 'moment';
+import { useModalStore } from '../../../../stores/modal';
+import { icons } from '@/images/icons/icons'
 
-    function convertDate(date){
-      return moment(date).format('LL')
-    }
+const props = defineProps({
+  lesson: Object})
 
-    return {
-      convertDate
-    }
-  }
+  const modal = useModalStore()
 
+function convertDate(date){
+  return moment(date).format('LL')
+}
+
+function handleAddNote(){
+  modal.open('LessonCreateNote')
 }
 </script>
 
@@ -66,6 +66,9 @@ h3 {
 }
 .add-btn {
   width: fit-content;
+}
+.add-icon {
+  fill: white;
 }
 
 </style>

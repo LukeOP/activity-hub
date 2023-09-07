@@ -3,7 +3,8 @@ import { defineStore } from "pinia";
 function getState() {
   return {
     type: '',
-    active: false
+    active: false,
+    data: {}
   };
 }
 
@@ -16,6 +17,7 @@ export const useModalStore = defineStore('modal', {
     },
     close() {
       this.active = false;
+      this.data = {}
       setTimeout(()=>{
         this.type = ''
       }, 200)
@@ -24,6 +26,9 @@ export const useModalStore = defineStore('modal', {
     setActive(value) {
       console.log('reached');
       this.active = value;
+    },
+    setData(data){
+      this.data = data;
     }
   },
   getters: {
@@ -32,6 +37,9 @@ export const useModalStore = defineStore('modal', {
     },
     getActiveState() {
       return this.active;
+    },
+    getData(){
+      return this.data;
     }
   }
 });

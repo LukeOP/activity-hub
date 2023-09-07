@@ -14,7 +14,7 @@ class LessonNotes extends Model
 
     protected $table = 'lesson_notes';
     protected $fillable = [
-        'lesson_id', 'comment'
+        'lesson_id', 'user_id', 'comment'
     ];
 
     public function user()

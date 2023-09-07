@@ -2,7 +2,7 @@
   <div v-if="lesson" :class="{fixed: lessonNotesActive}">
 
     <Header :lesson="lesson" />
-    <LessonDetails :lesson="lesson" />
+    <Details :lesson="lesson" />
     <ParentDetails :lesson="lesson" />
     <Notes :lesson="lesson" />
 
@@ -18,23 +18,21 @@ import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import axiosClient from '../../../axios'
 
-import LessonNotes from './Modals/Notes/LessonNotes.vue'
-import LessonNewNoteModal from './Modals/Notes/LessonCreateNote.vue'
-import Header from './DetailsComponents/Header.vue'
-import LessonDetails from './DetailsComponents/LessonDetails.vue'
-import ParentDetails from './DetailsComponents/ParentDetails.vue'
-import Notes from './DetailsComponents/Notes.vue'
-import { useActionsStore } from '../../../stores/actions'
-import { useLessonsStore } from '../../../stores/lessons'
+import LessonNotes from './Modals/Notes/LessonNotes.vue';
+import Header from './DetailsComponents/Header.vue';
+import Details from './DetailsComponents/Details.vue';
+import ParentDetails from './DetailsComponents/ParentDetails.vue';
+import Notes from './DetailsComponents/Notes.vue';
+import { useActionsStore } from '../../../stores/actions';
+import { useLessonsStore } from '../../../stores/lessons';
 
 export default {
   components: {
     Header,
-    LessonDetails,
+    Details,
     ParentDetails,
     Notes,
     LessonNotes,
-    LessonNewNoteModal
   },
   setup(){
     const lessonStore = useLessonsStore()
