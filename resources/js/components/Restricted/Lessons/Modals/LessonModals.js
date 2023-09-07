@@ -3,6 +3,8 @@ import LessonRecordAttendanceSingle from "./Attendance/LessonRecordAttendanceSin
 import LessonRecordReviewAttendanceSingle from "./Attendance/LessonRecordReviewAttendanceSingle.vue"
 import LessonCreateNote from "./Notes/LessonCreateNote.vue"
 import LessonNoteDeleteConfirm from './Notes/LessonNoteDeleteConfirm.vue'
+import EditLesson from './LessonEdit.vue'
+import DeleteLesson from './LessonDelete.vue'
 
 
 const lessonModals = {
@@ -10,7 +12,9 @@ const lessonModals = {
   LessonRecordAttendanceSingle,
   LessonRecordReviewAttendanceSingle,
   LessonCreateNote,
-  LessonNoteDeleteConfirm
+  LessonNoteDeleteConfirm,
+  EditLesson,
+  DeleteLesson,
 }
 
 export default lessonModals;

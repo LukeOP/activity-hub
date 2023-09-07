@@ -49,6 +49,7 @@ import axiosClient from "../../../axios";
 import { useModalStore } from "../../../stores/modal";
 import SchoolPermissions from './Details/Permissions.vue'
 import { useUserStore } from "../../../stores/user";
+import { useActionsStore } from "@/stores/actions";
 
 const staffStore = useStaffStore()
 const staff = staffStore.getStaff
@@ -56,6 +57,7 @@ const schoolStore = useSchoolStore()
 const currentSchool = schoolStore.getSchool
 const modal = useModalStore()
 const user = useUserStore()
+const actions = useActionsStore()
 
 const editingPosition = ref(false)
 
@@ -78,6 +80,15 @@ function handlePositionEdit(position){
     editingPosition.value = false
   })
 }
+
+function setActions(){
+  const actionsArray = []
+  if(user.hasPermission('STAFF_D', currentSchool.id) && user.attributes.id != staff.id){
+    actionsArray.push({ header: 'Unlink From School', to: { name: 'Dashboard' }, modal: 'DeleteLesson', icon: 'fa-solid fa-link-slash', additional: true, red: true})
+  }
+  actions.setItems(actionsArray)
+}
+setActions()
 
 </script>
 

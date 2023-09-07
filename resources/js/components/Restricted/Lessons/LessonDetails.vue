@@ -25,6 +25,7 @@ import ParentDetails from './DetailsComponents/ParentDetails.vue';
 import Notes from './DetailsComponents/Notes.vue';
 import { useActionsStore } from '../../../stores/actions';
 import { useLessonsStore } from '../../../stores/lessons';
+import { useUserStore } from '@/stores/user';
 
 export default {
   components: {
@@ -41,6 +42,7 @@ export default {
     const lesson = ref(false)
     const lessonNotesActive = ref(false)
     const lessonNewNotesActive = ref(false)
+    const user = useUserStore()
 
     function getData(){
       axiosClient.get('lessons/' + route.params.id).then(res => {
@@ -51,21 +53,26 @@ export default {
     }
 
     function setActions(){
-      const actionsArray = [
-      { header: 'Edit Lesson', to: { name: 'LessonEdit' }, showSubItems: false, icon: 'fa-solid fa-edit', additional: true},
-      { header: 'Add Lesson Notes', to: { name: 'LessonCreateNote' }, showSubItems: false, icon: 'fa-solid fa-file-circle-plus', additional: true},
-      { header: 'View Lesson Notes', to: { name: 'LessonNotes' }, showSubItems: false, icon: 'fa-solid fa-eye', additional: true},
-      { header: 'View Attendance', to: { name: 'LessonAttendanceSingle' }, showSubItems: false, icon: 'fa-solid fa-user-check', additional: true},
-      { header: 'Delete Lesson', to: { name: 'Login' }, showSubItems: false, icon: 'fa-solid fa-trash', additional: true, red: true}
-      ]
+      const actionsArray = []
+      if(user.hasPermission('LESSONS_R', lesson.value.school.id) || user.hasPermission('LESSONS_V', lesson.value.school.id)){
+        actionsArray.push(
+          { header: 'Add Lesson Notes', to: { name: 'LessonCreateNote' }, icon: 'fa-solid fa-file-circle-plus', additional: true},
+          { header: 'View Lesson Notes', to: { name: 'LessonNotes' }, icon: 'fa-solid fa-eye', additional: true},
+          { header: 'Edit Lesson', to: { name: 'LessonDetails', route: {id: lesson.value.attributes.id} }, modal: 'EditLesson', icon: 'fa-solid fa-edit', additional: true})
+      }
+      if(user.hasPermission('ATTENDANCE_R', lesson.value.school.id) || user.hasPermission('ATTENDANCE_V')){
+        actionsArray.push({ header: 'View Attendance', to: { name: 'LessonAttendanceSingle' }, icon: 'fa-solid fa-user-check', additional: true})
+      }
+      if(user.hasPermission('LESSONS_D', lesson.value.school.id)){
+        actionsArray.push({ header: 'Delete Lesson', to: { name: 'LessonDetails' }, modal: 'DeleteLesson', icon: 'fa-solid fa-trash', additional: true, red: true})
+      }
       if(lesson.value.attributes.status != 'Active' && lessonDetailsSet()){
-        actionsArray.unshift({ header: 'Set Lesson as Active', to: { name: 'LessonConfirmActive' }, showSubItems: false, icon: 'fa-solid fa-circle-check', additional: true, green: true})
+        actionsArray.unshift({ header: 'Set Lesson as Active', to: { name: 'LessonConfirmActive' }, icon: 'fa-solid fa-circle-check', additional: true, green: true})
       }
       actions.setItems(actionsArray)
     }
 
     function lessonDetailsSet(){
-      console.log(lesson.value)
       if(lesson.value.attributes.day == "Not Set") return false
       if(lesson.value.attributes.start == null) return false
       if(lesson.value.attributes.startDate == null) return false
@@ -78,6 +85,10 @@ export default {
         getData()
       }
     })
+
+    watch(() => lessonStore.singleLesson, (newValue) => {
+      lesson.value = newValue
+    }, {deep: true})
 
     function refreshNotes(){
       axiosClient.get('lessons/' + route.params.id).then(res => {

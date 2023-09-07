@@ -10,13 +10,11 @@
         </div>
 
         <div id="action-nav">
-          <router-link v-for="item in actionItems" :key="item" :to="item.to" class="link" @click="menu.actionsActive = false" :class="{additional: item.additional, red: item.red, green: item.green}" @mouseover="item.showSubItems = true" @mouseleave="item.showSubItems = false">
+          <router-link v-for="item in actionItems" :key="item" :to="item.to" class="link" 
+            @click="[menu.actionsActive = false, modalCheck(item)]" 
+            :class="{additional: item.additional, red: item.red, green: item.green}" 
+            @mouseover="item.showSubItems = true" @mouseleave="item.showSubItems = false">
             <span class="linkText"><i class="me-3 icon" :class="item.icon"></i>{{item.header}}</span>
-              <div v-show="item.subItems && item.showSubItems">
-                <router-link v-for="subItem in item.subItems" :key="subItem.header" :to="subItem.to" class="subLink" @click="menu.actionsActive = false">
-                  {{ subItem.header}}
-                </router-link>
-              </div>
           </router-link>
         </div>
 
@@ -34,6 +32,7 @@ import { useRoute } from 'vue-router'
 import { useMenuStore } from '../../../stores/menu'
 import { useActionsStore } from '../../../stores/actions'
 import { icons } from '@/images/icons/icons'
+import { useModalStore } from '@/stores/modal'
 
 const props = defineProps({state: String})
 const emit = defineEmits(['setState'])
@@ -45,6 +44,7 @@ const menu = useMenuStore()
 const filterActive = ref(false)
 const actionVisible = ref(false)
 const actionItems = ref([])
+const modal = useModalStore()
 
 watch(() => props.state, (newValue) => {
     if(newValue === 'nav' || newValue === 'filter') menu.actionsActive = false;
@@ -62,6 +62,12 @@ watch(() => menu.actionsActive, (newValue) => {
   actionVisible.value = newValue
   emit('setState', 'action ' + actionVisible.value)
 })
+
+function modalCheck(item){
+  if(item.modal){
+    modal.open(item.modal)
+  }
+}
 
 </script>
 

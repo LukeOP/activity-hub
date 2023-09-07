@@ -1,8 +1,6 @@
 <template>
-<modal-template-vue title="Edit Lesson" :push='returnDetails'>
   <div>
-    <!-- "params": {id: general.routeData.lesson.id} -->
-    <!-- <div class="mt-3" style="text-align:center">Select the weekly date and time for this lesson to occur:</div> -->
+    <h2 class="text-center">Edit Lesson Details</h2>
     <form class="px-2 mt-3" @submit.prevent="updateValues">
       <div class="subHeading">Day and Time:</div>
       <div class="row">
@@ -25,7 +23,7 @@
         </div>
       </div>
 
-      <span v-if="isAdmin">
+      <span v-if="user.hasPermission('LESSONS_E', currentLesson.school.id)">
         <div class="subHeading">Start and End Dates:</div>
         <div class="row">
           <div class="col col-12 col-md-6">
@@ -39,16 +37,16 @@
         </div>
       </span>
 
-      <span v-if="isAdmin">
+      <span v-if="user.hasPermission('LESSONS_E', currentLesson.school.id)">
         <div class="subHeading">Financial:</div>
         <div class="row">
           <div class="col col-12 col-md-6">
-            <label for="fundingType">Funding Type:</label>
+            <label for="fundingType">Lesson Type:</label>
             <select name="fundingType" class="form-control" v-model="lessonData.funding_type" required>
               <option v-for="option in fundingTypes" :key="option.index" :value="option.value">{{option.label}}</option>
             </select>
           </div>
-          <div class="col col-12 col-md-6">
+          <div class="col col-12 col-md-6" v-if="currentLesson.attributes.fee">
             <label for="lessonFees">Lesson Fees $:</label>
             <input type="number" name="lessonFees" class="form-control" v-model="lessonData.fees">
           </div>
@@ -57,28 +55,26 @@
        
       <div class="pb-4 mt-3" style="height:50px">
         <input type="submit" class="btn btn-primary float-end" value="Save">
-        <input type="button" class="btn btn-grey mx-2 float-end" value="Cancel" @click="returnToDetails()">
+        <input type="button" class="btn btn-grey mx-2 float-end" value="Cancel" @click="modal.close()">
       </div>
     </form>
   </div>
-</modal-template-vue>
 
 </template>
 
 <script setup>
 import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import axiosClient from '../../../../axios'
-import ModalTemplateVue from '../../../Modal.vue'
 import moment from 'moment'
 import { useUserStore } from '../../../../stores/user'
 import { useToast } from 'vue-toast-notification'
 import { useLessonsStore } from '../../../../stores/lessons'
+import { useModalStore } from '@/stores/modal'
 
-const router = useRouter()
 const toast = useToast()
 const user = useUserStore()
 const lessonStore = useLessonsStore()
+const modal = useModalStore()
 
 const currentLesson = lessonStore.getLessonData
   
@@ -149,15 +145,12 @@ function updateValues(){
     .then((res) => {
       lessonStore.setLesson(res.data.lesson)
       toast.open({ message: res.data.message, duration: 5000, dismissible: true, type: 'success'})
-      returnToDetails()
+      modal.close()
     })
 }
 
 const returnDetails = { name: 'LessonDetails', params: { id: currentLesson.id } }
 
-function returnToDetails(){
-    router.push(returnDetails)
-}
 </script>
 
 <style lang="scss" scoped>

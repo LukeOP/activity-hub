@@ -71,6 +71,12 @@ export const useUserStore = defineStore('user', {
       }
       else return false
     },
+    hasPermissionAny(permission){
+      if(this.permissions.find(p => (p.type === permission || p.type === 'administrator'))){
+        return true
+      }
+      else return false
+    },
     resetStores(){
       const mainStore = useMainStore()
       mainStore.resetStores()

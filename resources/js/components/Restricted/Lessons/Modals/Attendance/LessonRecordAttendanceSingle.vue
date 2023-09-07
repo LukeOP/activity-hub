@@ -1,6 +1,6 @@
 <template>
   <h2 class="mb-4">Record Lesson Attendance</h2>
-  <span style="height:fit-content; background:blue" v-if="lesson">
+  <span style="height:fit-content" v-if="lesson">
     <form style="padding:1rem" @submit.prevent="handleClick('custom')">
       <div class="row">
         <div class="heading">{{lesson.student.first_name}} {{lesson.student.last_name}}</div>
@@ -45,6 +45,7 @@ import { useUserStore } from '../../../../../stores/user'
 import axiosClient from '../../../../../axios'
 import { useCalendarStore } from '../../../../../stores/calendar'
 import { useLessonsStore } from '../../../../../stores/lessons'
+import { useModalStore } from '@/stores/modal'
 
 
 const router = useRouter()
@@ -54,6 +55,7 @@ const calendar = useCalendarStore()
 const lessonStore = useLessonsStore()
 const currentCalendar = calendar.getEventData
 const lesson = lessonStore.getLessonData
+const modal = useModalStore()
 const advancedOptions = ref(false)
 const today = moment().format('YYYY-MM-DD')
 
@@ -82,9 +84,10 @@ function handleClick(result){
 }
 
 function submitRecord(){
-  axiosClient.post('/lessonAttendance', attendanceData.value).then(res => {
+  console.log(attendanceData.value)
+  axiosClient.post('/lesson-attendance', attendanceData.value).then(res => {
     calendar.addAttendanceRecord(res.data.data)
-    router.push({ name: 'Dashboard'})
+    modal.close()
   })
 }
 
