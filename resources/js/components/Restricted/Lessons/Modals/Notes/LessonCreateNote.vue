@@ -1,9 +1,12 @@
 <template>
-  <h2>Create A Note</h2>
-  <div class="container body-notes">
-    <textarea v-model="noteData.comment" rows="10" placeholder="Today we worked on..." style="resize:none"></textarea>
-    <button class="btn btn-primary mt-2" @click="handleCreateNote">Submit</button>
+  <div class="text-center">
+    <h2>Create A Note</h2>
+    <div class="container body-notes">
+      <textarea v-model="noteData.comment" rows="5" placeholder="Today we worked on..." style="resize:none"></textarea>
+      <button class="btn btn-primary mt-2" @click="handleCreateNote">Submit</button>
+    </div>
   </div>
+  
 </template>
 
 <script>
@@ -15,6 +18,8 @@ import { useRouter } from 'vue-router'
 
 import ModalTemplate from '../../../../Modal.vue'
 import { useLessonsStore } from '../../../../../stores/lessons'
+import { useUserStore } from '../../../../../stores/user'
+import { useModalStore } from '../../../../../stores/modal'
 
 export default {
   props: {
@@ -30,9 +35,12 @@ export default {
     const currentLesson = lessonStore.getLessonData
      
     const router = useRouter()
+    const user = useUserStore()
+    const modal = useModalStore()
 
     const noteData = ref({
       lesson_id: currentLesson.id,
+      user_id: user.attributes.id,
       comment: ''
     })
 
@@ -42,10 +50,9 @@ export default {
 
     function handleCreateNote(){
       axiosClient.post('/lesson-notes', noteData.value)
-      .then(() => {
-        toast.open({ message: 'Lesson Note Added', duration: 5000, dismissible: true, type: 'success'})
-        context.emit('refresh-notes')
-        context.emit('close')
+      .then((res) => {
+        lessonStore.addNote(res.data.data)
+        modal.close()
       })
     }
 
@@ -67,6 +74,19 @@ export default {
   height: fit-content;
   display: flex;
   flex-direction: column;
+}
+
+textarea {
+  border: none;
+  border-left: 2px solid $ah-primary;
+  outline-color: transparent;
+  padding-left: 10px;
+}
+
+button {
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Styles for mobile */

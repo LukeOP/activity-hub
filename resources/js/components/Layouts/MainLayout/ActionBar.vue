@@ -5,7 +5,7 @@
       <div id="sideBar">
 
         <div id="header" class="pt-5 pb-2">
-          <i id="close-icon" class="fa-solid fa-xmark fa-2x" @click="menu.actionsActive = false"></i>
+          <i id="close-icon" class="fill-secondary" v-html="icons.xmark" @click="menu.actionsActive = false"></i>
           <h1>Actions</h1>
         </div>
 
@@ -33,6 +33,7 @@ import { useUserStore } from '../../../stores/user'
 import { useRoute } from 'vue-router'
 import { useMenuStore } from '../../../stores/menu'
 import { useActionsStore } from '../../../stores/actions'
+import { icons } from '@/images/icons/icons'
 
 const props = defineProps({state: String})
 const emit = defineEmits(['setState'])
@@ -189,6 +190,7 @@ watch(() => menu.actionsActive, (newValue) => {
     top: 10px;
     right: 10px;
     opacity: 0;
+    width: 1.5rem;
   }
 
 /* Styles for mobile */

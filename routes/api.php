@@ -6,6 +6,7 @@ use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LessonAttendanceController;
+use App\Http\Controllers\LessonNoteController;
 use App\Http\Controllers\LessonNotesController;
 use App\Http\Controllers\LessonRequestsController;
 use App\Http\Controllers\LessonsController;

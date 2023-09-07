@@ -5,15 +5,19 @@
       <div id="sideBar">
         <img id="logo-img" src="/images/ActivityHub-Logo.png" alt="Activity Hub Logo">
 
+
         <div id="nav">
           <router-link v-for="item in navItems" :key="item" :to="item.to" class="link" @click="menu.navActive = false" :class="{ active: isActive(item) }">
-            <span class="linkText"><i class="me-3 icon" :class="item.icon"></i>{{item.header}}</span>
-              <div v-show="item.subItems && item.showSubItems" class="subItemContainer">
+            <!-- <span class="linkText"><i class="me-3 icon" :class="item.icon"></i>{{item.header}}</span> -->
+            <!-- <span class="linkText"><img class="icon" :src="item.icon" :alt="item.header + ' Icon'">{{item.header}}</span> -->
+            <span v-html="item.icon" class="icon fill-white"></span><span>{{item.header}}</span>
+              <!-- <div v-show="item.subItems && item.showSubItems" class="subItemContainer">
                 <router-link v-for="subItem in item.subItems" :key="subItem.header" :to="subItem.to" class="subLink" :class="{ activeSub: isActive(subItem) }">
                   {{ subItem.header}}
                 </router-link>
-              </div>
+              </div> -->
           </router-link>
+          
         </div>
 
         <div id="settings">
@@ -23,7 +27,7 @@
               <img v-else src="/storage/userImages/user.png" alt="Profile Image">
               <p>Profile</p>
             </span>
-            <p @click="handleLogout"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Logout</p>
+            <p @click="handleLogout"><i id="logout" v-html="icons.logout" class="me-2 fill-white icon"></i>Logout</p>
           </div>
           
         </div>
@@ -42,6 +46,7 @@ import { useMenuStore } from '../../../stores/menu'
 import { useRoute, useRouter } from 'vue-router'
 import { useWindowSize } from '../../../composables/useWindowSize'
 import { useFilterStore } from '../../../stores/filter'
+import { icons } from '@/images/icons/icons'
 
 const props = defineProps({state: String})
 const emit = defineEmits(['setState'])
@@ -73,17 +78,17 @@ function handleProfile(){
 }
 
 const navItems = ref([
-  { header: 'Dashboard', to: { name: 'Dashboard' }, showSubItems: false, icon: 'fa-solid fa-house'},
+  { header: 'Dashboard', to: { name: 'Dashboard' }, showSubItems: false, icon: icons.house},
 ])
 
 const navOptions = [
-  { header: 'Lessons', to: { name: 'LessonsList' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard', permission: 'LESSONS_V', additional_permission: 'LESSONS_R'},
+  { header: 'Lessons', to: { name: 'LessonsList' }, showSubItems: false, icon: icons.chalkboard, permission: 'LESSONS_V', additional_permission: 'LESSONS_R'},
   // { header: 'Events', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-circle', permission: 'EVENTS_V'},
   // { header: 'Hires', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-moon', permission: 'HIRES_V'},
   // { header: 'Rooms', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-book', permission: 'ROOMS_V'},
   // { header: 'Instruments', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-car', permission: 'INSTRUMENTS_V'},
-  { header: 'Students', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-children', permission: 'STUDENTS_V'},
-  { header: 'Staff', to: { name: 'StaffList' }, showSubItems: false, icon: 'fa-solid fa-user-group', permission: 'STAFF_V'},
+  { header: 'Students', to: { name: 'StudentsTable' }, showSubItems: false, icon: icons.children, permission: 'STUDENTS_V'},
+  { header: 'Staff', to: { name: 'StaffList' }, showSubItems: false, icon: icons.userGroup, permission: 'STAFF_V'},
 ]
 function setNavItems(){
   navOptions.forEach(option => {
@@ -154,6 +159,12 @@ function handleSchools(){
 
 <style lang="scss" scoped>
 /* Menu container styles */
+.icon {
+  display: inline-flex;
+  height: 1.25rem;
+  margin-right: 1rem;
+  margin-left: 1rem;
+}
 #sideBar {
   display: flex;
   flex-direction: column;
@@ -175,7 +186,7 @@ function handleSchools(){
       color: lighten($ah-primary, 55%);
       width: 100%;
       text-decoration: none;
-      padding: 10px 0px;
+      padding: 10px 8px;
       font-size: 1rem;
 
       &:hover {
@@ -185,9 +196,6 @@ function handleSchools(){
 
       .linkText {
         padding-left: 20px;
-        .icon {
-          width: 20px;
-        }
       }
     }
     .subLink {
@@ -207,6 +215,7 @@ function handleSchools(){
       border-left: 8px solid $ah-primary-light;
       color: lighten($ah-primary, 55%);
       font-weight: bold;
+      padding: 10px 0px;
       .linkText {
         font-weight: bold;
         padding: 12px;

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\LessonsResource;
 use App\Http\Resources\SchoolsResource;
 use App\Models\Lesson;
+use App\Models\LessonNotes;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;

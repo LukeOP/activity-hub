@@ -16,7 +16,7 @@ class LessonNotesController extends Controller
     public function index()
     {
         return LessonNotesResource::collection(
-            LessonNotes::get()
+            LessonNotes::all()
         );
     }
 
@@ -29,6 +29,7 @@ class LessonNotesController extends Controller
 
         $note = LessonNotes::create([
             'lesson_id' => $request->lesson_id,
+            'user_id' => $request->user_id,
             'comment' => $request->comment,
         ]);
 

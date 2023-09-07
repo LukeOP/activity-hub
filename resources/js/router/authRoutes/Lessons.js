@@ -28,10 +28,10 @@ const lessonsRoutes = [
             { path: '', name: 'LessonDetails', component: LessonDetails, props: true, meta: {title: 'lesson Details'}, children: [
                 { path: 'edit', name: 'LessonEdit', component: LessonEdit, props: true, meta: { title: 'Edit Lesson', showModal: true} },
                 { path: 'create-note', name: 'LessonCreateNote', component: LessonCreateNote, props: true, meta: { title: 'Create Note Lesson', showModal: true} },
-                { path: 'notes', name: 'LessonNotes', component: LessonNotes, props: true, meta: { title: 'Lesson Notes', showModal: true} },
                 { path: 'confirm-active', name: 'LessonConfirmActive', component: LessonConfirmActive, props: true, meta: { title: 'Lesson Details', showModal: true} },
                 { path: 'confirm-date-time', name: 'LessonDateTime', component: LessonDateTime, props: true, meta: { title: 'Lesson Date and Time', showModal: true} },
             ]},
+            { path: 'notes', name: 'LessonNotes', component: LessonNotes, props: true, meta: { title: 'Lesson Notes' } },
             { path: 'attendance', name: 'LessonAttendanceSingle', component: LessonAttendanceSingle, props: true, meta: { title: 'Lesson Attendance', breadcrumb: 'Attendance'} },
           ] },
 
