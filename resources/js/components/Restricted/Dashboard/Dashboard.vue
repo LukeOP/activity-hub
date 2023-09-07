@@ -22,10 +22,12 @@ const actionArray = []
 
 function setActions(){
   if(user.attributes.schools.length > 0) {
-    actionArray.push(
-      { header: 'New Lesson', to: { name: 'LessonCreate' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'},
-      { header: 'Lesson Attendance', to: { name: 'LessonAttendanceOverview' }, showSubItems: false, icon: 'fa-solid fa-user-check'}
-    )
+    if(user.hasPermissionAny('LESSONS_C')){
+      actionArray.push({ header: 'New Lesson', to: { name: 'LessonCreate' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'})
+    }
+    if(user.hasPermissionAny('ATTENDANCE_R') || user.hasPermissionAny('ATTENDANCE_V')){
+      actionArray.push({ header: 'Lesson Attendance', to: { name: 'LessonAttendanceOverview' }, showSubItems: false, icon: 'fa-solid fa-user-check'})
+    }
     hasSchools.value = true
   }
   actions.setItems(actionArray)

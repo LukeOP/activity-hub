@@ -33,11 +33,11 @@
     </div>
     <div class="col col-12 col-sm-6 col-md-3">
       <span><h3>Start Date:</h3>
-      {{lesson.attributes.startDate}}</span>
+      {{convertDate(lesson.attributes.startDate)}}</span>
     </div>
     <div class="col col-12 col-sm-6 col-md-3">
       <span><h3>End Date:</h3>
-      {{lesson.attributes.endDate}}</span>
+      {{convertDate(lesson.attributes.endDate)}}</span>
     </div>
     <div class="col col-12 col-sm-6 col-md-3">
       <span><h3>School:</h3>
@@ -59,7 +59,7 @@ export default {
       return moment(time, 'HH:mm:ss').format('h:mm A')
     }
     function convertDate(date){
-      return moment(date).format('LL')
+      return moment(date).format('LL') != 'Invalid date' ? moment(date).format('LL') : 'Not set'
     }
 
     return {

@@ -20,8 +20,6 @@
 
 <script setup>
   import { ref, shallowRef, watch } from 'vue'
-  import { useUserStore } from '../../../stores/user'
-  import { useRoute } from 'vue-router'
 import { useFilterStore } from '../../../stores/filter'
 import { useMenuStore } from '../../../stores/menu'
 
@@ -32,8 +30,6 @@ import { useMenuStore } from '../../../stores/menu'
   const props = defineProps({state: String})
   const emit = defineEmits(['setState'])
 
-  const route = useRoute()
-  const user = useUserStore()
   const menu = useMenuStore()
   const filter = useFilterStore()
   const filterVisible = ref(false)
@@ -51,7 +47,7 @@ import { useMenuStore } from '../../../stores/menu'
     })
 
   watch(() => filter.data, (newValue) => {
-    if(newValue != null) menu.filter = true
+    if(newValue != null && Object.keys(newValue).length > 0) menu.filter = true
     else menu.filter = false
   })
 

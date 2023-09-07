@@ -27,11 +27,13 @@ import LessonsTable from './ListComponents/LessonsTable.vue'
 import LessonsTableMobile from './ListComponents/LessonsTableMobile.vue'
 import { useActionsStore } from '../../../stores/actions'
 import { useLessonsStore } from '../../../stores/lessons'
+import { useUserStore } from '@/stores/user'
 
 //  Initiate Stores
 const filter = useFilterStore()
 const lessonStore = useLessonsStore()
 const actions = useActionsStore()
+const user = useUserStore()
 
 // Initiate Composables
 const windowSize = useWindowSize()
@@ -57,11 +59,16 @@ fetchData().then(() => {
 
 
 // Set side actions available on this page
-const actionArray = [
-  { header: 'Lesson Requests', to: { name: 'LessonRequests' }, showSubItems: false, icon: 'fa-solid fa-square-plus'},
-  { header: 'New Lesson', to: { name: 'LessonCreate' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'},
-  { header: 'Attendance', to: { name: 'LessonAttendanceOverview' }, showSubItems: false, icon: 'fa-solid fa-user-check'},
-]
+const actionArray = []
+if(user.hasPermissionAny('LESSONS_REQ_R') || user.hasPermission('LESSONS_REQ_V')){
+  actionArray.push({ header: 'Lesson Requests', to: { name: 'LessonRequests' }, showSubItems: false, icon: 'fa-solid fa-square-plus'})
+}
+if(user.hasPermissionAny('LESSONS_C')){
+  actionArray.push({ header: 'New Lesson', to: { name: 'LessonCreate' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'})
+}
+if(user.hasPermissionAny('ATTENDANCE_R') || user.hasPermission('ATTENDANCE_V')){
+  actionArray.push({ header: 'Attendance', to: { name: 'LessonAttendanceOverview' }, icon: 'fa-solid fa-user-check', additional: true})
+}
 actions.setItems(actionArray)
 
 // Check for update to filtered lessons and display to user
