@@ -4,7 +4,7 @@
     <div v-show="modalActive" class="modal">
       <transition name="modal-animation-inner">
         <div v-show="modalActive" class="modal-inner">
-          <i @click="close" class="far fa-times-circle"></i>
+          <i @click="close" class="icon" v-html="icons.xmark"></i>
           <!-- Modal Content -->
           <slot />
         </div>
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { icons } from '@/images/icons/icons'
 export default {
   props: ["modalActive"],
   setup(props, { emit }) {
@@ -21,7 +22,7 @@ export default {
       emit("close");
     };
 
-    return { close };
+    return { close, icons };
   },
 };
 </script>
@@ -81,10 +82,6 @@ export default {
       right: 15px;
       font-size: 20px;
       cursor: pointer;
-
-      &:hover {
-        color: $ah-primary;
-      }
     }
 
     button {
@@ -95,6 +92,13 @@ export default {
       color: #fff;
       cursor: pointer;
     }
+  }
+}
+.icon {
+  width: 20px;
+  fill: $ah-grey;
+  &:hover {
+    fill: $ah-primary;
   }
 }
 @media (max-width: 768px) {

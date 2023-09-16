@@ -1,0 +1,67 @@
+<template>
+  <div class="row">
+    <div class="col col-12 col-md-6">
+      <h1>Students</h1>
+      <!-- Search input -->
+      <input type="text" class="form-control mb-2" placeholder="Student search..." v-model="search">
+    </div>
+
+    <!-- Table component -->
+    <section v-if="filteredStudents">
+      <component :is="currentComponent" />
+    </section>
+
+  </div>
+</template>
+
+<script setup>
+import useApi from '/resources/js/composables/useApi';
+import StudentsTable from './ListComponents/StudentsTable.vue'
+import StudentsTableMobile from './ListComponents/StudentsTableMobile.vue'
+import { useStudentStore } from '/resources/js/stores/students';
+import { computed, ref } from 'vue';
+import { useWindowSize } from '/resources/js/composables/useWindowSize';
+
+// Initiate Stores
+const studentStore = useStudentStore()
+
+// Initiate Composables
+const windowSize = useWindowSize()
+
+// Get appropriate component based on window size
+const currentComponent = computed(() => {
+  return windowSize.value.width > 1030 ? StudentsTable : StudentsTableMobile
+})
+
+// Fetch Student data and add to store
+const { data: allStudents, fetchData: fetchStudents } = useApi('students')
+if(studentStore.getStudents.length < 1){
+  fetchStudents().then(()=>{
+    studentStore.setStudents(allStudents.value)
+  })
+}
+
+// Initiate search variable
+const search = ref('')
+
+// Returns array of students based on search term, stores array in student Store
+const filteredStudents = computed(() => {
+  const searchTerm = search.value.toLowerCase();
+  const filterFunction = s => (
+    s.first_name.toLowerCase().includes(searchTerm) ||
+    s.last_name.toLowerCase().includes(searchTerm)
+  );
+
+  const filtered = searchTerm.length > 0
+    ? studentStore.getStudents.filter(filterFunction)
+    : studentStore.getStudents;
+
+  studentStore.setFilteredStudents(filtered);
+  return filtered;
+});
+
+</script>
+
+<style lang="scss" scoped>
+
+</style>

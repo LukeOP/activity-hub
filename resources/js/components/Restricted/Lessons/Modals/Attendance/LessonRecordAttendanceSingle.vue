@@ -84,9 +84,9 @@ function handleClick(result){
 }
 
 function submitRecord(){
-  console.log(attendanceData.value)
+  // console.log(attendanceData.value)
   axiosClient.post('/lesson-attendance', attendanceData.value).then(res => {
-    calendar.addAttendanceRecord(res.data.data)
+    calendar.addAttendanceRecord(res.data)
     modal.close()
   })
 }

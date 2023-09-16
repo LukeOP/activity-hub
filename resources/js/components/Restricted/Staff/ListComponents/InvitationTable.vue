@@ -1,5 +1,5 @@
 <template>
-  <div v-if="invitations && invitations.data.length > 0">
+  <div v-if="invitations && invitations.length > 0">
     <h3 class="mt-5">Invitations Pending:</h3>
     <p>Awaiting user(s) to accept invitation to join {{currentSchool.name}}.</p>
      <table role="table" id="staff-table">

@@ -66,7 +66,7 @@ const newSubject = ref('')
 function addSubject(){
   axiosClient.post('user-subjects', {user_id: staff.id, school_id: currentSchool.id, subject: newSubject.value})
   .then(res => {
-    staff.subjects.push(res.data.data)
+    staff.subjects.push(res.data)
   })
   newSubject.value = ''
 }
@@ -84,7 +84,7 @@ function handlePositionEdit(position){
 function setActions(){
   const actionsArray = []
   if(user.hasPermission('STAFF_D', currentSchool.id) && user.attributes.id != staff.id){
-    actionsArray.push({ header: 'Unlink From School', to: { name: 'Dashboard' }, modal: 'DeleteLesson', icon: 'fa-solid fa-link-slash', additional: true, red: true})
+    actionsArray.push({ header: 'Unlink From School', to: { name: 'StaffDetails' }, modal: 'DeleteLesson', icon: 'fa-solid fa-link-slash', additional: true, red: true})
   }
   actions.setItems(actionsArray)
 }

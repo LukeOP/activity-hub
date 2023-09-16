@@ -55,6 +55,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/schools', SchoolsController::class);
 
     Route::resource('/students', StudentsController::class);
+    Route::get('/student-lessons/{student_id}', [LessonsController::class, 'getStudentLessons']);
+    Route::get('/student-lessons/past/{student_id}', [LessonsController::class, 'getStudentPastLessons']);
     Route::get('school-students/{schoolId}', [StudentsController::class, 'getStudentsInSchool']);
     Route::resource('/student-contacts', ContactsController::class);
 

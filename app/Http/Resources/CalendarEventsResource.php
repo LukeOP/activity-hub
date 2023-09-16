@@ -25,7 +25,11 @@ class CalendarEventsResource extends JsonResource
                 'className' => $this->className,
                 'type' => $this->reference_type,
             ],
-            'reference_type' => $reference_data
+            'reference' => [
+                'id' => $this->reference_type_id,
+                'type' => $this->reference_type,
+                'data' => $reference_data
+            ]
         ];
     }
 }

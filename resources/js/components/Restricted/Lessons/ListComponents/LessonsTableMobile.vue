@@ -12,7 +12,7 @@ const props = defineProps({lessons:Array});
 <style lang="scss" scoped>
 .lesson {
   &:nth-child(odd){
-  background-color: lighten($ah-primary-background, 6%);
+    background-color: lighten($ah-primary-background, 6%);
   }
 }
 </style>

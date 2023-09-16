@@ -51,7 +51,7 @@ export default {
     function handleCreateNote(){
       axiosClient.post('/lesson-notes', noteData.value)
       .then((res) => {
-        lessonStore.addNote(res.data.data)
+        lessonStore.addNote(res.data)
         modal.close()
       })
     }

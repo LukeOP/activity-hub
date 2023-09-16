@@ -25,8 +25,10 @@ class CalendarEvent extends Model
 
     public function lesson($id)
     {
-        return LessonsResource::collection(
-            Lesson::where('id', $id)->get()
-        );
+        return new LessonsResource(Lesson::where('id', $id)->first());
+
+        // return LessonsResource::collection(
+        //     Lesson::where('id', $id)->get()
+        // );
     }
 }

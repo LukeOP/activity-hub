@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import axiosClient from "../axios";
-import { useMainStore } from './main'
+import { useMainStore } from './_main'
 
 
 function getState(){
