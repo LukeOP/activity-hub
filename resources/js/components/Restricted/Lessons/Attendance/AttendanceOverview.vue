@@ -38,7 +38,7 @@ const subjectArray = ref([])
 
 // Functions
 function filteredLessons(type){
-  let filtLessons = lessons.value.data.filter(l => l.attributes.instrument == type && l.attendance.length > 0)
+  let filtLessons = lessons.value.filter(l => l.attributes.instrument == type && l.attendance.length > 0)
   sorter.sort(filtLessons, 'student.last_name')
   return filtLessons
 }
@@ -46,7 +46,7 @@ function filteredLessons(type){
 function handleClick(lesson){
   const { data: lessonData, fetchData} = useApi('lessons/' + lesson.id)
   fetchData().then(()=>{
-    lessonStore.setLesson(lessonData.value.data)
+    lessonStore.setLesson(lessonData.value)
     router.push({
       name: 'LessonAttendanceSingle',
       params: {
@@ -58,7 +58,7 @@ function handleClick(lesson){
 
 onMounted( async ()=>{
   await fetchData()
-  subjectArray.value = Array.from(new Set(lessons.value.data.map(l => l.attributes.instrument)))
+  subjectArray.value = Array.from(new Set(lessons.value.map(l => l.attributes.instrument)))
 })
 
 </script>

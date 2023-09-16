@@ -37,24 +37,18 @@ class LessonsController extends Controller
         }
 
         return $lessonCollection;
+    }
 
+    public function getStudentLessons($student_id)
+    {
+        $lessons = Lesson::where('student_id', $student_id)->get();
+        return LessonsResource::collection($lessons);
+    }
 
-        // User is not an admin
-        // if (!$user->isAdmin) {
-        //     return LessonsResource::collection(
-        //         Lesson::where('user_id', $user->id)->get()
-        //     );
-        // } else {
-        //     $schoolIds = $user->isAdmin->pluck('school_id')->toArray();
-
-        //     return LessonsResource::collection(
-        //         Lesson::where(function ($query) use ($schoolIds, $user) {
-        //             $query->whereHas('student', function ($query) use ($schoolIds) {
-        //                 $query->whereIn('school_id', $schoolIds);
-        //             })->orWhere('user_id', $user->id);
-        //         })->get()
-        //     );
-        // }
+    public function getStudentPastLessons($student_id)
+    {
+        $lessons = Lesson::onlyTrashed()->where('student_id', $student_id)->get();
+        return LessonsResource::collection($lessons);
     }
 
     /**

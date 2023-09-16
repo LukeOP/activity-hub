@@ -20,10 +20,10 @@ class StudentsResource extends JsonResource
             'last_name' => $this->last_name,
             'year_level' => (string)$this->year_level,
             'contacts' => new ContactsResource($this->contacts),
-            // 'school' => [
-            //     'id' => $this->school->id,
-            //     'name' => $this->school->name,
-            // ],
+            'school' => [
+                'id' => $this->school->id,
+                'name' => $this->school->name,
+            ],
         ];
     }
 }

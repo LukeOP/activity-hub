@@ -8,7 +8,7 @@
         v-for="school in schools.data" :key="school.id" 
         @click="selectedSchool = school; key++">{{school.name}}</span>
       </div>
-      <span v-if="user.hasPermission('STAFF_C', selectedSchool.id)" class="add-staff" @click="handleNewStaffClick">New Staff Member</span>
+      <!-- <span v-if="user.hasPermission('STAFF_C', selectedSchool.id)" class="add-staff" @click="handleNewStaffClick">New Staff Member</span> -->
     </div>
     <div v-if="selectedSchool">
       <StaffTable :school_id="selectedSchool.id" :key="key" />
@@ -27,30 +27,38 @@ import { useSchoolStore } from "../../../stores/schools";
 import { useUserStore } from "../../../stores/user";
 import StaffTable from './ListComponents/StaffTable.vue'
 import InvitationTable from './ListComponents/InvitationTable.vue'
+import { useActionsStore } from "/resources/js/stores/actions";
 
 const schoolStore = useSchoolStore()
-const currentSchool = schoolStore.getSchool
+// const currentSchool = 
 const modal = useModalStore()
 const user = useUserStore()
+const actions = useActionsStore()
 
-const selectedSchool = ref(currentSchool)
+
+// Set side actions available on this page
+const actionArray = []
+if(user.hasPermissionAny('STAFF_C')){
+  actionArray.push({ header: 'Link New Staff', to: { name: 'StaffList' }, icon: 'fa-solid fa-square-plus', modal: 'NewStaff'})
+}
+actions.setItems(actionArray)
+
+const selectedSchool = ref({})
 const key = ref(0)
-
 const { data: schools, fetchData: fetchSchools } = useApi('schools')
-fetchSchools().then(()=>{
-  if(Object.keys(currentSchool).length > 0) {selectedSchool.value = currentSchool}
-  else {
-    selectedSchool.value = schools.value.data[0]}
-});
+
+if(Object.keys(schoolStore.getSchool).length > 0){
+  selectedSchool.value = schoolStore.getSchool
+} else {
+  fetchSchools().then(()=>{
+    selectedSchool.value = schools.value[0]
+  })
+}
 
 watch(() => selectedSchool.value, (newValue) => {
   schoolStore.setSchool(newValue)
   key.value++
   })
-
-function handleNewStaffClick(){
-  modal.open('NewStaff')
-}
 
 </script>
 

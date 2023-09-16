@@ -1,7 +1,7 @@
 <template>
   <div :class="{background: showDropDown}" @click.self="showDropDown = false">
     <div v-if="!hideMenu" id="profile-container" @click="showDropDown = !showDropDown">
-    <div id="user-img" @mouseenter="showDropDown = true">
+    <div id="user-img" @click.self="showDropDown = true">
       <span id="icon-text">{{initials}}</span>
     </div>
 

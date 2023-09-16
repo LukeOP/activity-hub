@@ -24,6 +24,7 @@ import { useUserStore } from '../../../stores/user';
 import Modal from '../../Modal.vue';
 import LessonCalendarClickVue from '../Lessons/Modals/Calendar/LessonCalendarClick.vue';
 import { useModalStore } from '../../../stores/modal';
+import { useLessonsStore } from '/resources/js/stores/lessons';
 
 
 export default {
@@ -42,8 +43,9 @@ export default {
     const user = useUserStore()
     const modal = useModalStore()
     const calendar = useCalendarStore()
+    const lessonStore = useLessonsStore()
     const windowSize = useWindowSize()
-    const { data: events, loading, fetchData } = useApi('/calendar-events')
+    const { data: events, loading, fetchData: fetchCalendarEvents } = useApi('/calendar-events')
     const eventsLoaded = ref(false)
 
     // MAIN CALENDAR OPTIONS
@@ -101,30 +103,25 @@ export default {
     
     function handleEventClick(info) {
       if(info.event.extendedProps.reference_type === 'lesson'){
-        const {data:lessonData, fetchData} = useApi('lessons/' + info.event.extendedProps.reference_type_id)
-        fetchData().then(()=>{
-          calendar.setEventData({
-            lesson_id: info.event.extendedProps.reference_type_id, 
-            dateTime: info.event.start,
-            lesson: lessonData.value.data})
-          modal.open('LessonCalendarClick')
-
-          // router.push({
-          //   name: 'LessonCalendarClick',
-          // })
-        })
+        calendar.setEventData({
+          lesson_id: info.event.extendedProps.lesson.id, 
+          dateTime: info.event.start,
+          lesson: info.event.extendedProps.lesson})
+        lessonStore.setLesson(info.event.extendedProps.lesson)
+        modal.open('LessonCalendarClick')
       }
     }
 
     watch(toRef(calendar.data, 'calendarData'), (newData) => {
       events.value = newData;
-      console.log('newData', newData)
+      // console.log('newData', newData)
       calendarOptions.value.events = newData;
     }, {deep:true});
 
     onMounted(async () => {
-      await fetchData();
-      events.value = formatEvent(events.value.data, user.attributes.id);
+      await fetchCalendarEvents();
+      // console.log(events.value)
+      events.value = formatEvent(events.value, user.attributes.id);
       calendarOptions.value.events = events.value;
       calendar.setData(events.value);
       eventsLoaded.value = true;

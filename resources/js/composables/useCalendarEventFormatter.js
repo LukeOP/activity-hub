@@ -1,25 +1,26 @@
 export function useCalendarEventFormatter() {
   
   const formatEvent = (data, user_id) => {
+    // console.log(data)
     let calendarEvents = []
     // console.log(data)
     data.forEach(element => {
     // console.log(element)
       let newEvent = {
         id: element.id,
-        title: element.calendar.title ? element.calendar.title : element.reference_type[0].student.first_name + ' ' + element.reference_type[0].student.last_name,
-        startTime: element.reference_type[0].attributes.start,
-        endTime: element.reference_type[0].attributes.end,
-        daysOfWeek: [getWeekDay(element.reference_type[0].attributes.day)],
-        startRecur: element.reference_type[0].attributes.start_date,
+        title: element.calendar.title ? element.calendar.title : element.reference.data.student.first_name + ' ' + element.reference.data.student.last_name,
+        startTime: element.reference.data.attributes.start,
+        endTime: element.reference.data.attributes.end,
+        daysOfWeek: [getWeekDay(element.reference.data.attributes.day)],
+        startRecur: element.reference.data.attributes.start_date,
         reference_type: element.calendar.type,
-        reference_type_id: element.reference_type[0].id,
-        endRecur: element.reference_type[0].attributes.end_date || null,
+        reference_type_id: element.reference.data.id,
+        endRecur: element.reference.data.attributes.end_date || null,
         color: getColor(element.calendar.user_id, user_id),
-        location: element.reference_type[0].school.room,
-        tutor: getTutor(element.reference_type[0].tutor, user_id),
-        attendance: element.reference_type[0].attendance
-        
+        location: element.reference.data.school.room,
+        tutor: getTutor(element.reference.data.tutor, user_id),
+        attendance: element.reference.data.attendance,
+        lesson: element.reference.data
       }
       calendarEvents.push(newEvent)
     });

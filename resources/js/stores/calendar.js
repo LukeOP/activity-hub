@@ -18,7 +18,7 @@ export const useCalendarStore = defineStore('calendar', {
     async loadData(){
       const formatEvent = useCalendarEventFormatter()
       const res = await axiosClient.get('/calendar-events')
-      this.data = formatEvent(res.data.data)
+      this.data = formatEvent(res.data)
     },
     setEventData(data){
       this.eventData = data

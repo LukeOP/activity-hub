@@ -14,9 +14,8 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import axiosClient from "../../../../axios";
-import useApi from "../../../../composables/useApi";
 import { useModalStore } from "../../../../stores/modal";
 import { useSchoolStore } from "../../../../stores/schools";
 import { useStaffStore } from "../../../../stores/staff";

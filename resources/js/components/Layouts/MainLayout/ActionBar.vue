@@ -135,9 +135,7 @@ function modalCheck(item){
     background-color: $ah-secondary;
     border-left: 8px solid $ah-secondary-light;
     color: lighten($ah-secondary, 55%);
-    font-weight: bold;
     .linkText {
-      font-weight: bold;
       padding: 12px;
     }
   }

@@ -35,7 +35,8 @@
 .btn.btn-primary.active:hover,
 .btn.btn-primary:active.focus,
 .btn.btn-primary:active:focus,
-.btn.btn-primary:active:hover {
+.btn.btn-primary:active:hover,
+.btn.btn-primary:focus-visible {
   color: #fff;
   background-color: $ah-primary-dark;
   border-color: $ah-primary-dark;

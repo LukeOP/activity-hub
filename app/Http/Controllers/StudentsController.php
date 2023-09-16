@@ -29,20 +29,10 @@ class StudentsController extends Controller
     public function getStudentsInSchool($schoolId)
     {
         $students = Student::whereHas('school', function ($query) use ($schoolId) {
-            $query->where('schools.id', $schoolId);
+            $query->where('schools.id', $schoolId)->orderBy('last_name');
         })->get();
 
-        // Return the students or pass them to a resource for transformation.
-
-        return $students;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return StudentsResource::collection($students);
     }
 
     /**
@@ -50,21 +40,23 @@ class StudentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $student = Student::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'tutor_group' => $request->tutor_group,
+            'year_level' => $request->year_level,
+            'gender' => $request->gender,
+            'identifier' => $request->identifier,
+            'school_id' => $request->school_id,
+        ]);
+
+        return new StudentsResource($student);
     }
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
     {
         //
     }

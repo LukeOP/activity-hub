@@ -8,14 +8,7 @@
 
         <div id="nav">
           <router-link v-for="item in navItems" :key="item" :to="item.to" class="link" @click="menu.navActive = false" :class="{ active: isActive(item) }">
-            <!-- <span class="linkText"><i class="me-3 icon" :class="item.icon"></i>{{item.header}}</span> -->
-            <!-- <span class="linkText"><img class="icon" :src="item.icon" :alt="item.header + ' Icon'">{{item.header}}</span> -->
             <span v-html="item.icon" class="icon fill-white"></span><span>{{item.header}}</span>
-              <!-- <div v-show="item.subItems && item.showSubItems" class="subItemContainer">
-                <router-link v-for="subItem in item.subItems" :key="subItem.header" :to="subItem.to" class="subLink" :class="{ activeSub: isActive(subItem) }">
-                  {{ subItem.header}}
-                </router-link>
-              </div> -->
           </router-link>
           
         </div>
@@ -87,7 +80,7 @@ const navOptions = [
   // { header: 'Hires', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-moon', permission: 'HIRES_V'},
   // { header: 'Rooms', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-book', permission: 'ROOMS_V'},
   // { header: 'Instruments', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-car', permission: 'INSTRUMENTS_V'},
-  { header: 'Students', to: { name: 'StudentsTable' }, showSubItems: false, icon: icons.children, permission: 'STUDENTS_V'},
+  { header: 'Students', to: { name: 'StudentsList' }, showSubItems: false, icon: icons.children, permission: 'STUDENTS_V'},
   { header: 'Staff', to: { name: 'StaffList' }, showSubItems: false, icon: icons.userGroup, permission: 'STAFF_V'},
 ]
 function setNavItems(){

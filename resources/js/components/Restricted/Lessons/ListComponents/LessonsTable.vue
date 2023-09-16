@@ -61,12 +61,9 @@ export default {
     const user = useUserStore()
 
     function handleLessonClick(lesson){
-      lessonStore.setLesson({lesson: lesson})
+      lessonStore.setLesson(lesson)
       router.push({
-        name: 'LessonDetails',
-        params: {
-          id: lesson.id
-        }
+        name: 'LessonDetails'
       })
     }
 

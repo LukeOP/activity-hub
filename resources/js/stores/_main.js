@@ -6,6 +6,7 @@ import { useFilterStore } from "./filter";
 import { useMenuStore } from "./menu";
 import { useModalStore } from "./modal";
 import { useStaffStore } from "./staff";
+import { useStudentStore } from "./students";
 
 
 function getState(){
@@ -36,6 +37,9 @@ export const useMainStore = defineStore('main', {
 
       const staffStore = useStaffStore()
         staffStore.reset()
+
+      const studentStore = useStudentStore()
+        studentStore.reset()
     },
   },
   getters: {

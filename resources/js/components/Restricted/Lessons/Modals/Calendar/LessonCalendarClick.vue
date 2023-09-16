@@ -77,13 +77,6 @@ export default {
       router.push(route)
     }
 
-    onMounted(() => {
-      const {data:lessonResponse, fetchData: fetchLesson} = useApi('lessons/' + calendarData.lesson_id)
-      fetchLesson().then(()=>{
-        lessonStore.setLesson(lessonResponse.value.data)
-      })
-    })
-
     return {
       handleClick, returnDetails, futureEvent, 
       attendanceRecorded, changeRoute, calendarData

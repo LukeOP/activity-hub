@@ -39,8 +39,7 @@
 </template>
 
 <script setup>
-import moment from 'moment'
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import useApi from '../../../../composables/useApi'
 import { useFilterStore } from '../../../../stores/filter'
 
@@ -48,7 +47,7 @@ const filter = useFilterStore()
 const { data: attendanceRecords, loading, fetchData } = useApi('lesson-attendance')
 fetchData().then(()=>{
   filter.setType('AttendanceReviewForm')
-  filter.setData(attendanceRecords.value.data)
+  filter.setData(attendanceRecords.value)
 })
 
 const lessons = computed(()=>{
