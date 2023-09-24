@@ -33,7 +33,7 @@ const formData = ref({
 
 function handleInvite(){
   axiosClient.post('school-invitations', formData.value).then(res =>{
-    staffStore.updateSchoolInvites(res.data.data.school_id)
+    staffStore.updateSchoolInvites(res.data.school_id)
     modal.close()
   })
 }

@@ -24,7 +24,7 @@ export const useStaffStore = defineStore('staff', {
     },
     setPermission(user_id, school_id, permission){
       axiosClient.post('user-permissions', {user_id: user_id, school_id: school_id, permission_type: permission}).then(res => {
-        this.singleStaff.permissions.push(res.data.data)
+        this.singleStaff.permissions.push(res.data)
       })
     },
     removePermission(id){

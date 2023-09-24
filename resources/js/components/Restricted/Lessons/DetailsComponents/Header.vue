@@ -1,14 +1,12 @@
 <template>
 <div class="row">
-  <div class="col-12 col-md-9">
-    <h1>{{lesson.student.first_name}} {{lesson.student.last_name}}'{{getSIfNeeded()}} {{lesson.attributes.instrument}} Lessons - 
-      <span v-if="user.hasPermission('STUDENT_V', lesson.school.id)" :class="lesson.attributes.status.toLowerCase()">{{lesson.attributes.status}}</span>
-    </h1>
+  <HeaderLine :heading="heading" :school="lesson.school.name" />
+  <!-- <div class="col-12 col-md-9">
     <button class="btn btn-outline-primary" style="width: 150px;" @click="viewStudent">View Student</button>
   </div>
-  <div class="d-none d-xl-block col-12 col-md-3">
+  <div class="d-none d-xl-block col-12 col-md-3"> -->
     <attendance-snapshot :lesson="lesson" />
-  </div>
+  <!-- </div> -->
 </div>
   
 </template>
@@ -16,11 +14,13 @@
 <script>
 import { useRouter } from 'vue-router'
 import AttendanceSnapshot from '../Attendance/AttendanceSnapshot.vue'
+import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
 import { useStudentStore } from '/resources/js/stores/students'
 import { useUserStore } from '/resources/js/stores/user'
 export default {
   components: {
-    AttendanceSnapshot
+    AttendanceSnapshot,
+    HeaderLine,
   },
   props: {
     lesson: Object
@@ -31,8 +31,10 @@ export default {
     const studentStore = useStudentStore()
     const user = useUserStore()
 
+    const heading = `${props.lesson.student.first_name} ${props.lesson.student.last_name}${getSIfNeeded()} ${props.lesson.attributes.instrument} Lessons`
+
     function getSIfNeeded(){
-      if(props.lesson.student.last_name.slice(-1) != 's') return 's'
+      return props.lesson.student.last_name.slice(-1) != "s" ? "'s" : "'"
     }
 
     function viewStudent(){
@@ -43,7 +45,8 @@ export default {
     return {
       getSIfNeeded,
       viewStudent,
-      user
+      user,
+      heading
     }
   }
 

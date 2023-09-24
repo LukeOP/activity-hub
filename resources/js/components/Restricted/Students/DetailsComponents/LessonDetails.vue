@@ -22,6 +22,7 @@
 import useApi from '/resources/js/composables/useApi';
 import SingleLessonTile from './SingleLessonTile.vue'
 import { ref } from 'vue'
+
 const props = defineProps({student:Object})
 const showActiveLessons = ref(true)
 

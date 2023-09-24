@@ -34,7 +34,7 @@ const lessonStore = useLessonsStore()
 const actions = useActionsStore()
 
 // Initiate Composables
-const windowSize = useWindowSize()
+const { windowSize } = useWindowSize()
 
 // Get appropriate component based on window size
 const currentComponent = computed(() => {

@@ -24,7 +24,7 @@ const menu = useMenuStore()
 const filter = useFilterStore()
 const actions = useActionsStore()
 const route = useRoute()
-const windowSize = useWindowSize()
+const { windowSize } = useWindowSize()
 
 const menuItems = ref([]);
 

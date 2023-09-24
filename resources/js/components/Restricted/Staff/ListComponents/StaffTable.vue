@@ -6,7 +6,6 @@
           <th role="columnheader" @click="sortData('first_name')" style="width: 1%">First Name:</th>
           <th role="columnheader" @click="sortData('last_name')" style="width: 1%">Last Name:</th>
           <th role="columnheader" @click="sortData('email')" style="width: 1%" >Email:</th>
-          <!-- <th role="columnheader" @click="sortData('tutor.last_name')" style="width: 1%" >Lessons Assigned:</th> -->
           <th role="columnheader" style="width: 1%" >Administrator:</th>
         </tr>
       </thead>
@@ -27,21 +26,13 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import useApi from '../../../../composables/useApi'
 import useSorter from '../../../../composables/useSorter'
-import { useSchoolStore } from '../../../../stores/schools'
 import { useStaffStore } from '../../../../stores/staff'
 
-const props = defineProps({school_id: String})
+const props = defineProps({staff: Array})
 const staffStore = useStaffStore()
-const schoolStore = useSchoolStore()
 const sorter = useSorter()
 const router = useRouter()
-
-const { data: staff, fetchData: fetchStaff } = useApi('school-users/' + props.school_id)
-fetchStaff().then(()=>{
-  staffStore.setStaffList(staff.value)
-})
 
 function isAdmin(member){
   return member.permissions.find(m => m.type === 'administrator') ? 'Yes' : ''
@@ -53,14 +44,12 @@ function sortData(field){
 
 function handleRowClick(staff){
   staffStore.setStaff(staff)
-  schoolStore.setSchool({name: staff.permissions[0].name, id: staff.permissions[0].school_id})
+  // schoolStore.setSchool({name: staff.permissions[0].name, id: staff.permissions[0].school_id})
   router.push({
     name: 'StaffDetails',
   })
 }
 
-
-  
 </script>
 
 <style lang="scss" scoped>

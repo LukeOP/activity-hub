@@ -20,7 +20,7 @@
           <td>{{ permission.access }}</td>
           <td v-for="action in permission.actions" :key="action" :style="{ width: '15%' }">
             <i :style="{ cursor: 'pointer' }" :class="getPermissionIconClass(permission, action)"
-              @click="togglePermission(action)"></i>
+              @click="togglePermission(action)" />
           </td>
         </tr>
       </tbody>
@@ -29,23 +29,28 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
 import { useSchoolStore } from "../../../../stores/schools";
 import { useStaffStore } from "../../../../stores/staff";
 import { useUserStore } from "../../../../stores/user";
 
+// Initiate Stores
 const staffStore = useStaffStore();
-const staff = staffStore.getStaff;
 const schoolStore = useSchoolStore();
-const school = schoolStore.getSchool
 const user = useUserStore()
 
-const isAdministrator = computed(() => (staff.permissions.find(p => p.type === "administrator") ? "Yes" : "No"));
+// Get stored values
+const staff = staffStore.getStaff;
+const school = schoolStore.getSchool
 
-function hasPermission(value) {
-  return isAdministrator.value === "Yes" || staff.permissions.some(p => p.type === value);
+// Set whether staff member is an administrator or not
+const administrator = staff.permissions.some(p => p.type === 'administrator')
+
+// Check if staff has permission already in staff permissions
+function StaffHasPermission(value) {
+  return staff.permissions.some(p => p.type == value);
 }
 
+// Permission array of values that can be toggled by an administrator or 'STAFF_E'
 const permissionsArray = [
   { access: "Lessons", actions: ["LESSONS_R", "LESSONS_V", "LESSONS_E", "LESSONS_C", "LESSONS_D"] },
   { access: "Lesson Requests", actions: ["LESSON_REQ_R", "LESSON_REQ_V", "LESSON_REQ_E", "LESSON_REQ_C", "LESSON_REQ_D"] },
@@ -57,33 +62,39 @@ const permissionsArray = [
   { access: "Rooms", actions: ["ROOMS_R", "ROOMS_V", "ROOMS_E", "ROOMS_C", "ROOMS_D"] },
   { access: "Bookings", actions: ["BOOKINGS_R", "BOOKINGS_V", "BOOKINGS_E", "BOOKINGS_C", "BOOKINGS_D"] },
   { access: "Staff", actions: ["STAFF_R", "STAFF_V", "STAFF_E", "STAFF_C", "STAFF_D"] },
-  
 ];
 
+// Display the correct icon for the permission access
 function getPermissionIconClass(permission, action) {
   if(permission == 'administrator'){
-    const hasPerm = hasPermission(action);
+    const hasPerm = StaffHasPermission(action);
     return `${hasPerm ? "fa-solid fa-circle-check" : "fa-regular fa-circle-xmark"}`;
   }
-  const hasPerm = hasPermission(action);
+  const hasPerm = StaffHasPermission(action);
   return `fa-2x ${hasPerm ? "fa-solid fa-circle-check" : "fa-regular fa-circle"}`;
 }
 
-function togglePermission(action){
-  if((user.hasPermission('STAFF_E', school.id) || user.hasPermission('administrator', school.id)) && isAdministrator.value === 'No') {
-    if(hasPermission(action)) {
-      let permission = staff.permissions.find(p => p.type === action)
-      staffStore.removePermission(permission.id)
-    }
-    else {
-      staffStore.setPermission(staff.id, school.id, action)
-    }
+// Toggle permission access on/off for non-administrators
+function togglePermission(action) {
+  if (!user.hasPermission('STAFF_E', school.id)) return;
+  if (administrator) return;
+
+  const permission = staff.permissions.some(p => p.type === action);
+  if (permission) {
+    // The permission object with the specified action exists and needs to be removed
+    let permissionObject = staff.permissions.find(p => p.type === action)
+    staffStore.removePermission(permissionObject.id);
+  } else {
+    // The permission object doesn't exist and needs to be added
+    staffStore.setPermission(staff.id, school.id, action);
   }
 }
+
+
+// Toggle whether a staff member is an administrator or not
 function toggleAdministrator(){
   if(user.hasPermission('administrator', school.id) && (user.attributes.id != staff.id)) {
-    console.log(user.attributes.id, staff.id)
-    if(hasPermission('administrator')) {
+    if(StaffHasPermission('administrator')) {
       let permission = staff.permissions.find(p => p.type === 'administrator')
       staffStore.removePermission(permission.id)
     }

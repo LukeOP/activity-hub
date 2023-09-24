@@ -1,7 +1,7 @@
 <template>
   <div class="row">
+    <HeaderLine heading="Students" />
     <div class="col col-12 col-md-6">
-      <h1>Students</h1>
       <!-- Search input -->
       <input type="text" class="form-control mb-2" placeholder="Student search..." v-model="search">
     </div>
@@ -21,12 +21,13 @@ import StudentsTableMobile from './ListComponents/StudentsTableMobile.vue'
 import { useStudentStore } from '/resources/js/stores/students';
 import { computed, ref } from 'vue';
 import { useWindowSize } from '/resources/js/composables/useWindowSize';
+import HeaderLine from '../../Layouts/MainLayout/Elements/HeaderLine.vue';
 
 // Initiate Stores
 const studentStore = useStudentStore()
 
 // Initiate Composables
-const windowSize = useWindowSize()
+const { windowSize } = useWindowSize()
 
 // Get appropriate component based on window size
 const currentComponent = computed(() => {

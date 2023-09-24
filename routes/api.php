@@ -5,6 +5,7 @@ use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\InstrumentsController;
 use App\Http\Controllers\LessonAttendanceController;
 use App\Http\Controllers\LessonNoteController;
 use App\Http\Controllers\LessonNotesController;
@@ -43,6 +44,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/image/{path}/{filename}', [ImageController::class, 'getImage']);
     Route::post('/image', [ImageController::class, 'storeImage']);
+    Route::resource('instruments', InstrumentsController::class);
+    Route::get('instrument-states', [InstrumentsController::class, 'getInstrumentStates']);
 
     Route::resource('/lesson-attendance', LessonAttendanceController::class);
     Route::resource('/lesson-notes', LessonNotesController::class);

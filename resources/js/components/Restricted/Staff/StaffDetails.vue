@@ -1,9 +1,6 @@
 <template>
   <div class="mt-1">
-    <div class="header">
-      <span class="name">{{staff.first_name}} {{staff.last_name}}</span>
-      <span class="school">{{currentSchool.name}}</span>
-    </div>
+    <HeaderLine :heading="staff.first_name + ' ' + staff.last_name" :school="currentSchool.name"/>
     
     <div class="body row">
       <div class="col col-12 col-md-6">
@@ -48,6 +45,7 @@ import { useSchoolStore } from "../../../stores/schools";
 import axiosClient from "../../../axios";
 import { useModalStore } from "../../../stores/modal";
 import SchoolPermissions from './Details/Permissions.vue'
+import HeaderLine from "../../Layouts/MainLayout/Elements/HeaderLine.vue";
 import { useUserStore } from "../../../stores/user";
 import { useActionsStore } from "@/stores/actions";
 
