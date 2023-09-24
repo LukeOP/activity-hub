@@ -1,13 +1,7 @@
 <template>
 <div>
   <!-- Header -->
-  <section class="row">
-    <div class="col-12 col-md-8">
-      <h1>Lessons:</h1>
-    </div>
-    <div class="col-12 col-md-4">
-    </div>
-  </section>
+  <HeaderLine heading="Lessons" />
 
   <!-- Table component -->
   <section v-if="filteredLessons">
@@ -23,6 +17,7 @@ import { useFilterStore } from '../../../stores/filter'
 import useApi from '../../../composables/useApi'
 import { useWindowSize } from '../../../composables/useWindowSize'
 
+import HeaderLine from '../../Layouts/MainLayout/Elements/HeaderLine.vue'
 import LessonsTable from './ListComponents/LessonsTable.vue'
 import LessonsTableMobile from './ListComponents/LessonsTableMobile.vue'
 import { useActionsStore } from '../../../stores/actions'
@@ -36,7 +31,7 @@ const actions = useActionsStore()
 const user = useUserStore()
 
 // Initiate Composables
-const windowSize = useWindowSize()
+const { windowSize } = useWindowSize()
 
 // Get appropriate component based on window size
 const currentComponent = computed(() => {
@@ -56,7 +51,6 @@ fetchData().then(() => {
   },300)
   
 })
-
 
 // Set side actions available on this page
 const actionArray = []

@@ -1,11 +1,9 @@
 <template>
-  <h1>Events</h1>
+  <HeaderLine heading="Events" />
 </template>
 
-<script>
-export default {
-
-}
+<script setup>
+import HeaderLine from '../../Layouts/MainLayout/Elements/HeaderLine.vue'
 </script>
 
 <style>

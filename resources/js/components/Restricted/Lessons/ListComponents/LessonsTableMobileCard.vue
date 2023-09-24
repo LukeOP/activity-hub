@@ -25,11 +25,13 @@
 
 <script setup>
 import moment from "moment"
+import { useLessonsStore } from "/resources/js/stores/lessons"
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 const props = defineProps({lesson:Object})
 
 const router = useRouter()
+const lessonStore = useLessonsStore()
 
 const active = ref(false)
 
@@ -37,11 +39,9 @@ function formatTime(time){
   return moment(time, 'HH:mm:ss').format('h:mma')
 }
 function LessonDetails(){
+  lessonStore.setLesson(props.lesson)
   router.push({
-    name: 'LessonDetails',
-    params: {
-      id: props.lesson.id
-    }
+    name: 'LessonDetails'
   })
 }
 

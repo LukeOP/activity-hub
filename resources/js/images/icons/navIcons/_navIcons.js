@@ -7,6 +7,7 @@ import { xmark } from './xmark'
 import { gears } from './gears'
 import { bars } from './bars'
 import { filter } from './filter'
+import { guitar } from './guitar'
 
 export const navIcons = {
   house,
@@ -17,5 +18,6 @@ export const navIcons = {
   xmark,
   gears,
   bars,
-  filter
+  filter,
+  guitar
 }

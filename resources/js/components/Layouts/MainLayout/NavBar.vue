@@ -37,7 +37,6 @@ import { computed, ref, watch } from 'vue'
 import { useUserStore } from '../../../stores/user'
 import { useMenuStore } from '../../../stores/menu'
 import { useRoute, useRouter } from 'vue-router'
-import { useWindowSize } from '../../../composables/useWindowSize'
 import { useFilterStore } from '../../../stores/filter'
 import { icons } from '@/images/icons/icons'
 
@@ -48,7 +47,6 @@ const router = useRouter()
 const route = useRoute()
 const user = useUserStore()
 const menu = useMenuStore()
-const windowSize = useWindowSize()
 const userImage = ref(null)
 const navVisible = ref(false)
 
@@ -81,6 +79,7 @@ const navOptions = [
   // { header: 'Rooms', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-book', permission: 'ROOMS_V'},
   // { header: 'Instruments', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-car', permission: 'INSTRUMENTS_V'},
   { header: 'Students', to: { name: 'StudentsList' }, showSubItems: false, icon: icons.children, permission: 'STUDENTS_V'},
+  { header: 'Instruments', to: { name: 'InstrumentList' }, showSubItems: false, icon: icons.guitar, permission: 'INSTRUMENTS_V'},
   { header: 'Staff', to: { name: 'StaffList' }, showSubItems: false, icon: icons.userGroup, permission: 'STAFF_V'},
 ]
 function setNavItems(){

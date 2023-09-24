@@ -1,4 +1,4 @@
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount, computed } from 'vue';
 
 export function useWindowSize() {
   const windowSize = ref({
@@ -13,6 +13,10 @@ export function useWindowSize() {
     };
   };
 
+  const mobileFormat = computed(() => {
+    return windowSize.value.width < 769;
+  });
+
   onMounted(() => {
     window.addEventListener('resize', handleResize);
   });
@@ -25,5 +29,5 @@ export function useWindowSize() {
   //   console.log('Window size changed from', oldVal, 'to', newVal);
   // });
 
-  return windowSize;
+  return { windowSize, mobileFormat };
 }

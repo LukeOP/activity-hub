@@ -1,6 +1,6 @@
 <template>
   <div :class="{background: showDropDown}" @click.self="showDropDown = false">
-    <div v-if="!hideMenu" id="profile-container" @click="showDropDown = !showDropDown">
+    <div v-if="!mobileFormat" id="profile-container" @click="showDropDown = !showDropDown">
     <div id="user-img" @click.self="showDropDown = true">
       <span id="icon-text">{{initials}}</span>
     </div>
@@ -24,7 +24,7 @@ import { useWindowSize } from '../../../composables/useWindowSize'
 const router = useRouter()
 const user = useUserStore()
 const showDropDown = ref(false)
-const windowSize = useWindowSize()
+const { mobileFormat } = useWindowSize()
 
 const initials = computed(()=>{
   if(user.attributes.first_name) return getFirstLetter(user.attributes.first_name) + getFirstLetter(user.attributes.last_name)
@@ -51,14 +51,6 @@ function handleLogout(){
     })
   })
 }
-
-const hideMenu = ref(true)
-if(windowSize.value.width > 768) hideMenu.value = false
-
-watch(windowSize,(newSize, oldSize) => {
-  if(newSize.width > 768) hideMenu.value = false
-  else hideMenu.value = true
-})
 
 </script>
 

@@ -1,6 +1,6 @@
 <template>
 <div>
-  <h1>Create Lesson</h1>
+  <HeaderLine heading="Create Lesson" />
   <div class="row" v-if="schools.length > 0">
     <div class="col col-12 col-md-6">
       <label>School:</label>
@@ -55,8 +55,12 @@ import { ref, watch, watchEffect } from 'vue'
 import useApi from '../../../composables/useApi'
 import { useUserStore } from '../../../stores/user'
 import useSorter from '../../../composables/useSorter'
+import HeaderLine from '../../Layouts/MainLayout/Elements/HeaderLine.vue'
 
 export default {
+  components: {
+    HeaderLine
+  },
   setup() {
     const user = useUserStore()
     const sorter = useSorter()

@@ -1,62 +1,85 @@
 <template>
   <div>
-    <h1>Staff</h1>
-    <div v-if="schools" class="tab-header mb-3">
+    <HeaderLine heading="Staff" :school="selectedSchool.name" />
+    <div v-if="schoolStore.getSchools" class="tab-header mb-3">
       <div>
         <span class="school-tile unselectable" 
         :class="{active: selectedSchool.id === school.id}" 
-        v-for="school in schools.data" :key="school.id" 
+        v-for="school in schoolStore.getSchools" :key="school.id" 
         @click="selectedSchool = school; key++">{{school.name}}</span>
       </div>
-      <!-- <span v-if="user.hasPermission('STAFF_C', selectedSchool.id)" class="add-staff" @click="handleNewStaffClick">New Staff Member</span> -->
     </div>
-    <div v-if="selectedSchool">
+    <ComponentController :key="key" />
+    <!-- <div v-if="selectedSchool">
+      <component :is="currentComponent" :staff="filteredStaff" />
       <StaffTable :school_id="selectedSchool.id" :key="key" />
       <InvitationTable :school_id="selectedSchool.id" :key="key" />
-    </div>
+    </div> -->
     
     
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import useApi from "../../../composables/useApi";
-import { useModalStore } from "../../../stores/modal";
 import { useSchoolStore } from "../../../stores/schools";
 import { useUserStore } from "../../../stores/user";
 import StaffTable from './ListComponents/StaffTable.vue'
-import InvitationTable from './ListComponents/InvitationTable.vue'
+import StaffTableMobile from './ListComponents/StaffTableMobile.vue'
 import { useActionsStore } from "/resources/js/stores/actions";
+import HeaderLine from '../../Layouts/MainLayout/Elements/HeaderLine.vue'
+import { useWindowSize } from "/resources/js/composables/useWindowSize";
+import ComponentController from './ListComponents/ComponentController.vue'
 
+// Initiate Stores
 const schoolStore = useSchoolStore()
-// const currentSchool = 
-const modal = useModalStore()
 const user = useUserStore()
 const actions = useActionsStore()
 
+// Initiate Composables
+const { windowSize } = useWindowSize()
+
+// Get appropriate component based on window size
+const currentComponent = computed(() => {
+  return windowSize.value.width > 1030 ? StaffTable : StaffTableMobile
+})
 
 // Set side actions available on this page
-const actionArray = []
-if(user.hasPermissionAny('STAFF_C')){
-  actionArray.push({ header: 'Link New Staff', to: { name: 'StaffList' }, icon: 'fa-solid fa-square-plus', modal: 'NewStaff'})
+function defineActions(){
+  const actionArray = []
+  if(user.hasPermission('STAFF_C', selectedSchool.value.id)){
+    actionArray.push({ header: 'Link New Staff', to: { name: 'StaffList' }, icon: 'fa-solid fa-square-plus', modal: 'NewStaff'})
+  }
+  actions.setItems(actionArray)
 }
-actions.setItems(actionArray)
 
+// Assign selected school
 const selectedSchool = ref({})
-const key = ref(0)
-const { data: schools, fetchData: fetchSchools } = useApi('schools')
 
+// Key to update components
+const key = ref(0)
+
+// Fetch Schools Data based on Logged in User's school associations. Set selectedSchool to first school on list
+const { data: schools, fetchData: fetchSchools } = useApi('schools')
 if(Object.keys(schoolStore.getSchool).length > 0){
   selectedSchool.value = schoolStore.getSchool
 } else {
   fetchSchools().then(()=>{
+    schoolStore.setSchools(schools.value)
     selectedSchool.value = schools.value[0]
+    defineActions()
   })
 }
 
+const filteredStaff = computed(() => {
+  return 
+})
+
+// Watch for a change in selected school an update components
 watch(() => selectedSchool.value, (newValue) => {
   schoolStore.setSchool(newValue)
+  defineActions()
   key.value++
   })
 

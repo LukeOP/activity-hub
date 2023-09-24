@@ -1,14 +1,14 @@
 <template>
 <div>
-  <h1>Your Profile:</h1>
+  <HeaderLine :heading="user.attributes.first_name + ' ' + user.attributes.last_name + ' Profile'" />
   
   <div class="d-flex mb-3">
-    <div class="justify-content-center" id="user-image-container">
+    <!-- <div class="justify-content-center" id="user-image-container">
       <div id="user-img" @click="handleProfile">
         <span id="icon-text">{{initials}}</span>
       </div>
-    </div>
-    <div class="justify-content-center p-3">
+    </div> -->
+    <div class="mt-2">
       <h2 class="text-primary">Your Details:</h2>
       <div class="heading">Name: <span class="data">{{user.attributes.first_name}} {{user.attributes.last_name}}</span></div>
       <div class="heading">Email: <span class="data">{{user.attributes.email}}</span></div>
@@ -30,6 +30,8 @@
 import { computed, ref } from 'vue'
 import { useModalStore } from '../../../../stores/modal'
 import { useUserStore } from '../../../../stores/user'
+
+import HeaderLine from '../../../Layouts/MainLayout/Elements/HeaderLine.vue'
 
 const user = useUserStore()
 const modal = useModalStore()

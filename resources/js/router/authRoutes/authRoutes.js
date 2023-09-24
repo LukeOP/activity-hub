@@ -5,6 +5,7 @@ import eventsRoutes from './Events';
 import dashboardRoutes from './Dashboard';
 import staffRoutes from './Staff';
 import studentsRoutes from './Students';
+import instrumentRoutes from './Instruments';
 
 const authRoutes = [
   {
@@ -22,6 +23,7 @@ const authRoutes = [
       ...eventsRoutes,
       ...staffRoutes,
       ...studentsRoutes,
+      ...instrumentRoutes,
     ], 
     props: true
   },

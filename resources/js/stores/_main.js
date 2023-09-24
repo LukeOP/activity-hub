@@ -7,6 +7,7 @@ import { useMenuStore } from "./menu";
 import { useModalStore } from "./modal";
 import { useStaffStore } from "./staff";
 import { useStudentStore } from "./students";
+import { useInstrumentStore } from "./instruments";
 
 
 function getState(){
@@ -40,6 +41,9 @@ export const useMainStore = defineStore('main', {
 
       const studentStore = useStudentStore()
         studentStore.reset()
+      
+      const instrumentStore = useInstrumentStore()
+        instrumentStore.reset()
     },
   },
   getters: {

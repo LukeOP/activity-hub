@@ -44,7 +44,7 @@ export default {
     const modal = useModalStore()
     const calendar = useCalendarStore()
     const lessonStore = useLessonsStore()
-    const windowSize = useWindowSize()
+    const { mobileFormat } = useWindowSize()
     const { data: events, loading, fetchData: fetchCalendarEvents } = useApi('/calendar-events')
     const eventsLoaded = ref(false)
 
@@ -65,7 +65,7 @@ export default {
     
     // Reformats header items in Calendar based on screen size
     function headerToolbar() {
-      if(windowSize.value.width < 768){
+      if(mobileFormat.value){
         return { left: 'timeGridDay,listDay', right: 'today prev,next' }
       }
       return { left: 'title', right: 'timeGridDay,listDay today prev,next'

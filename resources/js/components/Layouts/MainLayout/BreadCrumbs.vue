@@ -1,5 +1,5 @@
 <template>
-<div class="container">
+<div class="container" v-if="!mobileFormat">
   <div class="breadcrumbs mt-1">
     <span v-for="(breadcrumb, index) in breadcrumbs" :key="index">
       <span v-if="index !== breadcrumbs.length - 1"> > </span>
@@ -11,10 +11,13 @@
 </template>
 
 <script setup>
+import { useWindowSize } from '/resources/js/composables/useWindowSize';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
+
+const { mobileFormat } = useWindowSize()
 
 const breadcrumbs = computed(() => {
   const matchedRoutes = route.matched;
