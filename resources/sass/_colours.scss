@@ -5,6 +5,7 @@ $ah-primary: #3B6580;
 // $ah-primary: #734588;
 $ah-primary-alt: #3C7DA6;
 $ah-primary-light: lighten($ah-primary, 8%);
+$ah-primary-lighter: lighten($ah-primary, 20%);
 $ah-primary-dark: darken($ah-primary, 8%);
 $ah-primary-background: lighten($ah-primary, 55%);
 

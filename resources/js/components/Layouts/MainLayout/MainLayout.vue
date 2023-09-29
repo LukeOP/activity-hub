@@ -4,9 +4,9 @@
     <div id="main-container">
       <BreadCrumbs />
       <div class="container">
-        
+
         <RouterView v-slot="{ Component }">
-          <transition name="route" mode="out-in">
+          <transition :name="getTransitionName" mode="out-in">
             <component :is="Component" />
           </transition>
         </RouterView>
@@ -20,9 +20,42 @@
 
 <script setup>
 import Menus from './Menus.vue' 
-import { computed } from 'vue'
 import Modals from './Modals.vue'
 import BreadCrumbs from './BreadCrumbs.vue'
+import { useRoute, useRouter } from 'vue-router';
+import { computed, ref } from 'vue';
+
+const router = useRouter()
+
+// Store route depths for each section
+const fromSectionDepth = ref() 
+const toSectionDepth = ref() 
+
+// Store route sections to maintain linear progression
+const fromSection = ref()
+const toSection = ref()
+
+const getTransitionName = computed(() => {
+  if(toSection.value === fromSection.value){
+    if (fromSectionDepth.value < toSectionDepth.value) {
+      return 'forwardFade';
+    } else if (fromSectionDepth.value > toSectionDepth.value) {
+      return 'backwardFade';
+    } else {
+      return '';
+    }
+  }
+  else return 'fade'
+})
+
+// Update section depth before navigation
+router.beforeEach((to, from, next) => {
+  fromSectionDepth.value = from.meta.depth
+  toSectionDepth.value = to.meta.depth
+  fromSection.value = from.meta.section
+  toSection.value = to.meta.section
+  next()
+})
 
 </script>
 
@@ -42,24 +75,4 @@ import BreadCrumbs from './BreadCrumbs.vue'
     left: 0px;
   }
 }
-
-
-
-/* route transitions */
-
-.route-enter-from {
-  opacity: 0;
-  transform: translateX(100px);
-}
-.route-enter-active {
-  transition: all 0.3s ease-out;
-}
-.route-leave-to {
-  opacity: 0;
-  transform: translateX(-100px);
-}
-.route-leave-active {
-  transition: all 0.3s ease-in;
-}
-
 </style>

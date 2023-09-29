@@ -102,11 +102,7 @@ setNavItems()
 })
 
 const isActive = (item) => {
-  if (item.subItems) {
-    return item.subItems.some(subItem => subItem.to.name === route.name)
-  } else {
-    return item.to.name === route.name
-  }
+  return item.header === route.meta.section
 }
 
 watch(() => props.state, (newValue, oldValue) => {

@@ -1,0 +1,50 @@
+$delay: 0.3s;
+
+// Route Transition fade out-in
+// Used in naviagting to a different section (eg. lessons to hires)
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: all $delay ease-out;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-leave-active {
+  transition: all $delay ease-in;
+}
+
+// Route Transition from Right to Left
+// Used in naviagting 'forwards' along a page chain (eg. LessonList to Lesson Details)
+.forwardFade-enter-from {
+  opacity: 0;
+  transform: translateX(100px);
+}
+.forwardFade-enter-active {
+  transition: all $delay ease-out;
+}
+.forwardFade-leave-to {
+  opacity: 0;
+  transform: translateX(-100px);
+}
+.forwardFade-leave-active {
+  transition: all $delay ease-in;
+}
+
+// Route Transition from left to right
+// Used in naviagting 'backwards' along a page chain (eg. Lesson Details to LessonList
+.backwardFade-enter-from {
+  opacity: 0;
+  transform: translateX(-100px);
+}
+.backwardFade-enter-active {
+  transition: all $delay ease-out;
+}
+.backwardFade-leave-to {
+  opacity: 0;
+  transform: translateX(100px);
+}
+.backwardFade-leave-active {
+  transition: all $delay ease-in;
+}
