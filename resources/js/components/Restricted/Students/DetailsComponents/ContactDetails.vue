@@ -70,10 +70,10 @@ h3 {
   border-color: $ah-primary;
 }
 #primary-carer {
-  border-color: $ah-secondary;
+  border-color: $ah-primary-light;
 }
 #secondary-carer {
-  border-color: $ah-background-dark;
+  border-color: $ah-primary-lighter;
 }
 
 @media (max-width: 768px) {
