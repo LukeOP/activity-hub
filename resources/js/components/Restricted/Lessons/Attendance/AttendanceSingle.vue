@@ -1,18 +1,11 @@
 <template>
   <div>
-    <div class="row mb-3" id="lesson-heading">
-      <div class="col col-12 col-md-8">
-        <h2>{{lesson.student.first_name}} {{lesson.student.last_name}}'s Attendance: </h2>
-        <h3>{{lesson.attributes.instrument}} lessons with {{lesson.tutor.first_name}} {{lesson.tutor.last_name}}</h3>
-      </div>
-      <div class="col col-12 col-md-4">
-        <div id="detailsBtn" class="float-end btn btn-outline-primary form-control mb-2" @click="routeChange({name: 'LessonDetails', params: {id: lesson.id}})">Lesson Details</div>
-      </div>
-    </div>
+    <HeaderLine :heading="lesson.student.full_name + `'s Attendance:`" :school="lesson.attributes.instrument + ' lessons with ' + lesson.tutor.full_name"
+      link1="Lesson Details" @link1="routeChange({name: 'LessonDetails'})"/>
     
     <div class="row mb-4">
       <div class="col-12 col-sm-4">
-        <AttendanceSnapshot :lesson="lesson" heading="Overall Attendance" />
+        <AttendanceSnapshot :lesson="lesson" heading="Overall Attendance" stats="true" />
       </div>
     </div>
 
@@ -33,6 +26,7 @@ import AttendanceTable from './AttendanceTable.vue'
 import { useRouter } from 'vue-router'
 import { useFilterStore } from '../../../../stores/filter'
 import { useLessonsStore } from '../../../../stores/lessons'
+import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
 
 const lessonStore = useLessonsStore()
 const filter = useFilterStore()

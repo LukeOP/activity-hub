@@ -2,7 +2,7 @@
   <h2 class="text-items:center">Editing Attendance</h2>
   <form style="padding:1rem" @submit.prevent="submitRecord">
     <div class="row">
-      <div class="heading">{{lesson.student.first_name}} {{lesson.student.last_name}}</div>
+      <div class="heading">{{lesson.student.full_name}}</div>
       <div class="col-12 col-md-4">
         <label for="date">Lesson date:</label>
         <input type="date" id="date" class="form-control" required :max="today" v-model="attendanceData.date">

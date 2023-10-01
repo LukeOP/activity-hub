@@ -1,12 +1,8 @@
 <template>
-<div class="row">
-  <HeaderLine :heading="heading" :school="lesson.school.name" />
-  <!-- <div class="col-12 col-md-9">
-    <button class="btn btn-outline-primary" style="width: 150px;" @click="viewStudent">View Student</button>
-  </div>
-  <div class="d-none d-xl-block col-12 col-md-3"> -->
-    <attendance-snapshot :lesson="lesson" />
-  <!-- </div> -->
+<div>
+  <HeaderLine :heading="heading" :school="lesson.school.name" :link1="links.link1" :link2="links.link2"
+    @link1="handleClick" @link2="handleClick" />
+    <!-- <attendance-snapshot :lesson="lesson" /> -->
 </div>
   
 </template>
@@ -33,6 +29,9 @@ export default {
 
     const heading = `${props.lesson.student.first_name} ${props.lesson.student.last_name}${getSIfNeeded()} ${props.lesson.attributes.instrument} Lessons`
 
+    const links = {link1: 'View Notes', link2: 'View Attendance'}
+
+
     function getSIfNeeded(){
       return props.lesson.student.last_name.slice(-1) != "s" ? "'s" : "'"
     }
@@ -42,9 +41,18 @@ export default {
       router.push({ name: 'StudentDetails'})
     }
 
+    function handleClick(value){
+      let route = []
+      if(value === 'link1') route = 'LessonNotes'
+      if(value === 'link2') route = 'LessonAttendanceSingle'
+      router.push({name: route})
+    }
+
     return {
       getSIfNeeded,
       viewStudent,
+      handleClick,
+      links,
       user,
       heading
     }

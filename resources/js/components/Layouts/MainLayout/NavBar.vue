@@ -69,18 +69,17 @@ function handleProfile(){
 }
 
 const navItems = ref([
-  { header: 'Dashboard', to: { name: 'Dashboard' }, showSubItems: false, icon: icons.house},
+  { header: 'Dashboard', to: { name: 'Dashboard' }, icon: icons.house},
 ])
 
 const navOptions = [
-  { header: 'Lessons', to: { name: 'LessonsList' }, showSubItems: false, icon: icons.chalkboard, permission: 'LESSONS_V', additional_permission: 'LESSONS_R'},
-  // { header: 'Events', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-circle', permission: 'EVENTS_V'},
-  // { header: 'Hires', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-moon', permission: 'HIRES_V'},
-  // { header: 'Rooms', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-book', permission: 'ROOMS_V'},
-  // { header: 'Instruments', to: { name: 'StudentsTable' }, showSubItems: false, icon: 'fa-solid fa-car', permission: 'INSTRUMENTS_V'},
-  { header: 'Students', to: { name: 'StudentsList' }, showSubItems: false, icon: icons.children, permission: 'STUDENTS_V'},
-  { header: 'Instruments', to: { name: 'InstrumentList' }, showSubItems: false, icon: icons.guitar, permission: 'INSTRUMENTS_V'},
-  { header: 'Staff', to: { name: 'StaffList' }, showSubItems: false, icon: icons.userGroup, permission: 'STAFF_V'},
+  { header: 'Lessons', to: { name: 'LessonsList' }, icon: icons.chalkboard, permission: 'LESSONS_V', additional_permission: 'LESSONS_R'},
+  // { header: 'Events', to: { name: 'StudentsTable' }, icon: 'fa-solid fa-circle', permission: 'EVENTS_V'},
+  { header: 'Instruments', to: { name: 'InstrumentList' }, icon: icons.guitar, permission: 'INSTRUMENTS_V'},
+  // { header: 'Hires', to: { name: 'HiresList' }, icon: icons.xmark, permission: 'HIRES_V'},
+  // { header: 'Rooms', to: { name: 'StudentsTable' }, icon: 'fa-solid fa-book', permission: 'ROOMS_V'},
+  { header: 'Students', to: { name: 'StudentsList' }, icon: icons.children, permission: 'STUDENTS_V'},
+  { header: 'Staff', to: { name: 'StaffList' }, icon: icons.userGroup, permission: 'STAFF_V'},
 ]
 function setNavItems(){
   navOptions.forEach(option => {
@@ -152,6 +151,7 @@ function handleSchools(){
   height: 1.25rem;
   margin-right: 1rem;
   margin-left: 1rem;
+  width: 25px;
 }
 #sideBar {
   display: flex;

@@ -1,6 +1,6 @@
 <template>
   <div class="mt-1">
-    <HeaderLine :heading="staff.first_name + ' ' + staff.last_name" :school="currentSchool.name"/>
+    <HeaderLine :heading="staff.full_name" :school="currentSchool.name"/>
     
     <div class="body row">
       <div class="col col-12 col-md-6">

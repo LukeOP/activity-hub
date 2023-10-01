@@ -2,7 +2,7 @@
   <div>
     <HeaderLine heading="Staff" :school="selectedSchool.name" />
     <div v-if="schoolStore.getSchools" class="tab-header mb-3">
-      <div>
+      <div v-if="schoolStore.getSchools.length > 1">
         <span class="school-tile unselectable" 
         :class="{active: selectedSchool.id === school.id}" 
         v-for="school in schoolStore.getSchools" :key="school.id" 
@@ -72,10 +72,6 @@ if(Object.keys(schoolStore.getSchool).length > 0){
   })
 }
 
-const filteredStaff = computed(() => {
-  return 
-})
-
 // Watch for a change in selected school an update components
 watch(() => selectedSchool.value, (newValue) => {
   schoolStore.setSchool(newValue)
@@ -91,15 +87,12 @@ watch(() => selectedSchool.value, (newValue) => {
   justify-content: space-between;
 }
 .school-tile {
-  display: inline-flex;
-  background: $ah-grey;
-  color: white;
-  padding: 10px;
-  cursor: pointer;
+  color: $ah-grey-dark;
   margin-right: 0.5rem;
-  border-radius: 0.5rem;
   &:hover {
-    background: $ah-grey-dark;
+    color: $ah-grey-dark;
+    border-bottom: 1px solid $ah-grey-dark;
+    cursor: pointer;
   }
 }
 .add-staff {
@@ -113,10 +106,14 @@ watch(() => selectedSchool.value, (newValue) => {
   }
 }
 .active {
-  background: $ah-primary;
-  // box-shadow: 5px 5px 5px $ah-grey;
+  color: $ah-primary;
+  // text-decoration: underline;;
+  font-weight: bold;
+  // background: $ah-primary;
   &:hover {
-    background: $ah-primary;
+    background: transparent;
+    border: none;
+    color: $ah-primary;
     cursor: default;
   }
 }

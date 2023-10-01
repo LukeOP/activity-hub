@@ -3,7 +3,7 @@
   <span style="height:fit-content" v-if="lesson">
     <form style="padding:1rem" @submit.prevent="handleClick('custom')">
       <div class="row">
-        <div class="heading">{{lesson.student.first_name}} {{lesson.student.last_name}}</div>
+        <div class="heading">{{lesson.student.full_name}}</div>
         <div style="text-align:center" :class="{lineThrough: advancedOptions}">{{formatDatetime(currentCalendar.dateTime)}}</div>
         <div class="col-12 col-md-4">
           <input type="button" class="btn btn-green form-control mb-2" value="Present" :disabled="advancedOptions == true" @click="handleClick('present')">

@@ -3,7 +3,7 @@
       <div class="row">
         <div class="col col-6">
           <div>{{ lesson.attributes.instrument }}</div>
-          <div>Tutor: {{ lesson.tutor.first_name }} {{ lesson.tutor.last_name }}</div>
+          <div>Tutor: {{ lesson.tutor.full_name }}</div>
         </div>
         <div class="col col-6 text-end">
           <span v-if="lesson.attributes.deleted_at === null">

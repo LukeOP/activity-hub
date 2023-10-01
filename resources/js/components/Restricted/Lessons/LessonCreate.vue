@@ -16,11 +16,13 @@
       <div class="col col-12 col-sm-6">
         <label>Student:</label>
         <select name="studentName" class="form-control" required v-model="formData.student">
-          <option v-for="student in data.students" :key="student.id" :value="student.id">{{student.first_name}} {{student.last_name}}</option>
+          <option v-for="student in data.students" :key="student.id" :value="student.id">{{student.full_name}}</option>
         </select>
       </div>
+
       <div class="col col-12 col-sm-6">
       </div>
+
     </div>
 
     <div class="row">

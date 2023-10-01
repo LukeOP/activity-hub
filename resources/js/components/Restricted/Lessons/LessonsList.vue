@@ -1,7 +1,8 @@
 <template>
 <div>
   <!-- Header -->
-  <HeaderLine heading="Lessons" />
+  <HeaderLine heading="Lessons" link1="Attendance Data" link2="Lesson Requests" 
+    @link1="changeRoute" @link2="changeRoute"/>
 
   <!-- Table component -->
   <section v-if="filteredLessons">
@@ -23,6 +24,7 @@ import LessonsTableMobile from './ListComponents/LessonsTableMobile.vue'
 import { useActionsStore } from '../../../stores/actions'
 import { useLessonsStore } from '../../../stores/lessons'
 import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
 
 //  Initiate Stores
 const filter = useFilterStore()
@@ -31,6 +33,7 @@ const actions = useActionsStore()
 const user = useUserStore()
 
 // Initiate Composables
+const router = useRouter()
 const { windowSize } = useWindowSize()
 
 // Get appropriate component based on window size
@@ -49,25 +52,32 @@ fetchData().then(() => {
     filter.setData(lessons.value)
     filter.setType('LessonsForm')
   },300)
-  
 })
 
 // Set side actions available on this page
 const actionArray = []
-if(user.hasPermissionAny('LESSONS_REQ_R') || user.hasPermission('LESSONS_REQ_V')){
-  actionArray.push({ header: 'Lesson Requests', to: { name: 'LessonRequests' }, showSubItems: false, icon: 'fa-solid fa-square-plus'})
-}
 if(user.hasPermissionAny('LESSONS_C')){
-  actionArray.push({ header: 'New Lesson', to: { name: 'LessonCreate' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'})
-}
-if(user.hasPermissionAny('ATTENDANCE_R') || user.hasPermission('ATTENDANCE_V')){
-  actionArray.push({ header: 'Attendance', to: { name: 'LessonAttendanceOverview' }, icon: 'fa-solid fa-user-check', additional: true})
+  actionArray.push({ header: 'Create New Lesson', to: { name: 'LessonCreate' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'})
 }
 actions.setItems(actionArray)
+
+// if(user.hasPermissionAny('ATTENDANCE_R') || user.hasPermission('ATTENDANCE_V')){
+//   actionArray.push({ header: 'Attendance', to: { name: 'LessonAttendanceOverview' }, icon: 'fa-solid fa-user-check', additional: true})
+// }
+// if(user.hasPermissionAny('LESSONS_REQ_R') || user.hasPermission('LESSONS_REQ_V')){
+//   actionArray.push({ header: 'Lesson Requests', to: { name: 'LessonRequests' }, showSubItems: false, icon: 'fa-solid fa-square-plus'})
+// }
 
 // Check for update to filtered lessons and display to user
 watch(() => filter.getReturned, (newValue) => {
   filteredLessons.value = newValue
 })
+
+function changeRoute(value){
+  let newRoute = {}
+  if(value === 'link1') newRoute = 'LessonAttendanceOverview'
+  if(value === 'link2') newRoute = 'LessonRequests'
+  router.push({name: newRoute})
+}
 
 </script>

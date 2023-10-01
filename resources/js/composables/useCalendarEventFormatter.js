@@ -8,7 +8,7 @@ export function useCalendarEventFormatter() {
     // console.log(element)
       let newEvent = {
         id: element.id,
-        title: element.calendar.title ? element.calendar.title : element.reference.data.student.first_name + ' ' + element.reference.data.student.last_name,
+        title: element.calendar.title ? element.calendar.title : element.reference.data.student.full_name,
         startTime: element.reference.data.attributes.start,
         endTime: element.reference.data.attributes.end,
         daysOfWeek: [getWeekDay(element.reference.data.attributes.day)],
