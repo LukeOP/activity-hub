@@ -26,11 +26,13 @@ class LessonAttendanceResource extends JsonResource
                 'id' => $this->lesson->student->id,
                 'first_name' => $this->lesson->student->first_name,
                 'last_name' => $this->lesson->student->last_name,
+                'full_name' => $this->lesson->student->first_name . " " . $this->lesson->student->last_name,
             ],
             'tutor' => [
                 'id' => $this->lesson->user->id,
                 'first_name' => $this->lesson->user->first_name,
                 'last_name' => $this->lesson->user->last_name,
+                'full_name' => $this->lesson->user->first_name . " " . $this->lesson->user->last_name,
             ],
             'school' => [
                 'id' => $this->lesson->student->school->id,

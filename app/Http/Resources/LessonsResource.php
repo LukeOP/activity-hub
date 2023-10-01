@@ -42,6 +42,7 @@ class LessonsResource extends JsonResource
                 'id' => $this->user->id,
                 'first_name' => $this->user->first_name,
                 'last_name' => $this->user->last_name,
+                'full_name' => $this->user->first_name . " " . $this->user->last_name,
             ]
         ];
     }

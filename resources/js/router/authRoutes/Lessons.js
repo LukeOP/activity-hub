@@ -3,7 +3,7 @@ import LessonDetails from '../../components/Restricted/Lessons/LessonDetails.vue
 import LessonCreate from '../../components/Restricted/Lessons/LessonCreate.vue'
 import LessonEdit from '../../components/Restricted/Lessons/Modals/LessonEdit.vue'
 import LessonCreateNote from '../../components/Restricted/Lessons/Modals/Notes/LessonCreateNote.vue'
-import LessonNotes from '../../components/Restricted/Lessons/Modals/Notes/LessonNotes.vue'
+import LessonNotes from '../../components/Restricted/Lessons/LessonNotes.vue'
 import LessonConfirmActive from '../../components/Restricted/Lessons/Modals/LessonConfirmActive.vue'
 import LessonDateTime from '../../components/Restricted/Lessons/Modals/LessonDateTime.vue'
 
@@ -36,7 +36,9 @@ const lessonsRoutes = [
                 { path: 'confirm-active', name: 'LessonConfirmActive', component: LessonConfirmActive, props: true, meta: { title: 'Lesson Details', showModal: true} },
                 { path: 'confirm-date-time', name: 'LessonDateTime', component: LessonDateTime, props: true, meta: { title: 'Lesson Date and Time', showModal: true} },
             ]},
-            { path: 'notes', name: 'LessonNotes', component: LessonNotes, props: true, meta: { title: 'Lesson Notes', section: "Lessons", depth: 3 } },
+            // View Notes
+            { path: 'notes', name: 'LessonNotes', component: LessonNotes, props: true, meta: { title: 'Lesson Notes', breadcrumb: ' > Notes', section: "Lessons", depth: 3 } },
+            // View Single Lesson Attendance
             { path: 'attendance', name: 'LessonAttendanceSingle', component: LessonAttendanceSingle, props: true, meta: { title: 'Lesson Attendance', breadcrumb: ' > Attendance', section: "Lessons", depth: 3} },
           ] },
 

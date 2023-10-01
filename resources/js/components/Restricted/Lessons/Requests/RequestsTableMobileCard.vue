@@ -1,7 +1,7 @@
 <template>
   <div class="row" :class="{active: active}" @click="active = !active">
     <div class="col col-6">
-      <p>{{lesson.student.first_name}} {{lesson.student.last_name}}</p>
+      <p>{{lesson.student.full_name}}</p>
       <p>{{lesson.attributes.instrument}}</p>
     </div>
     <div class="col col-4">

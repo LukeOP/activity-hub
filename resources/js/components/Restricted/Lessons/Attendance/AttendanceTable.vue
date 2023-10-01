@@ -1,30 +1,37 @@
 <template>
 <div>
   <h3>Attendance Entries</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Day:</th>
-        <th>Date:</th>
-        <th>Time:</th>
-        <th>Attendance:</th>
-        <th class="hide">Recorded By:</th>
-        <th class="hide">Last Modified:</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="record in attendanceRecords" :key="record">
-        <td>{{getDay(record.date)}}</td>
-        <td>{{record.date}}</td>
-        <td>{{record.time}}</td>
-        <td><span class="attendance" :class="record.attendance">{{capitalizeFirstLetter(record.attendance)}}</span></td>
-        <td class="hide">{{lesson.tutor.first_name}} {{lesson.tutor.last_name}}</td>
-        <td class="hide">{{formatModified(record.updated_at)}}</td>
-        <td><i class="fa-solid fa-edit"></i></td>
-      </tr>
-    </tbody>
-  </table>
+  <section id="table-header-section">
+    <table>
+      <thead>
+        <tr>
+          <th>Day:</th>
+          <th>Date:</th>
+          <th>Time:</th>
+          <th>Attendance:</th>
+          <th class="hide">Recorded By:</th>
+          <th class="hide">Last Modified:</th>
+          <th></th>
+        </tr>
+      </thead>
+    </table>
+  </section>
+
+  <section id="table-body-section" style="overflow-y: auto;">
+    <table>
+      <tbody>
+        <tr v-for="record in attendanceRecords" :key="record">
+          <td>{{getDay(record.date)}}</td>
+          <td>{{record.date}}</td>
+          <td>{{record.time}}</td>
+          <td><span class="attendance" :class="record.attendance">{{capitalizeFirstLetter(record.attendance)}}</span></td>
+          <td class="hide">{{lesson.tutor.first_name}} {{lesson.tutor.last_name}}</td>
+          <td class="hide">{{formatModified(record.updated_at)}}</td>
+          <td><i class="fa-solid fa-edit"></i></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 </div>
 </template>
 
@@ -60,29 +67,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-table {
-  width: 100%;
-  thead {
-    background-color: $ah-primary;
-    color: white;
-    tr th:first-child {
-        padding-left: 10px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-      }
-  }
-  tbody {
-    tr {
-      border-bottom: 1px solid $ah-grey;
-      &:hover {
-        background-color: $ah-primary-background;
-      }
-      td:first-child {
-        padding: 10px;
-      }
-    }
-  }
-}
 .attendance {
   display: block;
   text-align: center;

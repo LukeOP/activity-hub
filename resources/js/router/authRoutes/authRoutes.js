@@ -6,6 +6,7 @@ import dashboardRoutes from './Dashboard';
 import staffRoutes from './Staff';
 import studentsRoutes from './Students';
 import instrumentRoutes from './Instruments';
+// import hireRoutes from './Hires';
 
 const authRoutes = [
   {
@@ -24,6 +25,7 @@ const authRoutes = [
       ...staffRoutes,
       ...studentsRoutes,
       ...instrumentRoutes,
+      // ...hireRoutes,
     ], 
     props: true
   },

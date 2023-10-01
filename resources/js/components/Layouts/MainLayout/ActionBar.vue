@@ -131,14 +131,6 @@ function modalCheck(item){
       color: lighten($ah-secondary, 55%);
     }
   }
-  .router-link-exact-active, .active {
-    background-color: $ah-secondary;
-    border-left: 8px solid $ah-secondary-light;
-    color: lighten($ah-secondary, 55%);
-    .linkText {
-      padding: 12px;
-    }
-  }
 }
 
 /* action styles */
@@ -177,7 +169,7 @@ function modalCheck(item){
 .green {
   background-color: rgb(60, 166, 60) !important;
   &:hover {
-    background-color: green !important;
+    background-color: $ah-green-light !important;
   }
 }
 

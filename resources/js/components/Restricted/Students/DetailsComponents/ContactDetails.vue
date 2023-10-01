@@ -4,7 +4,7 @@
     <div id="student" class="col col-12 col-sm-6 col-md-3" v-if="student.contacts.student.email">
       <h2>Student:</h2>
       <h3>Name:</h3>
-      {{student.first_name}} {{student.last_name}}<br/>
+      {{student.full_name}}<br/>
       <h3>Year Level:</h3>
       {{student.year_level}}<br/>
       <h3>Email:</h3>

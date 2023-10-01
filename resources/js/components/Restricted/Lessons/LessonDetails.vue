@@ -39,18 +39,14 @@ import { useUserStore } from '@/stores/user';
     const actionsArray = []
     if(user.hasPermission('LESSONS_R', lesson.value.school.id) || user.hasPermission('LESSONS_V', lesson.value.school.id)){
       actionsArray.push(
-        { header: 'Add Lesson Notes', to: { name: 'LessonCreateNote' }, icon: 'fa-solid fa-file-circle-plus', additional: true},
-        { header: 'View Lesson Notes', to: { name: 'LessonNotes' }, icon: 'fa-solid fa-eye', additional: true},
+        { header: 'Add Lesson Notes', to: { name: 'LessonDetails' }, modal: 'LessonCreateNote', icon: 'fa-solid fa-file-circle-plus', additional: true},
         { header: 'Edit Lesson', to: { name: 'LessonDetails', route: {id: lesson.value.attributes.id} }, modal: 'EditLesson', icon: 'fa-solid fa-edit', additional: true})
-    }
-    if(user.hasPermission('ATTENDANCE_R', lesson.value.school.id) || user.hasPermission('ATTENDANCE_V')){
-      actionsArray.push({ header: 'View Attendance', to: { name: 'LessonAttendanceSingle' }, icon: 'fa-solid fa-user-check', additional: true})
     }
     if(user.hasPermission('LESSONS_D', lesson.value.school.id)){
       actionsArray.push({ header: 'Delete Lesson', to: { name: 'LessonDetails' }, modal: 'DeleteLesson', icon: 'fa-solid fa-trash', additional: true, red: true})
     }
     if(lesson.value.attributes.status != 'Active' && lessonDetailsSet()){
-      actionsArray.unshift({ header: 'Set Lesson as Active', to: { name: 'LessonConfirmActive' }, icon: 'fa-solid fa-circle-check', additional: true, green: true})
+      actionsArray.unshift({ header: 'Set Lesson as Active', to: { name: 'LessonDetails' }, modal: "LessonConfirmActive", icon: 'fa-solid fa-circle-check', additional: true, green: true})
     }
     actions.setItems(actionsArray)
   }
@@ -67,6 +63,7 @@ import { useUserStore } from '@/stores/user';
 
   watch(() => lessonStore.singleLesson, (newValue) => {
     lesson.value = newValue
+    setActions()
   }, {deep: true})
 
 </script>

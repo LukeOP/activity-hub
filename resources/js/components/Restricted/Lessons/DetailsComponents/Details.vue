@@ -2,72 +2,69 @@
   <div id="lesson-details" class="section row">
     <h2 class="heading2">Lesson Details:</h2>
     <div class="col col-12 col-sm-6 col-md-3">
-      <span><h3>Status:</h3>
+      <AttendanceSnapshot :lesson="lesson" @click="handleAttendanceClick" />
+    </div>
+    <div class="col col-12 col-sm-6 col-md-3">
+      <div><h3>Status:</h3>
         <span :class="lesson.attributes.status.toLowerCase()">{{lesson.attributes.status}}</span>
-      </span>
+      </div>
+      <div><h3>Tutor:</h3>
+      {{lesson.tutor.full_name}}</div>
     </div>
     <div class="col col-12 col-sm-6 col-md-3">
-      <span><h3>Lesson Day:</h3>
-      <span v-if="lesson.attributes.day != 'Not Set'">{{lesson.attributes.day}}</span>
-    </span>
-    </div>
-    <div class="col col-12 col-sm-6 col-md-3">
-      <span><h3>Lesson Time:</h3>
+      <div>
+        <h3>Lesson Day:</h3>
+        <span v-if="lesson.attributes.day != 'Not Set'">{{lesson.attributes.day}}</span>
+      </div>
+      <div><h3>Lesson Time:</h3>
         <span v-if="lesson.attributes.start != null">
           {{convertTime(lesson.attributes.start)}}
           <span v-if="lesson.attributes.end"> - {{convertTime(lesson.attributes.end)}}</span>
         </span>
-      </span>
+      </div>
+    </div>
+    <div class="col col-12 col-sm-6 col-md-3">
+      <div><h3>Funding:</h3>
+      {{lesson.attributes.funding_type}}</div>
+      <div><h3>Start Date:</h3>
+      {{convertDate(lesson.attributes.startDate)}}</div>
+      <div v-if="lesson.attributes.endDate"><h3>End Date:</h3>
+      {{convertDate(lesson.attributes.endDate)}}</div>
     </div>
     <div class="col col-12 col-sm-6 col-md-3" v-if="lesson.location">
       <span><h3>Location:</h3>
       {{lesson.location.room_name}}</span>
-    </div>
-    <div class="col col-12 col-sm-6 col-md-3">
-      <span><h3>Tutor:</h3>
-      {{lesson.tutor.first_name}} {{lesson.tutor.last_name}}</span>
-    </div>
-    <div class="col col-12 col-sm-6 col-md-3">
-      <span><h3>Funding:</h3>
-      {{lesson.attributes.funding_type}}</span>
-    </div>
-    <div class="col col-12 col-sm-6 col-md-3">
-      <span><h3>Start Date:</h3>
-      {{convertDate(lesson.attributes.startDate)}}</span>
-    </div>
-    <div class="col col-12 col-sm-6 col-md-3">
-      <span><h3>End Date:</h3>
-      {{convertDate(lesson.attributes.endDate)}}</span>
-    </div>
-    <div class="col col-12 col-sm-6 col-md-3">
-      <span><h3>School:</h3>
-      {{lesson.school.name}}</span>
     </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
+import AttendanceSnapshot from '../Attendance/AttendanceSnapshot.vue'
+import { useRouter } from 'vue-router';
 
 export default {
-  props: {
-    lesson: Object
-  },
-  setup(){
-
-    function convertTime(time){
-      return moment(time, 'HH:mm:ss').format('h:mm A')
-    }
-    function convertDate(date){
-      return moment(date).format('LL') != 'Invalid date' ? moment(date).format('LL') : 'Not set'
-    }
-
-    return {
-      convertTime,
-      convertDate,
-    }
-  }
-
+    props: {
+        lesson: Object
+    },
+    setup() {
+      const router = useRouter()
+        function convertTime(time) {
+            return moment(time, 'HH:mm:ss').format('h:mm A');
+        }
+        function convertDate(date) {
+            return moment(date).format('LL') != 'Invalid date' ? moment(date).format('LL') : 'Not set';
+        }
+        function handleAttendanceClick(){
+          router.push({name: 'LessonAttendanceSingle'})
+        }
+        return {
+            convertTime,
+            convertDate,
+            handleAttendanceClick,
+        };
+    },
+    components: { AttendanceSnapshot }
 }
 </script>
 

@@ -16,7 +16,7 @@
         <label for="reviewed-student">Name of Student:</label>
         <span style="display:flex">
           <select id="reviewed-student" class="form-control" v-model="selectedStudent" @change="updateStudentDetails" required>
-            <option v-for="student in students.data" :key="student.id" :value="student">{{student.first_name}} {{student.last_name}}</option>
+            <option v-for="student in students.data" :key="student.id" :value="student">{{student.full_name}}</option>
           </select>
           <!-- <button class="btn btn-primary form-control" style="height:37px; width: 37px"><i class="fa-solid fa-plus"></i></button> -->
         </span>

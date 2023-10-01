@@ -1,14 +1,13 @@
 <template>
-<modal-template-vue title="Set Lesson As Active" :push='returnDetails'>
-  <span style="text-align:center; height:fit-content; background:blue">
-    <div class="mt-5">You are about to set this lesson as 'active'.</div>
+  <div class="text-center">
+    <h2>Set Lesson as Active?</h2>
+    <div>You are about to set this lesson as 'active'.</div>
     <div>Do you wish to continue?</div>
     <form class="mt-3">
-      <input type="button" value="Yes" class="btn btn-primary mx-2" @click="handleClick('Yes')">
       <input type="button" value="Cancel" class="btn btn-grey mx-2" @click="handleClick('Cancel')">
+      <input type="button" value="Yes" class="btn btn-primary mx-2" @click="handleClick('Yes')">
     </form>
-  </span>
-</modal-template-vue>
+  </div>
 
 </template>
 
@@ -17,6 +16,8 @@ import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toast-notification'
 import axiosClient from '../../../../axios'
 import ModalTemplateVue from '../../../Modal.vue'
+import { useLessonsStore } from '/resources/js/stores/lessons'
+import { useModalStore } from '/resources/js/stores/modal'
 
 export default {
   components: {
@@ -25,38 +26,39 @@ export default {
   setup(){
     const router = useRouter()
     const toast = useToast()
+
+    const lessonStore = useLessonsStore()
+    const lesson = lessonStore.getLessonData
+    const modal = useModalStore()
      
 
     function handleClick(click){
       if(click === 'Yes') handleSetActive()
-      if(click === 'Cancel') returnToDetails()
+      if(click === 'Cancel') modal.close()
     }
 
     function handleSetActive(){
-      axiosClient.patch('lessons/' + general.routeData.lesson.id, {status: 'Active'})
+      axiosClient.patch('lessons/' + lesson.id, {status: 'Active'})
       .then((res) => {
         toast.open({ message: res.data.message, duration: 5000, dismissible: true, type: 'success'})
         axiosClient.post('calendar-events', CalendarData())
-        .then(res => {
-          returnToDetails()
+        .then(() => { 
+          lesson.attributes.status = 'Active'
+          modal.close()
         })
       })
     }
 
     function CalendarData(){
       return {
-        school_id: general.routeData.lesson.school.id,
-        user_id: general.routeData.lesson.tutor.id,
-        start: general.routeData.lesson.attributes.startDate ? general.routeData.lesson.attributes.startDate : new Date(),
+        school_id: lesson.school.id,
+        user_id: lesson.tutor.id,
+        start: lesson.attributes.startDate ? lesson.attributes.startDate : new Date(),
         reference_type: 'lesson',
-        reference_type_id: general.routeData.lesson.id
+        reference_type_id: lesson.id
       }
     }
-    const returnDetails = { name: 'LessonDetails', params: { id: general.routeData.lesson.id } }
-
-    function returnToDetails(){
-        router.push(returnDetails)
-    }
+    const returnDetails = { name: 'LessonDetails', params: { id: lesson.id } }
 
     return {
       handleClick,
@@ -67,6 +69,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+input[type = 'button']{
+  width: 100px;
+}
 </style>

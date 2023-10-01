@@ -1,6 +1,7 @@
 <template>
   <div class="row">
-    <HeaderLine heading="Instruments" />
+    <HeaderLine heading="Instruments" :link1="links.link1"
+      @link1="routeChange" />
 
     <div class="col col-12 col-md-6">
       <!-- Search input -->
@@ -25,12 +26,16 @@ import InstrumentsTableMobile from './ListComponents/InstrumentsTableMobile.vue'
 
 import { useInstrumentStore } from '/resources/js/stores/instruments';
 import { computed, ref } from 'vue';
+import { useUserStore } from '/resources/js/stores/user';
+import router from '/resources/js/router/router';
 
 const key = ref(0)
+const links = ref({link1: ''})
 
 
 // Initiate Stores
 const instrumentStore = useInstrumentStore()
+const user = useUserStore()
 
 // Initiate Composables
 const { windowSize } = useWindowSize()
@@ -39,6 +44,10 @@ const { windowSize } = useWindowSize()
 const currentComponent = computed(() => {
   return windowSize.value.width > 1030 ? InstrumentsTable : InstrumentsTableMobile
 })
+
+// Set user permission areas
+if(user.hasPermissionAny('HIRES_V')) links.value.link1 = 'Instrument Hire'
+
 
 // Fetch Instrument data and add to store
 const { data: allInstruments, fetchData: fetchInstruments } = useApi('instruments')
@@ -66,6 +75,13 @@ const filteredInstruments = computed(() => {
   instrumentStore.setFilteredInstruments(filtered);
   return filtered;
 });
+
+// Handle route change
+function routeChange(value) {
+  let route = {}
+  if(value === 'link1') route = {name: 'HiresList'}
+  router.push(route)
+}
 
 </script>
 

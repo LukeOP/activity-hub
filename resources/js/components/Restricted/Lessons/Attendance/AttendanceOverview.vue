@@ -1,15 +1,11 @@
 <template>
 <div>
-  <!-- <div id="heading">
-    <h1 style="position:inline-block">Attendance Overview
-    <i style="position:inline-block" class="fa-solid fa-calendar-days float-end" @click="router.push({name: 'LessonAttendanceReview'})"></i></h1>
-  </div> -->
   
   <div v-for="subject in subjectArray" :key="subject">
     <div class="row mb-5 lesson-group" v-if="lessons">
       <h2 class="subjectHeading">{{subject}}</h2>
       <div class="col-12 col-md-4 col-sm-6" v-for="lesson in filteredLessons(subject)" :key="lesson">
-        <AttendanceSnapshot class="snapShot"  :lesson="lesson" :heading="lesson.student.first_name + ' ' + lesson.student.last_name" @click="handleClick(lesson)"/>
+        <AttendanceSnapshot class="snapShot"  :lesson="lesson" :heading="lesson.student.full_name" stats="true" @click="handleClick(lesson)"/>
       </div>
     </div>
   </div>

@@ -18,6 +18,7 @@ class StudentsResource extends JsonResource
             'id' => (string)$this->id,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
+            'full_name' => $this->first_name . " " . $this->last_name,
             'year_level' => (string)$this->year_level,
             'contacts' => new ContactsResource($this->contacts),
             'school' => [

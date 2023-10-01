@@ -22,10 +22,10 @@
         <tr v-for="record in lessons" :key="record">
           <td style="width:10%">{{record.lesson.date}}</td>
           <td style="width:10%">{{record.lesson.time}}</td>
-          <td style="width:15%">{{record.student.first_name}} {{record.student.last_name}}</td>
+          <td style="width:15%">{{record.student.full_name}}</td>
           <td style="width:10%">{{record.lesson.instrument}}</td>
           <td style="width:15%; text-align:center; padding-left:10px; padding-right:10px"><span class="attendance" :class="record.lesson.attendance">{{capitalizeFirstLetter(record.lesson.attendance)}}</span></td>
-          <td style="width:15%">{{record.tutor.first_name}} {{record.tutor.last_name}}</td>
+          <td style="width:15%">{{record.tutor.full_name}}</td>
           <td style="width:20%">{{record.school.name}}</td>
         </tr>
       </tbody>
@@ -64,33 +64,6 @@ function capitalizeFirstLetter(string){
 </script>
 
 <style lang="scss" scoped>
-table {
-  width: 100%;
-  thead {
-    background-color: $ah-primary;
-    color: white;
-    tr th:first-child {
-        padding-left: 10px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-      }
-  }
-  tbody {
-    tr {
-      border-bottom: 1px solid $ah-grey;
-      &:hover {
-        background-color: $ah-primary-background;
-      }
-      td:first-child {
-        padding: 10px;
-      }
-    }
-  }
-}
-#table-body-section {
-  max-height: calc(100vh - 200px);
-  border-bottom: 5px solid $ah-primary;
-}
 #no-records {
   width: 100%;
   text-align: center;

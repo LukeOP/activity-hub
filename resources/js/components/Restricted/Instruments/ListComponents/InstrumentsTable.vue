@@ -69,47 +69,6 @@ import { useInstrumentStore } from '../../../../stores/instruments'
 
 <style lang="scss" scoped>
 @media (min-width: 768px){
-  table {
-    table-layout: fixed;
-    width: 100%;
-    thead {
-      background-color: $ah-primary;
-      color: white;
-      tr {
-        th {
-          &:first-child {
-            padding-left: 10px;
-            padding-top: 5px;
-            padding-bottom: 5px;
-          }
-        }
-      }
-    }
-    tbody {
-      tr {
-        border-bottom: 1px solid $ah-grey;
-        &:hover {
-          background-color: $ah-primary-background;
-          cursor: pointer;
-        }
-        td {
-          &:first-child {
-            padding: 10px;
-          }
-        }
-      }
-    }
-  }
-  #table-body-section {
-    max-height: calc(100vh - 200px);
-    border-bottom: 5px solid $ah-primary;
-  }
-  .totals {
-    padding-left: 10px;
-    display: inline-flex;
-    align-items: flex-end;
-    justify-content: space-between;
-  }
   .status {
     width: 90px;
     padding: 5px;

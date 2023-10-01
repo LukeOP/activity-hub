@@ -3,7 +3,7 @@
     <table>
       <thead>
         <tr>
-          <th @click="sortData('student.last_name')">Student Name:</th>
+          <th @click="sortData('student.last_name')">Student:</th>
           <th @click="sortData('student.year_level')">Year:</th>
           <th @click="sortData('attributes.instrument')">Instrument:</th>
           <th @click="sortData('attributes.day')">Lesson Day:</th>
@@ -21,12 +21,12 @@
     <table>
       <tbody>
         <tr v-for="lesson in lessons" :key="lesson.id" @click="handleLessonClick(lesson)" :class="lesson.attributes.status">
-          <td>{{lesson.student.first_name}} {{lesson.student.last_name}}</td>
+          <td>{{lesson.student.full_name}}</td>
           <td>{{lesson.student.year_level || '-'}}</td>
           <td>{{lesson.attributes.instrument}}</td>
           <td>{{lesson.attributes.day || '-'}}</td>
           <td>{{formatTime(lesson.attributes.start) || '-'}}</td>
-          <td>{{lesson.tutor.first_name}} {{lesson.tutor.last_name}}</td>
+          <td>{{lesson.tutor.full_name}}</td>
           <td><span :class="lesson.attributes.funding_type">{{lesson.attributes.funding_type || '-'}}</span></td>
           <td><span class="status btn" :class="lesson.attributes.status + '-td'">{{lesson.attributes.status}}</span></td>
           <td v-if="user.attributes.schools">{{lesson.school.name}}</td>
@@ -96,46 +96,6 @@ export default {
 
 <style lang="scss" scoped>
 @media (min-width: 768px){
-  table {
-    table-layout: fixed;
-    width: 100%;
-    thead {
-      background-color: $ah-primary;
-      color: white;
-      tr {
-        th {
-          &:first-child {
-            padding-left: 10px;
-            padding-top: 5px;
-            padding-bottom: 5px;
-          }
-        }
-      }
-    }
-    tbody {
-      tr {
-        border-bottom: 1px solid $ah-grey;
-        &:hover {
-          background-color: $ah-primary-background;
-          cursor: pointer;
-        }
-        td {
-          &:first-child {
-            padding: 10px;
-          }
-        }
-      }
-    }
-  }
-  #table-body-section {
-    max-height: calc(100vh - 200px);
-    border-bottom: 5px solid $ah-primary;
-  }
-  .totals {
-    display: inline-flex;
-    align-items: flex-end;
-    justify-content: space-between;
-  }
   .status {
     width: 90px;
     padding: 5px;

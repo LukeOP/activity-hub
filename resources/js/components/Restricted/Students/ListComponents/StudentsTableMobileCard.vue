@@ -1,7 +1,7 @@
 <template>
   <div class="row" :class="{active: active}" @click="active = !active">    
     <div class="col col-7">
-      <p>{{student.first_name}} {{student.last_name}}</p>
+      <p>{{student.full_name}}</p>
     </div>
     <div class="col col-3">
       <p v-if="!active">{{abbreviate(student.school.name)}}</p>

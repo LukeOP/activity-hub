@@ -1,17 +1,21 @@
 <template>
-  <div class="container body-notes" v-if="allNotes.length > 0">
-    <div v-for="comment in allNotes" :key="comment.id" class="comment-container">
-      <span id="comment-section">
-        <div class="comment-date">{{convertDate(comment.created_at)}} - {{comment.created_by.first_name}} {{comment.created_by.last_name}}</div>
-        <div class="comment">"{{comment.comment}}"</div>
-      </span>
-      <div v-html="icons.trash" class="trash" @click="handleNoteDelete(comment)"></div>
-    </div>    
-  </div>
-  <div v-else class="container text-center mt-5">
-    <h2>It looks like there are no notes to display!</h2>
-    <button class="btn btn-primary mx-2" @click="handleReturnToDetails">Return to Lesson Details</button>
-    <button class="btn btn-secondary mx-2" @click="handleAddNote">Make a Note</button>
+  <div>
+    <HeaderLine heading="Lesson Notes" :school="subHeading" link1="Student Details" @link1="handleReturnToDetails" />
+    <div></div>
+    <div class="container body-notes" v-if="allNotes.length > 0">
+      <div v-for="comment in allNotes" :key="comment.id" class="comment-container">
+        <span id="comment-section">
+          <div class="comment-date">{{convertDate(comment.created_at)}} - {{comment.created_by.first_name}} {{comment.created_by.last_name}}</div>
+          <div class="comment">"{{comment.comment}}"</div>
+        </span>
+        <div v-html="icons.trash" class="trash" @click="handleNoteDelete(comment)"></div>
+      </div>    
+    </div>
+    <div v-else class="container text-center mt-5">
+      <h2>It looks like there are no notes to display!</h2>
+      <button class="btn btn-primary mx-2" @click="handleReturnToDetails">Return to Lesson Details</button>
+      <button class="btn btn-secondary mx-2" @click="handleAddNote">Make a Note</button>
+    </div>
   </div>
 </template>
 
@@ -23,11 +27,15 @@ import { useLessonsStore } from '@/stores/lessons'
 import { icons } from '@/images/icons/icons'
 import { useModalStore } from '@/stores/modal'
 import { useRouter } from 'vue-router'
+import HeaderLine from '../../Layouts/MainLayout/Elements/HeaderLine.vue'
 
 const emits = defineEmits(['close'])
 const lessonStore = useLessonsStore()
+const currentLesson = lessonStore.getLessonData
 const modal = useModalStore()
 const router = useRouter()
+
+const subHeading = `${currentLesson.student.full_name} ${currentLesson.attributes.instrument} Lessons`
   
 const allNotes = computed(()=>{
   return lessonStore.getLessonData.notes
@@ -48,10 +56,7 @@ function handleAddNote(){
 
 function handleReturnToDetails(){
   router.push({
-    name: 'LessonDetails',
-    params: {
-      id: lessonStore.getLessonData.id
-    }
+    name: 'LessonDetails'
   })
 }
 
@@ -59,7 +64,7 @@ function handleReturnToDetails(){
 
 <style lang="scss" scoped>
 .body-notes {
-  height: calc(100vh - 110px);
+  height: calc(100vh - 250px);
   display: flex;
   flex-direction: column;
   background: white;
