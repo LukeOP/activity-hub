@@ -29,7 +29,10 @@ const user = useUserStore()
 const actions = useActionsStore()
 
 if(user.hasPermission('INSTRUMENTS_E', instrument.value.school.id)){
-  actions.setItems([{ header: 'Edit Instrument', to: { name: 'InstrumentDetails' }, modal: 'EditInstrument', icon: 'fa-solid fa-circle-check', additional: true}])
+  actions.setItems([
+    { header: 'Edit Instrument', to: { name: 'InstrumentDetails' }, modal: 'EditInstrument', icon: 'fa-solid fa-circle-check', additional: true},
+    { header: 'Hire Out Instrument', to: { name: 'InstrumentDetails' }, modal: 'InstrumentHireCreateFromInstrument', icon: 'fa-solid fa-circle-check', additional: true}
+  ])
 }
 
 </script>

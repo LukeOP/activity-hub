@@ -26,6 +26,7 @@ import { useMenuStore } from '../../../stores/menu'
   import LessonsForm from './FilterForms/LessonsForm.vue'
   import AttendanceSingleForm from './FilterForms/AttendanceSingleForm.vue'
   import AttendanceReviewForm from './FilterForms/AttendanceReviewForm.vue'
+  import InstrumentsForm from './FilterForms/InstrumentsForm.vue'
 
   const props = defineProps({state: String})
   const emit = defineEmits(['setState'])
@@ -39,6 +40,7 @@ import { useMenuStore } from '../../../stores/menu'
     if(newValue == 'LessonsForm') activeComponent.value = LessonsForm
     else if(newValue == 'AttendanceSingleForm') activeComponent.value = AttendanceSingleForm
     else if(newValue == 'AttendanceReviewForm') activeComponent.value = AttendanceReviewForm
+    else if(newValue == 'InstrumentsForm') activeComponent.value = InstrumentsForm
     else activeComponent.value = null
   })
 

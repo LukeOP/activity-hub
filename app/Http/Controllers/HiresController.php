@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\HireResource;
 use App\Http\Resources\HiresResource;
 use App\Models\Hire;
+use App\Models\Instrument;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HiresController extends Controller
 {
@@ -13,15 +17,54 @@ class HiresController extends Controller
      */
     public function index()
     {
-        return HiresResource::collection(Hire::all());
+        $user = Auth::user();
+        $userSchools = $user->schools;
+        $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
+        $hireCollection = new Collection();
+
+        // Iterate through each school to check permissions and hires
+        foreach ($userSchools as $school) {
+
+            // Check if user has permission to access hire data for this school
+            $hasPermission = $user->hasPermissionForSchool($school->id, 'HIRES_V');
+
+            // If permission is valid, get hires from that school
+            if ($hasPermission || in_array($school->id, $userAdmin)) {
+                $hiresAtSchool = HiresResource::collection(
+                    Hire::whereHas('student', function ($query) use ($school) {
+                        $query->where('school_id', $school->id);
+                    })->get()
+                );
+            }
+
+            $hireCollection = $hireCollection->concat($hiresAtSchool);
+        }
+
+        return $hireCollection;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function getStudentHires(string $student_id)
     {
-        //
+        $hires = Hire::where('student_id', $student_id)->get();
+        return HiresResource::collection($hires);
+    }
+
+    public function getStudentPastHires(string $student_id)
+    {
+        $hires = Hire::onlyTrashed()->where('student_id', $student_id)->get();
+        return HiresResource::collection($hires);
+    }
+
+    public function getInstrumentHires(int $instrument_id)
+    {
+        $hires = Hire::where('instrument_id', $instrument_id)->get();
+        return HiresResource::collection($hires);
+    }
+
+    public function getInstrumentPastHires(int $instrument_id)
+    {
+        $hires = Hire::onlyTrashed()->where('instrument_id', $instrument_id)->get();
+        return HiresResource::collection($hires);
     }
 
     /**
@@ -29,7 +72,18 @@ class HiresController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $hire = Hire::create([
+            'instrument_id' => $request->instrument,
+            'student_id' => $request->student,
+            'start_date' => $request->start,
+            'return_date' => $request->end,
+            'notes' => $request->notes,
+        ]);
+
+        Instrument::where('id', $request->instrument)->first()->update(['state_id' => 2]);
+
+
+        return new HiresResource($hire);
     }
 
     /**
@@ -41,19 +95,18 @@ class HiresController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $hire = Hire::findOrFail($id);
+
+        $hire->update($request->all());
+
+        return response()->json([
+            'message' => 'hire updated successfully',
+            'hire' => new HiresResource(Hire::where('id', $hire['id'])->first())
+        ]);
     }
 
     /**
@@ -61,6 +114,7 @@ class HiresController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Hire::where('id', $id)->first()->delete();
+        return 'Hire completed';
     }
 }

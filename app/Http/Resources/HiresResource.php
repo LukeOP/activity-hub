@@ -25,7 +25,7 @@ class HiresResource extends JsonResource
                 'notes' => $this->notes,
             ],
             'instrument' => $this->instrument($this->instrument_id),
-            'student' => $this->student($this->student_id),
+            'student' => $this->getStudent($this->student_id),
             'timestamps' => [
                 'created' => $this->created_at,
                 'updated' => $this->updated_at,

@@ -18,6 +18,7 @@ class Instrument extends Model
         'family',
         'notes',
         'state_id',
+        'school_id',
         'fee'
     ];
 

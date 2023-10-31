@@ -25,12 +25,17 @@ class Hire extends Model
         'notes',
     ];
 
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+
     public function instrument($instrument_id)
     {
         return new InstrumentResource(Instrument::where('id', $instrument_id)->first());
     }
 
-    public function student($student_id)
+    public function getStudent($student_id)
     {
         return new StudentsResource(Student::where('id', $student_id)->first());
     }
