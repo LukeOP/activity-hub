@@ -20,6 +20,9 @@ export const useInstrumentStore = defineStore('instruments', {
     setFilteredInstruments(instrumentArray){
       this.filteredInstruments = instrumentArray
     },
+    addInstrument(instrumentObject){
+      this.instruments = [...this.instruments, instrumentObject]
+    },
     reset(){
       this.currentInstrument = {}
       this.instruments = []

@@ -5,8 +5,8 @@
       <thead>
         <tr>
           <th @click="sortData('hire.name')">Instrument:</th>
-          <th @click="sortData('hire.fee')">Fee:</th>
-          <th @click="sortData('hire.state')">State:</th>
+          <th @click="sortData('hire.fee')">Student:</th>
+          <th @click="sortData('hire.state')">Hire Date:</th>
           <th @click="sortData('hire.notes')" style="width: 50%;">Notes:</th>
           <th @click="sortData('hire.state')">School:</th>
         </tr>
@@ -20,7 +20,7 @@
         <tr v-for="hire in filteredHires" :key="hire.id" @click="handleClick(hire)">
           <td>{{ hire.instrument.attributes.name }}</td>
           <td>{{hire.student.full_name}}</td>
-          <td>{{hire.attributes.start_date}}</td>
+          <td>{{formatDate(hire.attributes.start_date)}}</td>
           <td style="width: 50%;">{{hire.attributes.notes}}</td>
           <td>{{hire.instrument.school.name}}</td>
         </tr>
@@ -38,6 +38,7 @@
 import { useRouter } from 'vue-router'
 import useSorter from '../../../../../composables/useSorter'
 import { useHireStore } from '../../../../../stores/hires'
+import moment from 'moment'
 
 
   const router = useRouter()
@@ -65,6 +66,10 @@ import { useHireStore } from '../../../../../stores/hires'
 
   function sortData(field){
     sorter.sort(props.lessons, field)
+  }
+
+  function formatDate(date){
+    return moment(date).format('DD-MM-YYYY')
   }
 
 </script>

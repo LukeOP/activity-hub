@@ -4,10 +4,11 @@
     <table>
       <thead>
         <tr>
-          <th @click="sortData('instrument.name')">Instrument:</th>
-          <th @click="sortData('instrument.fee')">Fee:</th>
-          <th @click="sortData('instrument.notes')" style="width: 50%;">Notes:</th>
-          <th @click="sortData('instrument.state')">State:</th>
+          <th @click="sortData('attributes.name')">Instrument:</th>
+          <th @click="sortData('attributes.type')">Type:</th>
+          <th @click="sortData('attributes.notes')" style="width: 50%;">Notes:</th>
+          <th @click="sortData('attributes.state.description')">State:</th>
+          <th @click="sortData('school.name')">School:</th>
         </tr>
       </thead>
     </table>
@@ -16,11 +17,12 @@
   <section id="table-body-section" style="overflow-y:auto">
     <table>
       <tbody>
-        <tr v-for="instrument in filteredInstruments" :key="instrument.id" @click="handleClick(instrument)">
+        <tr v-for="instrument in instruments" :key="instrument.id" @click="handleClick(instrument)">
           <td>{{ instrument.attributes.name }}</td>
-          <td>{{instrument.attributes.fee || '-'}}</td>
+          <td>{{ instrument.attributes.type }}</td>
           <td style="width: 50%;">{{instrument.attributes.notes}}</td>
           <td>{{instrument.attributes.state.description}}</td>
+          <td>{{instrument.school.name}}</td>
         </tr>
       </tbody>
     </table>
@@ -41,7 +43,8 @@ import { useInstrumentStore } from '../../../../stores/instruments'
   const router = useRouter()
   const sorter = useSorter()
   const instrumentStore = useInstrumentStore()
-  const filteredInstruments = instrumentStore.getFilteredInstruments
+
+  const props = defineProps({instruments: Array})
 
 
   function handleClick(instrument){
@@ -53,7 +56,7 @@ import { useInstrumentStore } from '../../../../stores/instruments'
 
   function getNum(type){
     if(type === 'filtered'){
-      return instrumentStore.getFilteredInstruments.length
+      return props.instruments.length
     }
     if(type === 'total'){
       return instrumentStore.getInstruments.length
@@ -62,7 +65,7 @@ import { useInstrumentStore } from '../../../../stores/instruments'
   }
 
   function sortData(field){
-    sorter.sort(props.lessons, field)
+    sorter.sort(props.instruments, field)
   }
 
 </script>

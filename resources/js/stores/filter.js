@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 function getState(){
     return {
       data: {},
-      returned: {},
+      returned: [],
       type: ''
     }
 }
@@ -22,7 +22,7 @@ export const useFilterStore = defineStore('filter', {
     },
     reset(){
       this.data = {}, 
-      this.returned = {}, 
+      this.returned = [], 
       this.type= ''}
     },
   getters: {

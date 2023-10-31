@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Resources\InstrumentResource;
 use App\Models\Instrument;
 use App\Models\InstrumentState;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class InstrumentsController extends Controller
 {
@@ -14,7 +16,21 @@ class InstrumentsController extends Controller
      */
     public function index()
     {
-        return InstrumentResource::collection(Instrument::all());
+        $user = Auth::user();
+        $userSchools = $user->schools;
+        $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
+        $instrumentCollection = new Collection();
+
+        foreach ($userSchools as $school) {
+            $hasPermission = $user->hasPermissionForSchool($school->id, 'INSTRUMENTS_V');
+
+            if ($hasPermission || in_array($school->id, $userAdmin)) {
+                $instrumentsAtSchool = InstrumentResource::collection(Instrument::where('school_id', $school->id)->get());
+            }
+            $instrumentCollection = $instrumentCollection->concat($instrumentsAtSchool);
+        }
+
+        return $instrumentCollection;
     }
 
     public function getInstrumentStates()
@@ -27,7 +43,16 @@ class InstrumentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $instrument = Instrument::create([
+            'name' => $request->name,
+            'type' => $request->type,
+            'family' => $request->family,
+            'school_id' => $request->school,
+            'state_id' => $request->state_id,
+            'fee' => $request->fee
+        ]);
+
+        return new InstrumentResource($instrument);
     }
 
     /**
@@ -47,7 +72,10 @@ class InstrumentsController extends Controller
 
         $instrument->update($request->all());
 
-        return response()->json(['message' => 'instrument updated successfully', 'instrument' => new InstrumentResource(Instrument::where('id', $instrument['id'])->first())]);
+        return response()->json([
+            'message' => 'instrument updated successfully',
+            'instrument' => new InstrumentResource(Instrument::where('id', $instrument['id'])->first())
+        ]);
     }
 
     /**

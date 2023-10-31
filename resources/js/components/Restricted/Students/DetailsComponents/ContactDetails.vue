@@ -68,6 +68,7 @@ h3 {
 }
 #student {
   border-color: $ah-primary;
+  margin-left: 10px;
 }
 #primary-carer {
   border-color: $ah-primary-light;

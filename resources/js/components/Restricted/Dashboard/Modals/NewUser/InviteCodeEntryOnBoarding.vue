@@ -1,7 +1,7 @@
 <template>
   <div class="text-center">
     <h2>Enter Invite Code</h2>
-    <p>This is be provided by the school.</p>
+    <p>This will be provided by the school.</p>
     <form @submit.prevent="checkCode">
       <input
         v-for="(field, index) in fields"

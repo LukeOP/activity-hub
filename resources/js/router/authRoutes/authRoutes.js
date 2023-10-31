@@ -5,8 +5,8 @@ import eventsRoutes from './Events';
 import dashboardRoutes from './Dashboard';
 import staffRoutes from './Staff';
 import studentsRoutes from './Students';
-import instrumentRoutes from './Instruments';
-// import hireRoutes from './Hires';
+import instrumentRoutes from '../../components/Restricted/Instruments/InstrumentRoutes';
+import { useFilterStore } from '/resources/js/stores/filter';
 
 const authRoutes = [
   {
@@ -25,9 +25,13 @@ const authRoutes = [
       ...staffRoutes,
       ...studentsRoutes,
       ...instrumentRoutes,
-      // ...hireRoutes,
     ], 
-    props: true
+    props: true,
+    beforeEnter: (to, from, next) => {
+      const filter = useFilterStore()
+      filter.$reset()
+      next()
+    }
   },
 ];
 

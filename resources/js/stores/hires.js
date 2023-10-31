@@ -20,6 +20,9 @@ export const useHireStore = defineStore('hires', {
     setFilteredHires(hireArray){
       this.filteredHires = hireArray
     },
+    addHire(hireObject){
+      this.hires = [...this.hires, hireObject]
+    },
     reset(){
       this.currentHire = {}
       this.hires = []

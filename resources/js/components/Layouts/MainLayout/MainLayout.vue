@@ -63,7 +63,7 @@ router.beforeEach((to, from, next) => {
 
 #main-container {
   position: absolute;
-  width: calc(100vw - 250px);
+  width: calc(100% - 250px);
   left: 250px;
   top: 70px;
 }
