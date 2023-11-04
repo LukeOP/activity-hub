@@ -4,6 +4,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\ContactsController;
+use App\Http\Controllers\EventJobController;
+use App\Http\Controllers\EventSchoolJobController;
+use App\Http\Controllers\EventsController;
 use App\Http\Controllers\HiresController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\InstrumentsController;
@@ -47,6 +50,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/image', [ImageController::class, 'storeImage']);
     Route::resource('instruments', InstrumentsController::class);
     Route::get('instrument-states', [InstrumentsController::class, 'getInstrumentStates']);
+
     Route::resource('hires', HiresController::class);
 
     Route::resource('/lesson-attendance', LessonAttendanceController::class);
@@ -56,6 +60,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('lesson-attendance/{id}/{date}', [LessonAttendanceController::class, 'getAttendanceRecordByIdAndDate']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::resource('events', EventsController::class);
+    Route::resource('event-jobs', EventJobController::class);
+    Route::resource('event-school-jobs', EventSchoolJobController::class);
+    Route::get('event-school-jobs/all/{school_id}', [EventSchoolJobController::class, 'getSchoolJobs']);
+    Route::post('event-school-jobs/add-to-event/{event_id}/{school_id}/{identifier}', [EventSchoolJobController::class, 'createEventJobFromSchoolEventIdentifier']);
+
 
     Route::resource('/schools', SchoolsController::class);
 

@@ -124,6 +124,7 @@ function routeChange(value) {
   if(value === 'link1') route = {name: 'HiresList'}
   router.push(route)
 }
+
 onUpdated(()=>{ 
   setActions()
   setFilter()
