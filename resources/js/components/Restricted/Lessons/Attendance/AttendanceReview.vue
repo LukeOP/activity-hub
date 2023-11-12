@@ -1,5 +1,5 @@
 <template>
-<div v-if="!loading">
+<div v-if="!loading && lessons">
   <section id="table-header-section">
     <table>
       <thead>

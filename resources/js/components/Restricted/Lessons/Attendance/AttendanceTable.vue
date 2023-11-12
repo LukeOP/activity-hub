@@ -11,7 +11,7 @@
           <th>Attendance:</th>
           <th class="hide">Recorded By:</th>
           <th class="hide">Last Modified:</th>
-          <th></th>
+          <th style="width: 30px;"></th>
         </tr>
       </thead>
     </table>
@@ -27,7 +27,7 @@
           <td><span class="attendance" :class="record.attendance">{{capitalizeFirstLetter(record.attendance)}}</span></td>
           <td class="hide">{{lesson.tutor.first_name}} {{lesson.tutor.last_name}}</td>
           <td class="hide">{{formatModified(record.updated_at)}}</td>
-          <td><i class="fa-solid fa-edit"></i></td>
+          <td style="width: 30px;"><i class="fa-solid fa-edit edit" @click="editAttendance(record)"></i></td>
         </tr>
       </tbody>
     </table>
@@ -37,12 +37,17 @@
 
 <script>
 import moment from 'moment'
+import { useModalStore } from '/resources/js/stores/modal'
+import { useLessonsStore } from '/resources/js/stores/lessons'
+import useSorter from '/resources/js/composables/useSorter'
 export default {
   props: {
     lesson: Object
   },
   setup(props){
     const attendanceRecords = props.lesson.attendance
+    const modal = useModalStore()
+    const lessonStore = useLessonsStore()
 
     function capitalizeFirstLetter(string){
       return string.charAt(0).toUpperCase() + string.slice(1)
@@ -55,11 +60,17 @@ export default {
       return moment(dateTime).format('DD-MM-YYYY hh:mma')
     }
 
+    function editAttendance(record){
+      lessonStore.setAttendance(record)
+      modal.open('EditAttendance')
+    }
+
     return {
       attendanceRecords,
       capitalizeFirstLetter,
       getDay,
       formatModified,
+      editAttendance,
     }
   }
 
@@ -67,6 +78,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#table-body-section {
+  max-height: calc(100vh - 200px);
+  border-bottom: 5px solid $ah-primary;
+}
 .attendance {
   display: block;
   text-align: center;
@@ -88,6 +103,13 @@ export default {
 }
 .custom {
   background-color: $ah-green;
+}
+.edit:hover {
+  color: $ah-primary;
+  cursor: pointer;
+}
+tr:hover {
+  cursor: default;
 }
 
 /* Styles for mobile */

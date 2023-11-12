@@ -86,8 +86,8 @@ export default {
       if (school) {
         loading.value = true
 
-        const { data: students, error: errorStudents, loading: loadingStudents, fetchData: fetchStudents } = useApi('school-students/' + school)
-        const { data: tutors, error: errorUsers, loading: loadingUsers, fetchData: fetchTutors } = useApi('school-users/' + school)
+        const { data: students, fetchData: fetchStudents } = useApi('school-students/' + school)
+        const { data: tutors, fetchData: fetchTutors } = useApi('school-users/' + school)
 
         Promise.all([fetchStudents(), fetchTutors()]).then(() => {
           data.value.students = students

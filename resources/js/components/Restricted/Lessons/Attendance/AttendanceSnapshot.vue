@@ -64,6 +64,10 @@ function getPercentage(value) {
   padding: 5px;
   border-radius: 50%;
   text-align: center;
+  cursor: pointer;
+  &:hover {
+    background-color: $ah-primary-dark;
+  }
 }
 .faded {
   opacity: 0;

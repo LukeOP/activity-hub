@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\LessonRequestFormResource;
 use App\Http\Resources\LessonRequestResource;
 use App\Models\LessonRequest;
+use App\Models\LessonRequestForm;
 use Illuminate\Http\Request;
 
 class LessonRequestsController extends Controller
@@ -16,6 +18,22 @@ class LessonRequestsController extends Controller
         return LessonRequestResource::collection(
             LessonRequest::get()
         );
+    }
+
+    /**
+     * Display a listing of Request Forms
+     */
+    public function indexOfRequestFormsForSchool(string $school_id)
+    {
+        return LessonRequestFormResource::collection(LessonRequestForm::where('school_id', $school_id)->get());
+    }
+
+    /**
+     * Display a specific form resource from id
+     */
+    public function getFormById(string $form_id)
+    {
+        return new LessonRequestFormResource(LessonRequestForm::where('id', $form_id)->first());
     }
 
     /**

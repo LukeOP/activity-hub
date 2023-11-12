@@ -1,0 +1,65 @@
+<template>
+  <div>
+    <HeaderLine heading="Edit Attendance" /> 
+    <form style="padding:1rem" @submit.prevent="updateAttendance">
+      <div class="row">
+        <div class="col-12 col-md-4">
+          <label for="date">Lesson date:</label>
+          <input type="date" id="date" class="form-control" required :max="today" v-model="formData.date">
+        </div>
+        <div class="col-12 col-md-4">
+          <label for="time">Lesson start time:</label>
+          <input type="time" id="time" class="form-control" required v-model="formData.time">
+        </div>
+        <div class="col-12 col-md-4">
+          <label for="attendance">Attendance:</label>
+          <select id="attendance" v-model="formData.attendance" class="form-control">
+            <option value="present">Present</option>
+            <option value="late">Late</option>
+            <option value="absent">Absent</option>
+            <option value="custom">Alternative date/time</option>
+          </select>
+        </div>
+      </div>
+      <div class="content-align:center; mt-4">
+        <input type="submit" id="submit" class="btn btn-primary form-control" value="Update Attendance">
+      </div>
+    </form>    
+
+  </div>
+</template>
+
+<script setup>
+import { useLessonsStore } from '/resources/js/stores/lessons';
+import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue';
+import { ref } from 'vue';
+import axiosClient from '/resources/js/axios';
+import { useModalStore } from '/resources/js/stores/modal';
+import moment from 'moment';
+
+const lessonStore = useLessonsStore()
+const currentAttendance = lessonStore.getAttendance
+const modal = useModalStore()
+
+const today = moment().format('YYYY-MM-DD')
+
+const formData = ref({
+  id: currentAttendance.id,
+  date: currentAttendance.date,
+  time: currentAttendance.time,
+  attendance: currentAttendance.attendance
+})
+
+function updateAttendance(){
+  axiosClient.patch('/lesson-attendance/' + formData.value.id, formData.value).then(res => {
+    lessonStore.updateAttendanceRecord(res.data.lesson)
+    modal.close()
+  })
+}
+
+
+</script>
+
+<style lang="scss" scoped>
+
+</style>

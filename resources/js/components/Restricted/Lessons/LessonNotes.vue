@@ -78,7 +78,6 @@ function handleReturnToDetails(){
   padding: 10px;
   margin-bottom: 6px;
   &:hover {
-    cursor: pointer;
     background-color: lighten($ah-primary-background, 6%);
     border-color: $ah-primary;
   }

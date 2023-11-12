@@ -5,7 +5,7 @@
     <div class="row mb-5 lesson-group" v-if="lessons">
       <h2 class="subjectHeading">{{subject}}</h2>
       <div class="col-12 col-md-4 col-sm-6" v-for="lesson in filteredLessons(subject)" :key="lesson">
-        <AttendanceSnapshot class="snapShot"  :lesson="lesson" :heading="lesson.student.full_name" stats="true" @click="handleClick(lesson)"/>
+        <AttendanceSnapshot class="snapShot"  :lesson="lesson" :heading="lesson.student.full_name" :stats="true" @click="handleClick(lesson)"/>
       </div>
     </div>
   </div>
@@ -44,10 +44,7 @@ function handleClick(lesson){
   fetchData().then(()=>{
     lessonStore.setLesson(lessonData.value)
     router.push({
-      name: 'LessonAttendanceSingle',
-      params: {
-        id: lesson.id
-      }
+      name: 'LessonAttendanceSingle'
     })
   })
 }

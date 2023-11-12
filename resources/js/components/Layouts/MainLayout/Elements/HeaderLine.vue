@@ -40,6 +40,7 @@ const { mobileFormat } = useWindowSize()
   margin-bottom: 10px;
   border-radius: 0;
   margin-left: 0.25rem;
+  min-width: 125px;
   &:first-of-type {
     border-top-left-radius: 0.75rem;
     border-bottom-left-radius: 0.75rem;
