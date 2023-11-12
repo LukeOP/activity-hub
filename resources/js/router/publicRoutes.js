@@ -1,7 +1,7 @@
 import Home from '../components/Public/Home.vue';
 import Login from '../components/Public/AuthenticateUser/LoginUser.vue';
 import RegisterUser from '../components/Public/AuthenticateUser/RegisterUser.vue';
-import LessonSignUpForm from '../components/Public/Forms/LessonSignUp.vue'
+import LessonSignUpForm from '../components/Public/Forms/LessonSignup.vue'
 
 const publicRoutes = [
   {
