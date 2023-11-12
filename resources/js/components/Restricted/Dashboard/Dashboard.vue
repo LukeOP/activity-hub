@@ -1,7 +1,10 @@
 <template>
-  <div v-if="ready">
+  <div v-if="ready" class="row">
     <NewUserSetUp v-if="!hasSchools" />
-    <Calendar class="calendar" />
+    <div class="col col-12 col-md-6">
+      <Calendar class="calendar" />
+    </div>
+    
 
   </div>
 </template>

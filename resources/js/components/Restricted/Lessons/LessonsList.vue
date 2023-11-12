@@ -76,7 +76,7 @@ watch(() => filter.getReturned, (newValue) => {
 function changeRoute(value){
   let newRoute = {}
   if(value === 'link1') newRoute = 'LessonAttendanceOverview'
-  if(value === 'link2') newRoute = 'LessonRequests'
+  if(value === 'link2') newRoute = 'RequestsList'
   router.push({name: newRoute})
 }
 

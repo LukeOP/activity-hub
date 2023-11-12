@@ -1,13 +1,6 @@
 <template>
   <div>
-    <div id="heading" class="row">
-      <div class="col col-12 col-md-8">
-        <h1>{{activeComponent.heading}}</h1>
-      </div>
-      <div style="display:flex; justify-content: flex-end; align-items: flex-end" class="col col-12 col-md-4">
-        <span class="text-primary pb-1" style="cursor:pointer" @click="handleClick(activeComponent.click)">{{activeComponent.switchText}}</span>
-      </div>
-    </div>
+    <header-line :heading="activeComponent.heading" :link1="activeComponent.switchText" @link1="handleClick(activeComponent.click)" />
 
     <transition name="fade" mode="out-in">
       <component :is="activeComponent.component" />
@@ -22,6 +15,7 @@ import { useRouter } from 'vue-router'
 import { useFilterStore } from '../../../../stores/filter'
 import AttendanceOverView from './AttendanceOverview.vue'
 import AttendanceReview from './AttendanceReview.vue'
+import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
 
 const activeComponent = shallowRef(null)
 const filter = useFilterStore()

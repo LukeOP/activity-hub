@@ -53,7 +53,7 @@ const attendanceData = ref({
 const returnDetails = { name: 'Dashboard' }
 
 function submitRecord(){
-  axiosClient.patch('/lessonAttendance/' + attendance.id, attendanceData.value).then(res => {
+  axiosClient.patch('/lesson-attendance/' + attendance.id, attendanceData.value).then(res => {
     calendar.updateAttendanceRecord(res.data.lesson)
     router.push(returnDetails)
   })

@@ -1,6 +1,6 @@
 import MainLayout from '../../components/Layouts/MainLayout/MainLayout.vue'
 
-import lessonsRoutes from './Lessons';
+import lessonsRoutes from '../../components/Restricted/Lessons/LessonsRoutes';
 import eventsRoutes from './Events';
 import dashboardRoutes from './Dashboard';
 import staffRoutes from './Staff';

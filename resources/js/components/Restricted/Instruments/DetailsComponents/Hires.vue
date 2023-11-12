@@ -37,6 +37,7 @@ import { useInstrumentStore } from '/resources/js/stores/instruments';
 import useApi from '/resources/js/composables/useApi';
 import { useRouter } from 'vue-router';
 import { useHireStore } from '/resources/js/stores/hires';
+import { watch } from 'vue';
 
 const instrumentStore = useInstrumentStore()
 const hireStore = useHireStore()
@@ -46,6 +47,10 @@ const router = useRouter()
 // Fetch Hire data for instrument
 const { data: hires, fetchData: fetchHires } = useApi('instrument-hires/' + instrumentStore.getInstrument.id)
 fetchHires()
+
+watch(() => hireStore.getHires, (newValue) => {
+  fetchHires()
+})
 
 function viewHire(hire){
   hireStore.setHire(hire)

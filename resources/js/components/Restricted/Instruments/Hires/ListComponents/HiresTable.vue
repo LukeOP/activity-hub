@@ -4,11 +4,11 @@
     <table>
       <thead>
         <tr>
-          <th @click="sortData('hire.name')">Instrument:</th>
-          <th @click="sortData('hire.fee')">Student:</th>
-          <th @click="sortData('hire.state')">Hire Date:</th>
-          <th @click="sortData('hire.notes')" style="width: 50%;">Notes:</th>
-          <th @click="sortData('hire.state')">School:</th>
+          <th @click="sortData('instrument.attributes.name')">Instrument:</th>
+          <th @click="sortData('student.full_name')">Student:</th>
+          <th @click="sortData('attributes.start_date')">Hire Date:</th>
+          <th style="width: 50%;">Notes:</th>
+          <th @click="sortData('instrument.school.name')">School:</th>
         </tr>
       </thead>
     </table>
@@ -21,7 +21,7 @@
           <td>{{ hire.instrument.attributes.name }}</td>
           <td>{{hire.student.full_name}}</td>
           <td>{{formatDate(hire.attributes.start_date)}}</td>
-          <td style="width: 50%;">{{hire.attributes.notes}}</td>
+          <td style="width: 50%;">{{hire.attributes.notes || '-'}}</td>
           <td>{{hire.instrument.school.name}}</td>
         </tr>
       </tbody>
@@ -65,7 +65,7 @@ import moment from 'moment'
   }
 
   function sortData(field){
-    sorter.sort(props.lessons, field)
+    sorter.sort(hireStore.getFilteredHires, field)
   }
 
   function formatDate(date){

@@ -13,11 +13,16 @@ class UserSubject extends Model
     protected $table = "user_subjects";
 
     protected $fillable = [
-        'user_id', 'school_id', 'subject'
+        'user_id', 'school_id', 'subject', 'signup_enabled'
     ];
 
     public function School($schoolId)
     {
         return new SchoolsResource(School::where('id', $schoolId)->first());
+    }
+
+    public function tutor()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

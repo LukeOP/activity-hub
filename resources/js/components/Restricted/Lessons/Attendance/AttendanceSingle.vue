@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div v-if="lesson.student">
     <HeaderLine :heading="lesson.student.full_name + `'s Attendance:`" :school="lesson.attributes.instrument + ' lessons with ' + lesson.tutor.full_name"
       link1="Lesson Details" @link1="routeChange({name: 'LessonDetails'})"/>
     
     <div class="row mb-4">
       <div class="col-12 col-sm-4">
-        <AttendanceSnapshot :lesson="lesson" heading="Overall Attendance" stats="true" />
+        <AttendanceSnapshot :lesson="lesson" heading="Overall Attendance" :stats="true" />
       </div>
     </div>
 
@@ -40,6 +40,11 @@ const lesson = computed(()=>{
   return Object.keys(filter.getReturned).length > 0 
   ? filter.getReturned 
   : lessonStore.getLessonData 
+})
+
+watch(() => lessonStore.getLessonData.attendance, (newValue) => {
+  console.log('watching', newValue)
+  tableKey.value++
 })
 
 function routeChange(path){

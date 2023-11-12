@@ -6,6 +6,7 @@ import LessonNoteDeleteConfirm from './Notes/LessonNoteDeleteConfirm.vue'
 import EditLesson from './LessonEdit.vue'
 import DeleteLesson from './LessonDelete.vue'
 import LessonConfirmActive from './LessonConfirmActive.vue'
+import EditAttendance from './Attendance/EditAttendance.vue'
 
 
 const lessonModals = {
@@ -16,7 +17,8 @@ const lessonModals = {
   LessonNoteDeleteConfirm,
   EditLesson,
   DeleteLesson,
-  LessonConfirmActive
+  LessonConfirmActive,
+  EditAttendance
 }
 
 export default lessonModals;

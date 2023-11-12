@@ -52,7 +52,7 @@ class LessonAttendanceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update($id, Request $request)
+    public function update(int $id, Request $request)
     {
         $attendance = LessonAttendance::findOrFail($id);
 
@@ -62,9 +62,7 @@ class LessonAttendanceController extends Controller
         return response()->json(
             [
                 'message' => 'lesson updated successfully',
-                'lesson' => new LessonAttendanceResource(
-                    LessonAttendance::where('id', $attendance['id'])->first()
-                )
+                'lesson' => $attendance
             ]
         );
     }

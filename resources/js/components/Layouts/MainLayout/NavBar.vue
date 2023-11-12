@@ -3,7 +3,8 @@
     <nav class="menu" :class="{ 'menu-visible': navVisible }">
       
       <div id="sideBar">
-        <img id="logo-img" src="/images/ActivityHub-Logo.png" alt="Activity Hub Logo">
+        <!-- <img id="logo-img" src="/images/ActivityHub-Logo_JT.png" alt="Activity Hub Logo"> -->
+        <img id="logo-img" src="/images/ActivityHub_Logo_Main.png" alt="Activity Hub Logo">
 
 
         <div id="nav">
@@ -163,6 +164,8 @@ function handleSchools(){
   img {
     width: 100%;
     max-height: 200px;
+    background-color: white;
+    padding: 10px;
   }
 
   #nav {

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 5548 3635" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(22.12,0,0,22.12,-4955.84,-34317.5)">
+        <text x="232px" y="1681.75px" style="font-family:'AGaramondPro-Regular', 'Adobe Garamond Pro', serif;font-size:50px;fill:rgb(51,51,51);">A<tspan x="262.55px " y="1681.75px ">c</tspan>tivityH<tspan x="421.25px " y="1681.75px ">u</tspan>b</text>
+    </g>
+    <g transform="matrix(28.604,0,0,28.604,-6468.64,-43822.2)">
+        <text x="232.779px" y="1655.06px" style="font-family:'Alesand-Regular', 'Alesand';font-size:13.562px;fill:rgb(51,51,51);">S<tspan x="238.8px 244.727px 251.386px 257.923px 265.111px 274.591px 280.437px 283.841px 291.978px 295.382px 303.52px 310.911px 314.139px 320.676px 327.417px 333.344px 340.003px 347.191px 350.419px 357.566px 365.012px 371.671px 378.33px 381.734px 388.882px 396.327px 402.173px 409.361px " y="1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px 1655.06px ">TREAMLINING EXTRA CURRICULAR</tspan></text>
+    </g>
+    <g transform="matrix(1.10286,0,0,1.10286,-640.557,-141.912)">
+        <g transform="matrix(0.866025,-0.5,0.5,0.866025,1126.92,860.101)">
+            <path d="M1386,122C996.746,119.284 342.34,1095.48 569,1527C814.032,1993.5 1975.11,1851.62 2162,1561C2473.89,1076.01 1714.31,124.291 1386,122Z" style="fill:rgb(243,177,79);"/>
+        </g>
+        <g transform="matrix(1,0,0,1,1913,101)">
+            <path d="M1386,122C996.746,119.284 342.34,1095.48 569,1527C814.032,1993.5 1975.11,1851.62 2162,1561C2473.89,1076.01 1714.31,124.291 1386,122Z" style="fill:rgb(74,116,165);"/>
+        </g>
+        <g transform="matrix(1,0,0,1,1913,101)">
+            <clipPath id="_clip1">
+                <path d="M475.234,171.756C136.772,364.031 58.136,1536.64 470.192,1797.02C915.646,2078.51 1850.22,1375.09 1866.77,1029.97C1894.38,454.006 760.707,9.583 475.234,171.756Z"/>
+            </clipPath>
+            <g clip-path="url(#_clip1)">
+                <path d="M1386,122C996.746,119.284 342.34,1095.48 569,1527C814.032,1993.5 1975.11,1851.62 2162,1561C2473.89,1076.01 1714.31,124.291 1386,122Z" style="fill:rgb(69,100,125);"/>
+            </g>
+        </g>
+    </g>
+</svg>
