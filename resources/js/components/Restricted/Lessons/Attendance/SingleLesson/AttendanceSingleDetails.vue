@@ -21,11 +21,11 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
-import AttendanceSnapshot from './AttendanceSnapshot.vue'
+import AttendanceSnapshot from '../Components/AttendanceSnapshot.vue'
 import AttendanceTable from './AttendanceTable.vue'
 import { useRouter } from 'vue-router'
-import { useFilterStore } from '../../../../stores/filter'
-import { useLessonsStore } from '../../../../stores/lessons'
+import { useFilterStore } from '../../../../../stores/filter'
+import { useLessonsStore } from '../../../../../stores/lessons'
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
 
 const lessonStore = useLessonsStore()

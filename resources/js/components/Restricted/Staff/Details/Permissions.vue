@@ -1,10 +1,10 @@
 <template>
   <div>
     <h3>School Permissions:</h3>
-    <h4>Administrator: 
+    <h4>Administrator:
       <i :style="{ cursor: 'pointer' }" :class="getPermissionIconClass('administrator', 'administrator')" @click="toggleAdministrator()" />
     </h4>
-    <table>
+    <table v-if="!mobileDevice">
       <thead>
         <tr>
           <th>Access</th>
@@ -25,22 +25,35 @@
         </tr>
       </tbody>
     </table>
+    <div v-else>
+      <p>Individual User Permissions cannot be set on a mobile device.</p>
+    </div>
   </div>
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { useSchoolStore } from "../../../../stores/schools";
 import { useStaffStore } from "../../../../stores/staff";
 import { useUserStore } from "../../../../stores/user";
+import { useWindowSize } from "/resources/js/composables/useWindowSize";
 
 // Initiate Stores
 const staffStore = useStaffStore();
 const schoolStore = useSchoolStore();
 const user = useUserStore()
 
+// Initiate Composables
+const { windowSize } = useWindowSize()
+
 // Get stored values
 const staff = staffStore.getStaff;
 const school = schoolStore.getSchool
+
+// Get window size to set display
+const mobileDevice = computed(() => {
+  return windowSize.value.width < 768 ? true : false
+})
 
 // Set whether staff member is an administrator or not
 const administrator = staff.permissions.some(p => p.type === 'administrator')

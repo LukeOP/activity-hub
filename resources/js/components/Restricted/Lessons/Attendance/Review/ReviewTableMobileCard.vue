@@ -1,20 +1,23 @@
 <template>
   <div class="row" :class="{active: active}" @click="active = !active">
     <div class="col col-6">
-      <p>{{request.student.name}}</p>
-      <p>{{ request.status }}</p>
+      <p>{{ lesson.student.full_name }}</p>
+      <p>{{ lesson.lesson.instrument }}</p>
+      <!-- <p>{{lesson}}</p> -->
     </div>
-    <div class="col col-4">
-      <p>{{request.requested_instrument}}</p>
+    <div class="col col-6">
+      <p>{{formatDate(lesson.date)}}</p>
+      <p>{{lesson.lesson.attendance}}</p>
     </div>
-    <div class="col col-2">
-      <i class="fa-solid fa-magnifying-glass ms-2" :class="{active: active}" @click="RequestDetails"></i>
+    <!-- <div class="col col-2">
+      <i class="fa-solid fa-magnifying-glass ms-2" :class="{active: active}"></i>
+    </div> -->
+    <div class="col col-6" v-if="active">
+      <p>Time: {{ formatTime(lesson.lesson.time) }}</p>
+      <p>Tutor: {{ lesson.tutor.full_name }}</p>
     </div>
     <div class="col col-6" v-if="active">
-      <p>Received: {{ moment(request.created_at).format('DD-MM-YYYY') }}</p>
-      <!-- <p>{{ request }}</p> -->
-    </div>
-    <div class="col col-6" v-if="active">
+      <p>School: {{lesson.school.name}}</p>
     </div>
   </div>
 </template>
@@ -24,18 +27,23 @@ import moment from "moment"
 import { useLessonsStore } from "/resources/js/stores/lessons"
 import { ref } from "vue"
 import { useRouter } from "vue-router"
-
-const props = defineProps({request:Object})
-const lessonStore = useLessonsStore()
+const props = defineProps({lesson:Object})
 
 const router = useRouter()
+const lessonStore = useLessonsStore()
 
 const active = ref(false)
 
-function RequestDetails(){
-  lessonStore.setLesson(props.request)
+function formatTime(time){
+  return moment(time, 'HH:mm:ss').format('h:mma')
+}
+function formatDate(date){
+  return moment(date).format('DD-MM-YYYY')
+}
+function LessonDetails(){
+  lessonStore.setLesson(props.lesson)
   router.push({
-    name: 'LessonRequestReview'
+    name: 'LessonDetails'
   })
 }
 

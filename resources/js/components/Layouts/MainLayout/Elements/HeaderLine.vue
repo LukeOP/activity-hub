@@ -13,7 +13,11 @@
     <!-- Dividing Line -->
 
     <div id="below-line">
-      <span v-if="mobileFormat || (link1 || link2)" id="school" class="float-right">{{ school }}</span>
+      <div v-if="mobileFormat || (link1 || link2)" id="school">{{ school }}</div>
+      <div id="buttons" v-if="mobileFormat && (link1 || link2)">
+        <button v-if="link1" class="btn btn-outline-primary" @click="$emit('link1', 'link1')">{{ link1 }}</button>
+        <button v-if="link2" class="btn btn-outline-primary" @click="$emit('link2', 'link2')">{{ link2 }}</button>
+      </div>
     </div>
 
   </div>
@@ -78,6 +82,15 @@ const { mobileFormat } = useWindowSize()
   }
   #below-line {
     justify-content: center;
+    #buttons {
+      width: 100%;
+      display: flex;
+
+      button {
+        margin-top: 0.5rem;
+        flex-grow: 1;
+      }
+    }
   }
 }
 </style>

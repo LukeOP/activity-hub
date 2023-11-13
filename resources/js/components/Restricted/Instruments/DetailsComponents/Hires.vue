@@ -1,33 +1,12 @@
 <template>
   <section id="main-section" v-if="hires">
     <h3>Hires</h3>
-    <section id="table-header-section">
-      <table>
-        <thead>
-          <tr>
-            <th @click="sortData('attributes.name')">Hirer:</th>
-            <th @click="sortData('attributes.name')">Hire Date:</th>
-            <th @click="sortData('attributes.name')">Expected Return:</th>
-            <th @click="sortData('attributes.name')">Returned:</th>
-            <th @click="sortData('attributes.name')">Form Signed:</th>
-          </tr>
-        </thead>
-      </table>
+
+    <!-- Table component -->
+    <section v-if="hires">
+      <component :is="currentComponent" :hires="hires" :key="key" />
     </section>
 
-    <section id="table-body-section" style="overflow-y:auto" v-if="hires.length > 0">
-      <table>
-        <tbody>
-          <tr v-for="hire in hires" :key="hire.id" @click="viewHire(hire)">
-            <td>{{ hire.student.full_name }}</td>
-            <td>{{ hire.attributes.start_date }}</td>
-            <td>{{ hire.attributes.return_date }}</td>
-            <td>{{ hire.attributes.returned_date }}</td>
-            <td>{{ hire.attributes.form_signed === 0 ? 'No' : 'Yes' }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
     <div v-else class="text-center" id="UI-note">-- No hires yet --</div>
   </section>
 </template>
@@ -37,11 +16,22 @@ import { useInstrumentStore } from '/resources/js/stores/instruments';
 import useApi from '/resources/js/composables/useApi';
 import { useRouter } from 'vue-router';
 import { useHireStore } from '/resources/js/stores/hires';
-import { watch } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { useWindowSize } from '/resources/js/composables/useWindowSize';
+import HiresTable from './HiresTable.vue';
+import HiresTableMobile from './HiresTableMobile.vue';
 
 const instrumentStore = useInstrumentStore()
 const hireStore = useHireStore()
 const router = useRouter()
+const key = ref(0)
+
+const { windowSize } = useWindowSize()
+
+// Get appropriate component based on window size
+const currentComponent = computed(() => {
+  return windowSize.value.width > 1030 ? HiresTable : HiresTableMobile
+})
 
 
 // Fetch Hire data for instrument

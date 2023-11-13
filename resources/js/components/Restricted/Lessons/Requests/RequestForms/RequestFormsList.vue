@@ -26,7 +26,7 @@
         </div>
         <!-- <div class="btn btn-primary create">Create New Form</div> -->
       </div>
-      <!-- {{ formData.forms }} -->
+      <p v-if="windowSize.width < 1030">Forms cannot be created or edited on a mobile device.</p>
     </div>
 
 
@@ -40,12 +40,14 @@ import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLessonsStore } from '/resources/js/stores/lessons';
 import moment from 'moment';
+import { useWindowSize } from '/resources/js/composables/useWindowSize';
 
 // Initiate Stores'
 const lessonStore = useLessonsStore()
 
 // Initiate Composables
 const router = useRouter()
+const { windowSize } = useWindowSize()
 
 // Initiate Data Variables
 const formData = ref({
@@ -65,16 +67,17 @@ fetchSchools().then(()=>{
 watch(() => formData.value.school, (newValue) => {
   const {data: forms, fetchData: fetchSchoolForms} = useApi('school-lesson-request-forms/' + newValue)
   fetchSchoolForms().then(()=>{
-    console.log(forms.value)
     formData.value.forms = forms.value
   })
 })
 
 function viewFormDetails(form){
-  lessonStore.setRequestForm(form)
-  router.push({
-    name: 'RequestFormDetails'
-  })
+  if(windowSize.value.width > 1030) {
+    lessonStore.setRequestForm(form)
+    router.push({
+      name: 'RequestFormDetails'
+    })
+  }
 }
 
 // Handle Route Change

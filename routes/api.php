@@ -36,6 +36,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('token-user/{localToken}', [UsersController::class, 'getUserOfToken']);
 
 Route::get('lesson-request-form/{form_id}', [LessonRequestsController::class, 'getFormById']);
+Route::get('user-subjects-available/{school_id}', [UserSubjectsController::class, 'getAvailableTutorsAndSubjects']);
 
 
 
@@ -96,7 +97,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('school-users/{schoolId}', [UsersController::class, 'getUsersInSchool']);
     Route::get('user/search/{search}', [UsersController::class, 'searchForUser']);
     Route::resource('/user-subjects', UserSubjectsController::class);
-    Route::get('user-subjects-available/{school_id}', [UserSubjectsController::class, 'getAvailableTutorsAndSubjects']);
     Route::resource('/user-permissions', UserPermissionsController::class);
     Route::resource('/user-position', UserPositionController::class);
     Route::get('/user-position/{user}/{school}', [UserPositionController::class, 'getUserPositionAtSchool']);

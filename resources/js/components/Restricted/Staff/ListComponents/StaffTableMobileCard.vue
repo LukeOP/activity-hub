@@ -1,42 +1,38 @@
 <template>
   <div class="row" :class="{active: active}" @click="active = !active">
     <div class="col col-6">
-      <p>{{request.student.name}}</p>
-      <p>{{ request.status }}</p>
+      <p>{{staff.full_name}}</p>
     </div>
     <div class="col col-4">
-      <p>{{request.requested_instrument}}</p>
+      <p>{{isAdmin(staff)}}</p>
     </div>
     <div class="col col-2">
-      <i class="fa-solid fa-magnifying-glass ms-2" :class="{active: active}" @click="RequestDetails"></i>
-    </div>
-    <div class="col col-6" v-if="active">
-      <p>Received: {{ moment(request.created_at).format('DD-MM-YYYY') }}</p>
-      <!-- <p>{{ request }}</p> -->
-    </div>
-    <div class="col col-6" v-if="active">
+      <i class="fa-solid fa-magnifying-glass ms-2" :class="{active: active}" @click="StaffDetails"></i>
     </div>
   </div>
 </template>
 
 <script setup>
 import moment from "moment"
-import { useLessonsStore } from "/resources/js/stores/lessons"
+import { useStaffStore } from "/resources/js/stores/staff"
 import { ref } from "vue"
 import { useRouter } from "vue-router"
-
-const props = defineProps({request:Object})
-const lessonStore = useLessonsStore()
+const props = defineProps({staff:Object})
 
 const router = useRouter()
+const staffStore = useStaffStore()
 
 const active = ref(false)
 
-function RequestDetails(){
-  lessonStore.setLesson(props.request)
+function StaffDetails(){
+  staffStore.setStaff(props.staff)
   router.push({
-    name: 'LessonRequestReview'
+    name: 'StaffDetails'
   })
+}
+
+function isAdmin(member){
+  return member.permissions.find(m => m.type === 'administrator') ? 'Admin' : ''
 }
 
 </script>

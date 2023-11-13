@@ -52,12 +52,12 @@
       <div class="col col-12 col-md-6">
         <label>{{ form.field_labels.instrument }}
           <select class="form-control" v-model="formData.instrument">
-            <option value=""></option>
+            <option v-for="instrument in SubjectsArray" :key="instrument" :value="instrument">{{ instrument }}</option>
           </select>
         </label>
-        <label v-if="form.inputs.tutor">{{ form.field_labels.tutor }}
+        <label v-if="form.inputs.tutor && formData.instrument != ''">{{ form.field_labels.tutor }}
           <select class="form-control" v-model="formData.tutor">
-            <option value=""></option>
+            <option v-for="staff in tutorArray" :key="staff" :value="staff.tutor.id">{{ staff.tutor.full_name }}</option>
           </select>
         </label>
         <label v-if="form.inputs.type">{{ form.field_labels.lesson_type }}
@@ -81,15 +81,20 @@
     
     <section id="footer">
       <p>{{ form.content.footer_content }}</p>
+      <!-- <span v-html="" class="icon fill-white"></span> -->
+      <p>Powered by Activity Hub </p>
     </section>
     
-    <!-- <pre>{{ form }}</pre> -->
-    <!-- <pre>{{ route.params.id }}</pre> -->
   </div>
+    <!-- <pre>{{tutorArray}}</pre> -->
+    <!-- <pre>{{ form }}</pre> -->
+    <!-- <pre>{{ staffList }}</pre>
+    <pre>{{ formData }}</pre> -->
+    <!-- <pre>{{ route.params.id }}</pre> -->
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import useApi from '/resources/js/composables/useApi';
 import { useRoute } from 'vue-router';
 
@@ -110,9 +115,44 @@ const formData = ref({
   experience: '',
 })
 
+const staffList = ref([])
+
 const { data: form, fetchData: fetchFormData } = useApi('lesson-request-form/' + route.params.id)
-fetchFormData()
-let primary = '#abc123'
+fetchFormData().then(()=>{
+  // Fetch school staff from database and add to store
+  const { data: staff, fetchData: fetchStaff } = useApi('user-subjects-available/' + form.value.school.id)
+  fetchStaff().then(() => {
+    staffList.value = staff.value
+  })
+})
+
+
+// Function to filter subjects and remove duplicates
+const getUniqueSubjects = (item) => {
+  const uniqueTitles = new Set();
+
+  return item
+    .filter((subject) => {
+      // Check if the title is already in the Set, if not, add it and return true
+      if (!uniqueTitles.has(subject.subject)) {
+        uniqueTitles.add(subject.subject);
+        return true;
+      }
+      return false;
+    })
+    .map((subject) => subject.subject);
+};
+
+// Create a new array of unique subjects
+const SubjectsArray = computed(() => {
+  if(staffList.value) {
+    return getUniqueSubjects(staffList.value);
+  } else return []
+})
+
+const tutorArray = computed(() => {
+    return staffList.value.filter(s => s.subject === formData.value.instrument)
+})
 
 </script>
 

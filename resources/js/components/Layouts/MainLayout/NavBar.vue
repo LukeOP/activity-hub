@@ -17,8 +17,6 @@
         <div id="settings">
           <div v-if="navVisible">
             <span id="user-img" @click="handleProfile">
-              <img v-if="userImage" :src="userImage" alt="Profile Image">
-              <img v-else src="/storage/userImages/user.png" alt="Profile Image">
               <p>Profile</p>
             </span>
             <p @click="handleLogout"><i id="logout" v-html="icons.logout" class="me-2 fill-white icon"></i>Logout</p>
@@ -66,7 +64,7 @@ function handleProfile(){
       id: user.attributes.id
     }
   })
-  hideMenu()
+  navVisible.value = false
 }
 
 const navItems = ref([

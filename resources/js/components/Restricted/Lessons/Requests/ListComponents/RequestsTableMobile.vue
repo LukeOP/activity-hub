@@ -1,16 +1,16 @@
 <template>
-  <div v-for="lesson in lessons" :key="lesson" class="lesson">
-    <RequestsTableMobileCard :lesson="lesson" />
+  <div v-for="request in requests" :key="request" class="request">
+    <RequestsTableMobileCard :request="request" />
   </div>
 </template>
 
 <script setup>
 import RequestsTableMobileCard from './RequestsTableMobileCard.vue'
-const props = defineProps({lessons:Array});
+const props = defineProps({requests:Array});
 </script>
 
 <style lang="scss" scoped>
-.lesson {
+.request {
   &:nth-child(odd){
   background-color: lighten($ah-primary-background, 6%);
   }

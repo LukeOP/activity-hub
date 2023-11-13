@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div id="loginContainer" class="center">
+  <div id="loginContainer" class="center mt-5">
     <img id="logo-img" src="/images/ActivityHub_Logo_Main.png" alt="Activity Hub Logo">
     <h2>Login</h2>
     <form @submit.prevent="handleLogin">

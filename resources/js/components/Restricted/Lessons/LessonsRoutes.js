@@ -1,3 +1,4 @@
+// Lessons
 import LessonsList from './LessonsList.vue'
 import LessonDetails from './LessonDetails.vue'
 import LessonCreate from './LessonCreate.vue'
@@ -7,11 +8,11 @@ import LessonNotes from './LessonNotes.vue'
 import LessonConfirmActive from './Modals/LessonConfirmActive.vue'
 import LessonDateTime from './Modals/LessonDateTime.vue'
 
-import LessonAttendance from './Attendance/Attendance.vue'
-import LessonAttendanceSingle from './Attendance/AttendanceSingle.vue'
-import LessonAttendanceOverview from './Attendance/AttendanceOverview.vue'
-import LessonAttendanceReview from './Attendance/AttendanceReview.vue'
+// Attendance
+import attendanceRoutes from './Attendance/AttendanceRoutes'
+import LessonAttendanceSingle from './Attendance/SingleLesson/AttendanceSingleDetails.vue'
 
+// Lesson Requests
 import RequestReview from './Requests/RequestReview.vue'
 import RequestsList from './Requests/RequestsList.vue'
 import RequestFormList from './Requests/RequestForms/RequestFormsList.vue'
@@ -52,10 +53,7 @@ const lessonsRoutes = [
         { path: 'create', name: 'LessonCreate', component: LessonCreate, props: true, meta: { title: 'Create Lesson', breadcrumb: ' > Create New', section: "Lessons", depth: 2} },
 
         // Lesson Attendance
-        { path: 'attendance', name: 'LessonAttendance', component: LessonAttendance, children: [
-            { path: 'overview', name: 'LessonAttendanceOverview', component: LessonAttendanceOverview, props: true, meta: { title: 'Attendance Overview', breadcrumb: 'Attendance Overview', section: "Lessons", depth: 2} },
-            { path: 'review', name: 'LessonAttendanceReview', component: LessonAttendanceReview, props: true, meta: { title: 'Attendance Review', breadcrumb: 'Attendance Review', section: "Lessons", depth: 2} },
-        ] },
+        ...attendanceRoutes,
 
         // Lesson Requests
         { path: 'requests', meta: { title: 'Lesson Requests', breadcrumb: 'Requests'},

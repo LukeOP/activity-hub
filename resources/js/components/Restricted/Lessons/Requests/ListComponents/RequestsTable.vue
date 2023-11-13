@@ -1,4 +1,5 @@
 <template>  
+<div>
   <section id="table-header-section">
     <table>
       <thead>
@@ -37,7 +38,7 @@
     <span>Pending: {{getNum('Pending')}}</span>
     <span>Waiting List: {{getNum('Waiting')}}</span>
   </div>
-  
+</div>
 </template>
 <script>
 import { useRouter } from 'vue-router'

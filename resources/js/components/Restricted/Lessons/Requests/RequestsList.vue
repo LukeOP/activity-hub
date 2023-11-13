@@ -2,7 +2,9 @@
 <div>
   <!-- Header -->
   <section class="row">
-    <HeaderLine heading="Lesson Requests:" link1="Current Lessons" @link1="routeChange('LessonsList')" link2="Requests Form" @link2="routeChange('RequestFormsList')" />
+    <HeaderLine heading="Lesson Requests:" 
+      link1="Current Lessons" @link1="routeChange('LessonsList')" 
+      link2="Requests Form" @link2="routeChange('RequestFormsList')" />
   </section>
 
   <!-- Table component -->

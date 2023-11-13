@@ -1,8 +1,9 @@
 <template>
 <div>
+  <HeaderLine heading="Attendance Overview" link1="Attendance Review" @link1="viewAttendanceReview" />
   
   <div v-for="subject in subjectArray" :key="subject">
-    <div class="row mb-5 lesson-group" v-if="lessons">
+    <div class="row mb-2 lesson-group" v-if="lessons">
       <h2 class="subjectHeading">{{subject}}</h2>
       <div class="col-12 col-md-4 col-sm-6" v-for="lesson in filteredLessons(subject)" :key="lesson">
         <AttendanceSnapshot class="snapShot"  :lesson="lesson" :heading="lesson.student.full_name" :stats="true" @click="handleClick(lesson)"/>
@@ -17,13 +18,14 @@
 <script setup>
 // Imports
 import { onMounted, ref } from 'vue'
-import useApi from '../../../../composables/useApi'
+import useApi from '../../../../../composables/useApi'
 import { useRouter } from 'vue-router'
-import useSorter from '../../../../composables/useSorter'
+import useSorter from '../../../../../composables/useSorter'
+import { useLessonsStore } from '../../../../../stores/lessons'
 
 // Components
-import AttendanceSnapshot from './AttendanceSnapshot.vue'
-import { useLessonsStore } from '../../../../stores/lessons'
+import AttendanceSnapshot from './../Components/AttendanceSnapshot.vue'
+import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
 
 // Variables
 const router = useRouter()
@@ -49,6 +51,12 @@ function handleClick(lesson){
   })
 }
 
+function viewAttendanceReview(){
+  router.push({
+    name: 'LessonAttendanceReview'
+  })
+}
+
 onMounted( async ()=>{
   await fetchData()
   subjectArray.value = Array.from(new Set(lessons.value.map(l => l.attributes.instrument)))
@@ -59,9 +67,7 @@ onMounted( async ()=>{
 <style lang="scss" scoped>
 .lesson-group {
   padding: 10px;
-  // border: 2px solid $ah-grey;
   border-radius: 0.25rem;
-  box-shadow: 0px 0px 5px $ah-grey;
   .subjectHeading {
     color: $ah-primary;
     border-bottom: 2px solid $ah-grey;
