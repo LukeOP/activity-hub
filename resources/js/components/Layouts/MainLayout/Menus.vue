@@ -42,4 +42,9 @@ function stateControl(state){
     top: 10px;
   }
 }
+@media (max-width: 768px) {
+  .menus {
+    height: 70px;
+  }
+}
 </style>

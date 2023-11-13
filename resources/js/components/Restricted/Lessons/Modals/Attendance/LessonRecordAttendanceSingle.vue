@@ -87,6 +87,9 @@ function submitRecord(){
   // console.log(attendanceData.value)
   axiosClient.post('/lesson-attendance', attendanceData.value).then(res => {
     calendar.addAttendanceRecord(res.data)
+    router.push({
+      name: 'LessonDetails'
+    })
     modal.close()
   })
 }

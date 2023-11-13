@@ -13,8 +13,8 @@
 import { ref, shallowRef } from 'vue'
 import { useRouter } from 'vue-router'
 import { useFilterStore } from '../../../../stores/filter'
-import AttendanceOverView from './AttendanceOverview.vue'
-import AttendanceReview from './AttendanceReview.vue'
+import AttendanceOverView from './Overview/AttendanceOverview.vue'
+import AttendanceReview from './Review/AttendanceReview.vue'
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
 
 const activeComponent = shallowRef(null)

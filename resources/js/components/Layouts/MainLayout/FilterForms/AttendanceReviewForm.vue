@@ -73,7 +73,7 @@ function returnFiltered(){
   sorter.sort(filteredAttendance, 'lesson.date', 'desc')
   Object.keys(filteredAttendance).length > 0 
   ? filter.setReturned(filteredAttendance)
-  : filter.setReturned({id: 0})
+  : filter.setReturned([])
   
 }
 

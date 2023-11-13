@@ -56,7 +56,7 @@
             <option v-for="instrument in SubjectsArray" :key="instrument" :value="instrument">{{ instrument }}</option>
           </select>
         </label>
-        <label v-if="formData.tutor_cb && tutorArray.length > 1">{{ formData.tutor }}
+        <label v-if="formData.tutor_cb">{{ formData.tutor }}
           <select class="form-control" v-model="inputData.tutor">
             <option v-for="staff in tutorArray" :key="staff" :value="staff.tutor.id">{{ staff.tutor.full_name }}</option>
           </select>
@@ -149,7 +149,7 @@ const SubjectsArray = computed(() => {
 })
 
 const tutorArray = computed(() => {
-  return staff.value.filter(s => s.subject === inputData.value.instrument)
+  return staffStore.getStaffList.filter(s => s.subject === inputData.value.instrument)
 })
 
 

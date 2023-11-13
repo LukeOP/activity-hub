@@ -5,11 +5,11 @@
       <div class="heading">{{lesson.student.full_name}}</div>
       <div class="col-12 col-md-4">
         <label for="date">Lesson date:</label>
-        <input type="date" id="date" class="form-control" required :max="today" v-model="attendanceData.date">
+        <input type="date" id="date" class="form-control" required :max="today" v-model="attendanceData.attendance.date">
       </div>
       <div class="col-12 col-md-4">
         <label for="time">Lesson start time:</label>
-        <input type="time" id="time" class="form-control" required v-model="attendanceData.time">
+        <input type="time" id="time" class="form-control" required v-model="attendanceData.attendance.time">
       </div>
       <div class="col-12 col-md-4">
         <label for="attendance">Attendance:</label>
@@ -29,14 +29,13 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
-import ModalTemplateVue from '../../../../Modal.vue'
 import moment from 'moment'
 import axiosClient from '../../../../../axios'
 import { ref } from 'vue'
 import { useCalendarStore } from '../../../../../stores/calendar'
+import { useModalStore } from '/resources/js/stores/modal'
 
-const router = useRouter()
+const modal = useModalStore()
 const calendar = useCalendarStore()
 const currentCalendar = calendar.getEventData
   
@@ -46,16 +45,12 @@ const attendance = lesson.attendance.find(l => l.date == moment(currentCalendar.
 
 const attendanceData = ref({
   attendance: attendance,
-  date: attendance.date,
-  time: attendance.time,
 })
 
-const returnDetails = { name: 'Dashboard' }
-
 function submitRecord(){
-  axiosClient.patch('/lesson-attendance/' + attendance.id, attendanceData.value).then(res => {
+  axiosClient.patch('/lesson-attendance/' + attendance.id, attendanceData.value.attendance).then(res => {
     calendar.updateAttendanceRecord(res.data.lesson)
-    router.push(returnDetails)
+    modal.close()
   })
 }
 

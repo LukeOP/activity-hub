@@ -39,7 +39,7 @@ function setActions(){
 onMounted(()=>{
   setTimeout(()=>{
     setActions()
-  },300)
+  },500)
   
 })
 

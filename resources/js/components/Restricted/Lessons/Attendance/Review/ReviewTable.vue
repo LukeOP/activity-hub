@@ -1,6 +1,6 @@
 <template>
-<div v-if="!loading && lessons">
-  <section id="table-header-section">
+  <div>
+    <section id="table-header-section">
     <table>
       <thead>
         <tr>
@@ -34,32 +34,15 @@
   <section v-else>
     <p id="no-records">No records for this time period</p>
   </section>
-    
-</div>
+  </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import useApi from '../../../../composables/useApi'
-import { useFilterStore } from '../../../../stores/filter'
-
-const filter = useFilterStore()
-const { data: attendanceRecords, loading, fetchData } = useApi('lesson-attendance')
-fetchData().then(()=>{
-  filter.setType('AttendanceReviewForm')
-  filter.setData(attendanceRecords.value)
-})
-
-const lessons = computed(()=>{
-  return Object.keys(filter.getReturned).length > 0 
-  ? filter.getReturned 
-  : attendanceRecords.value.data
-})
+const props = defineProps({lessons:Array})
 
 function capitalizeFirstLetter(string){
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
-
 
 </script>
 
@@ -71,7 +54,7 @@ function capitalizeFirstLetter(string){
   padding-bottom: 20px;
   font-size: 1.25rem;
   color: $ah-primary;
-  border-bottom: 5px solid $ah-primary;
+  border-bottom: 2px solid $ah-primary;
 }
 .attendance {
   display: block;
