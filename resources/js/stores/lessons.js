@@ -21,6 +21,11 @@ export const useLessonsStore = defineStore('lessons', {
     setLessons(lessonsArray){
       this.lessons = lessonsArray
     },
+    updateLessonRecord(record){
+      console.log(record)
+      this.lessons = this.lessons.filter(l => l.id != record.id)
+      this.lessons = [record, ...this.lessons]
+    },
     setAttendance(attendanceObject){
       this.singleAttendance = attendanceObject
     },

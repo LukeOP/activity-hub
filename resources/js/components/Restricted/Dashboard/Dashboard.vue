@@ -1,8 +1,8 @@
 <template>
   <div v-if="ready" class="row">
     <NewUserSetUp v-if="!hasSchools" />
-    <div class="col col-12 col-md-6">
-      <Calendar class="calendar" />
+    <div class="col col-12 col-xl-6">
+      <LessonList />
     </div>
     
 
@@ -15,6 +15,7 @@ import { useActionsStore } from '../../../stores/actions'
 import { useUserStore } from '../../../stores/user';
 import Calendar from './Calendar.vue'
 import NewUserSetUp from './NewUserSetUp.vue';
+import LessonList from './LessonList.vue';
 
 const user = useUserStore()
 const actions = useActionsStore()

@@ -3,7 +3,6 @@ import { chalkboard } from './chalkboard'
 import { userGroup } from './user-group'
 import { children } from './children'
 import { logout } from './logout'
-import { xmark } from './xmark'
 import { gears } from './gears'
 import { bars } from './bars'
 import { filter } from './filter'
@@ -16,7 +15,6 @@ export const navIcons = {
   chalkboard,
   userGroup,
   logout,
-  xmark,
   gears,
   bars,
   filter,

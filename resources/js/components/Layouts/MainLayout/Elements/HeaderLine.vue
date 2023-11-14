@@ -1,7 +1,7 @@
 <template>
   <div id="header">
 
-    <div id="above-line">
+    <div id="above-line" :class="{centerText: center, spaceText: !center}">
       <span id="heading">{{ heading }}</span>
       <span v-if="!mobileFormat && (!link1 && !link2)" id="school">{{ school }}</span>
       <span v-if="!mobileFormat && (link1 || link2)">
@@ -31,6 +31,7 @@ const props = defineProps({
   school: String,
   link1: String,
   link2: String,
+  center: String,
 })
 
 const emit = defineEmits(['link1', 'link2'])
@@ -62,11 +63,17 @@ const { mobileFormat } = useWindowSize()
   font-size: 2.25rem;
 }
 #above-line {
-  justify-content:space-between;
   align-items: flex-end;
   display:flex;
   border-bottom:3px solid $ah-primary;
 }
+.centerText {
+  justify-content: center;
+}
+.spaceText {
+  justify-content: space-between;
+}
+
 #below-line {
   justify-content:flex-end;
   align-items: flex-end;
