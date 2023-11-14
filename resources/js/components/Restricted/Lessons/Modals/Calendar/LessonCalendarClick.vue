@@ -1,21 +1,26 @@
 <template>
-  <h2 class="mb-4">What would you like to do?</h2>
+  <HeaderLine heading="What would you like to do?" center="true" />
   <div class="options">
+
+    <!-- Mark Attendance -->
     <div class="col-12 col-md-6 icon" @click="handleClick('LessonRecordAttendanceSingle')" v-if="!futureEvent && !attendanceRecorded()">
       <i class="fa-solid fa-user-check fa-8x mb-3"></i>
       <input type="button" value="Mark Attendance" class="btn btn-primary form-control">
     </div>
 
+    <!-- Review Attendance -->
     <div class="col-12 col-md-6 icon" @click="handleClick('LessonRecordReviewAttendanceSingle')" v-else-if="!futureEvent && attendanceRecorded()">
       <i class="fa-solid fa-user-check fa-8x mb-3"></i>
       <input type="button" value="Review Attendance" class="btn btn-primary form-control">
     </div>
 
+    <!-- View Lesson Details -->
     <div class="col-12 col-md-6 icon" @click="changeRoute({name: 'LessonDetails', params: {id: calendarData.lesson_id}})">
       <i class="fa-solid fa-graduation-cap fa-8x mb-3"></i>
       <input type="button" value="View Lesson Details" class="btn btn-primary form-control">
     </div>
 
+    <!-- Write Lesson Notes -->
     <div class="col-12 col-md-6 icon" @click="handleClick('LessonCreateNote')" v-if="!futureEvent && attendanceRecorded()">
       <i class="fa-solid fa-pen-to-square fa-8x mb-3"></i>
       <input type="button" value="Write Lesson Notes" class="btn btn-primary form-control">
@@ -26,25 +31,24 @@
 </template>
 
 <script>
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import ModalTemplate from '../../../../Modal.vue'
 import moment from 'moment'
 import { useCalendarStore } from '../../../../../stores/calendar'
 import { useModalStore } from '../../../../../stores/modal'
-import useApi from '../../../../../composables/useApi'
-import { useLessonsStore } from '../../../../../stores/lessons'
+import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
 
 export default {
   components: {
-    ModalTemplate
-  },
+    ModalTemplate,
+    HeaderLine
+},
   setup(){
     const router = useRouter()
     const calendar = useCalendarStore()
     const modal = useModalStore()
     const calendarData = calendar.getEventData
-    const lessonStore = useLessonsStore()
 
     // Checks click value and assigns route 'name' to direct user.
     function handleClick(click){

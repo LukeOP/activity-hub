@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\LessonAttendanceResource;
+use App\Http\Resources\LessonsResource;
+use App\Models\Lesson;
 use App\Models\LessonAttendance;
 use Illuminate\Http\Request;
 
@@ -38,7 +40,12 @@ class LessonAttendanceController extends Controller
             'user_id' => $request->tutor_id
         ]);
 
-        return new LessonAttendanceResource($lessonRecord);
+        return response()->json(
+            [
+                'message' => 'lesson Attendance Added successfully',
+                'lesson' => new LessonsResource(Lesson::where('id', $request->lesson_id)->first())
+            ]
+        );
     }
 
     /**
