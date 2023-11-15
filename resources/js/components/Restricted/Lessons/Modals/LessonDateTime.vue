@@ -33,7 +33,7 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axiosClient from '../../../../axios'
-import ModalTemplateVue from '../../../Modal.vue'
+import ModalTemplateVue from '../../../Layouts/MainLayout/Elements/Modal.vue'
 import moment from 'moment'
 
 export default {

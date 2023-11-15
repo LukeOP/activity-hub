@@ -1,6 +1,5 @@
 <template>
   <transition name="modal-animation">
-    <!-- <div v-show="modalActive" class="modal" @click.self="close"> -->
     <div v-show="modalActive" class="modal">
       <transition name="modal-animation-inner">
         <div v-show="modalActive" class="modal-inner">

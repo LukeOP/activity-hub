@@ -21,7 +21,7 @@ import { useWindowSize } from '../../../composables/useWindowSize';
 import { useCalendarEventFormatter } from '../../../composables/useCalendarEventFormatter';
 import { useCalendarStore } from '../../../stores/calendar';
 import { useUserStore } from '../../../stores/user';
-import Modal from '../../Modal.vue';
+import Modal from '../../Layouts/MainLayout/Elements/Modal.vue';
 import LessonCalendarClickVue from '../Lessons/Modals/Calendar/LessonCalendarClick.vue';
 import { useModalStore } from '../../../stores/modal';
 import { useLessonsStore } from '/resources/js/stores/lessons';

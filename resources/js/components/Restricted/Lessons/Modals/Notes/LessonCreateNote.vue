@@ -16,7 +16,7 @@ import axiosClient from '../../../../../axios'
 import { useToast } from 'vue-toast-notification'
 import { useRouter } from 'vue-router'
 
-import ModalTemplate from '../../../../Modal.vue'
+import ModalTemplate from '../../../../Layouts/MainLayout/Elements/Modal.vue'
 import { useLessonsStore } from '../../../../../stores/lessons'
 import { useUserStore } from '../../../../../stores/user'
 import { useModalStore } from '../../../../../stores/modal'
