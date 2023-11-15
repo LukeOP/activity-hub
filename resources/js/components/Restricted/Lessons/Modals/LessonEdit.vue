@@ -67,11 +67,13 @@ import { computed, ref } from 'vue'
 import axiosClient from '../../../../axios'
 import moment from 'moment'
 import { useUserStore } from '../../../../stores/user'
-import { useToast } from 'vue-toast-notification'
+// import { useToast } from 'vue-toast-notification'
 import { useLessonsStore } from '../../../../stores/lessons'
 import { useModalStore } from '@/stores/modal'
+import { useToastStore } from '/resources/js/stores/toast'
 
-const toast = useToast()
+// const toast = useToast()
+const toast = useToastStore()
 const user = useUserStore()
 const lessonStore = useLessonsStore()
 const modal = useModalStore()
@@ -144,7 +146,7 @@ function updateValues(){
     })
     .then((res) => {
       lessonStore.setLesson(res.data.lesson)
-      toast.open({ message: res.data.message, duration: 5000, dismissible: true, type: 'success'})
+      toast.open('success', 'Lesson Updated Successfully!', 'The lesson details have been updated')
       modal.close()
     })
 }

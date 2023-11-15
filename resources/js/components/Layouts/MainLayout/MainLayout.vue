@@ -12,6 +12,8 @@
         </RouterView>
 
         <Modals />
+      
+        <Toast />
 
       </div>
     </div>
@@ -24,6 +26,7 @@ import Modals from './Modals.vue'
 import BreadCrumbs from './BreadCrumbs.vue'
 import { useRoute, useRouter } from 'vue-router';
 import { computed, ref } from 'vue';
+import Toast from './Elements/Toast.vue';
 
 const router = useRouter()
 

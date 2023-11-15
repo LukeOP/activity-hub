@@ -8,6 +8,7 @@
     <div id="profile-drop-down" v-if="showDropDown">
       <div id="triangle"></div>
       <div class="drop-down-item" @click="handleProfile">Profile</div>
+      <div class="drop-down-item" @click="routerChange('Settings')">Settings</div>
       <div class="drop-down-item" @click="handleLogout">Log Out</div>
     </div>
   </div>
@@ -44,11 +45,18 @@ function handleProfile(){
   })
 }
 
+function routerChange(path_name){
+  router.push({
+    name: path_name
+  })
+}
+
 function handleLogout(){
   user.logout().then(()=>{
-    router.push({
-      name: 'Login'
-    })
+    routerChange('Login')
+    // router.push({
+    //   name: 'Login'
+    // })
   })
 }
 
