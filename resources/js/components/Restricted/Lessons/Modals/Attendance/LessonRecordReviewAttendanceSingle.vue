@@ -34,10 +34,12 @@ import axiosClient from '../../../../../axios'
 import { ref } from 'vue'
 import { useCalendarStore } from '../../../../../stores/calendar'
 import { useModalStore } from '/resources/js/stores/modal'
+import { useToastStore } from '/resources/js/stores/toast'
 
 const modal = useModalStore()
 const calendar = useCalendarStore()
 const currentCalendar = calendar.getEventData
+const toast = useToastStore()
   
 const lesson = currentCalendar.lesson
 const today = moment().format('YYYY-MM-DD')
@@ -50,6 +52,7 @@ const attendanceData = ref({
 function submitRecord(){
   axiosClient.patch('/lesson-attendance/' + attendance.id, attendanceData.value.attendance).then(res => {
     calendar.updateAttendanceRecord(res.data.lesson)
+    toast.open('success', 'Record Changed', 'Lesson record has been updated')
     modal.close()
   })
 }

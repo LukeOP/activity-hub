@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HeaderLine heading="Edit Attendance" /> 
+    <HeaderLine heading="Edit Attendance" center="true" /> 
     <form style="padding:1rem" @submit.prevent="updateAttendance">
       <div class="row">
         <div class="col-12 col-md-4">
@@ -36,10 +36,12 @@ import { ref } from 'vue';
 import axiosClient from '/resources/js/axios';
 import { useModalStore } from '/resources/js/stores/modal';
 import moment from 'moment';
+import { useToastStore } from '/resources/js/stores/toast';
 
 const lessonStore = useLessonsStore()
 const currentAttendance = lessonStore.getAttendance
 const modal = useModalStore()
+const toast = useToastStore()
 
 const today = moment().format('YYYY-MM-DD')
 
@@ -52,7 +54,11 @@ const formData = ref({
 
 function updateAttendance(){
   axiosClient.patch('/lesson-attendance/' + formData.value.id, formData.value).then(res => {
-    lessonStore.updateAttendanceRecord(res.data.lesson)
+    let attendance = lessonStore.getAttendanceArray.find(a => a.id === formData.value.id)
+    attendance.attendance = formData.value.attendance
+    attendance.date = formData.value.date
+    attendance.time = formData.value.time
+    toast.open('success', 'Attendance Updated', 'Attendance details have been changed')
     modal.close()
   })
 }

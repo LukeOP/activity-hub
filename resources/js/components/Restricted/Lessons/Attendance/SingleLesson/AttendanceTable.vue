@@ -17,7 +17,7 @@
     </table>
   </section>
 
-  <section id="table-body-section" style="overflow-y: auto;">
+  <section id="table-body-section" style="overflow-y: auto;" v-if="attendanceRecords.length > 0">
     <table>
       <tbody>
         <tr v-for="record in attendanceRecords" :key="record">
@@ -45,9 +45,10 @@ export default {
     lesson: Object
   },
   setup(props){
-    const attendanceRecords = props.lesson.attendance
-    const modal = useModalStore()
     const lessonStore = useLessonsStore()
+
+    const attendanceRecords = lessonStore.getAttendanceArray
+    const modal = useModalStore()
 
     function capitalizeFirstLetter(string){
       return string.charAt(0).toUpperCase() + string.slice(1)

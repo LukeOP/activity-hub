@@ -51,6 +51,7 @@ import { useCalendarStore } from '../../../../../stores/calendar'
 import { useLessonsStore } from '../../../../../stores/lessons'
 import { useModalStore } from '@/stores/modal'
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
+import { useToastStore } from '/resources/js/stores/toast'
 
 
 const router = useRouter()
@@ -58,6 +59,7 @@ const router = useRouter()
 const user = useUserStore()
 const calendar = useCalendarStore()
 const lessonStore = useLessonsStore()
+const toast = useToastStore()
 const currentCalendar = calendar.getEventData
 const lesson = lessonStore.getLessonData
 const modal = useModalStore()
@@ -83,19 +85,16 @@ function handleClick(result){
     attendanceData.value.date = customData.value.date
     attendanceData.value.time = customData.value.time
   }
-  submitRecord()
+  submitRecord(result)
 }
 
-function submitRecord(){
+function submitRecord(result){
   // console.log(attendanceData.value)
   axiosClient.post('/lesson-attendance', attendanceData.value).then(res => {
     console.log(res.data.lesson)
     lessonStore.updateLessonRecord(res.data.lesson)
     lessonStore.setLesson(res.data.lesson)
-    // calendar.addAttendanceRecord(res.data)
-    // router.push({
-    //   name: 'LessonDetails'
-    // })
+    toast.open('success', 'Record Saved', 'Lesson attendance set as ' + result)
     modal.close()
   })
 }

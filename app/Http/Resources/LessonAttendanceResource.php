@@ -16,12 +16,11 @@ class LessonAttendanceResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'lesson' => [
-                'date' => $this->date,
-                'time' => $this->time,
-                'instrument' => $this->lesson->instrument,
-                'attendance' => $this->attendance,
-            ],
+            'lesson_id' => $this->lesson->id,
+            'date' => $this->date,
+            'time' => $this->time,
+            'instrument' => $this->lesson->instrument,
+            'attendance' => $this->attendance,
             'student' => [
                 'id' => $this->lesson->student->id,
                 'first_name' => $this->lesson->student->first_name,

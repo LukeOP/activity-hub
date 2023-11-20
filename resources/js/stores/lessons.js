@@ -5,6 +5,7 @@ function getState(){
       singleLesson: {},
       lessons: [],
       singleAttendance: {},
+      attendanceArray: [],
       singleRequest: {},
       lessonRequests: [],
       lessonRequestForm: {},
@@ -25,6 +26,9 @@ export const useLessonsStore = defineStore('lessons', {
       console.log(record)
       this.lessons = this.lessons.filter(l => l.id != record.id)
       this.lessons = [record, ...this.lessons]
+    },
+    setAttendanceArray(attendanceArray){
+      this.attendanceArray = attendanceArray
     },
     setAttendance(attendanceObject){
       this.singleAttendance = attendanceObject
@@ -71,6 +75,9 @@ export const useLessonsStore = defineStore('lessons', {
     },
     getLessonsData(){
       return this.lessons
+    },
+    getAttendanceArray(){
+      return this.attendanceArray
     },
     getAttendance(){
       return this.singleAttendance

@@ -41,9 +41,11 @@ import { useRouter } from 'vue-router';
 import { useLessonsStore } from '/resources/js/stores/lessons';
 import moment from 'moment';
 import { useWindowSize } from '/resources/js/composables/useWindowSize';
+import { useUserStore } from '/resources/js/stores/user';
 
-// Initiate Stores'
+// Initiate Stores
 const lessonStore = useLessonsStore()
+const user = useUserStore()
 
 // Initiate Composables
 const router = useRouter()
@@ -59,9 +61,19 @@ const formData = ref({
 // Fetch user schools or set default school if only one exists for user
 const {data: schools, fetchData: fetchSchools} = useApi('schools')
 fetchSchools().then(()=>{
-  formData.value.school = schools.value[0].id
-  formData.value.schools = schools
+  setSchools()
 })
+
+function setSchools(){
+  schools.value.forEach(school => {
+    console.log(user.hasPermission('LESSON_FRM_C', school.id))
+    if(user.hasPermission('LESSON_FRM_C', school.id)){
+      formData.value.schools = [...formData.value.schools, school]
+    }
+  });
+  formData.value.school =formData.value.schools[0].id
+}
+
 
 // Fetch school forms when school is selected
 watch(() => formData.value.school, (newValue) => {

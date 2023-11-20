@@ -7,22 +7,28 @@ use App\Http\Resources\SchoolsResource;
 use App\Models\Lesson;
 use App\Models\LessonNotes;
 use App\Models\User;
+use App\Traits\HttpResponses;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class LessonsController extends Controller
 {
+    use HttpResponses;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        // Get User's List of associated-schools and create an array of school ids
         $user = Auth::user();
         $userSchools = $user->schools;
         $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
         $lessonCollection = new Collection();
 
+        // For each user-associated school check if they have permission to view all lessons 
+        // If they do or they are an administrator - get all student lessons for that school
+        // Else just get the lessons assigned to the tutor
         foreach ($userSchools as $school) {
             $hasPermission = $user->hasPermissionForSchool($school->id, 'LESSONS_V');
 
@@ -36,10 +42,11 @@ class LessonsController extends Controller
             $lessonCollection = $lessonCollection->concat($lessonsAtSchool);
         }
 
+        // return compiled list of lessons the user has access to
         return $lessonCollection;
     }
 
-    public function getStudentLessons($student_id)
+    public function getStudentLessons(string $student_id)
     {
         $lessons = Lesson::where('student_id', $student_id)->get();
         return LessonsResource::collection($lessons);

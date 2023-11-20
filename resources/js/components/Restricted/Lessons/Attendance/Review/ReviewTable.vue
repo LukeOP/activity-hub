@@ -19,12 +19,12 @@
   <section id="table-body-section" style="overflow-y:auto" v-if="lessons.length > 0">
     <table>
       <tbody>
-        <tr v-for="record in lessons" :key="record">
-          <td style="width:10%">{{record.lesson.date}}</td>
-          <td style="width:10%">{{record.lesson.time}}</td>
+        <tr v-for="record in lessons" :key="record" @click="editAttendance(record)">
+          <td style="width:10%">{{record.date}}</td>
+          <td style="width:10%">{{record.time}}</td>
           <td style="width:15%">{{record.student.full_name}}</td>
-          <td style="width:10%">{{record.lesson.instrument}}</td>
-          <td style="width:15%; text-align:center; padding-left:10px; padding-right:10px"><span class="attendance" :class="record.lesson.attendance">{{capitalizeFirstLetter(record.lesson.attendance)}}</span></td>
+          <td style="width:10%">{{record.instrument}}</td>
+          <td style="width:15%; text-align:center; padding-left:10px; padding-right:10px"><span class="attendance" :class="record.attendance">{{capitalizeFirstLetter(record.attendance)}}</span></td>
           <td style="width:15%">{{record.tutor.full_name}}</td>
           <td style="width:20%">{{record.school.name}}</td>
         </tr>
@@ -38,11 +38,27 @@
 </template>
 
 <script setup>
+import { useModalStore } from '/resources/js/stores/modal'
+import { useLessonsStore } from '/resources/js/stores/lessons'
+
 const props = defineProps({lessons:Array})
+const lessonStore = useLessonsStore()
+const modal = useModalStore()
 
 function capitalizeFirstLetter(string){
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
+
+function editAttendance(record){
+    lessonStore.setAttendance({
+      attendance: record.attendance,
+      date: record.date,
+      time: record.time,
+      lesson_id: record.lesson_id,
+      id: record.id
+    })
+    modal.open('EditAttendance')
+  }
 
 </script>
 

@@ -1,7 +1,8 @@
 <template>
   <div v-if="lesson.student">
     <HeaderLine :heading="lesson.student.full_name + `'s Attendance:`" :school="lesson.attributes.instrument + ' lessons with ' + lesson.tutor.full_name"
-      link1="Lesson Details" @link1="routeChange({name: 'LessonDetails'})"/>
+      :link1="link1" @link1="routeChange({name: 'LessonAttendanceOverview'})"
+      link2="Lesson Details" @link2="routeChange({name: 'LessonDetails'})"/>
     
     <div class="row mb-4">
       <div class="col-12 col-sm-4">
@@ -10,11 +11,7 @@
     </div>
 
     <div class="row">
-      <AttendanceTable :lesson="lesson" :key="tableKey"/>
-    </div>
-    
-    <div class="modal-route">
-        <router-view></router-view>
+      <AttendanceTable :lesson="lesson"/>
     </div>
   </div>
 </template>
@@ -24,31 +21,24 @@ import { computed, ref, watch } from 'vue'
 import AttendanceSnapshot from '../Components/AttendanceSnapshot.vue'
 import AttendanceTable from './AttendanceTable.vue'
 import { useRouter } from 'vue-router'
-import { useFilterStore } from '../../../../../stores/filter'
 import { useLessonsStore } from '../../../../../stores/lessons'
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
+import { useUserStore } from '/resources/js/stores/user'
 
 const lessonStore = useLessonsStore()
-const filter = useFilterStore()
+const user = useUserStore()
 const router = useRouter()
-const tableKey = ref(0)
-filter.setData(lessonStore.getLessonData)
-filter.setType('AttendanceSingleForm')
 
-const lesson = computed(()=>{
-  tableKey.value++
-  return Object.keys(filter.getReturned).length > 0 
-  ? filter.getReturned 
-  : lessonStore.getLessonData 
-})
+const lesson = lessonStore.getLessonData
+lessonStore.setAttendanceArray(lesson.attendance)
 
-watch(() => lessonStore.getLessonData.attendance, (newValue) => {
-  console.log('watching', newValue)
-  tableKey.value++
+// Set User Permissions in Header
+const link1 = computed(()=>{
+  if(user.hasPermissionAny('ATTENDANCE_V') || user.hasPermissionAny('ATTENDANCE_R'))
+  return 'Attendance Data'
 })
 
 function routeChange(path){
-  filter.setType('')
   router.push(path)
 }
 </script>

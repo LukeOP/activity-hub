@@ -8,7 +8,7 @@
       <thead>
         <tr>
           <th>Access</th>
-          <th>Restricted</th>
+          <th>Restricted View</th>
           <th>View</th>
           <th>Edit</th>
           <th>Create</th>
@@ -19,7 +19,7 @@
         <tr v-for="permission in permissionsArray" :key="permission.access">
           <td>{{ permission.access }}</td>
           <td v-for="action in permission.actions" :key="action" :style="{ width: '15%' }">
-            <i :style="{ cursor: 'pointer' }" :class="getPermissionIconClass(permission, action)"
+            <i v-if="action != ''" :style="{ cursor: 'pointer' }" :class="getPermissionIconClass(permission, action)"
               @click="togglePermission(action)" />
           </td>
         </tr>
@@ -66,15 +66,16 @@ function StaffHasPermission(value) {
 // Permission array of values that can be toggled by an administrator or 'STAFF_E'
 const permissionsArray = [
   { access: "Lessons", actions: ["LESSONS_R", "LESSONS_V", "LESSONS_E", "LESSONS_C", "LESSONS_D"] },
-  { access: "Lesson Requests", actions: ["LESSON_REQ_R", "LESSON_REQ_V", "LESSON_REQ_E", "LESSON_REQ_C", "LESSON_REQ_D"] },
+  { access: "Lesson Requests", actions: ["", "LESSON_REQ_V", "LESSON_REQ_E", "LESSON_REQ_C", "LESSON_REQ_D"] },
+  { access: "Lesson Forms", actions: ["", "", "", "LESSON_FRM_C", "LESSON_FRM_D"] },
   { access: "Attendance", actions: ["ATTENDANCE_R", "ATTENDANCE_V", "ATTENDANCE_E", "ATTENDANCE_C", "ATTENDANCE_D"] },
   { access: "Students", actions: ["STUDENTS_R", "STUDENTS_V", "STUDENTS_E", "STUDENTS_C", "STUDENTS_D"] },
   { access: "Events", actions: ["EVENTS_R", "EVENTS_V", "EVENTS_E", "EVENTS_C", "EVENTS_D"] },
-  { access: "Instruments", actions: ["INSTRUMENTS_R", "INSTRUMENTS_V", "INSTRUMENTS_E", "INSTRUMENTS_C", "INSTRUMENTS_D"] },
-  { access: "Hires", actions: ["HIRES_R", "HIRES_V", "HIRES_E", "HIRES_C", "HIRES_D"] },
+  { access: "Instruments", actions: ["", "INSTRUMENTS_V", "INSTRUMENTS_E", "INSTRUMENTS_C", "INSTRUMENTS_D"] },
+  { access: "Hires", actions: ["", "HIRES_V", "HIRES_E", "HIRES_C", "HIRES_D"] },
   { access: "Rooms", actions: ["ROOMS_R", "ROOMS_V", "ROOMS_E", "ROOMS_C", "ROOMS_D"] },
   { access: "Bookings", actions: ["BOOKINGS_R", "BOOKINGS_V", "BOOKINGS_E", "BOOKINGS_C", "BOOKINGS_D"] },
-  { access: "Staff", actions: ["STAFF_R", "STAFF_V", "STAFF_E", "STAFF_C", "STAFF_D"] },
+  { access: "Staff", actions: ["", "STAFF_V", "STAFF_E", "STAFF_C", "STAFF_D"] },
 ];
 
 // Display the correct icon for the permission access

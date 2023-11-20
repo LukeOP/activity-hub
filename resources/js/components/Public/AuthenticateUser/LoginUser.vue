@@ -11,11 +11,13 @@
     <div v-if="error" class="error">{{error}}</div>
     <!-- <router-link :to="{name: 'Register'}" id="register-btn">Or register an account.</router-link> -->
   <button class="btn btn-outline-primary mt-3" @click="loginUser">Log In User/Admin Demo</button>
+  <button class="btn btn-outline-primary mt-3" @click="loginTutor">Log In Tutor</button>
+  <button class="btn btn-outline-primary mt-3" @click="loginAdmin">Log In Admin</button>
+
     
   </div>
   <!-- <button @click="loginUser">Log In User/Admin Demo</button> -->
   <!-- <button @click="loginTutor">Log In Tutor</button>
-  <button @click="loginAdmin">Log In Admin</button>
   <button @click="loginNew">Log In New Member</button> -->
 </div>
 </template>

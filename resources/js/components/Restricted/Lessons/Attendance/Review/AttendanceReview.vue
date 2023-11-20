@@ -3,17 +3,18 @@
   <HeaderLine heading="Attendance Review" link1="Attendance Overview" @link1="routerChange" />
 
 <!-- Table component -->
-<section v-if="!loading && filteredLessons">
-  <component :is="currentComponent" :lessons="filteredLessons" />
+<section v-if="!loading">
+  <component :is="currentComponent" :lessons="filter.getReturned" :key="key" />
 </section>
     
 </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import useApi from '../../../../../composables/useApi'
 import { useFilterStore } from '../../../../../stores/filter'
+import { useLessonsStore } from '../../../../../stores/lessons'
 import ReviewTable from './ReviewTable.vue'
 import { useWindowSize } from '/resources/js/composables/useWindowSize'
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
@@ -22,6 +23,8 @@ import ReviewTableMobile from './ReviewTableMobile.vue'
 
 const { windowSize } = useWindowSize()
 const router = useRouter()
+const key = ref(0)
+const lessonStore = useLessonsStore()
 
 // Get appropriate component based on window size
 const currentComponent = computed(() => {
@@ -31,14 +34,15 @@ const currentComponent = computed(() => {
 const filter = useFilterStore()
 const { data: attendanceRecords, loading, fetchData } = useApi('lesson-attendance')
 fetchData().then(()=>{
+  lessonStore.setAttendanceArray(attendanceRecords.value)
   filter.setType('AttendanceReviewForm')
-  filter.setData(attendanceRecords.value)
+  filter.setData(lessonStore.getAttendanceArray)
+  key.value++
 })
 
-const filteredLessons = computed(()=>{
-  return Object.keys(filter.getReturned).length > 0 
-  ? filter.getReturned 
-  : attendanceRecords.value.data
+
+watch(() => lessonStore.getAttendanceArray, () => {
+
 })
 
 function routerChange(){

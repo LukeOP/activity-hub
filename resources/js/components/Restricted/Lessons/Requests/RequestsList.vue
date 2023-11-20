@@ -4,7 +4,7 @@
   <section class="row">
     <HeaderLine heading="Lesson Requests:" 
       link1="Current Lessons" @link1="routeChange('LessonsList')" 
-      link2="Requests Form" @link2="routeChange('RequestFormsList')" />
+      :link2="link2" @link2="routeChange('RequestFormsList')" />
   </section>
 
   <!-- Table component -->
@@ -27,6 +27,7 @@ import { useActionsStore } from '../../../../stores/actions'
 import { useLessonsStore } from '../../../../stores/lessons'
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '/resources/js/stores/user'
 
 const key = ref(0)
 
@@ -34,6 +35,7 @@ const key = ref(0)
 const filter = useFilterStore()
 const lessonStore = useLessonsStore()
 const actions = useActionsStore()
+const user = useUserStore()
 
 // Initiate Composables
 const { windowSize } = useWindowSize()
@@ -56,6 +58,12 @@ const actionArray = [
   { header: 'Attendance', to: { name: 'LessonAttendanceOverview' }, showSubItems: false, icon: 'fa-solid fa-user-check'},
 ]
 actions.setItems(actionArray)
+
+// Set User Permissions in Header
+const link2 = computed(()=>{
+  if(user.hasPermissionAny('LESSON_FRM_V'))
+  return 'Requests Form'
+})
 
 // Check for update to filtered lessons and display to user
 watch(() => filter.getReturned, (newValue) => {

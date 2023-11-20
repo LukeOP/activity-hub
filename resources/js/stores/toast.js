@@ -10,7 +10,7 @@ function getState() {
 export const useToastStore = defineStore('toast', {
   state: () => (getState()),
   actions: {
-    open(type: String, header: String, message: String) {
+    open(type, header, message) {
       this.data = {type: type, header: header, message: message}
       this.active = true;
       setTimeout(()=>{

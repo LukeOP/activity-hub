@@ -44,7 +44,7 @@ const sorter = useSorter()
 filter.setReturned({})
 const originalData = ref(filter.getData)
 
-const attendanceArray = ref(Array.from(new Set(originalData.value.map(d => d.lesson.attendance))))
+const attendanceArray = ref(Array.from(new Set(originalData.value.map(d => d.attendance))))
 const tutorArray = computed(()=>{
   return originalData.value.reduce((result, d) => {
     const tutor = { id: d.tutor.id, name: `${d.tutor.first_name} ${d.tutor.last_name}` };
@@ -67,10 +67,10 @@ const filtering = ref({
 
 function returnFiltered(){
   let filteredAttendance = originalData.value
-  filteredAttendance = filteredAttendance.filter(att => att.lesson.date >= filtering.value.start_date && att.lesson.date <= filtering.value.end_date)
-  if(filtering.value.attendance != '') filteredAttendance = filteredAttendance.filter(att => att.lesson.attendance == filtering.value.attendance)
+  filteredAttendance = filteredAttendance.filter(att => att.date >= filtering.value.start_date && att.date <= filtering.value.end_date)
+  if(filtering.value.attendance != '') filteredAttendance = filteredAttendance.filter(att => att.attendance == filtering.value.attendance)
   if(filtering.value.tutor != '') filteredAttendance = filteredAttendance.filter(d => d.tutor.id == filtering.value.tutor)
-  sorter.sort(filteredAttendance, 'lesson.date', 'desc')
+  sorter.sort(filteredAttendance, 'date', 'desc')
   Object.keys(filteredAttendance).length > 0 
   ? filter.setReturned(filteredAttendance)
   : filter.setReturned([])

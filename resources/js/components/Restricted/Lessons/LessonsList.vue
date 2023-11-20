@@ -1,7 +1,7 @@
 <template>
 <div>
   <!-- Header -->
-  <HeaderLine heading="Lessons" link1="Attendance Data" link2="Lesson Requests" 
+  <HeaderLine heading="Lessons" :link1="link1" :link2="link2" 
     @link1="changeRoute" @link2="changeRoute"/>
 
   <!-- Table component -->
@@ -60,6 +60,16 @@ if(user.hasPermissionAny('LESSONS_C')){
   actionArray.push({ header: 'Create New Lesson', to: { name: 'LessonCreate' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'})
 }
 actions.setItems(actionArray)
+
+// Set User Permissions in Header
+const link1 = computed(()=>{
+  if(user.hasPermissionAny('ATTENDANCE_V') || user.hasPermissionAny('ATTENDANCE_R'))
+  return 'Attendance Data'
+})
+const link2 = computed(()=>{
+  if(user.hasPermissionAny('LESSON_REQ_V'))
+  return 'Lesson Requests'
+})
 
 // if(user.hasPermissionAny('ATTENDANCE_R') || user.hasPermission('ATTENDANCE_V')){
 //   actionArray.push({ header: 'Attendance', to: { name: 'LessonAttendanceOverview' }, icon: 'fa-solid fa-user-check', additional: true})
