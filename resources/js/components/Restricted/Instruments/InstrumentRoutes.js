@@ -17,9 +17,9 @@ const instrumentRoutes = [
         // List
         { path: '', name: 'InstrumentList', component: InstrumentList, meta: { title: 'Instruments', section: "Instruments", depth: 1}},
         // Create Instrument
-        // { path: 'create', name: 'InstrumentCreate', component: InstrumentCreate, meta: { title: 'Create Instrument', breadcrumb: ' > Create', section: "Instruments", depth: 2}},
+        // { path: 'create', name: 'InstrumentCreate', component: InstrumentCreate, meta: { title: 'Create Instrument', breadcrumb: ' / Create', section: "Instruments", depth: 2}},
         // Single Instrument Details
-        { path: 'details', name: 'InstrumentDetails', component: InstrumentDetails, meta: { title: 'Instrument Details', breadcrumb: ' > Details', section: "Instruments", depth: 2},
+        { path: 'details', name: 'InstrumentDetails', component: InstrumentDetails, meta: { title: 'Instrument Details', breadcrumb: ' / Details', section: "Instruments", depth: 2},
         beforeEnter: (to, from, next) => {
           const instrumentStore = useInstrumentStore()
           if(Object.keys(instrumentStore.getInstrument) == 0) next({ name: 'InstrumentList'})
@@ -34,7 +34,7 @@ const instrumentRoutes = [
         children: [
           { path: '', name: 'HiresList', component: HiresList, meta: { title: 'Hires', section: "Instruments", depth: 2}},
           // Single Hire Details
-          { path: 'details', name: 'HireDetails', component: HireDetails, meta: { title: 'Hire Details', breadcrumb: ' > Details', section: "Instruments", depth: 3},
+          { path: 'details', name: 'HireDetails', component: HireDetails, meta: { title: 'Hire Details', breadcrumb: ' / Details', section: "Instruments", depth: 3},
           beforeEnter: (to, from, next) => {
             const hireStore = useHireStore()
             if(Object.keys(hireStore.getHire).length == 0) next({ name: 'HiresList'})

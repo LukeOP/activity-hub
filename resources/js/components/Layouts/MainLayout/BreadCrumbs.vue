@@ -2,7 +2,7 @@
 <div class="container" v-if="!mobileFormat">
   <div class="breadcrumbs mt-1">
     <span v-for="(breadcrumb, index) in breadcrumbs" :key="index">
-      <span v-if="index !== breadcrumbs.length - 1"> > </span>
+      <span v-if="index !== breadcrumbs.length - 1"> / </span>
       <router-link :to="breadcrumb.to" class="link">{{ breadcrumb.label }}</router-link>
     </span>
   </div>

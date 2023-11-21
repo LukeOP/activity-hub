@@ -44,13 +44,13 @@ const lessonsRoutes = [
                 { path: 'confirm-date-time', name: 'LessonDateTime', component: LessonDateTime, props: true, meta: { title: 'Lesson Date and Time', showModal: true} },
             ]},
             // View Notes
-            { path: 'notes', name: 'LessonNotes', component: LessonNotes, props: true, meta: { title: 'Lesson Notes', breadcrumb: ' > Notes', section: "Lessons", depth: 3 } },
+            { path: 'notes', name: 'LessonNotes', component: LessonNotes, props: true, meta: { title: 'Lesson Notes', breadcrumb: ' / Notes', section: "Lessons", depth: 3 } },
             // View Single Lesson Attendance
-            { path: 'attendance', name: 'LessonAttendanceSingle', component: LessonAttendanceSingle, props: true, meta: { title: 'Lesson Attendance', breadcrumb: ' > Attendance', section: "Lessons", depth: 3} },
+            { path: 'attendance', name: 'LessonAttendanceSingle', component: LessonAttendanceSingle, props: true, meta: { title: 'Lesson Attendance', breadcrumb: ' / Attendance', section: "Lessons", depth: 3} },
           ] },
 
         // Create Lessons
-        { path: 'create', name: 'LessonCreate', component: LessonCreate, props: true, meta: { title: 'Create Lesson', breadcrumb: ' > Create New', section: "Lessons", depth: 2} },
+        { path: 'create', name: 'LessonCreate', component: LessonCreate, props: true, meta: { title: 'Create Lesson', breadcrumb: ' / Create New', section: "Lessons", depth: 2} },
 
         // Lesson Attendance
         ...attendanceRoutes,
@@ -59,7 +59,7 @@ const lessonsRoutes = [
         { path: 'requests', meta: { title: 'Lesson Requests', breadcrumb: 'Requests'},
           children: [
               { path: '', name: 'RequestsList', component: RequestsList, meta: {section: "Lessons", depth: 2}},
-              { path: 'review', name: 'LessonRequestReview', component: RequestReview, meta: {breadcrumb: ' > Review', section: "Lessons", depth: 2} },
+              { path: 'review', name: 'LessonRequestReview', component: RequestReview, meta: {breadcrumb: ' / Review', section: "Lessons", depth: 2} },
               { path: 'forms', meta: {breadcrumb: "Forms"},
                 children: [
                   { path: '', name: 'RequestFormsList', component: RequestFormList, meta: {section: "Lessons", depth: 3}},
@@ -70,7 +70,7 @@ const lessonsRoutes = [
                     else next()
                   }, children: [
                     { path: '', name: 'RequestFormDetails', component: RequestFormDetails, meta: {section: "Lessons", depth: 4}},
-                    { path: 'preview', name: 'RequestFormPreview', component: FormPreview, meta: {section: "Lessons", breadcrumb: ' > Preview', depth: 5}}
+                    { path: 'preview', name: 'RequestFormPreview', component: FormPreview, meta: {section: "Lessons", breadcrumb: ' / Preview', depth: 5}}
                   ]},
                 ]}
           ]}
