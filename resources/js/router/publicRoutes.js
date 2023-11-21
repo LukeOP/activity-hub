@@ -10,9 +10,9 @@ const publicRoutes = [
     component: Home,
     redirect: {name: 'Login'},
     children: [
-      { path: 'user-login', name: 'Login', component: Login },
-      { path: 'registration', name: 'Register', component: RegisterUser, },
-      { path: 'forms/:id', name: 'LessonSignUp', component: LessonSignUpForm, }
+      { path: 'user-login', name: 'Login', component: Login, meta: {title: 'Login'}},
+      { path: 'registration', name: 'Register', component: RegisterUser, meta: {title: 'Register'} },
+      { path: 'forms/:id', name: 'LessonSignUp', component: LessonSignUpForm, meta: {title: 'Lesson Signup'} }
     ]
   },
   
