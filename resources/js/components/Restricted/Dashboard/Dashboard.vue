@@ -10,10 +10,9 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useActionsStore } from '../../../stores/actions'
 import { useUserStore } from '../../../stores/user';
-import Calendar from './Calendar.vue'
 import NewUserSetUp from './NewUserSetUp.vue';
 import LessonList from './LessonList.vue';
 
@@ -37,6 +36,11 @@ function setActions(){
   actions.setItems(actionArray)
   ready.value = true
 }
+
+watch(() => user.attributes.schools, (newValue) => {
+  setActions()
+})
+
 onMounted(()=>{
   setTimeout(()=>{
     setActions()

@@ -9,41 +9,32 @@
         @click="selectedSchool = school; key++">{{school.name}}</span>
       </div>
     </div>
+
     <ComponentController :key="key" />
-    <!-- <div v-if="selectedSchool">
-      <component :is="currentComponent" :staff="filteredStaff" />
-      <StaffTable :school_id="selectedSchool.id" :key="key" />
-      <InvitationTable :school_id="selectedSchool.id" :key="key" />
-    </div> -->
-    
+    <InvitationController :key="key2" v-if="!mobileFormat && user.hasPermission('STAFF_C', selectedSchool.id)" />
     
   </div>
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import useApi from "../../../composables/useApi";
 import { useSchoolStore } from "../../../stores/schools";
 import { useUserStore } from "../../../stores/user";
-import StaffTable from './ListComponents/StaffTable.vue'
-import StaffTableMobile from './ListComponents/StaffTableMobile.vue'
 import { useActionsStore } from "/resources/js/stores/actions";
 import HeaderLine from '../../Layouts/MainLayout/Elements/HeaderLine.vue'
-import { useWindowSize } from "/resources/js/composables/useWindowSize";
 import ComponentController from './ListComponents/ComponentController.vue'
+import InvitationController from './ListComponents/InvitationController.vue'
+import { useWindowSize } from "/resources/js/composables/useWindowSize";
+import { useStaffStore } from "/resources/js/stores/staff";
 
 // Initiate Stores
 const schoolStore = useSchoolStore()
 const user = useUserStore()
 const actions = useActionsStore()
+const staffStore = useStaffStore()
 
-// Initiate Composables
-const { windowSize } = useWindowSize()
-
-// Get appropriate component based on window size
-const currentComponent = computed(() => {
-  return windowSize.value.width > 1030 ? StaffTable : StaffTableMobile
-})
+const { mobileFormat } = useWindowSize()
 
 // Set side actions available on this page
 function defineActions(){
@@ -59,11 +50,13 @@ const selectedSchool = ref({})
 
 // Key to update components
 const key = ref(0)
+const key2 = ref(0)
 
 // Fetch Schools Data based on Logged in User's school associations. Set selectedSchool to first school on list
 const { data: schools, fetchData: fetchSchools } = useApi('schools')
 if(Object.keys(schoolStore.getSchool).length > 0){
   selectedSchool.value = schoolStore.getSchool
+  defineActions()
 } else {
   fetchSchools().then(()=>{
     schoolStore.setSchools(schools.value)
@@ -77,8 +70,13 @@ watch(() => selectedSchool.value, (newValue) => {
   schoolStore.setSchool(newValue)
   defineActions()
   key.value++
-  })
+  key2.value++
+})
 
+// Watch for a change in selected school an update components
+watch(() => staffStore.value, () => {
+  key2.value++
+}, {deep: true})
 </script>
 
 <style lang="scss" scoped>

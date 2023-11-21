@@ -85,6 +85,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // SCHOOLS
     Route::resource('/schools', SchoolsController::class);
 
+    // SCHOOL INVITATIONS
+    Route::get('/school-invitations/{school}', [UserSchoolInvitationsController::class, 'getInvitesForSchool']);
+    Route::get('/school-invitation/{code}', [UserSchoolInvitationsController::class, 'getInviteByCode']);
+    Route::resource('school-invitations', UserSchoolInvitationsController::class);
+
     // STUDENTS
     Route::resource('/students', StudentsController::class);
     Route::get('school-students/{schoolId}', [StudentsController::class, 'getStudentsInSchool']);
@@ -105,9 +110,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // TASKS
     Route::resource('/tasks', TasksController::class);
-
-    // SCHOOL INVITATIONS
-    Route::get('/school-invitations/{school}', [UserSchoolInvitationsController::class, 'getInvitesForSchool']);
-    Route::get('/school-invitation/{code}', [UserSchoolInvitationsController::class, 'getInviteByCode']);
-    Route::resource('school-invitations', UserSchoolInvitationsController::class);
 });

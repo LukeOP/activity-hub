@@ -39,8 +39,10 @@ function closeToast(){
   position: fixed;
   bottom: 20px;
   right: 10px;
-  width: 370px;
-  height: 70px;
+  width: 400px;
+  height: fit-content;
+  min-height: 70px;
+  max-height: 140px;
   border-radius: 0.375rem;
   background-color: white;
   border: 1px solid $ah-primary;

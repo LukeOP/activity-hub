@@ -40,7 +40,7 @@ export const useStaffStore = defineStore('staff', {
     },
     updateSchoolInvites(school_id){
       axiosClient.get('school-invitations/' + school_id).then((res)=>{
-        this.setSchoolInvites(res.data)
+        this.schoolInvites = res.data
       })
     },
     reset(){

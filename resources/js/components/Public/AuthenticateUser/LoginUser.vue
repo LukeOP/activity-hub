@@ -17,8 +17,8 @@
     
   </div>
   <!-- <button @click="loginUser">Log In User/Admin Demo</button> -->
-  <!-- <button @click="loginTutor">Log In Tutor</button>
-  <button @click="loginNew">Log In New Member</button> -->
+  <!-- <button @click="loginTutor">Log In Tutor</button>-->
+  <!-- <button @click="loginNew">Log In New Member</button>  -->
 </div>
 </template>
 
