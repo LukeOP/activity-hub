@@ -44,7 +44,7 @@
         <div class="checkbox-option">
           <input type="checkbox" checked disabled>
           <div class="description">Title Header:</div>
-          <input type="text" :value="formData.heading" class="form-control">
+          <input type="text" v-model="formData.heading" class="form-control">
         </div>
 
         <div class="checkbox-option">
@@ -202,7 +202,6 @@ const yearSelect = ref({
 })
 
 // const formData = ref(currentForm)
- FormData
 const formData = ref({
   // Setup
   description: currentForm.attributes.description,

@@ -66,7 +66,6 @@ fetchSchools().then(()=>{
 
 function setSchools(){
   schools.value.forEach(school => {
-    console.log(user.hasPermission('LESSON_FRM_C', school.id))
     if(user.hasPermission('LESSON_FRM_C', school.id)){
       formData.value.schools = [...formData.value.schools, school]
     }
