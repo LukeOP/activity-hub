@@ -12,7 +12,7 @@ const publicRoutes = [
     children: [
       { path: 'user-login', name: 'Login', component: Login, meta: {title: 'Login'}},
       { path: 'registration', name: 'Register', component: RegisterUser, meta: {title: 'Register'} },
-      { path: 'forms/:id', name: 'LessonSignUp', component: LessonSignUpForm, meta: {title: 'Lesson Signup'} }
+      { path: 'forms/:id', name: 'LessonSignUp', component: LessonSignUpForm, meta: {title: 'Lesson Signup'} },
     ]
   },
   
