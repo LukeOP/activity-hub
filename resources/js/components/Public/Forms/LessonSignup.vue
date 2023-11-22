@@ -19,28 +19,28 @@
         <label>{{ form.field_labels.student_name }}
           <input type="text" class="form-control" v-model="formData.student_name" required>
         </label>
-        <label v-if="form.inputs.student_email">{{ form.field_labels.student_email }}
+        <label v-if="form.inputs.student_email == 1">{{ form.field_labels.student_email }}
           <input type="email" class="form-control" v-model="formData.student_email" required>
         </label>
-        <label v-if="form.inputs.student_phone">{{ form.field_labels.student_phone }}
+        <label v-if="form.inputs.student_phone == 1">{{ form.field_labels.student_phone }}
           <input type="number" class="form-control" v-model="formData.student_phone" required>
         </label>
-        <label v-if="form.inputs.student_age">{{ form.field_labels.student_age }}
+        <label v-if="form.inputs.student_age == 1">{{ form.field_labels.student_age }}
           <input type="number" class="form-control" v-model="formData.student_age" required>
         </label>
-        <label v-if="form.inputs.student_year">{{form.field_labels.student_year}}
+        <label v-if="form.inputs.student_year == 1">{{form.field_labels.student_year}}
           <input type="text" class="form-control" v-model="formData.student_year" required>
         </label>
       </div>
 
       <div class="col col-12 col-md-6">
-        <label v-if="form.inputs.pc_name">{{ form.field_labels.pc_name }}
+        <label v-if="form.inputs.pc_name == 1">{{ form.field_labels.pc_name }}
           <input type="text" class="form-control" v-model="formData.pc_name" required>
         </label>
-        <label v-if="form.inputs.pc_phone">{{ form.field_labels.pc_phone }}
+        <label v-if="form.inputs.pc_phone == 1">{{ form.field_labels.pc_phone }}
           <input type="number" class="form-control" v-model="formData.pc_phone" required>
         </label>
-        <label v-if="form.inputs.pc_email">{{ form.field_labels.pc_email }}
+        <label v-if="form.inputs.pc_email == 1">{{ form.field_labels.pc_email }}
           <input type="email" class="form-control" v-model="formData.pc_email" required>
         </label>
       </div>
@@ -55,19 +55,19 @@
             <option v-for="instrument in SubjectsArray" :key="instrument" :value="instrument">{{ instrument }}</option>
           </select>
         </label>
-        <label v-if="form.inputs.tutor && formData.instrument != ''">{{ form.field_labels.tutor }}
+        <label v-if="form.inputs.tutor == 1 && formData.instrument != ''">{{ form.field_labels.tutor }}
           <select class="form-control" v-model="formData.tutor" required>
             <option v-for="staff in tutorArray" :key="staff" :value="staff.tutor.id">{{ staff.tutor.full_name }}</option>
           </select>
         </label>
-        <label v-if="form.inputs.type">{{ form.field_labels.lesson_type }}
+        <label v-if="form.inputs.type == 1">{{ form.field_labels.lesson_type }}
           <select class="form-control" v-model="formData.funding_type" required>
             <option value=""></option>
           </select>
         </label>
       </div>
       <div class="col col-12 col-md-6">
-        <label v-if="form.inputs.experience">{{ form.field_labels.experience }}
+        <label v-if="form.inputs.experience == 1">{{ form.field_labels.experience }}
           <textarea rows="5" class="form-control" v-model="formData.experience" required></textarea>
         </label>
       </div>
