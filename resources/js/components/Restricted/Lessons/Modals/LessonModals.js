@@ -8,8 +8,11 @@ import DeleteLesson from './LessonDelete.vue'
 import LessonConfirmActive from './LessonConfirmActive.vue'
 import EditAttendance from './Attendance/EditAttendance.vue'
 
+import requestModals from "../Requests/Modals/requestModals";
+
 
 const lessonModals = {
+  ...requestModals,
   LessonCalendarClick,
   LessonRecordAttendanceSingle,
   LessonRecordReviewAttendanceSingle,
@@ -18,7 +21,7 @@ const lessonModals = {
   EditLesson,
   DeleteLesson,
   LessonConfirmActive,
-  EditAttendance
+  EditAttendance,
 }
 
 export default lessonModals;

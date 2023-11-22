@@ -68,6 +68,7 @@ class LessonsController extends Controller
             'user_id' => $request->tutor,
             'student_id' => $request->student,
             'instrument' => $request->instrument,
+            'experience' => $request->experience,
         ]);
 
         return new LessonsResource($lesson);
@@ -100,7 +101,8 @@ class LessonsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Lesson::where('id', $id)->first()->delete();
+        return 'Lesson Deleted';
     }
 
     private function isNotAuthorized(Lesson $lesson)

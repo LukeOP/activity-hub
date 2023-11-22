@@ -59,7 +59,12 @@ const lessonsRoutes = [
         { path: 'requests', meta: { title: 'Lesson Requests', breadcrumb: 'Requests'},
           children: [
               { path: '', name: 'RequestsList', component: RequestsList, meta: {section: "Lessons", depth: 2}},
-              { path: 'review', name: 'LessonRequestReview', component: RequestReview, meta: {breadcrumb: ' / Review', section: "Lessons", depth: 2} },
+              { path: 'review', name: 'LessonRequestReview', component: RequestReview, meta: {breadcrumb: ' / Review', section: "Lessons", depth: 3}, 
+              beforeEnter: (to, from, next) => {
+                const lessonStore = useLessonsStore()
+                if(Object.keys(lessonStore.getRequest) == 0) next({ name: 'RequestsList'})
+                else next() }},
+
               { path: 'forms', meta: {breadcrumb: "Forms"},
                 children: [
                   { path: '', name: 'RequestFormsList', component: RequestFormList, meta: {section: "Lessons", depth: 3}},

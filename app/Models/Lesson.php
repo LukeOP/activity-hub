@@ -35,7 +35,8 @@ class Lesson extends Model
         'start_date',
         'end_date',
         'funding_type',
-        'fee'
+        'fee',
+        'experience'
     ];
 
     public function user()

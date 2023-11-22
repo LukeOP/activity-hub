@@ -1,5 +1,5 @@
 <template>  
-<div>
+<div>  
   <section id="table-header-section">
     <table>
       <thead>
@@ -7,7 +7,6 @@
           <th @click="sortData('student_name')">Student Name:</th>
           <th @click="sortData('student_year')">Year:</th>
           <th @click="sortData('requested_instrument')">Instrument:</th>
-          <th @click="sortData('funding_type')">Funding:</th>
           <th @click="sortData('status')">Status:</th>
           <th @click="sortData('school_id')">School:</th>
           <th @click="sortData('created_at')">Received:</th>
@@ -22,9 +21,8 @@
         <tr v-for="lesson in requests" :key="lesson.id" @click="handleLessonClick(lesson)" :class="lesson.status">
           <td>{{lesson.student.name}}</td>
           <td>{{lesson.student.year || '-'}}</td>
-          <td>{{lesson.requested_instrument}}</td>
-          <td><span>{{lesson.funding_type || '-'}}</span></td>
-          <td><span>{{lesson.status}}</span></td>
+          <td>{{lesson.attributes.requested_instrument}}</td>
+          <td><span>{{lesson.attributes.status}}</span></td>
           <td>{{lesson.school.name}}</td>
           <td>{{formatDate(lesson.created_at)}}</td>
         </tr>
@@ -59,14 +57,14 @@ export default {
     const user = useUserStore()
 
     function handleLessonClick(lesson){
-      lessonStore.setLesson(lesson)
+      lessonStore.setRequest(lesson)
       router.push({
         name: 'LessonRequestReview'
       })
     }
 
     function formatDate(date){
-      let formatDate = moment(date).format('MMM Do YYYY')
+      let formatDate = moment(date).format('MMM Do, YYYY')
       return formatDate != 'Invalid date' ? formatDate : '-'
     }
 

@@ -181,10 +181,12 @@ import moment from 'moment';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axiosClient from '/resources/js/axios';
+import { useToastStore } from '/resources/js/stores/toast';
 
 // Initiate Stores
 const lessonStore = useLessonsStore()
 const currentForm = lessonStore.getRequestForm
+const toast = useToastStore()
 
 // Initiate Composables
 const router = useRouter()
@@ -258,23 +260,21 @@ function convertToBool(value){
 }
 
 function saveUpdates(){
-  console.log(formData.value)
   axiosClient.patch('/lesson-request-forms/' + currentForm.id, formData.value).then(res => {
-    console.log(res.data)
-    alert('Form Saved')
+    toast.open('success', 'Form Updated', 'Form changes have been saved. ')
   })
 }
 
 let url = ''
-if(import.meta.env.VITE_ENV === 'production') url = 'http://activityhub.co.nz'
+if(import.meta.env.VITE_ENV === 'production') url = 'https://activityhub.co.nz'
 else url = 'http://localhost:8000'
 
 async function copyURL(){
   try {
     await navigator.clipboard.writeText(url + '/forms/' + currentForm.id)
-    alert('Form URL Copied!')
+    toast.open('success', 'Link Copied!', 'A link to this form has been copied to your clipboard.')
   } catch($e) {
-    alert('Error in Copying URL')
+    toast.open('error', 'Error in getting Link', 'There was an error in getting your form link.')
   }
 }
 

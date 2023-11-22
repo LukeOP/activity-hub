@@ -36,6 +36,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('token-user/{localToken}', [UsersController::class, 'getUserOfToken']);
 
 Route::get('lesson-request-form/{form_id}', [LessonRequestsController::class, 'getFormById']);
+Route::post('lesson-request-form/create-public-request', [LessonRequestsController::class, 'createFromPublicForm']);
 Route::get('user-subjects-available/{school_id}', [UserSubjectsController::class, 'getAvailableTutorsAndSubjects']);
 
 

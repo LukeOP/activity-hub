@@ -8,7 +8,7 @@
         <div id="message-icon"><ToastIconSVG :status="toast.data.type" /></div>
         <div>
           <div id="title">{{ toast.data.header }}</div>
-          <div>{{ toast.data.message }}</div>
+          <div id="message">{{ toast.data.message }}</div>
         </div>
       </div>
     </div>
@@ -66,6 +66,9 @@ function closeToast(){
   #title {
     font-size: 1rem;
     font-weight: bold;
+  }
+  #message {
+    padding-bottom: 10px;
   }
 }
 

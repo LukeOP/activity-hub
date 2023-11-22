@@ -10,38 +10,38 @@
       </span>
     </section>
 
-    <form @submit.prevent="">
+    <form @submit.prevent="submitForm">
     
     <section id="contact-details" class="row">
       <h2>Contact Information:</h2>
       <p>{{ form.content.contact_details_content }}</p>
       <div class="col col-12 col-md-6">
         <label>{{ form.field_labels.student_name }}
-          <input type="text" class="form-control" v-model="formData.student_name">
+          <input type="text" class="form-control" v-model="formData.student_name" required>
         </label>
         <label v-if="form.inputs.student_email">{{ form.field_labels.student_email }}
-          <input type="email" class="form-control" v-model="formData.student_email">
+          <input type="email" class="form-control" v-model="formData.student_email" required>
         </label>
         <label v-if="form.inputs.student_phone">{{ form.field_labels.student_phone }}
-          <input type="number" class="form-control" v-model="formData.student_phone">
+          <input type="number" class="form-control" v-model="formData.student_phone" required>
         </label>
         <label v-if="form.inputs.student_age">{{ form.field_labels.student_age }}
-          <input type="number" class="form-control" v-model="formData.student_age">
+          <input type="number" class="form-control" v-model="formData.student_age" required>
         </label>
         <label v-if="form.inputs.student_year">{{form.field_labels.student_year}}
-          <input type="text" class="form-control" v-model="formData.student_year">
+          <input type="text" class="form-control" v-model="formData.student_year" required>
         </label>
       </div>
 
       <div class="col col-12 col-md-6">
         <label v-if="form.inputs.pc_name">{{ form.field_labels.pc_name }}
-          <input type="text" class="form-control" v-model="formData.pc_name">
+          <input type="text" class="form-control" v-model="formData.pc_name" required>
         </label>
         <label v-if="form.inputs.pc_phone">{{ form.field_labels.pc_phone }}
-          <input type="number" class="form-control" v-model="formData.pc_phone">
+          <input type="number" class="form-control" v-model="formData.pc_phone" required>
         </label>
         <label v-if="form.inputs.pc_email">{{ form.field_labels.pc_email }}
-          <input type="email" class="form-control" v-model="formData.pc_email">
+          <input type="email" class="form-control" v-model="formData.pc_email" required>
         </label>
       </div>
     </section>
@@ -51,38 +51,38 @@
       <p>{{ form.content.lesson_details_content }}</p>
       <div class="col col-12 col-md-6">
         <label>{{ form.field_labels.instrument }}
-          <select class="form-control" v-model="formData.instrument">
+          <select class="form-control" v-model="formData.instrument" required>
             <option v-for="instrument in SubjectsArray" :key="instrument" :value="instrument">{{ instrument }}</option>
           </select>
         </label>
         <label v-if="form.inputs.tutor && formData.instrument != ''">{{ form.field_labels.tutor }}
-          <select class="form-control" v-model="formData.tutor">
+          <select class="form-control" v-model="formData.tutor" required>
             <option v-for="staff in tutorArray" :key="staff" :value="staff.tutor.id">{{ staff.tutor.full_name }}</option>
           </select>
         </label>
         <label v-if="form.inputs.type">{{ form.field_labels.lesson_type }}
-          <select class="form-control" v-model="formData.funding_type">
+          <select class="form-control" v-model="formData.funding_type" required>
             <option value=""></option>
           </select>
         </label>
       </div>
       <div class="col col-12 col-md-6">
         <label v-if="form.inputs.experience">{{ form.field_labels.experience }}
-          <textarea rows="5" class="form-control" v-model="formData.experience"></textarea>
+          <textarea rows="5" class="form-control" v-model="formData.experience" required></textarea>
         </label>
       </div>
     </section>
 
     <section>
+      <p>{{ form.content.footer_content }}</p>
       <input type="submit" class="btn btn-primary" value="Send Request">
     </section>
 
   </form>
     
     <section id="footer">
-      <p>{{ form.content.footer_content }}</p>
       <!-- <span v-html="" class="icon fill-white"></span> -->
-      <p>Powered by Activity Hub </p>
+      <p>Powered by Activity Hub {{ moment().format('YYYY') }}</p>
     </section>
     
   </div>
@@ -97,8 +97,12 @@
 import { computed, ref } from 'vue';
 import useApi from '/resources/js/composables/useApi';
 import { useRoute } from 'vue-router';
+import moment from 'moment';
+import axiosClient from '/resources/js/axios';
 
 const route = useRoute()
+
+const staffList = ref([])
 
 const formData = ref({
   student_name: '',
@@ -113,12 +117,12 @@ const formData = ref({
   tutor: '',
   funding_type: '',
   experience: '',
+  school_id: ''
 })
-
-const staffList = ref([])
 
 const { data: form, fetchData: fetchFormData } = useApi('lesson-request-form/' + route.params.id)
 fetchFormData().then(()=>{
+  formData.value.school_id = form.value.school.id
   // Fetch school staff from database and add to store
   const { data: staff, fetchData: fetchStaff } = useApi('user-subjects-available/' + form.value.school.id)
   fetchStaff().then(() => {
@@ -153,6 +157,13 @@ const SubjectsArray = computed(() => {
 const tutorArray = computed(() => {
     return staffList.value.filter(s => s.subject === formData.value.instrument)
 })
+
+function submitForm(){
+  console.log(formData.value)
+  axiosClient.post('lesson-request-form/create-public-request', formData.value).then(res => {
+    console.log(res.data);
+  })
+}
 
 </script>
 
