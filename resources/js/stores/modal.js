@@ -24,7 +24,7 @@ export const useModalStore = defineStore('modal', {
       ;
     },
     setActive(value) {
-      console.log('reached');
+      // console.log('reached');
       this.active = value;
     },
     setData(data){

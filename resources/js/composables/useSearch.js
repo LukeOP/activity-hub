@@ -1,12 +1,12 @@
 export default function useSearch() {
   function search(array, inputValue) {
-    console.log(array, inputValue)
+    // console.log(array, inputValue)
     if (!array) {
-      console.log('rejecting array')
+      // console.log('rejecting array')
       return [];
     }
     if (!inputValue) {
-      console.log('rejecting input')
+      // console.log('rejecting input')
       return array;
     }
     
