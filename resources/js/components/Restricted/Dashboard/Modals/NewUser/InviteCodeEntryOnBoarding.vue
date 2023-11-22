@@ -89,8 +89,8 @@ const schoolStore = useSchoolStore()
           // console.log('user school success')
         })
         .catch(error => {
-          console.log(error.message)
-          console.log('user school error')
+          // console.log(error.message)
+          // console.log('user school error')
           error++
         });
 
@@ -102,8 +102,8 @@ const schoolStore = useSchoolStore()
             // console.log('user postion success')
           })
           .catch(error => {
-            console.log(error.message)
-            console.log('user position error')
+            // console.log(error.message)
+            // console.log('user position error')
             error++
           });
       }
@@ -116,8 +116,8 @@ const schoolStore = useSchoolStore()
             // console.log('user permission success')
           })
           .catch(error => {
-            console.log(error.message)
-            console.log('user permission error')
+            // console.log(error.message)
+            // console.log('user permission error')
           });
       }
 
@@ -129,8 +129,8 @@ const schoolStore = useSchoolStore()
             // console.log('invitation delete success')
           })
           .catch(error => {
-            console.log(error.message)
-            console.log('invitation delete error')
+            // console.log(error.message)
+            // console.log('invitation delete error')
           });
       }
       if(error === 0){

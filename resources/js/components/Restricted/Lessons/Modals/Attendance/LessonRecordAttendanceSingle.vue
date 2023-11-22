@@ -91,7 +91,7 @@ function handleClick(result){
 function submitRecord(result){
   // console.log(attendanceData.value)
   axiosClient.post('/lesson-attendance', attendanceData.value).then(res => {
-    console.log(res.data.lesson)
+    // console.log(res.data.lesson)
     lessonStore.updateLessonRecord(res.data.lesson)
     lessonStore.setLesson(res.data.lesson)
     toast.open('success', 'Record Saved', 'Lesson attendance set as ' + result)

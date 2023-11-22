@@ -136,7 +136,7 @@ function handleLogout(){
 
 function handleSchools(){
   user.attributes.schools.forEach(school => {
-    console.log(school.name)
+    // console.log(school.name)
   });
 }
 

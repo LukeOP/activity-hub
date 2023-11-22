@@ -23,7 +23,7 @@ export const useLessonsStore = defineStore('lessons', {
       this.lessons = lessonsArray
     },
     updateLessonRecord(record){
-      console.log(record)
+      // console.log(record)
       this.lessons = this.lessons.filter(l => l.id != record.id)
       this.lessons = [record, ...this.lessons]
     },

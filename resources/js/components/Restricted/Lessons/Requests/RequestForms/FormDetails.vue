@@ -259,9 +259,9 @@ function convertToBool(value){
 }
 
 function saveUpdates(){
-  console.log(formData.value);
+  // console.log(formData.value);
   axiosClient.patch('/lesson-request-forms/' + currentForm.id, formData.value).then(res => {
-    console.log(res.data)
+    // console.log(res.data)
     toast.open('success', 'Form Updated', 'Form changes have been saved. ')
   })
 }

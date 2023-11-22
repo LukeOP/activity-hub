@@ -81,12 +81,14 @@ const dayLessons = computed(() => {
 })
 
 function getLessonAttendance(attendanceArray){
-  let response = 'incomplete'
+  let response = 'pending'
   let currentDate = moment(selectedDate.value).format('YYYY-MM-DD')
-  if(currentDate > moment().format('YYYY-MM-DD')) response = 'pending'
   if(attendanceArray.length > 0){
-    attendanceArray.filter(a => a.date === currentDate).length > 0 ? response = 'complete' : response = 'incomplete'
+    attendanceArray.find(a => a.date === currentDate) 
+    ? response = attendanceArray.find(a => a.date === currentDate).attendance 
+    : response = 'pending'
   }
+  if(currentDate > moment().format('YYYY-MM-DD')) response = 'pending'
   return response
 }
 

@@ -29,7 +29,7 @@ const breadcrumbs = computed(() => {
       to: matchedRoute.path
     });
   }
-
+  console.log(breadcrumbList);
   return breadcrumbList;
 });
 </script>
