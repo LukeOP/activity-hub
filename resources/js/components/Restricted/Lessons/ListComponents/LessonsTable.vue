@@ -95,6 +95,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#table-body-section {
+  max-height: calc(100vh - 300px);
+}
 @media (min-width: 768px){
   .status {
     width: 90px;

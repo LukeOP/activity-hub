@@ -88,6 +88,9 @@ export const useUserStore = defineStore('user', {
     },
     getName(){
       return this.attributes.first_name + ' ' + this.attributes.last_name
+    },
+    getPermissions(){
+      return this.permissions
     }
   }
 })

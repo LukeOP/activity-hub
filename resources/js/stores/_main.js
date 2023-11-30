@@ -8,6 +8,7 @@ import { useModalStore } from "./modal";
 import { useStaffStore } from "./staff";
 import { useStudentStore } from "./students";
 import { useInstrumentStore } from "./instruments";
+import { useEventStore } from "./events";
 
 
 function getState(){
@@ -29,6 +30,9 @@ export const useMainStore = defineStore('main', {
 
       const calendarStore = useCalendarStore()
         calendarStore.reset()
+
+      const eventStore = useEventStore()
+        eventStore.reset()
 
       const schoolStore = useSchoolStore()
         schoolStore.reset()

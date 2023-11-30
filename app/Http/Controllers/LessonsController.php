@@ -93,7 +93,10 @@ class LessonsController extends Controller
         $lesson->fill($request->all());
         $lesson->save();
 
-        return response()->json(['message' => 'lesson updated successfully', 'lesson' => new LessonsResource(Lesson::where('id', $lesson['id'])->first())]);
+        return response()->json([
+            'message' => 'lesson updated successfully',
+            'lesson' => new LessonsResource(Lesson::where('id', $lesson['id'])->first())
+        ]);
     }
 
     /**

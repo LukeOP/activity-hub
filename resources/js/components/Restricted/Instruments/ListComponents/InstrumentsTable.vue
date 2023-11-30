@@ -71,22 +71,8 @@ import { useInstrumentStore } from '../../../../stores/instruments'
 </script>
 
 <style lang="scss" scoped>
-@media (min-width: 768px){
-  .status {
-    width: 90px;
-    padding: 5px;
-    border: 1px solid black;
-  }
-  .Active-td {
-    color: $ah-green;
-    background-color: lighten($ah-green-light, 70%);
-    border-color: $ah-green;
-  }
-  .Pending-td {
-    color: $ah-purple;
-    background-color: lighten($ah-purple-light, 64%);
-    border-color: $ah-purple;
-  }
+#table-body-section {
+  max-height: calc(100vh - 300px);
 }
 
 </style>

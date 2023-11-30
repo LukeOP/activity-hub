@@ -73,7 +73,7 @@ const navItems = ref([
 
 const navOptions = [
   { header: 'Lessons', to: { name: 'LessonsList' }, icon: icons.chalkboard, permission: 'LESSONS_V', additional_permission: 'LESSONS_R'},
-  // { header: 'Events', to: { name: 'StudentsTable' }, icon: 'fa-solid fa-circle', permission: 'EVENTS_V'},
+  { header: 'Events', to: { name: 'EventsList' }, icon: icons.ticket, permission: 'EVENTS_V'},
   { header: 'Instruments', to: { name: 'InstrumentList' }, icon: icons.guitar, permission: 'INSTRUMENTS_V'},
   // { header: 'Hires', to: { name: 'HiresList' }, icon: icons.xmark, permission: 'HIRES_V'},
   // { header: 'Rooms', to: { name: 'StudentsTable' }, icon: 'fa-solid fa-book', permission: 'ROOMS_V'},
