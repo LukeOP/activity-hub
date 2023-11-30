@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AvailableSubjectsResource;
 use App\Http\Resources\SubjectResource;
 use App\Models\UserSubject;
 use Illuminate\Http\Request;
@@ -14,6 +15,11 @@ class UserSubjectsController extends Controller
     public function index()
     {
         return UserSubject::all();
+    }
+
+    public function getAvailableTutorsAndSubjects(string $school_id)
+    {
+        return AvailableSubjectsResource::collection(UserSubject::where('school_id', $school_id)->where('signup_enabled', 1)->get());
     }
 
     /**

@@ -1,12 +1,11 @@
 <template>
   <div v-for="member in staff" :key="member" class="staff">
-    <h3>member</h3>
-    <!-- <StaffTableMobileCard :staff="member" /> -->
+    <StaffTableMobileCard :staff="member" />
   </div>
 </template>
 
 <script setup>
-// import StaffTableMobileCard from './StaffTableMobileCard.vue'
+import StaffTableMobileCard from './StaffTableMobileCard.vue'
 const props = defineProps({staff:Array});
 </script>
 

@@ -19,11 +19,13 @@ import axiosClient from "../../../../axios";
 import { useModalStore } from "../../../../stores/modal";
 import { useSchoolStore } from "../../../../stores/schools";
 import { useStaffStore } from "../../../../stores/staff";
+import { useToastStore } from "/resources/js/stores/toast";
 
 const schoolStore = useSchoolStore()
 const currentSchool = schoolStore.getSchool
 const staffStore = useStaffStore()
 const modal = useModalStore()
+const toast = useToastStore()
 
 const formData = ref({
   reference: '',
@@ -33,7 +35,8 @@ const formData = ref({
 
 function handleInvite(){
   axiosClient.post('school-invitations', formData.value).then(res =>{
-    staffStore.updateSchoolInvites(res.data.school_id)
+    staffStore.updateSchoolInvites(res.data.school.id)
+    toast.open('success', 'Invitation Created', 'An invitation to join ' + currentSchool.name + ' has been sent.')
     modal.close()
   })
 }

@@ -9,7 +9,7 @@
 
 <script>
 import { useRouter } from 'vue-router'
-import AttendanceSnapshot from '../Attendance/AttendanceSnapshot.vue'
+import AttendanceSnapshot from '../Attendance/Components/AttendanceSnapshot.vue'
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
 import { useStudentStore } from '/resources/js/stores/students'
 import { useUserStore } from '/resources/js/stores/user'

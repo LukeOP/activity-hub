@@ -9,13 +9,24 @@
 
 <script setup>
 import { useModalStore } from '@/stores/modal';
+import axiosClient from '/resources/js/axios';
+import { useLessonsStore } from '/resources/js/stores/lessons';
+import { useToastStore } from '/resources/js/stores/toast';
+import { useRouter } from 'vue-router';
 
 const modal = useModalStore()
+const lessonStore = useLessonsStore()
+const toast = useToastStore()
+const router = useRouter()
 
 function deleteLesson(){
-  console.log('TODO: deleting...')
-  // TODO handle lesson delete
-  modal.close()
+  axiosClient.delete('lessons/' + lessonStore.getLessonData.id).then(()=>{
+    toast.open('success', 'Lesson Deleted', 'The lesson has been successfully deleted')
+    router.push({
+      name: 'LessonsList'
+    })
+    modal.close()
+  })
 }
 
 </script>

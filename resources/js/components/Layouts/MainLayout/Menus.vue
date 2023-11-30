@@ -1,6 +1,8 @@
 <template>
   <div class="menus">
-    <img id="logo-img" src="/images/ActivityHub-Logo-Icon.png" alt="Activity Hub Logo">
+    <div id="logo-img">
+      <ActivityHubIconSVG />
+    </div>
     <top-bar />
     <profile-menu />
     <nav-bar @setState="stateControl" :state="currentState" />
@@ -16,6 +18,7 @@ import FilterBar from './FilterBar.vue'
 import ProfileMenu from './ProfileMenu.vue'
 import TopBar from './TopBar.vue'
 import { ref } from 'vue'
+import ActivityHubIconSVG from './Elements/SVG/ActivityHubIconSVG.vue'
 
 
 const currentState = ref('')
@@ -40,6 +43,11 @@ function stateControl(state){
     height: 60px;
     left: 20px;
     top: 10px;
+  }
+}
+@media (max-width: 768px) {
+  .menus {
+    height: 70px;
   }
 }
 </style>

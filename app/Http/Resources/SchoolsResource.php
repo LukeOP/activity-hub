@@ -17,6 +17,11 @@ class SchoolsResource extends JsonResource
         return [
             'id' => (string)$this->id,
             'name' => $this->name,
+            'logo' => $this->logo,
+            'colors' => [
+                'primary' => $this->primary_color,
+                'secondary' => $this->secondary_color
+            ]
             // 'subscription' => $this->subscription,
             // 'number' => $this->number,
             // 'address' => $this->address,

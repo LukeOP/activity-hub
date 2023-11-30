@@ -40,7 +40,7 @@
 
 <script>
 import moment from 'moment'
-import AttendanceSnapshot from '../Attendance/AttendanceSnapshot.vue'
+import AttendanceSnapshot from '../Attendance/Components/AttendanceSnapshot.vue'
 import { useRouter } from 'vue-router';
 
 export default {

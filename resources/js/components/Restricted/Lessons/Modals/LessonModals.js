@@ -6,9 +6,13 @@ import LessonNoteDeleteConfirm from './Notes/LessonNoteDeleteConfirm.vue'
 import EditLesson from './LessonEdit.vue'
 import DeleteLesson from './LessonDelete.vue'
 import LessonConfirmActive from './LessonConfirmActive.vue'
+import EditAttendance from './Attendance/EditAttendance.vue'
+
+import requestModals from "../Requests/Modals/requestModals";
 
 
 const lessonModals = {
+  ...requestModals,
   LessonCalendarClick,
   LessonRecordAttendanceSingle,
   LessonRecordReviewAttendanceSingle,
@@ -16,7 +20,8 @@ const lessonModals = {
   LessonNoteDeleteConfirm,
   EditLesson,
   DeleteLesson,
-  LessonConfirmActive
+  LessonConfirmActive,
+  EditAttendance,
 }
 
 export default lessonModals;

@@ -33,7 +33,7 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axiosClient from '../../../../axios'
-import ModalTemplateVue from '../../../Modal.vue'
+import ModalTemplateVue from '../../../Layouts/MainLayout/Elements/Modal.vue'
 import moment from 'moment'
 
 export default {
@@ -73,10 +73,10 @@ export default {
     
 
     function updateValues(){
-      console.log(lessonTime.value, getEndTime.value)
+      // console.log(lessonTime.value, getEndTime.value)
       axiosClient.patch('lessons/' + general.routeData.lesson.id, {start: lessonTime.value.time, end: getEndTime.value, day: lessonTime.value.day})
         .then((res) => {
-          console.log(res.data)
+          // console.log(res.data)
           returnToDetails()
         })
     }

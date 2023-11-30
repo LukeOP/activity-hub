@@ -26,9 +26,7 @@ class LessonsResource extends JsonResource
                 'fee' => $this->fee,
                 'startDate' => $this->start_date,
                 'endDate' => $this->end_date,
-                'created_at' => $this->created_at,
-                'updated_at' => $this->updated_at,
-                'deleted_at' => $this->deleted_at,
+                'experience' => $this->experience
             ],
             'attendance' => $this->attendance,
             'notes' => LessonNotesResource::collection($this->notes),
@@ -43,6 +41,11 @@ class LessonsResource extends JsonResource
                 'first_name' => $this->user->first_name,
                 'last_name' => $this->user->last_name,
                 'full_name' => $this->user->first_name . " " . $this->user->last_name,
+            ],
+            'timestamps' => [
+                'created_at' => $this->created_at,
+                'updated_at' => $this->updated_at,
+                'deleted_at' => $this->deleted_at,
             ]
         ];
     }

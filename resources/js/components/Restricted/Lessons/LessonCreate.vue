@@ -58,6 +58,8 @@ import useApi from '../../../composables/useApi'
 import { useUserStore } from '../../../stores/user'
 import useSorter from '../../../composables/useSorter'
 import HeaderLine from '../../Layouts/MainLayout/Elements/HeaderLine.vue'
+import axiosClient from '/resources/js/axios'
+import router from '/resources/js/router/router'
 
 export default {
   components: {
@@ -86,8 +88,8 @@ export default {
       if (school) {
         loading.value = true
 
-        const { data: students, error: errorStudents, loading: loadingStudents, fetchData: fetchStudents } = useApi('school-students/' + school)
-        const { data: tutors, error: errorUsers, loading: loadingUsers, fetchData: fetchTutors } = useApi('school-users/' + school)
+        const { data: students, fetchData: fetchStudents } = useApi('school-students/' + school)
+        const { data: tutors, fetchData: fetchTutors } = useApi('school-users/' + school)
 
         Promise.all([fetchStudents(), fetchTutors()]).then(() => {
           data.value.students = students
@@ -105,7 +107,11 @@ export default {
     }
 
     function handleSubmit(){
-      console.log(formData.value)
+      axiosClient.post('lessons', {student: formData.value.student, instrument: formData.value.instrument, tutor: formData.value.tutor.id}).then(()=>{
+        router.push({
+          name: 'LessonsList'
+        })
+      })
     }
 
     return {

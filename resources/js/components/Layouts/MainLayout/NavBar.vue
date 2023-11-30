@@ -3,7 +3,8 @@
     <nav class="menu" :class="{ 'menu-visible': navVisible }">
       
       <div id="sideBar">
-        <img id="logo-img" src="/images/ActivityHub-Logo.png" alt="Activity Hub Logo">
+        <!-- <img id="logo-img" src="/images/ActivityHub-Logo_JT.png" alt="Activity Hub Logo"> -->
+        <img id="logo-img" src="/images/ActivityHub_Logo_Main.png" alt="Activity Hub Logo">
 
 
         <div id="nav">
@@ -16,8 +17,6 @@
         <div id="settings">
           <div v-if="navVisible">
             <span id="user-img" @click="handleProfile">
-              <img v-if="userImage" :src="userImage" alt="Profile Image">
-              <img v-else src="/storage/userImages/user.png" alt="Profile Image">
               <p>Profile</p>
             </span>
             <p @click="handleLogout"><i id="logout" v-html="icons.logout" class="me-2 fill-white icon"></i>Logout</p>
@@ -65,7 +64,7 @@ function handleProfile(){
       id: user.attributes.id
     }
   })
-  hideMenu()
+  navVisible.value = false
 }
 
 const navItems = ref([
@@ -137,7 +136,7 @@ function handleLogout(){
 
 function handleSchools(){
   user.attributes.schools.forEach(school => {
-    console.log(school.name)
+    // console.log(school.name)
   });
 }
 
@@ -163,6 +162,8 @@ function handleSchools(){
   img {
     width: 100%;
     max-height: 200px;
+    background-color: white;
+    padding: 10px;
   }
 
   #nav {

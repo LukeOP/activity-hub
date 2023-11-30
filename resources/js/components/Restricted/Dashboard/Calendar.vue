@@ -21,7 +21,7 @@ import { useWindowSize } from '../../../composables/useWindowSize';
 import { useCalendarEventFormatter } from '../../../composables/useCalendarEventFormatter';
 import { useCalendarStore } from '../../../stores/calendar';
 import { useUserStore } from '../../../stores/user';
-import Modal from '../../Modal.vue';
+import Modal from '../../Layouts/MainLayout/Elements/Modal.vue';
 import LessonCalendarClickVue from '../Lessons/Modals/Calendar/LessonCalendarClick.vue';
 import { useModalStore } from '../../../stores/modal';
 import { useLessonsStore } from '/resources/js/stores/lessons';
@@ -73,11 +73,12 @@ export default {
     }
     
     function getEventContent(info) {
-      if (info.event.extendedProps.location) {
-        const location = info.event.extendedProps.location;
-        const tutor = info.event.extendedProps.tutor;
-        return { html: `${info.event.title}${attendanceTaken(info)}<span class="float-end">${tutor}${location}</span>` };
-      } else return { html: `${info.event.title}`}
+      return { html: `${info.event.title}${attendanceTaken(info)}`}
+      // if (info.event.extendedProps.location) {
+      //   const location = info.event.extendedProps.location;
+      //   const tutor = info.event.extendedProps.tutor;
+      //   return { html: `${info.event.title}${attendanceTaken(info)}<span> ${tutor}${location}</span>` };
+      // } else return { html: `${info.event.title}`}
     }
 
     function attendanceTaken(info) {

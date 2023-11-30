@@ -3,7 +3,7 @@ import { useUserStore } from './stores/user'
 
 
 let url = ''
-if(import.meta.env.VITE_ENV === 'production') url = 'http://activityhub.co.nz'
+if(import.meta.env.VITE_ENV === 'production') url = 'https://activityhub.co.nz'
 else url = 'http://localhost:8000'
 
 

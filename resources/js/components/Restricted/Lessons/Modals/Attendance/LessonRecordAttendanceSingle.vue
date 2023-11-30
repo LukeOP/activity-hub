@@ -1,10 +1,12 @@
 <template>
-  <h2 class="mb-4">Record Lesson Attendance</h2>
+  <HeaderLine heading="Record Lesson Attendance" center="true"/>
   <span style="height:fit-content" v-if="lesson">
     <form style="padding:1rem" @submit.prevent="handleClick('custom')">
       <div class="row">
         <div class="heading">{{lesson.student.full_name}}</div>
         <div style="text-align:center" :class="{lineThrough: advancedOptions}">{{formatDatetime(currentCalendar.dateTime)}}</div>
+
+        <!-- Attendance Button Section -->
         <div class="col-12 col-md-4">
           <input type="button" class="btn btn-green form-control mb-2" value="Present" :disabled="advancedOptions == true" @click="handleClick('present')">
         </div>
@@ -14,8 +16,12 @@
         <div class="col-12 col-md-4">
           <input type="button" class="btn btn-primary form-control" value="Absent" :disabled="advancedOptions == true" @click="handleClick('absent')">
         </div>
+
+        <!-- Advanced Option Selection -->
         <span class="my-2" @click="advancedOptions = !advancedOptions" style="cursor:pointer; width:100%; text-align:center">Advanced options...</span>
       </div>
+
+      <!-- Advanced Option Inputs -->
       <div v-if="advancedOptions" class="row">
         <div class="col-12 col-md-4">
           <label for="date">Lesson date:</label>
@@ -36,16 +42,16 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import ModalTemplate from '../../../../Modal.vue'
-import useApi from '../../../../../composables/useApi'
 import moment from 'moment'
 import { useUserStore } from '../../../../../stores/user'
 import axiosClient from '../../../../../axios'
 import { useCalendarStore } from '../../../../../stores/calendar'
 import { useLessonsStore } from '../../../../../stores/lessons'
 import { useModalStore } from '@/stores/modal'
+import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
+import { useToastStore } from '/resources/js/stores/toast'
 
 
 const router = useRouter()
@@ -53,6 +59,7 @@ const router = useRouter()
 const user = useUserStore()
 const calendar = useCalendarStore()
 const lessonStore = useLessonsStore()
+const toast = useToastStore()
 const currentCalendar = calendar.getEventData
 const lesson = lessonStore.getLessonData
 const modal = useModalStore()
@@ -72,21 +79,22 @@ const customData = ref({
   time: null
 })
 
-const returnDetails = { name: 'Dashboard' }
-
 function handleClick(result){
   attendanceData.value.attendance = result
   if(result == "custom") {
     attendanceData.value.date = customData.value.date
     attendanceData.value.time = customData.value.time
   }
-  submitRecord()
+  submitRecord(result)
 }
 
-function submitRecord(){
+function submitRecord(result){
   // console.log(attendanceData.value)
   axiosClient.post('/lesson-attendance', attendanceData.value).then(res => {
-    calendar.addAttendanceRecord(res.data)
+    // console.log(res.data.lesson)
+    lessonStore.updateLessonRecord(res.data.lesson)
+    lessonStore.setLesson(res.data.lesson)
+    toast.open('success', 'Record Saved', 'Lesson attendance set as ' + result)
     modal.close()
   })
 }

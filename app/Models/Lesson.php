@@ -6,11 +6,24 @@ use App\Http\Resources\SchoolsResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Lesson extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    // public $incrementing = false;
+    // protected $keyType = 'string';
+
+    // protected static function boot()
+    // {
+    //     parent::boot();
+
+    //     static::creating(function ($model) {
+    //         $model->{$model->getKeyName()} = Str::uuid()->toString();
+    //     });
+    // }
 
     protected $fillable = [
         'user_id',
@@ -23,7 +36,8 @@ class Lesson extends Model
         'start_date',
         'end_date',
         'funding_type',
-        'fee'
+        'fee',
+        'experience'
     ];
 
     public function user()

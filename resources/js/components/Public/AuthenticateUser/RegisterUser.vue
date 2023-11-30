@@ -1,7 +1,7 @@
 <template>
 <div>
   <div id="loginContainer" class="center">
-    <img id="logo-img" src="/images/ActivityHub-Logo.png" alt="Activity Hub Logo">
+    <img id="logo-img" src="/images/ActivityHub_Logo_Main.png" alt="Activity Hub Logo">
     <h2>Register</h2>
     <form @submit.prevent="handleRegister">
       <input type="text" class="form-control my-2" v-model="register.first_name" placeholder="First Name">

@@ -1,7 +1,7 @@
 <template>
 <div>
-  <div id="loginContainer" class="center">
-    <img id="logo-img" src="/images/ActivityHub-Logo.png" alt="Activity Hub Logo">
+  <div id="loginContainer" class="center mt-5">
+    <img id="logo-img" src="/images/ActivityHub_Logo_Main.png" alt="Activity Hub Logo">
     <h2>Login</h2>
     <form @submit.prevent="handleLogin">
       <input type="text" class="form-control my-2" v-model="login.email" placeholder="email">
@@ -9,13 +9,16 @@
       <button class="btn btn-primary my-3 form-control" @click="handleLogin">Continue</button>
     </form>
     <div v-if="error" class="error">{{error}}</div>
-    <router-link :to="{name: 'Register'}" id="register-btn">Or register an account.</router-link>
+    <!-- <router-link :to="{name: 'Register'}" id="register-btn">Or register an account.</router-link> -->
+  <button class="btn btn-outline-primary mt-3" @click="loginUser">Log In User/Admin Demo</button>
+  <button class="btn btn-outline-primary mt-3" @click="loginTutor">Log In Tutor</button>
+  <button class="btn btn-outline-primary mt-3" @click="loginAdmin">Log In Admin</button>
 
+    
   </div>
-  <button @click="loginUser">Log In User/Admin</button>
-  <button @click="loginTutor">Log In Tutor</button>
-  <button @click="loginAdmin">Log In Admin</button>
-  <button @click="loginNew">Log In New Member</button>
+  <!-- <button @click="loginUser">Log In User/Admin Demo</button> -->
+  <!-- <button @click="loginTutor">Log In Tutor</button>-->
+  <!-- <button @click="loginNew">Log In New Member</button>  -->
 </div>
 </template>
 

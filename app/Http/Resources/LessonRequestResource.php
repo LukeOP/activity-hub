@@ -16,8 +16,18 @@ class LessonRequestResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'attributes' => [
+                'status' => $this->status,
+                'requested_tutor' => $this->requested_tutor,
+                'requested_instrument' => $this->requested_instrument,
+                'experience' => $this->experience,
+                'funding_type' => $this->funding_type,
+            ],
             'student' => [
                 'name' => $this->student_name,
+                'email' => $this->student_email,
+                'phone' => $this->student_phone,
+                'age' => $this->student_age,
                 'year' => $this->student_year,
             ],
             'parent' => [
@@ -29,13 +39,11 @@ class LessonRequestResource extends JsonResource
                 'id' => $this->school->id,
                 'name' => $this->school->name
             ],
-            'status' => $this->status,
-            'created_at' => $this->created_at,
-            'requested_tutor' => $this->requested_tutor,
-            'requested_instrument' => $this->requested_instrument,
-            'experience' => $this->experience,
-            'funding_type' => $this->funding_type,
-            'option_music' => $this->option_music,
+            'timestamps' => [
+                'created' => $this->created_at,
+                'updated' => $this->updated_at,
+                'deleted' => $this->deleted_at,
+            ]
         ];
     }
 }

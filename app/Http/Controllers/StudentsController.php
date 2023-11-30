@@ -58,7 +58,10 @@ class StudentsController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return 'hello';
+        $student = Student::where('id', $id)->first();
+        echo $student;
+        return $student;
     }
 
     /**

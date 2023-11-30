@@ -17,6 +17,7 @@ class UserSchoolInvitationsResource extends JsonResource
         return [
             'id' => $this->id,
             'reference' => $this->reference,
+            'code' => $this->code,
             'school' => $this->school($this->school_id),
             'email' => $this->email,
             'created_at' => $this->created_at

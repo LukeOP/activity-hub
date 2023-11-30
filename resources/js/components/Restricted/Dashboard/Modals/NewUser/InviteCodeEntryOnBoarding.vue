@@ -17,7 +17,7 @@
       <p class="text-center error">{{error}}</p>
     </form>
     <div v-if="result" class="result">
-      <span>{{result.data.school.name}}</span>
+      <span>{{result.school.name}}</span>
       <span class="btn btn-primary join" @click="handleJoin">Join Staff</span>
     </div>
     <button class="btn btn-grey float-start" style="width: 100px;" @click="back">Back</button>
@@ -83,58 +83,58 @@ const schoolStore = useSchoolStore()
       let error = 0
 
       // Link user with the school
-      await axiosClient.post('user-school', {user_id: user.attributes.id, school_id: result.value.data.school.id})
+      await axiosClient.post('user-school', {user_id: user.attributes.id, school_id: result.value.school.id})
         .then(response => {
           // Do something with the response, if needed
           // console.log('user school success')
         })
         .catch(error => {
-          console.log(error.message)
-          console.log('user school error')
+          // console.log(error.message)
+          // console.log('user school error')
           error++
         });
 
       if(error === 0){
         // Assign user a basic position at the newly assigned school
-        await axiosClient.post('user-position', {user_id: user.attributes.id, school_id: result.value.data.school.id})
+        await axiosClient.post('user-position', {user_id: user.attributes.id, school_id: result.value.school.id})
           .then(response => {
             // Do something with the response, if needed
             // console.log('user postion success')
           })
           .catch(error => {
-            console.log(error.message)
-            console.log('user position error')
+            // console.log(error.message)
+            // console.log('user position error')
             error++
           });
       }
       
       if(error === 0){
         // Assign user a basic permission at the newly assigned school
-        await axiosClient.post('user-permissions', {user_id: user.attributes.id, school_id: result.value.data.school.id, permission_type: 'Access'})
+        await axiosClient.post('user-permissions', {user_id: user.attributes.id, school_id: result.value.school.id, permission_type: 'Access'})
           .then(response => {
             // Do something with the response, if needed
             // console.log('user permission success')
           })
           .catch(error => {
-            console.log(error.message)
-            console.log('user permission error')
+            // console.log(error.message)
+            // console.log('user permission error')
           });
       }
 
       if(error === 0){
         // Delete the invitation
-        await axiosClient.delete(`school-invitations/${result.value.data.id}`)
+        await axiosClient.delete(`school-invitations/${result.value.id}`)
           .then(response => {
             // Do something with the response, if needed
             // console.log('invitation delete success')
           })
           .catch(error => {
-            console.log(error.message)
-            console.log('invitation delete error')
+            // console.log(error.message)
+            // console.log('invitation delete error')
           });
       }
       if(error === 0){
-        schoolStore.setSchool(result.value.data.school)
+        schoolStore.setSchool(result.value.school)
         modal.open('InviteCodeSuccessOnBoarding')
       }
     }
