@@ -97,7 +97,7 @@ function addJob(){
 
 // Set side actions available on this page
 const actionArray = []
-if(user.hasPermission('EVENTS_TEMP_C', currentTemplate.value.school_id)){
+if(user.hasPermission('EVENTS_TEMP_C', currentTemplate.value.school.id)){
   actionArray.push({ header: 'Add Template Job', to: { name: 'TemplateDetails' }, modal: 'AddTemplateJob', icon: 'fa-solid fa-plus'})
 }
 actions.setItems(actionArray)

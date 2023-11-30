@@ -28,7 +28,7 @@ const modal = useModalStore()
 const router = useRouter()
 
 const formData = ref({
-  school_id: schoolStore.getSchool,
+  school_id: schoolStore.getSchool.id,
   heading: ''
 })
 

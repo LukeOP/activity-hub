@@ -45,7 +45,7 @@ const formData = ref({
 })
 
 function addJob(){
-  console.log(formData.value);
+  // console.log(formData.value);
   axiosClient.post('event-school-jobs', formData.value).then((res)=>{
     addJobToDom(res.data)
     toast.open('success', 'Job Added', 'Job added to Template')
