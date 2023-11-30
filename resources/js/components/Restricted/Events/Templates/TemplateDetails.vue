@@ -78,7 +78,9 @@ function saveChanges(){
 const priorityList = priorities
 
 function getPriority(priority){
-  return priorityList.find(p => p.value === priority).description
+  let found = priorityList.find(p => p.value === priority)
+  if(found) return found.description
+  return ''
 }
 
 function deleteJob(job){

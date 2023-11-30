@@ -48,7 +48,7 @@
                 <p>{{ formData.selected_Template.notes }}</p>
                 <!-- <pre>{{ formData.selected_Template }}</pre> -->
               </div>
-              <button class="btn btn-primary" style="position: absolute; bottom: 25px;" @click="routeChange('TemplateDetails')">Manage Template</button>
+              <button class="btn btn-primary" @click="routeChange('TemplateDetails')">Manage Template</button>
             </div>
             <div v-else class="text-center text-grey w-100" style="text-align: center; transform: translateY(45%);">
               <p>No Template Selected</p>
@@ -103,7 +103,7 @@ function setSchools(){
       formData.value.schools = [...formData.value.schools, school]
     }
   });
-  formData.value.school =formData.value.schools[0].id
+  formData.value.school = formData.value.schools[0].id
 }
 
 // Fetch school templates when school is selected
