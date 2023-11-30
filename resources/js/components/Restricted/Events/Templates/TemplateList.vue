@@ -124,7 +124,7 @@ function viewTemplateDetails(template){
 }
 
 function createTemplate(){
-  schoolStore.setSchool(formData.value.school)
+  schoolStore.setSchool(schools.value.filter(s => s.id == formData.value.school)[0])
   modal.open('CreateTemplate')
 }
 

@@ -3,7 +3,7 @@
     <HeaderLine heading="Create Event Template" />
     <form @submit.prevent="">
       <label>School
-        <input type="text" disabled :value="eventStore.getEventData.school.name" class="form-control">
+        <input type="text" disabled :value="schoolStore.getSchool.name" class="form-control">
       </label>
       <label>Template Title
         <input type="text" class="form-control" v-model="formData.heading">
