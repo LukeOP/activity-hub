@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\StudentsResource;
 use App\Models\Student;
+use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class StudentsController extends Controller
 {
+    use HttpResponses;
     /**
      * Display a listing of the resource.
      */

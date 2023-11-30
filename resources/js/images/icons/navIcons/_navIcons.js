@@ -7,6 +7,7 @@ import { gears } from './gears'
 import { bars } from './bars'
 import { filter } from './filter'
 import { guitar } from './guitar'
+import { ticket } from './ticket'
 // import { AHIcon } from './AH_Icon'
 
 export const navIcons = {
@@ -19,5 +20,6 @@ export const navIcons = {
   bars,
   filter,
   guitar,
+  ticket,
   // AHIcon
 }

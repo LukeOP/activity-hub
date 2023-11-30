@@ -1,5 +1,5 @@
 .btn {
-  border-radius: 9999px;
+  border-radius: 0.375rem;
 }
 .btn-check:checked + .btn, :not(.btn-check) + .btn:active, .btn:first-child:active, .btn.active, .btn.show {
   background-color: $ah-primary;

@@ -58,6 +58,22 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/image/{path}/{filename}', [ImageController::class, 'getImage']);
     Route::post('/image', [ImageController::class, 'storeImage']);
 
+    // EVENTS
+    Route::resource('events', EventsController::class);
+
+    // jobs
+    Route::resource('event-jobs', EventJobController::class);
+    Route::get('event-jobs-list/{event_id}', [EventJobController::class, 'getJobsForEvent']);
+    // School Jobs
+    Route::resource('event-school-jobs', EventSchoolJobController::class);
+    Route::get('event-school-jobs/all/{school_id}', [EventSchoolJobController::class, 'getSchoolJobs']);
+    Route::post('event-school-jobs/add-to-event/{event_id}/{identifier}', [EventSchoolJobController::class, 'createEventJobFromSchoolEventIdentifier']);
+    // Event Templates
+    Route::post('event-school-jobs/templates', [EventSchoolJobController::class, 'createEventTemplate']);
+    Route::get('event-school-jobs/templates/{school_id}', [EventSchoolJobController::class, 'getSchoolEventJobTemplates']);
+    Route::get('event-school-jobs/template/{template_id}', [EventSchoolJobController::class, 'getTemplateJobs']);
+    Route::patch('event-school-jobs/template/edit/{template_id}', [EventSchoolJobController::class, 'updateSchoolEventJobTemplate']);
+
     // INSTRUMENTS
     Route::resource('instruments', InstrumentsController::class);
     Route::get('instrument-states', [InstrumentsController::class, 'getInstrumentStates']);

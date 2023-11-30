@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <HeaderLine heading="Events" />
+    <HeaderLine heading="Events" :link1="jobs.link1" @link1="routeChange"/>
 
     <div class="col col-12 col-md-6">
       <!-- Search input -->
@@ -10,7 +10,6 @@
     <!-- Table Component -->
     <section v-if="filteredEvents">
       <component :is="currentComponent" :events="filteredEvents" :key="key" />
-      <!-- <pre>{{ filteredEvents }}</pre> -->
     </section>
 
   </div>
@@ -26,21 +25,41 @@ import useApi from '/resources/js/composables/useApi';
 import EventsTable from './ListComponents/EventsTable.vue'
 import EventsTableMobile from './ListComponents/EventsTableMobile.vue'
 import { useFilterStore } from '/resources/js/stores/filter';
+import { useUserStore } from '/resources/js/stores/user';
+import { useActionsStore } from '/resources/js/stores/actions';
 
 const key = ref(0)
 
 // Initiate Stores
 const eventStore = useEventStore()
 const filter = useFilterStore()
+const user = useUserStore()
+const actions  = useActionsStore()
 
 // Initiate Composables
 const { windowSize } = useWindowSize()
 const router = useRouter()
 
+const jobs = ref({jobs: ''})
+
+// Set side actions available on this page
+const actionArray = []
+if(user.hasPermissionAny('EVENTS_C')){
+  actionArray.push({ header: 'Create Event', to: { name: 'EventCreate' }, icon: 'fa-solid fa-plus'})
+}
+actions.setItems(actionArray)
+
+
 // Get appropriate component based on window size
 const currentComponent = computed(() => {
   return windowSize.value.width > 1030 ? EventsTable : EventsTableMobile
 })
+
+// Set Links
+if(user.hasPermissionAny('EVENTS_TEMP_V')){
+  jobs.value.link1 = 'Job Templates'
+}
+
 
 // Fetch Event data and add to store
 const { data: allEvents, fetchData: fetchEvents } = useApi('events')
@@ -90,7 +109,7 @@ const filteredEvents = computed(() => {
 // Handle route change
 function routeChange(value) {
   let route = {}
-  if(value === 'link1') route = {name: 'HiresList'}
+  if(value === 'link1') route = {name: 'TemplateList'}
   router.push(route)
 }
 

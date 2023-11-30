@@ -29,7 +29,21 @@ class EventsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $newEvent = Event::create([
+            'name' => $request->title,
+            'school_id' => $request->school,
+            'description' => $request->description,
+            'location' => $request->location,
+            'date' => $request->date,
+            'time' => $request->time,
+        ]);
+
+        return response()->json(
+            [
+                'message' => 'Event Added successfully',
+                'event' => new EventsResource(Event::where('id', $newEvent->id)->first())
+            ]
+        );
     }
 
     /**
@@ -59,8 +73,10 @@ class EventsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Event $event)
+    public function destroy(string $event_id)
     {
-        //
+        $deleted = Event::where('id', $event_id)->first()->delete();
+        if ($deleted) return 'success';
+        else return 'error';
     }
 }

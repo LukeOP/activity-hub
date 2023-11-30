@@ -4,13 +4,17 @@
       <div id="close-btn">
         <i @click="closeToast" class="icon" v-html="icons.xmark"></i>
       </div>
+
       <div id="message-content">
-        <div id="message-icon"><ToastIconSVG :status="toast.data.type" /></div>
         <div>
-          <div id="title">{{ toast.data.header }}</div>
+          <div id="title">
+            <div id="message-icon" style="display: inline-block;"><ToastIconSVG :status="toast.data.type" /></div>
+            <div style="display: inline-block;">{{ toast.data.header }}</div>
+          </div>
           <div id="message">{{ toast.data.message }}</div>
         </div>
       </div>
+
     </div>
   </transition>
 </template>
@@ -45,8 +49,8 @@ function closeToast(){
   max-height: 140px;
   border-radius: 0.375rem;
   background-color: white;
-  border: 1px solid $ah-primary;
-  box-shadow: 0px 0px 20px $ah-grey;
+  // border: 1px solid $ah-primary;
+  box-shadow: 0px 0px 10px $ah-grey;
 }
 #close-btn {
   position: absolute;
@@ -59,7 +63,7 @@ function closeToast(){
   display: flex;
   padding-top: 10px;
   #message-icon {
-    width: 50px;
+    width: 20px;
     margin-left: 10px;
     margin-right: 10px;
   }
@@ -68,7 +72,7 @@ function closeToast(){
     font-weight: bold;
   }
   #message {
-    padding-bottom: 10px;
+    padding: 10px;
   }
 }
 

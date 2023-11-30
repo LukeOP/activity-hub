@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\EventJobResource;
 use App\Models\EventJob;
 use Illuminate\Http\Request;
 
@@ -12,15 +13,15 @@ class EventJobController extends Controller
      */
     public function index()
     {
-        //
+        return EventJobResource::collection(EventJob::all());
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display Collection of Jobs based on job_id
      */
-    public function create()
+    public function getJobsForEvent(string $event_id)
     {
-        //
+        return EventJob::where('event_id', $event_id)->orderBy('due_date')->get();
     }
 
     /**
@@ -28,7 +29,15 @@ class EventJobController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'event_id' => 'required',
+            'description' => 'required',
+            'due_date' => 'required'
+        ]);
+
+        $job = EventJob::create($validatedData);
+
+        return new EventJobResource($job);
     }
 
     /**
@@ -40,19 +49,16 @@ class EventJobController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(EventJob $eventJob)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, EventJob $eventJob)
+    public function update(Request $request, string $id)
     {
-        //
+        $job = EventJob::findOrFail($id);
+
+        $job->fill($request->all());
+        $job->save();
+
+        return ['success', 'EventJob updated'];
     }
 
     /**

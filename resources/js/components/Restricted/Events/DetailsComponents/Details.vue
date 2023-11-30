@@ -27,7 +27,7 @@ import moment from 'moment';
 const props = defineProps({event:Object})
 
 function formatDate(date){
-  return moment(date).format('DD-MMM-YYYY')
+  return moment(date).format('MMM Do, YYYY')
 }
 
 </script>
