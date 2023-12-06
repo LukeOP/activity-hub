@@ -7,6 +7,7 @@
       <span v-if="!mobileFormat && (link1 || link2)">
         <button v-if="link1" class="btn btn-outline-primary" @click="$emit('link1', 'link1')">{{ link1 }}</button>
         <button v-if="link2" class="btn btn-outline-primary" @click="$emit('link2', 'link2')">{{ link2 }}</button>
+        <button v-if="link3" class="btn btn-outline-primary" @click="$emit('link3', 'link3')">{{ link3 }}</button>
       </span>
     </div>
 
@@ -17,6 +18,7 @@
       <div id="buttons" v-if="mobileFormat && (link1 || link2)">
         <button v-if="link1" class="btn btn-outline-primary" @click="$emit('link1', 'link1')">{{ link1 }}</button>
         <button v-if="link2" class="btn btn-outline-primary" @click="$emit('link2', 'link2')">{{ link2 }}</button>
+        <button v-if="link3" class="btn btn-outline-primary" @click="$emit('link3', 'link3')">{{ link3 }}</button>
       </div>
     </div>
 
@@ -31,10 +33,11 @@ const props = defineProps({
   school: String,
   link1: String,
   link2: String,
+  link3: String,
   center: String,
 })
 
-const emit = defineEmits(['link1', 'link2'])
+const emit = defineEmits(['link1', 'link2', 'link3'])
 
 const { mobileFormat } = useWindowSize()
 

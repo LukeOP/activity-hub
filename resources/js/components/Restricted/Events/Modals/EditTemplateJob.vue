@@ -46,7 +46,6 @@ const formData = ref({
 })
 
 function addJob(){
-  console.log(formData.value);
   axiosClient.patch('event-school-jobs/' + formData.value.job_id, formData.value).then((res)=>{
     updateDom(res.data)
     toast.open('success', 'Job Added', 'Job added to Template')

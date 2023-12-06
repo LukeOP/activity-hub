@@ -18,31 +18,31 @@
           <p>{{ form.content.contact_details_content }}</p>
           <div class="col col-12 col-md-6">
             <label>{{ form.field_labels.student_name }}
-              <input type="text" class="form-control" v-model="formData.student_name" required>
+              <input type="text" name="name" class="form-control" v-model="formData.student_name" required>
             </label>
             <label v-if="form.inputs.student_email == 1">{{ form.field_labels.student_email }}
-              <input type="email" class="form-control" v-model="formData.student_email" required>
+              <input type="email" name="email" class="form-control" v-model="formData.student_email" required>
             </label>
             <label v-if="form.inputs.student_phone == 1">{{ form.field_labels.student_phone }}
-              <input type="number" class="form-control" v-model="formData.student_phone" required>
+              <input type="phone" name="phone" class="form-control" v-model="formData.student_phone" required>
             </label>
             <label v-if="form.inputs.student_age == 1">{{ form.field_labels.student_age }}
-              <input type="number" class="form-control" v-model="formData.student_age" required>
+              <input type="number" name="age" class="form-control" v-model="formData.student_age" required>
             </label>
             <label v-if="form.inputs.student_year == 1">{{form.field_labels.student_year}}
-              <input type="text" class="form-control" v-model="formData.student_year" required>
+              <input type="text" name="year" class="form-control" v-model="formData.student_year" required>
             </label>
           </div>
 
           <div class="col col-12 col-md-6">
             <label v-if="form.inputs.pc_name == 1">{{ form.field_labels.pc_name }}
-              <input type="text" class="form-control" v-model="formData.pc_name" required>
-            </label>
-            <label v-if="form.inputs.pc_phone == 1">{{ form.field_labels.pc_phone }}
-              <input type="number" class="form-control" v-model="formData.pc_phone" required>
+              <input type="text" name="name" class="form-control" v-model="formData.parent_name" required>
             </label>
             <label v-if="form.inputs.pc_email == 1">{{ form.field_labels.pc_email }}
-              <input type="email" class="form-control" v-model="formData.pc_email" required>
+              <input type="email" name="email" class="form-control" v-model="formData.parent_email" required>
+            </label>
+            <label v-if="form.inputs.pc_phone == 1">{{ form.field_labels.pc_phone }}
+              <input type="phone" name="phone" class="form-control" v-model="formData.parent_phone" required>
             </label>
           </div>
         </section>
@@ -120,9 +120,9 @@ const formData = ref({
   student_phone: '',
   student_age: '',
   student_year: '',
-  pc_name: '',
-  pc_email: '',
-  pc_phone: '',
+  parent_name: '',
+  parent_email: '',
+  parent_phone: '',
   instrument: '',
   tutor: '',
   funding_type: '',
@@ -137,9 +137,9 @@ function resetForm(){
     student_phone: '',
     student_age: '',
     student_year: '',
-    pc_name: '',
-    pc_email: '',
-    pc_phone: '',
+    parent_name: '',
+    parent_email: '',
+    parent_phone: '',
     instrument: '',
     tutor: '',
     funding_type: '',
@@ -152,6 +152,7 @@ function resetForm(){
 const { data: form, fetchData: fetchFormData } = useApi('lesson-request-form/' + route.params.id)
 fetchFormData().then(()=>{
   formData.value.school_id = form.value.school.id
+  console.log(formData.value)
   // Fetch school staff from database and add to store
   const { data: staff, fetchData: fetchStaff } = useApi('user-subjects-available/' + form.value.school.id)
   fetchStaff().then(() => {

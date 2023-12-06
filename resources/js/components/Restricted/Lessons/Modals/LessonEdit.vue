@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-center">Edit Lesson Details</h2>
+    <HeaderLine heading="Edit Lesson Details" center="true" />
     <form class="px-2 mt-3" @submit.prevent="updateValues">
       <div class="subHeading">Day and Time:</div>
       <div class="row">
@@ -71,6 +71,7 @@ import { useUserStore } from '../../../../stores/user'
 import { useLessonsStore } from '../../../../stores/lessons'
 import { useModalStore } from '@/stores/modal'
 import { useToastStore } from '/resources/js/stores/toast'
+import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
 
 // const toast = useToast()
 const toast = useToastStore()
@@ -112,10 +113,17 @@ const days = [
 ]
 
 const durations = [
+  {value: 10, label: "10 mins"},
   {value: 15, label: "15 mins"},
   {value: 20, label: "20 mins"},
   {value: 25, label: "25 mins"},
   {value: 30, label: "30 mins"},
+  {value: 35, label: "35 mins"},
+  {value: 40, label: "40 mins"},
+  {value: 45, label: "45 mins"},
+  {value: 50, label: "50 mins"},
+  {value: 55, label: "55 mins"},
+  {value: 60, label: "60 mins"},
 ]
 
 const fundingTypes = [

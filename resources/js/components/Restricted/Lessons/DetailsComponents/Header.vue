@@ -1,7 +1,7 @@
 <template>
 <div>
-  <HeaderLine :heading="heading" :school="lesson.school.name" :link1="links.link1" :link2="links.link2"
-    @link1="handleClick" @link2="handleClick" />
+  <HeaderLine :heading="heading" :school="lesson.school.name" :link1="links.link1" :link2="links.link2" :link3="links.link3"
+    @link1="handleClick" @link2="handleClick" @link3="handleClick" />
     <!-- <attendance-snapshot :lesson="lesson" /> -->
 </div>
   
@@ -25,11 +25,12 @@ export default {
 
     const router = useRouter()
     const studentStore = useStudentStore()
+    studentStore.setStudent(props.lesson.student)
     const user = useUserStore()
 
     const heading = `${props.lesson.student.first_name} ${props.lesson.student.last_name}${getSIfNeeded()} ${props.lesson.attributes.instrument} Lessons`
 
-    const links = {link1: 'View Notes', link2: 'View Attendance'}
+    const links = {link1: 'View Notes', link2: 'View Attendance', link3: 'View Student'}
 
 
     function getSIfNeeded(){
@@ -45,6 +46,7 @@ export default {
       let route = []
       if(value === 'link1') route = 'LessonNotes'
       if(value === 'link2') route = 'LessonAttendanceSingle'
+      if(value === 'link3') route = 'StudentDetails'
       router.push({name: route})
     }
 

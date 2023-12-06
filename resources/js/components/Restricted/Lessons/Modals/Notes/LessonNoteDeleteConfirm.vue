@@ -11,18 +11,18 @@
 <script setup>
 import { useModalStore } from '@/stores/modal';
 import axiosClient from '@/axios';
-import { useToast } from 'vue-toast-notification';
 import { useLessonsStore } from '@/stores/lessons';
+import { useToastStore } from '/resources/js/stores/toast';
 
 const modal = useModalStore()
 const lessonStore = useLessonsStore()
-const toast = useToast()
+const toast = useToastStore()
 
 function deleteNote(){
   const note = modal.getData
   axiosClient.delete('/lesson-notes/' + note.id)
   .then(()=>{
-    toast.open({ message: 'Lesson Note Deleted', duration: 5000, dismissible: true, type: 'success'})
+    toast.open( 'success', 'Lesson Note Deleted', 'The Lesson note has been deleted.')
     lessonStore.deleteNote(note)
     modal.close()
   })

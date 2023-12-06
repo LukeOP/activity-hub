@@ -22,9 +22,13 @@ import { useStudentStore } from '/resources/js/stores/students';
 import { computed, ref } from 'vue';
 import { useWindowSize } from '/resources/js/composables/useWindowSize';
 import HeaderLine from '../../Layouts/MainLayout/Elements/HeaderLine.vue';
+import { useUserStore } from '/resources/js/stores/user';
+import { useActionsStore } from '/resources/js/stores/actions';
 
 // Initiate Stores
 const studentStore = useStudentStore()
+const user = useUserStore()
+const actions = useActionsStore()
 
 // Initiate Composables
 const { windowSize } = useWindowSize()
@@ -41,6 +45,14 @@ if(studentStore.getStudents.length < 1){
     studentStore.setStudents(allStudents.value)
   })
 }
+
+// Set side actions available on this page
+const actionArray = []
+if(user.hasPermissionAny('STUDENTS_C')){
+  actionArray.push({ header: 'Add New Student', to: { name: 'StudentsList' }, modal: 'AddSingleStudent', icon: 'fa-solid fa-user-plus'})
+  actionArray.push({ header: 'Bulk Update Students', to: { name: 'StudentsBulkUpdate' }, icon: 'fa-solid fa-user-plus'})
+}
+actions.setItems(actionArray)
 
 // Initiate search variable
 const search = ref('')

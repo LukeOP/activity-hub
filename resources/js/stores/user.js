@@ -11,8 +11,9 @@ function getState(){
         last_name: "",
         image: "",
         email: '',
-        phone: ''
+        phone: '',
         // admin: false,
+        schools: [],
       },
       permissions: [],
       token: sessionStorage.getItem('AHT') || '',
@@ -91,6 +92,9 @@ export const useUserStore = defineStore('user', {
     },
     getPermissions(){
       return this.permissions
+    },
+    getSchools(){
+      return this.attributes.schools
     }
   }
 })

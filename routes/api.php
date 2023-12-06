@@ -3,7 +3,6 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CalendarEventController;
-use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\EventJobController;
 use App\Http\Controllers\EventSchoolJobController;
 use App\Http\Controllers\EventsController;
@@ -16,6 +15,7 @@ use App\Http\Controllers\LessonRequestsController;
 use App\Http\Controllers\LessonRequestsFormsController;
 use App\Http\Controllers\LessonsController;
 use App\Http\Controllers\SchoolsController;
+use App\Http\Controllers\StudentContactsController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\UserPermissionsController;
@@ -113,9 +113,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // STUDENTS
     Route::resource('/students', StudentsController::class);
     Route::get('school-students/{schoolId}', [StudentsController::class, 'getStudentsInSchool']);
+    Route::post('update-students-bulk/{school_id}', [StudentsController::class, 'storeFromCSV']);
 
     // Student Contacts
-    Route::resource('/student-contacts', ContactsController::class);
+    Route::resource('/student-contacts', StudentContactsController::class);
 
     // USERS
     Route::resource('/users', UsersController::class);

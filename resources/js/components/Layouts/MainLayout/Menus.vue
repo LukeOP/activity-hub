@@ -37,7 +37,7 @@ function stateControl(state){
   width: 100vw;
   z-index: 100;
   margin-bottom: 1rem;
-  background: white;
+  // background: white;
   #logo-img {
     position: absolute;
     height: 60px;

@@ -13,11 +13,11 @@
 
 <script>
 import { useRouter } from 'vue-router'
-import { useToast } from 'vue-toast-notification'
 import axiosClient from '../../../../axios'
 import ModalTemplateVue from '../../../Layouts/MainLayout/Elements/Modal.vue'
 import { useLessonsStore } from '/resources/js/stores/lessons'
 import { useModalStore } from '/resources/js/stores/modal'
+import { useToastStore } from '/resources/js/stores/toast'
 
 export default {
   components: {
@@ -25,7 +25,7 @@ export default {
   },
   setup(){
     const router = useRouter()
-    const toast = useToast()
+    const toast = useToastStore()
 
     const lessonStore = useLessonsStore()
     const lesson = lessonStore.getLessonData
@@ -40,7 +40,7 @@ export default {
     function handleSetActive(){
       axiosClient.patch('lessons/' + lesson.id, {status: 'Active'})
       .then((res) => {
-        toast.open({ message: res.data.message, duration: 5000, dismissible: true, type: 'success'})
+        toast.open('success', 'Lesson State Changed', 'The lesson is now set as active.')
         axiosClient.post('calendar-events', CalendarData())
         .then(() => { 
           lesson.attributes.status = 'Active'

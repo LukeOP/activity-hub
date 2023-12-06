@@ -13,6 +13,9 @@ class LessonRequest extends Model
 
     protected $fillable = [
         'student_name',
+        'student_email',
+        'students_phone',
+        'student_age',
         'student_year',
         'parent_name',
         'parent_phone',

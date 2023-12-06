@@ -18,6 +18,8 @@ class Student extends Model
         'tutor_group',
         'year_level',
         'gender',
+        'date_of_birth',
+        'enrolled_status',
         'identifier',
         'school_id',
     ];
@@ -34,7 +36,7 @@ class Student extends Model
 
     public function contacts()
     {
-        return $this->hasOne(Contacts::class);
+        return $this->hasOne(StudentContacts::class);
     }
 
     public function school()
@@ -45,5 +47,11 @@ class Student extends Model
     public function lessons()
     {
         return $this->hasMany(Lesson::class);
+    }
+    public function getAge(?string $dob): ?int
+    {
+        if ($dob === null) return null;
+        $year = (date('Y') - date('Y', strtotime($dob)));
+        return $year;
     }
 }
