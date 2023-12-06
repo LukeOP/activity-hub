@@ -76,13 +76,14 @@ function handleLogout(){
 }
 #user-img {
   position: absolute;
-  height: 40px;
-  width: 40px;
+  height: 46px;
+  width: 46px;
   top: 10px;
   right: 40px;
   border-radius: 50%;
   cursor: pointer;
   background: $ah-primary;
+  border: 3px solid white;
 }
 #icon-text {
   display: block;

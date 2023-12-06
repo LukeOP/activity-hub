@@ -1,20 +1,25 @@
 <template>
-  <div id="lesson-details" class="section" v-if="student.contacts != null">
+  <div id="lesson-details" class="section">
     <h2>Lesson Details:</h2>
-    <h3>
-      <span class="tab" :class="{active: showActiveLessons}" @click="showActiveLessons = true">Active Lessons</span>
-      <span class="tab" :class="{active: !showActiveLessons}" @click="showActiveLessons = false">Concluded Lessons</span>
-    </h3>
-    <div id="lesson-list" class="row" v-if="showActiveLessons">
-      <div class="col col-12 col-md-6" v-for="lesson in lessons" :key="lesson">
-        <SingleLessonTile  :lesson="lesson" />
+    <span v-if="combinedLessons > 0">
+      <h3>
+        <span class="tab" :class="{active: showActiveLessons}" @click="showActiveLessons = true">Active Lessons</span>
+        <span class="tab" :class="{active: !showActiveLessons}" @click="showActiveLessons = false">Concluded Lessons</span>
+      </h3>
+      <div id="lesson-list" class="row" v-if="showActiveLessons">
+        <div class="col col-12 col-md-6" v-for="lesson in lessons" :key="lesson">
+          <SingleLessonTile  :lesson="lesson" />
+        </div>
       </div>
-    </div>
-    <div id="lesson-list" class="row" v-if="!showActiveLessons">
-      <div class="col col-12 col-md-6" v-for="lesson in pastLessons" :key="lesson">
-        <SingleLessonTile  :lesson="lesson" />
+      <div id="lesson-list" class="row" v-if="!showActiveLessons">
+        <div class="col col-12 col-md-6" v-for="lesson in pastLessons" :key="lesson">
+          <SingleLessonTile  :lesson="lesson" />
+        </div>
       </div>
-    </div>
+    </span>
+    <span v-else>
+      <p style="margin: auto;" class="text-grey-dark">No lesson data</p>
+    </span>
   </div>
 </template>
 
@@ -25,12 +30,13 @@ import { ref } from 'vue'
 
 const props = defineProps({student:Object})
 const showActiveLessons = ref(true)
+const combinedLessons = ref(0)
 
 const { data: lessons, fetchData: fetchLessons } = useApi('student-lessons/' + props.student.id)
-fetchLessons()
+fetchLessons().then(()=> combinedLessons.value += lessons.value.length)
 
 const { data: pastLessons, fetchData: fetchPastLessons } = useApi('student-lessons/past/' + props.student.id)
-fetchPastLessons()
+fetchPastLessons().then(()=> combinedLessons.value += pastLessons.value.length)
 
 </script>
 

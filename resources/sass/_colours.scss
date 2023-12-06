@@ -29,6 +29,11 @@ $ah-red-light: lighten($ah-red, 8%);
 $ah-red-dark: darken($ah-red, 8%);
 $ah-red-background: lighten($ah-red, 55%);
 
+$ah-warning: #d50e0e;
+$ah-warning-light: lighten($ah-warning, 8%);
+$ah-warning-dark: darken($ah-warning, 8%);
+$ah-warning-background: lighten($ah-warning, 55%);
+
 $ah-purple: #461771;
 $ah-purple-light: lighten($ah-purple, 8%);
 $ah-purple-dark: darken($ah-purple, 8%);

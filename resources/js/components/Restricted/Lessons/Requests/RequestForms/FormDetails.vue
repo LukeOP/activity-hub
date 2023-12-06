@@ -2,7 +2,7 @@
   <div>
     <HeaderLine heading="Lesson Signup Form Details" link1="Forms List" link2="Preview Form" @link1="returnToFormList" @link2="previewForm" />
     <!-- <pre>{{ formData }}</pre> -->
-    <button class="btn btn-primary float-end top-btn" @click="saveUpdates">Save Form</button>
+    <button class="btn btn-secondary float-end top-btn" @click="saveUpdates">Save Form</button>
     <button class="btn btn-primary float-end top-btn" @click="copyURL">Copy Form URL</button>
     <form @submit.prevent="">
       <section id="main-details">

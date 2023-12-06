@@ -20,6 +20,9 @@ export const useStudentStore = defineStore('students', {
     setFilteredStudents(studentArray){
       this.filteredStudents = studentArray
     },
+    addStudent(studentObject){
+      this.students = [...this.students, studentObject]
+    },
     reset(){
       this.currentStudent = {}
       this.students = []

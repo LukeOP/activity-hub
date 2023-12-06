@@ -1,6 +1,5 @@
 <template>
   <div id="snapshot">
-    {{ usingProps }}
     <h4 style="display: flex; justify-content: space-between;"><span>{{getHeading()}}</span> <span id="total">{{ total }}</span></h4>
     <div class="progress" style="height: 10px; padding:0">
       <div class="progress-bar bg-primary" role="progressbar" :style="'width: '+ getPercentage(present) + '%;'" :aria-valuenow="present" aria-valuemin="0" aria-valuemax="100"></div>

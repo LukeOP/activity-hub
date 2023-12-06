@@ -1,6 +1,7 @@
-import StudentsList from '../../components/Restricted/Students/StudentsList.vue'
-import StudentDetails from '../../components/Restricted/Students/StudentDetails.vue'
+import StudentsList from './StudentsList.vue'
+import StudentDetails from './StudentDetails.vue'
 import { useStudentStore } from '/resources/js/stores/students'
+import StudentsBulkUpdate from './StudentsBulkUpdate.vue'
 
 
 const studentsRoutes = [
@@ -14,6 +15,7 @@ const studentsRoutes = [
             else next()
           }
         },
+        { path: 'bulk-update', name: "StudentsBulkUpdate", component: StudentsBulkUpdate, meta: { title: 'Bulk Update Students', breadcrumb: ' / Bulk Update', section: 'Students', depth: 2} }
     ]},
 ] 
 

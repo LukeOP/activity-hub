@@ -13,13 +13,13 @@
 import moment from 'moment'
 import { ref } from 'vue'
 import axiosClient from '../../../../../axios'
-import { useToast } from 'vue-toast-notification'
 import { useRouter } from 'vue-router'
 
 import ModalTemplate from '../../../../Layouts/MainLayout/Elements/Modal.vue'
 import { useLessonsStore } from '../../../../../stores/lessons'
 import { useUserStore } from '../../../../../stores/user'
 import { useModalStore } from '../../../../../stores/modal'
+import { useToastStore } from '/resources/js/stores/toast'
 
 export default {
   props: {
@@ -30,7 +30,7 @@ export default {
   },
   emits: ["close", "refresh-notes"],
   setup(props, context){
-    const toast = useToast()
+    const toast = useToastStore()
     const lessonStore = useLessonsStore()
     const currentLesson = lessonStore.getLessonData
      

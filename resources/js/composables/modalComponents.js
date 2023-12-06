@@ -5,12 +5,14 @@ import lessonModals from '../components/Restricted/Lessons/Modals/LessonModals';
 import dashboardModals from '../components/Restricted/Dashboard/Modals/DashboardModals';
 import instrumentModals from '../components/Restricted/Instruments/Modals/InstrumentModals';
 import eventModals from '../components/Restricted/Events/Modals/EventModals';
+import studentModals from '../components/Restricted/Students/Modals/StudentModals';
 
 const modalComponents = {
   ...lessonModals,
   ...dashboardModals,
   ...instrumentModals,
   ...eventModals,
+  ...studentModals,
   StaffDeleteSubject,
   NewStaff,
 }

@@ -1,50 +1,84 @@
 <template>
-  <div id="parent-details" class="section row" v-if="student.contacts != null">
+  <div id="parent-details" class="section row">
     <h2>Contact Details:</h2>
-    <div id="student" class="col col-12 col-sm-6 col-md-3" v-if="student.contacts.student.email">
+    <div id="student" class="col col-12 col-sm-6 col-md-3">
       <h2>Student:</h2>
-      <h3>Name:</h3>
-      {{student.full_name}}<br/>
-      <h3>Year Level:</h3>
-      {{student.year_level}}<br/>
-      <h3>Email:</h3>
-      {{student.contacts.student.email}}<br/>
-      <h3>Mobile:</h3>
-      {{student.contacts.student.mobile}}<br/>
+      <span v-if="student.contacts">
+        <span v-if="student.year_level">
+          <h3>Year Level:</h3>
+          {{student.year_level}}<br/>
+        </span>
+        <span v-if="student.contacts.student.email">
+          <h3>Email:</h3>
+          {{student.contacts.student.email}}<br/>
+        </span>
+        <span v-if="student.contacts.student.mobile">
+          <h3>Mobile:</h3>
+          {{student.contacts.student.mobile}}<br/>
+        </span>
+      </span>
+      <span v-if="student.contacts == null">
+        <p>No contact details have been provided</p>
+        <div class="btn btn-outline-primary" @click="modal.open('StudentEditContacts')">Add Contact Details</div>
+      </span>
     </div>
-    <div id="primary-carer" class="col col-12 col-sm-6 col-md-3" v-if="student.contacts.pc.name">
-      <h2>Primary Carer:</h2>
-      <h3>Name:</h3>
-      {{student.contacts.pc.name}}<br/>
-      <h3>Relationship:</h3>
-      {{student.contacts.pc.relationship}}<br/>
-      <h3>Email:</h3>
-      {{student.contacts.pc.email}}<br/>
-      <h3>Mobile:</h3>
-      {{student.contacts.pc.mobile}}<br/>
+    <div id="primary-caregiver" class="col col-12 col-sm-6 col-md-3">
+      <h2>Primary Caregiver:</h2>
+      <span v-if="student.contacts">
+        <span v-if="student.contacts.pc.name">
+          <h3>Name:</h3>
+          {{student.contacts.pc.name}}<br/>
+        </span>
+        <span v-if="student.contacts.pc.relationship">
+          <h3>Relationship:</h3>
+          {{student.contacts.pc.relationship}}<br/>
+        </span>
+        <span v-if="student.contacts.pc.email">
+          <h3>Email:</h3>
+          {{student.contacts.pc.email}}<br/>
+        </span>
+        <span v-if="student.contacts.pc.mobile">
+          <h3>Mobile:</h3>
+          {{student.contacts.pc.mobile}}<br/>
+        </span>
+      </span>
+      <span v-if="student.contacts == null || student.contacts.pc.name == null">
+        <p>No caregiver details have been provided</p>
+        <div class="btn btn-outline-primary" @click="modal.open('StudentEditCaregiverContacts')">Add Caregiver Contact Details</div>
+      </span>
     </div>
-    <div id="secondary-carer" class="col col-12 col-sm-6 col-md-3" v-if="student.contacts.sc.name">
-      <h2>Secondary Carer:</h2>
-      <h3>Name:</h3>
-      {{student.contacts.sc.name}}<br/>
-      <h3>Relationship:</h3>
-      {{student.contacts.sc.relationship}}<br/>
-      <h3>Email:</h3>
-      {{student.contacts.sc.email}}<br/>
-      <h3>Mobile:</h3>
-      {{student.contacts.sc.mobile}}<br/>
+    <div id="secondary-caregiver" class="col col-12 col-sm-6 col-md-3">
+      <h2>Secondary Caregiver:</h2>
+      <span v-if="student.contacts">
+        <span v-if="student.contacts.sc.name">
+          <h3>Name:</h3>
+          {{student.contacts.sc.name}}<br/>
+        </span>
+        <span v-if="student.contacts.sc.relationship">
+          <h3>Relationship:</h3>
+          {{student.contacts.sc.relationship}}<br/>
+        </span>
+        <span v-if="student.contacts.sc.email">
+          <h3>Email:</h3>
+          {{student.contacts.sc.email}}<br/>
+        </span>
+        <span v-if="student.contacts.sc.mobile">
+          <h3>Mobile:</h3>
+          {{student.contacts.sc.mobile}}<br/>
+        </span>
+      </span>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    student: Object
-  }
+<script setup>
+import { useModalStore } from '/resources/js/stores/modal';
 
-}
+const props = defineProps({student: Object})
+
+const modal = useModalStore()
 </script>
+
 
 <style lang="scss" scoped>
 h2 {
@@ -62,7 +96,7 @@ h3 {
   padding: 10px;
   border-bottom: 1px dashed $ah-primary;
 }
-#student, #primary-carer, #secondary-carer {
+#student, #primary-caregiver, #secondary-caregiver {
   border-left: 4px solid;
   margin-bottom: 2rem;
 }
@@ -70,25 +104,25 @@ h3 {
   border-color: $ah-primary;
   margin-left: 10px;
 }
-#primary-carer {
+#primary-caregiver {
   border-color: $ah-primary-light;
 }
-#secondary-carer {
+#secondary-caregiver {
   border-color: $ah-primary-lighter;
 }
 
 @media (max-width: 768px) {
-#student, #primary-carer, #secondary-carer {
+#student, #primary-caregiver, #secondary-caregiver {
   margin-bottom: 0.5rem;
   padding: 15px 10px;
 }
   #student{
     background-color: lighten($ah-primary-background, 6%);
   }
-  #primary-carer{
+  #primary-caregiver{
     background-color: lighten($ah-secondary-background, 6%);
   }
-  #secondary-carer{
+  #secondary-caregiver{
     background-color: $ah-grey-background;
   }
 }

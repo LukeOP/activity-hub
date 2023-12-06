@@ -51,6 +51,7 @@ function closeToast(){
   background-color: white;
   // border: 1px solid $ah-primary;
   box-shadow: 0px 0px 10px $ah-grey;
+  z-index: 10000;
 }
 #close-btn {
   position: absolute;
