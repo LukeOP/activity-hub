@@ -1,3 +1,27 @@
+.user-element {
+  position: relative;
+  background-color: white;
+  padding: 10px;
+  border-radius: 0.375rem;
+  box-shadow: 0 5px 10px rgb(244, 244, 244);
+  // box-shadow: 0 5px 10px rgb(233, 233, 233);
+  margin-bottom: 2rem;
+  min-height: 300px;
+  z-index: 1;
+}
+.user-element-header {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid $ah-grey;
+  .options {
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: $ah-grey-light;
+  }
+}
 .icon-size {
   display: block;
   width: 1.5rem;
@@ -54,4 +78,7 @@ table {
   display: inline-flex;
   align-items: flex-end;
   justify-content: space-between;
+}
+.unavailable-section {
+  background: rgba(222, 222, 222, 0.5);
 }

@@ -1,5 +1,6 @@
 <template>
-  <div v-if="!loading">
+  <div v-if="!loading" class="user-element">
+    <UserElementHeader heading="Upcoming Lessons" />
     <div id="date-banner">
       <div id="date" v-if="!mobileFormat">{{ moment(selectedDate).format('dddd - MMMM DD') }}</div>
       <div id="date" v-else>{{ moment(selectedDate).format('ddd - MMM Do') }}</div>
@@ -18,7 +19,7 @@
         <td id="state"><StatusIconSVG :status="getLessonAttendance(lesson.attendance)" /></td>
       </tr>
     </table>
-    <div class="text-center" v-else>No Lessons Today</div>
+    <div class="text-center" v-else>No Lessons To Display</div>
 
   </div>
 </template>
@@ -34,6 +35,7 @@ import { useLessonsStore } from '/resources/js/stores/lessons';
 import { icons } from '@/images/icons/icons'
 import { useWindowSize } from '/resources/js/composables/useWindowSize';
 import StatusIconSVG from '../../Layouts/MainLayout/Elements/SVG/StatusIconSVG.vue';
+import UserElementHeader from '../../Layouts/MainLayout/Elements/UserElementHeader.vue';
 
 const house = icons.question
 
@@ -110,7 +112,7 @@ function handleRowClick(lesson){
   justify-content: space-between;
   align-items: center;
   padding-bottom: 5px;
-  border-bottom: 3px solid $ah-primary;
+  // border-bottom: 3px solid $ah-primary;
 
   #date {
     font-size: 1.5rem;
@@ -133,7 +135,7 @@ table {
     width: 30px;
   }
   tr {
-    border-bottom: 1px solid $ah-grey;
+    // border-bottom: 1px solid $ah-grey;
     &:hover {
       background-color: $ah-primary-background;
       cursor: pointer;
