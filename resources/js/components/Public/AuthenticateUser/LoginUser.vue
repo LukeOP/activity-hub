@@ -1,21 +1,23 @@
 <template>
-<div>
-  <div id="loginContainer" class="center mt-5">
+<div style="width: 100%;">
+  <div id="loginContainer" class="my-5">
     <img id="logo-img" src="/images/ActivityHub_Logo_Main.png" alt="Activity Hub Logo">
-    <h2>Login</h2>
+    <h2>Log In To Your Account</h2>
     <form @submit.prevent="handleLogin">
       <input type="text" class="form-control my-2" v-model="login.email" placeholder="email">
       <input type="password" class="form-control" v-model="login.password" placeholder="password">
       <button class="btn btn-primary my-3 form-control" @click="handleLogin">Continue</button>
     </form>
+    <p class="ah-link" @click="routeChange({name: 'RecoverAccount'})">Forgot your password?</p>
+    <p class="ah-link" @click="routeChange({name: 'Register'})">Not yet registered?</p>
     <div v-if="error" class="error">{{error}}</div>
     <!-- <router-link :to="{name: 'Register'}" id="register-btn">Or register an account.</router-link> -->
-  <button class="btn btn-outline-primary mt-3" @click="loginUser">Log In User/Admin Demo</button>
-  <button class="btn btn-outline-primary mt-3" @click="loginTutor">Log In Tutor</button>
-  <button class="btn btn-outline-primary mt-3" @click="loginAdmin">Log In Admin</button>
-
-    
-  </div>
+    <!-- <button class="btn btn-outline-primary mt-3" @click="loginTutor">Log In Tutor</button>
+      <button class="btn btn-outline-primary mt-3" @click="loginAdmin">Log In Admin</button> -->
+      
+      
+    </div>
+    <button id="demo-btn" class="btn btn-outline-primary mt-3" @click="loginUser">Log In Demo User</button>
   <!-- <button @click="loginUser">Log In User/Admin Demo</button> -->
   <!-- <button @click="loginTutor">Log In Tutor</button>-->
   <!-- <button @click="loginNew">Log In New Member</button>  -->
@@ -58,6 +60,10 @@ function setError(statusVal){
   else return 'An unexpected error has occured'
 }
 
+function routeChange(route){
+  router.push(route)
+}
+
 function loginUser(){
   login.value.email = 'j.smith@this.com'
   login.value.password = 'Test1234!'
@@ -84,8 +90,12 @@ function loginNew(){
 </script>
 
 <style lang="scss" scoped>
+h2 {
+  font-size: 1.35rem;
+}
 #loginContainer {
-  width: 300px;
+  position: relative;
+  max-width: 500px;
   padding: 10px;
   // border: 1px solid black;
   border-radius: 10px;
@@ -93,26 +103,33 @@ function loginNew(){
 
   #logo-img {
     width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
     margin-top: 2rem;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
   }
   .error {
-    max-width: 280px;
+    max-width: 300px;
     color: rgb(166, 0, 0);
     background: rgba(166, 0, 0, 0.1);
     border: 1px solid rgb(166, 0, 0);
     padding: 5px;
-  }
-  #register-btn {
-    color: $ah-primary;
-    text-decoration: none;
+    margin: 1rem auto;
   }
 }
+form {
+  max-width: 300px;
+  margin: 0 auto;
+}
 
-.center {
-  position: fixed; /* Set the position of the div to absolute */
-  top: 30%; /* Set the top to 50% */
-  left: 50%; /* Set the left to 50% */
-  transform: translate(-50%, -50%); /* Use the transform property to center the div */
+#demo-btn {
+  position: relative;
+  top: 50px;
+}
+@media (max-width: 768px) {
+  #demo-btn {
+    top: 0;
+    left: 1rem;
+  }
 }
 </style>

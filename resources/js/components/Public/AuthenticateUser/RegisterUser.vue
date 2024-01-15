@@ -1,6 +1,6 @@
 <template>
-<div>
-  <div id="loginContainer" class="center">
+<div style="width: 100%;">
+  <div id="loginContainer" class="my-5">
     <img id="logo-img" src="/images/ActivityHub_Logo_Main.png" alt="Activity Hub Logo">
     <h2>Register</h2>
     <form @submit.prevent="handleRegister">
@@ -11,8 +11,8 @@
       <input type="password" class="form-control" v-model="register.password_confirmation" placeholder="Confirm Password">
       <button type="submit" class="btn btn-primary my-3 form-control">Continue</button>
     </form>
+    <router-link :to="{name: 'Login'}" class="ah-link">Or login to an existing account.</router-link>
     <div v-if="error" class="error">{{error}}</div>
-    <router-link :to="{name: 'Login'}" id="login-btn">Or login to an existing account.</router-link>
   </div>
 </div>
 </template>
@@ -70,38 +70,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+h2 {
+  font-size: 1.35rem;
+}
 #loginContainer {
-  width: 300px;
+  position: relative;
+  max-width: 500px;
   padding: 10px;
   // border: 1px solid black;
   border-radius: 10px;
   text-align: center;
 
   #logo-img {
+    position: relative;
     width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
     margin-top: 2rem;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
   }
   .error {
-    max-width: 280px;
+    max-width: 300px;
     color: rgb(166, 0, 0);
     background: rgba(166, 0, 0, 0.1);
     border: 1px solid rgb(166, 0, 0);
     padding: 5px;
-    position: fixed;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 1rem auto;
   }
   #login-btn {
     color: $ah-primary;
     text-decoration: none;
   }
 }
-
-.center {
-  position: fixed; /* Set the position of the div to absolute */
-  top: 30%; /* Set the top to 50% */
-  left: 50%; /* Set the left to 50% */
-  transform: translate(-50%, -50%); /* Use the transform property to center the div */
+form {
+  max-width: 300px;
+  margin: 0 auto;
 }
+
 </style>

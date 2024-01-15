@@ -13,6 +13,14 @@ body {
     color: $ah-secondary;
   }
 }
+.ah-link {
+  color: $ah-primary;
+  text-decoration: none;
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
 
 .unselectable {
   -webkit-touch-callout: none;
