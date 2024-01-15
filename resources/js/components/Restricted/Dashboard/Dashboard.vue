@@ -6,12 +6,12 @@
   <InfoTiles />
   <div id="dashboard-tiles">
     <div class="tile-row">
-      <div style="flex: 66%;"><LessonList /></div>
-      <div style="flex: 34%;"><AttendanceTile /></div>
+      <div class="mobile-full" style="flex: 66%;"><LessonList /></div>
+      <div class="mobile-full" style="flex: 34%;"><AttendanceTile /></div>
     </div>
     <div class="tile-row">
-      <div style="flex: 50%;"><EventList /></div>
-      <div style="flex: 50%;"><RoomsTile /></div>
+      <div class="mobile-full" style="flex: 50%;"><EventList /></div>
+      <div class="mobile-full" style="flex: 50%;"><RoomsTile /></div>
     </div>
   </div>
 </div>
@@ -80,6 +80,20 @@ const ready = ref(false)
       &:last-of-type{
         margin-right: 0;
       }
+    }
+  }
+
+  @media (max-width: 768px) {
+    #dashboard-tiles {
+      display: block;
+      .tile-row {
+        display: block;
+      }
+      .mobile-full {
+        display: block;
+        width: 100%;
+      }
+
     }
   }
 

@@ -11,8 +11,8 @@
             <p v-show="passwordTooShort">Password must be at least 8 characters.</p>
             <button :disabled="!passwordsMatch || processing" class="btn btn-primary my-3 form-control">Reset Password</button>
             </form>
-            <div v-if="!error" class="error">{{error}}Content</div>
-            <div v-if="!message" class="message">{{message}}Content</div>
+            <div v-if="!error" class="error">{{error}}</div>
+            <div v-if="!message" class="message">{{message}}</div>
         </div>
     </div>
 </template>
