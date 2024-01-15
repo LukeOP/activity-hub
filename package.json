@@ -27,6 +27,7 @@
         "@fullcalendar/vue3": "^6.1.4",
         "moment": "^2.29.4",
         "pinia": "^2.0.33",
+        "tinycolor2": "^1.6.0",
         "vue-router": "^4.1.6"
     }
 }

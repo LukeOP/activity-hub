@@ -117,7 +117,7 @@ class StudentsController extends Controller
                 Student::create([
                     'first_name' => $record['First Name'],
                     'last_name' => $record['Last Name'],
-                    'tutor_group' => $record['tTutor'] ?? null,
+                    'tutor_group' => $record['Tutor'] ?? null,
                     'year_level' => $record['Year'] ?? null,
                     'date_of_birth' => $record['Date Of Birth'] ?? null,
                     'gender' => $record['Gender'] ?? null,

@@ -1,4 +1,5 @@
 import MainLayout from '../../components/Layouts/MainLayout/MainLayout.vue'
+import NotFoundRestricted from '../../components/Restricted/NotFoundRestricted.vue'
 
 import lessonsRoutes from '../../components/Restricted/Lessons/LessonsRoutes';
 import eventsRoutes from '../../components/Restricted/Events/EventRoutes';
@@ -27,6 +28,7 @@ const authRoutes = [
       ...studentsRoutes,
       ...instrumentRoutes,
       ...settingsRoutes,
+      {path: '*', name: 'NotFoundRestricted', component: NotFoundRestricted, meta: {title: '404 Not Found'}}
     ], 
     props: true,
     beforeEnter: (to, from, next) => {

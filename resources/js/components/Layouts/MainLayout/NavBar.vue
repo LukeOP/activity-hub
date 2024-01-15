@@ -278,7 +278,7 @@ function handleSchools(){
   width: 250px;
   height: 100%;
   background-color: #fff;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  // box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
 /* Menu visible state */
