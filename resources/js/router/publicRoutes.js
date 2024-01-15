@@ -1,6 +1,5 @@
 import Home from '../components/Public/Home.vue';
 import NotFound from '../components/Public/NotFound.vue'
-import MainLayout from '../components/Layouts/PublicLayout/MainLayout.vue'
 import Login from '../components/Public/AuthenticateUser/LoginUser.vue';
 import RecoverAccount from '../components/Public/AuthenticateUser/RecoverAccount.vue';
 import SetPassword from '../components/Public/AuthenticateUser/SetPassword.vue';
