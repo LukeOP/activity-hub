@@ -6,8 +6,12 @@ use App\Http\Resources\StaffResource;
 use App\Http\Resources\UserPermissionsResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class UsersController extends Controller
 {
@@ -70,6 +74,42 @@ class UsersController extends Controller
             ->orWhere('last_name', 'LIKE', '%' . $search . '%')
             ->get(['first_name', 'last_name', 'id', 'email', 'image',]);
         return $users;
+    }
+
+    // Sends forgot password link to users
+    public function forgotPassword(Request $request) {
+        $request->validate(['email' => 'required|email']);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        // return $status;
+        return $status === Password::RESET_LINK_SENT
+        ? 'success' : 'error';
+    }
+    public function resetPassword(Request $request){
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function (User $user, string $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+        
+        return $status === Password::PASSWORD_RESET 
+        ? 'success' : 'error';
     }
 
     /**
