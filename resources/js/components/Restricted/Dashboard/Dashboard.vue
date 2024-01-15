@@ -3,6 +3,7 @@
     <NewUserSetUp v-if="!hasSchools" />
     <div class="col col-12 col-xl-6">
       <LessonList />
+      <button @click="sendTestEmail">Test Emails</button>
     </div>
     
 
@@ -15,6 +16,7 @@ import { useActionsStore } from '../../../stores/actions'
 import { useUserStore } from '../../../stores/user';
 import NewUserSetUp from './NewUserSetUp.vue';
 import LessonList from './LessonList.vue';
+import axiosClient from '/resources/js/axios';
 
 const user = useUserStore()
 const actions = useActionsStore()
@@ -47,6 +49,12 @@ onMounted(()=>{
   },500)
   
 })
+
+function sendTestEmail(){
+  axiosClient.post('email-test').then(res => {
+    console.log(res.data)
+  })
+}
 
 
 </script>

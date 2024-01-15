@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CalendarEventController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EventJobController;
 use App\Http\Controllers\EventSchoolJobController;
 use App\Http\Controllers\EventsController;
@@ -41,6 +42,12 @@ Route::get('token-user/{localToken}', [UsersController::class, 'getUserOfToken']
 Route::get('lesson-request-form/{form_id}', [LessonRequestsController::class, 'getFormById']);
 Route::post('lesson-request-form/create-public-request', [LessonRequestsController::class, 'createFromPublicForm']);
 Route::get('user-subjects-available/{school_id}', [UserSubjectsController::class, 'getAvailableTutorsAndSubjects']);
+Route::post('user-forgot-password', [UsersController::class, 'forgotPassword']);
+Route::post('user-reset-password', [UsersController::class, 'resetPassword']);
+
+// Emails
+Route::post('email-lesson-request-received/{form_title}', [EmailController::class, 'newLessonRequestReceived']);
+
 
 
 
@@ -131,4 +138,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // TASKS
     Route::resource('/tasks', TasksController::class);
+
+    // EMAILS
+    Route::post('email-test', [EmailController::class, 'test']);
 });

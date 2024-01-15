@@ -152,7 +152,6 @@ function resetForm(){
 const { data: form, fetchData: fetchFormData } = useApi('lesson-request-form/' + route.params.id)
 fetchFormData().then(()=>{
   formData.value.school_id = form.value.school.id
-  console.log(formData.value)
   // Fetch school staff from database and add to store
   const { data: staff, fetchData: fetchStaff } = useApi('user-subjects-available/' + form.value.school.id)
   fetchStaff().then(() => {
@@ -190,7 +189,13 @@ const tutorArray = computed(() => {
 
 function submitForm(){
   axiosClient.post('lesson-request-form/create-public-request', formData.value).then(res => {
-    submitted.value = true
+    axiosClient.post('email-lesson-request-received').then(res => {
+      if(res.data.response === "success"){
+        submitted.value = true
+      } else {
+        console.log(res.data.response.message);
+      }
+    })
   })
 }
 
