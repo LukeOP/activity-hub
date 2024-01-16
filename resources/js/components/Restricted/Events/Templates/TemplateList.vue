@@ -22,7 +22,7 @@
 
           <div class="mt-3" v-if="formData.templates">
               <h2 class="mb-3 mt-4">Existing Templates:
-                <button v-if="user.hasPermission('EVENTS_TEMP_C', formData.school)" class="btn btn-outline-secondary float-end" @click="createTemplate()">Create New Template</button>
+                <button v-if="user.hasPermission('EVENTS_TEMP_C', formData.school)" class="btn btn-outline-secondary float-end hiddenOnMobile" @click="createTemplate()">Create New Template</button>
               </h2>
               <div id="template-container">
                 <div v-for="template in formData.templates" :key="template">
@@ -32,7 +32,7 @@
                 </div>
                 <div v-if="formData.templates.length < 1" id="no-template">No event templates have been created</div>
               </div>
-            <p v-if="windowSize.width < 1030">Templates cannot be created or edited on a mobile device.</p>
+            <p v-if="windowSize.width < 1030" class="warning">Templates cannot be created or edited on a mobile device.</p>
           </div>
           
         </section>
@@ -48,7 +48,7 @@
                 <p>{{ formData.selected_Template.notes }}</p>
                 <!-- <pre>{{ formData.selected_Template }}</pre> -->
               </div>
-              <button class="btn btn-primary" @click="routeChange('TemplateDetails')">Manage Template</button>
+              <button class="btn btn-primary hiddenOnMobile" @click="routeChange('TemplateDetails')">Manage Template</button>
             </div>
             <div v-else class="text-center text-grey w-100" style="text-align: center; transform: translateY(45%);">
               <p>No Template Selected</p>
@@ -170,6 +170,22 @@ h3 {
   padding: 10px;
   border-radius: 0.375rem;
   min-height: 250px;
+}
+.hiddenOnMobile {
+  visibility: visible;
+}
+.warning {
+  color: $ah-red;
+  background-color: lighten($ah-red-background, 5%);
+  border: 1px dashed $ah-red;
+  padding: 10px;
+  border-radius: 0.375rem;
+}
+
+@media (max-width: 768px){
+  .hiddenOnMobile {
+    visibility: hidden;
+  }
 }
 
 </style>
