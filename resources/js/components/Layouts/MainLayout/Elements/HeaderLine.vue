@@ -83,6 +83,10 @@ const { mobileFormat } = useWindowSize()
   display:flex;
 }
 @media (max-width: 768px){
+#school {
+  display: block;
+  width: 100%;
+}
   #header {
     text-align: center;
   }
@@ -91,14 +95,16 @@ const { mobileFormat } = useWindowSize()
     font-size: 1.5rem;
   }
   #below-line {
-    justify-content: center;
+    display: block;
     #buttons {
       width: 100%;
-      display: flex;
-
       button {
-        margin-top: 0.5rem;
-        flex-grow: 1;
+        display: block;
+        width: 100%;
+        border-radius: 0.375rem;
+        &:first-of-type {
+          margin-top: 0.5rem;
+        }
       }
     }
   }

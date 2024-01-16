@@ -42,5 +42,13 @@ fetchInstruments().then(()=> {
         }
     }
 }
+@media (max-width: 768px){
+    #tile-list {
+        display: none;
+        .tile {
+            margin-right: 0;
+        }
+    }
+}
 
 </style>

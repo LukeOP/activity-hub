@@ -1,8 +1,8 @@
 <template>
+  <div id="logo-img">
+    <ActivityHubIconSVG />
+  </div>
   <div class="menus">
-    <div id="logo-img">
-      <ActivityHubIconSVG />
-    </div>
     <top-bar />
     <profile-menu />
     <nav-bar @setState="stateControl" :state="currentState" />
@@ -37,17 +37,22 @@ function stateControl(state){
   width: 100vw;
   z-index: 100;
   margin-bottom: 1rem;
-  // background: white;
-  #logo-img {
-    position: absolute;
-    height: 60px;
-    left: 20px;
-    top: 10px;
-  }
+  // background: rgb(83, 34, 34);
+}
+#logo-img {
+  position: absolute;
+  max-width: 60px;
+  height: 60px;
+  left: 10px;
+  top: 5px;
+  visibility: hidden;
 }
 @media (max-width: 768px) {
   .menus {
-    height: 70px;
+    height: 60px;
+  }
+  #logo-img {
+    visibility: visible;
   }
 }
 </style>

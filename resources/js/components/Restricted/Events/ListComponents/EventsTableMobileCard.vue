@@ -2,7 +2,7 @@
   <div class="row" :class="{active: active}" @click="active = !active">
     <div class="col col-10">
       <p>{{event.attributes.name}}</p>
-      <p>{{event.attributes.state.description}}</p>
+      <p>{{event.attributes.description}}</p>
     </div>
     <div class="col col-2">
       <i class="fa-solid fa-magnifying-glass ms-2" :class="{active: active}" @click="EventDetails"></i>
