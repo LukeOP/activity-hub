@@ -1,7 +1,8 @@
 <template>
   <div class="text-center">
     <h2>Enter Invite Code</h2>
-    <p>This will be provided by the school.</p>
+    <p>This will be provided by the school.<br>
+    If you have not received one and are expecting to, please contact the school administrator.</p>
     <form @submit.prevent="checkCode">
       <input
         v-for="(field, index) in fields"
