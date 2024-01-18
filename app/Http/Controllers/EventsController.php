@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\EventsResource;
 use App\Models\Event;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EventsController extends Controller
 {
@@ -13,7 +15,32 @@ class EventsController extends Controller
      */
     public function index()
     {
-        return EventsResource::collection(Event::all());
+        // Get User's List of associated-schools and create an array of school ids
+        $user = Auth::user();
+        $userSchools = $user->schools;
+        $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
+        $lessonCollection = new Collection();
+
+        // For each user-associated school check if they have permission to view all lessons 
+        // If they do or they are an administrator - get all student lessons for that school
+        // Else just get the lessons assigned to the tutor
+        foreach ($userSchools as $school) {
+            $hasPermission = $user->hasPermissionForSchool($school->id, 'EVENTS_V');
+
+            if ($hasPermission || in_array($school->id, $userAdmin)) {
+                $eventsAtSchool = EventsResource::collection(Event::where('school_id', $school->id)->get());
+            } 
+            // else {
+            //     $eventsAtSchool = EventsResource::collection(Event::where('user_id', $user->id)->get());
+            // }
+            $lessonCollection = $lessonCollection->concat($eventsAtSchool);
+        }
+
+        // return compiled list of lessons the user has access to
+        return $lessonCollection;
+
+
+        // return EventsResource::collection(Event::all());
     }
 
     /**
