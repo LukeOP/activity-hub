@@ -35,7 +35,7 @@ export const useUserStore = defineStore('user', {
       this.setPermissions(res.data.data.user.permissions)
     },
     setUser(user){
-      this.attributes.id = user.id
+      this.id = user.id
       this.attributes.first_name = user.first_name
       this.attributes.last_name = user.last_name
       this.attributes.image = user.image

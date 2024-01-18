@@ -18,7 +18,7 @@ Route::get('/', function () {
     return view('app');
 });
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 
 Route::get('/{any}', function () {

@@ -1,20 +1,15 @@
 <template>
-    <div style="width: 100%;">
-        <div id="loginContainer">
-            <img id="logo-img" src="/images/ActivityHub_Logo_Main.png" alt="Activity Hub Logo">
-            <h2>Recover Your Account</h2>
-            <p>Set a new password for your account.</p>
-            <form @submit.prevent="resetPassword" >
-                <div>{{ formData.email }}</div>
-            <input type="password" class="form-control my-2" v-model="formData.password" placeholder="new password" required>
-            <input type="password" class="form-control my-2" v-model="formData.password_confirmation" placeholder="confirm password" required>
-            <p v-show="passwordTooShort">Password must be at least 8 characters.</p>
-            <button :disabled="!passwordsMatch || processing" class="btn btn-primary my-3 form-control">Reset Password</button>
-            </form>
-            <div v-if="!error" class="error">{{error}}</div>
-            <div v-if="!message" class="message">{{message}}</div>
-        </div>
-    </div>
+  <h2>Recover Your Account</h2>
+  <p>Set a new password for your account.</p>
+  <form @submit.prevent="resetPassword" >
+      <div>{{ formData.email }}</div>
+  <input type="password" class="form-control my-2" v-model="formData.password" placeholder="new password" required>
+  <input type="password" class="form-control my-2" v-model="formData.password_confirmation" placeholder="confirm password" required>
+  <p v-show="passwordTooShort">Password must be at least 8 characters.</p>
+  <button :disabled="!passwordsMatch || processing" class="btn btn-primary my-3 form-control">Reset Password</button>
+  </form>
+  <div v-if="error" class="error">{{error}}</div>
+  <div v-if="message" class="message">{{message}}</div>
 </template>
 
 <script setup>
@@ -61,38 +56,21 @@ function resetPassword(){
 h2 {
   font-size: 1.35rem;
 }
-#loginContainer {
-  position: relative;
-  max-width: 500px;
-  padding: 10px;
-  border-radius: 10px;
-  text-align: center;
-  margin: 3rem 0;
-
-  #logo-img {
-    position: relative;
-    width: 100%;
-    max-width: 250px;
-    margin: 0 auto;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-  }
-  .error {
-    max-width: 300px;
-    color: rgb(166, 0, 0);
-    background: rgba(166, 0, 0, 0.1);
-    border: 1px solid rgb(166, 0, 0);
-    padding: 5px;
-    margin: 1rem auto;
-  }
-  .message {
-    max-width: 300px;
-    color: $ah-primary;
-    background: $ah-primary-background;
-    border: 1px solid $ah-primary;
-    padding: 5px;
-    margin: 1rem auto;
-  }
+.error {
+  max-width: 300px;
+  color: rgb(166, 0, 0);
+  background: rgba(166, 0, 0, 0.1);
+  border: 1px solid rgb(166, 0, 0);
+  padding: 5px;
+  margin: 1rem auto;
+}
+.message {
+  max-width: 300px;
+  color: $ah-primary;
+  background: $ah-primary-background;
+  border: 1px solid $ah-primary;
+  padding: 5px;
+  margin: 1rem auto;
 }
 form {
   max-width: 300px;

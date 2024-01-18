@@ -1,5 +1,5 @@
 <template>
-    <div class="tile user-element">
+    <div class="tile user-element" @click="newRoute(link)">
         <div class="image">
             <TileIconSVG :status="icon" :icon="icon" :color="color" />
         </div>
@@ -11,14 +11,26 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
 import TileIconSVG from '/resources/js/components/Layouts/MainLayout/Elements/SVG/TileIconSVG.vue';
+
+const router = useRouter()
 
 const props = defineProps({
     icon: String, 
     color: String,
     boldText: String, 
     subText: String, 
-    type: String})
+    type: String,
+    link: String
+})
+
+function newRoute(routeName){
+    console.log('click');
+    router.push({
+        name: routeName
+    })
+}
 
 
 </script>

@@ -1,7 +1,4 @@
 <template>
-  <div style="width: 100%;">
-    <div id="loginContainer" class="my-5">
-      <img id="logo-img" src="/images/ActivityHub_Logo_Main.png" alt="Activity Hub Logo">
       <h2>Recover Your Account</h2>
       <p>Provide your account email to reset your password.</p>
       <form @submit.prevent="sendRecoveryInfo" >
@@ -11,8 +8,6 @@
       </form>
       <div v-if="error" class="error">{{error}}</div>
       <div v-if="response != ''" class="response">{{ response }}</div>
-    </div>
-  </div>
 </template>
 
 <script setup>
@@ -47,39 +42,25 @@ function returnToLoginPage(){
 h2 {
   font-size: 1.35rem;
 }
-#loginContainer {
-  position: relative;
-  max-width: 500px;
-  padding: 10px;
-  border-radius: 10px;
-  text-align: center;
-
-  #logo-img {
-    width: 100%;
-    max-width: 250px;
-    margin: 0 auto;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-  }
-  form {
-    max-width: 300px;
-    margin: 0 auto;
-  }
-  .error {
-    max-width: 300px;
-    color: rgb(166, 0, 0);
-    background: rgba(166, 0, 0, 0.1);
-    border: 1px solid rgb(166, 0, 0);
-    padding: 5px;
-    margin: 1rem auto;
-  }
-  .response {
-    max-width: 300px;
-    color: $ah-primary;
-    background: $ah-primary-background;
-    border: 1px solid $ah-primary;
-    padding: 5px;
-    margin: 1rem auto;
-  }
+form {
+  max-width: 300px;
+  margin: 0 auto;
 }
+.error {
+  max-width: 300px;
+  color: rgb(166, 0, 0);
+  background: rgba(166, 0, 0, 0.1);
+  border: 1px solid rgb(166, 0, 0);
+  padding: 5px;
+  margin: 1rem auto;
+}
+.response {
+  max-width: 300px;
+  color: $ah-primary;
+  background: $ah-primary-background;
+  border: 1px solid $ah-primary;
+  padding: 5px;
+  margin: 1rem auto;
+}
+
 </style>
