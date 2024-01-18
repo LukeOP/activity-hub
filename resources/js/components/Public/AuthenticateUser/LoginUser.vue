@@ -70,7 +70,7 @@ function loginUser(){
 }
 
 function sendVerificationEmail(){
-  axiosClient.post('user-email-verify', verification_email.value ).then(res => {
+  axiosClient.post('user-email-verify', {email: verification_email.value} ).then(res => {
     verification.value = false
     error.value = 'Please check your email shortly for a verification link.'
   })
