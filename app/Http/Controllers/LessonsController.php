@@ -21,7 +21,7 @@ class LessonsController extends Controller
     public function index()
     {
         // Get User's List of associated-schools and create an array of school ids
-        $user = Auth::user();
+        $user = User::where('id', Auth::user()->id)->first();
         $userSchools = $user->schools;
         $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
         $lessonCollection = new Collection();

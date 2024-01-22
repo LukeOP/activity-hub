@@ -56,7 +56,7 @@ const filter = useFilterStore()
 const { data: states, fetchData: fetchStates } = useApi('instrument-states')
 fetchStates()
 
-const schools = ref(user.permissions.filter(p => (p.type === 'administrator' || p.type === 'INSTRUMENTS_C')))
+const schools = ref(user.permissions.filter(p => (p.type === 'Administrator' || p.type === 'INSTRUMENTS_C')))
 
 const instrumentStore = useInstrumentStore()
 

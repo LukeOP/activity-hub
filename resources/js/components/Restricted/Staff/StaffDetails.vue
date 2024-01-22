@@ -51,6 +51,7 @@ import { useActionsStore } from "@/stores/actions";
 
 const staffStore = useStaffStore()
 const staff = staffStore.getStaff
+console.log(staff);
 const schoolStore = useSchoolStore()
 const currentSchool = schoolStore.getSchool
 const modal = useModalStore()

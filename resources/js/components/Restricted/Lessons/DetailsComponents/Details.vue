@@ -1,70 +1,98 @@
 <template>
-  <div id="lesson-details" class="section row">
-    <h2 class="heading2">Lesson Details:</h2>
-    <div class="col col-12 col-sm-6 col-md-3">
-      <AttendanceSnapshot :lesson="lesson" @click="handleAttendanceClick" />
-    </div>
-    <div class="col col-12 col-sm-6 col-md-3">
-      <div><h3>Status:</h3>
-        <span :class="lesson.attributes.status.toLowerCase()">{{lesson.attributes.status}}</span>
+  <span>
+    <div id="lesson-details" class="section row" >
+      <h2 class="heading2">Lesson Details:</h2>
+      <div class="col col-12 col-sm-6 col-md-3">
+        <AttendanceSnapshot :lesson="lessonStore.getLessonData" @click="handleAttendanceClick" />
       </div>
-      <div><h3>Tutor:</h3>
-      {{lesson.tutor.full_name}}</div>
-    </div>
-    <div class="col col-12 col-sm-6 col-md-3">
-      <div>
-        <h3>Lesson Day:</h3>
-        <span v-if="lesson.attributes.day != 'Not Set'">{{lesson.attributes.day}}</span>
+      <div class="col col-12 col-sm-6 col-md-3">
+        <div><h3>Status:</h3>
+          <span :class="lessonStore.getLessonData.attributes.status.toLowerCase()">{{lessonStore.getLessonData.attributes.status}}</span>
+        </div>
+        <div><h3>Tutor:</h3>
+        {{lessonStore.getLessonData.tutor.full_name}}</div>
       </div>
-      <div><h3>Lesson Time:</h3>
-        <span v-if="lesson.attributes.start != null">
-          {{convertTime(lesson.attributes.start)}}
-          <span v-if="lesson.attributes.end"> - {{convertTime(lesson.attributes.end)}}</span>
+      <div class="col col-12 col-sm-6 col-md-3">
+        <div>
+          <h3>Lesson Day:</h3>
+          <span v-if="lessonStore.getLessonData.attributes.day != 'Not Set'">{{lessonStore.getLessonData.attributes.day}}</span>
+        </div>
+        <div><h3>Lesson Time:</h3>
+          <span v-if="lessonStore.getLessonData.attributes.start != null">
+            {{convertTime(lessonStore.getLessonData.attributes.start)}}
+            <span v-if="lessonStore.getLessonData.attributes.end"> - {{convertTime(lessonStore.getLessonData.attributes.end)}}</span>
+          </span>
+        </div>
+      </div>
+      <div class="col col-12 col-sm-6 col-md-3">
+        <div v-if="lessonStore.getLessonData.attributes.funding_type"><h3>Funding:</h3>
+        {{lessonStore.getLessonData.attributes.funding_type}}</div>
+        <div><h3>Start Date:</h3>
+        {{convertDate(lessonStore.getLessonData.attributes.startDate)}}</div>
+        <div v-if="lessonStore.getLessonData.attributes.endDate"><h3>End Date:</h3>
+        {{convertDate(lessonStore.getLessonData.attributes.endDate)}}</div>
+      </div>
+      <div class="col col-12 col-sm-6 col-md-3" v-if="lessonStore.getLessonData.location">
+        <span><h3>Location:</h3>
+        {{lessonStore.getLessonData.location.room_name}}</span>
+      </div>
+    </div>
+
+    <div class="checklist" v-if="lessonStore.getLessonData.attributes.status === 'Pending'">
+      <div class="heading" >Complete Lesson Setup</div>
+      <div v-for="option in setupOptions" :key="option.text" class="setup-option" @click="modal.open('EditLesson')">
+        <span class="icon">
+          <StatusIconSVG :status="option.status === 'pending' ? 'pending' : 'complete'" />
         </span>
+        {{ option.text }}
       </div>
+      <button class="btn btn-green w-100" style="border-radius: 0 0 0.375rem 0.375rem;" @click="markActive()" :disabled="isSetupPending">Mark as Active</button>
     </div>
-    <div class="col col-12 col-sm-6 col-md-3">
-      <div><h3>Funding:</h3>
-      {{lesson.attributes.funding_type}}</div>
-      <div><h3>Start Date:</h3>
-      {{convertDate(lesson.attributes.startDate)}}</div>
-      <div v-if="lesson.attributes.endDate"><h3>End Date:</h3>
-      {{convertDate(lesson.attributes.endDate)}}</div>
-    </div>
-    <div class="col col-12 col-sm-6 col-md-3" v-if="lesson.location">
-      <span><h3>Location:</h3>
-      {{lesson.location.room_name}}</span>
-    </div>
-  </div>
+
+  </span>
+
 </template>
 
-<script>
+<script setup>
 import moment from 'moment'
 import AttendanceSnapshot from '../Attendance/Components/AttendanceSnapshot.vue'
 import { useRouter } from 'vue-router';
+import StatusIconSVG from '/resources/js/components/Layouts/MainLayout/Elements/SVG/StatusIconSVG.vue';
+import { useModalStore } from '/resources/js/stores/modal';
+import axiosClient from '/resources/js/axios';
+import { computed, ref } from 'vue';
+import { useLessonsStore } from '/resources/js/stores/lessons';
+import { useToastStore } from '/resources/js/stores/toast';
 
-export default {
-    props: {
-        lesson: Object
-    },
-    setup() {
-      const router = useRouter()
-        function convertTime(time) {
-            return moment(time, 'HH:mm:ss').format('h:mm A');
-        }
-        function convertDate(date) {
-            return moment(date).format('LL') != 'Invalid date' ? moment(date).format('LL') : 'Not set';
-        }
-        function handleAttendanceClick(){
-          router.push({name: 'LessonAttendanceSingle'})
-        }
-        return {
-            convertTime,
-            convertDate,
-            handleAttendanceClick,
-        };
-    },
-    components: { AttendanceSnapshot }
+const modal = useModalStore()
+const toast = useToastStore()
+const lessonStore = useLessonsStore()
+const router = useRouter()
+
+const setupOptions = computed(() => [
+  { text: 'Set Lesson Day', status: lessonStore.getLessonData.attributes.day == null ? 'pending' : 'complete' },
+  { text: 'Set Lesson Time', status: lessonStore.getLessonData.attributes.start == null ? 'pending' : 'complete' },
+  { text: 'Set Start Date', status: lessonStore.getLessonData.attributes.startDate == null ? 'pending' : 'complete' },
+]);
+
+const isSetupPending = computed(() => {
+  const lessonData = lessonStore.getLessonData.attributes;
+  return lessonData.day == null || lessonData.start == null || lessonData.startDate == null;
+});
+
+
+function convertTime(time) {
+    return moment(time, 'HH:mm:ss').format('h:mm A');
+}
+function convertDate(date) {
+    return moment(date).format('LL') != 'Invalid date' ? moment(date).format('LL') : ' ';
+}
+function handleAttendanceClick(){
+  router.push({name: 'LessonAttendanceSingle'})
+}
+
+function markActive(){
+  modal.open('LessonConfirmActive')
 }
 </script>
 
@@ -83,6 +111,33 @@ h3 {
 .section {
   padding: 10px;
   border-bottom: 1px dashed $ah-primary;
+}
+.checklist {
+  position: fixed;
+  bottom: 50%;
+  right: 10px;
+  transform: translateY(50%);
+  width: 250px;
+  box-shadow: 0px 10px 20px $ah-grey;
+  background-color: white;
+  border-radius: 0.375rem;
+
+  .heading {
+    padding: 5px 10px; 
+    border-bottom: 1px solid grey;
+    font-size: 1.2rem;
+  }
+}
+.setup-option {
+  padding: 5px 10px;
+  &:hover {
+    background-color: $ah-primary-background;
+    cursor: pointer;
+  }
+}
+.icon {
+  display: inline-block;
+  width: 30px;
 }
 
 </style>

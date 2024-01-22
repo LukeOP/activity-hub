@@ -1,4 +1,5 @@
 <template>  
+<span>
   <section id="table-header-section">
     <table>
       <thead>
@@ -41,56 +42,42 @@
     <span>Pending: {{getNum('Pending')}}</span>
     <span>Waiting List: {{getNum('Waiting')}}</span>
   </div>
+</span>
   
 </template>
-<script>
+<script setup>
 import { useRouter } from 'vue-router'
 import moment from 'moment'
 import { useUserStore } from '../../../../stores/user'
 import { useLessonsStore } from '../../../../stores/lessons'
 import useSorter from '../../../../composables/useSorter'
 
-export default {
-  props: {
-    lessons: Array
-  },
-  setup(props){
-    const router = useRouter()
-    const sorter = useSorter()
-    const lessonStore = useLessonsStore()
-    const user = useUserStore()
+const props = defineProps({lessons: Array})
 
-    function handleLessonClick(lesson){
-      lessonStore.setLesson(lesson)
-      router.push({
-        name: 'LessonDetails'
-      })
-    }
+const router = useRouter()
+const sorter = useSorter()
+const lessonStore = useLessonsStore()
+const user = useUserStore()
 
-    function formatTime(time){
-      let formatTime = moment(time, 'HH:mm:ss').format('h:mm A')
-      return formatTime != 'Invalid date' ? formatTime : '-'
-    }
+function handleLessonClick(lesson){
+  lessonStore.setLesson(lesson)
+  router.push({ name: 'LessonDetails'})
+}
 
-    function getNum(type){
-      if(type != 'total'){
-        return props.lessons.filter(l => l.attributes.status == type).length
-      }
-      return props.lessons.length
-    }
+function formatTime(time){
+  let formatTime = moment(time, 'HH:mm:ss').format('h:mm A')
+  return formatTime != 'Invalid date' ? formatTime : '-'
+}
 
-    function sortData(field){
-      sorter.sort(props.lessons, field)
-    }
-
-    return {
-      user,
-      handleLessonClick,
-      formatTime,
-      getNum,
-      sortData
-    }
+function getNum(type){
+  if(type != 'total'){
+    return props.lessons.filter(l => l.attributes.status == type).length
   }
+  return props.lessons.length
+}
+
+function sortData(field){
+  sorter.sort(props.lessons, field)
 }
 </script>
 

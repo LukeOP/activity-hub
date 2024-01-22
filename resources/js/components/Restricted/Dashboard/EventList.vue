@@ -5,7 +5,7 @@
 
   <section style="overflow-y:auto">
     <table>
-      <tbody>
+      <tbody v-if="events">
         <tr v-for="event in events" :key="event.id">
           <td>{{ event.attributes.name }}</td>
           <td>{{event.attributes.date}}</td>
@@ -20,13 +20,20 @@
 import useApi from '/resources/js/composables/useApi';
 import UserElementHeader from '../../Layouts/MainLayout/Elements/UserElementHeader.vue';
 import { useEventStore } from '/resources/js/stores/events';
+import useSorter from '/resources/js/composables/useSorter';
+import { computed } from 'vue';
 
 // Initiate Stores
 const eventStore = useEventStore()
 
+//Initiate Composables
+const sorter = useSorter()
+
+
 // Fetch Lesson Data
 const { data: events, loading, fetchData: fetchLessons } = useApi('events')
 fetchLessons().then(()=> {
+  sorter.sort(events.value, 'id', 'desc')
   eventStore.setEvents(events.value)
 })
 

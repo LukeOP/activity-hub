@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\EventsResource;
 use App\Models\Event;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class EventsController extends Controller
     public function index()
     {
         // Get User's List of associated-schools and create an array of school ids
-        $user = Auth::user();
+        $user = User::where('id', Auth::user()->id)->first();
         $userSchools = $user->schools;
         $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
         $lessonCollection = new Collection();
@@ -38,9 +39,6 @@ class EventsController extends Controller
 
         // return compiled list of lessons the user has access to
         return $lessonCollection;
-
-
-        // return EventsResource::collection(Event::all());
     }
 
     /**

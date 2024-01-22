@@ -64,7 +64,7 @@ async function handleJoin(school){
     
     if(error === 0){
     // Assign user a basic permission at the newly assigned school
-    await axiosClient.post('user-permissions', {user_id: user.attributes.id, school_id: school.id, permission_type: 'administrator'})
+    await axiosClient.post('user-permissions', {user_id: user.attributes.id, school_id: school.id, permission_type: 'Administrator'})
         .then(response => {
         // Do something with the response, if needed
         // console.log('user permission success')
@@ -78,8 +78,7 @@ async function handleJoin(school){
     if(error === 0){
         schoolStore.setSchool(school)
         user.resetUserWithToken()
-        modal.close()
-        // modal.open('InviteCodeSuccessOnBoarding')
+        modal.open('NewSchoolSuccess')
     }
 }
 

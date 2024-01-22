@@ -143,4 +143,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // EMAILS
     Route::post('email-test', [EmailController::class, 'test']);
+    Route::post('user-linked-to-school', [EmailController::class, 'UserLinkedToSchool']);
 });

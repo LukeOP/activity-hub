@@ -76,7 +76,8 @@ function formatTime(date){
 
 const dayLessons = computed(() => {
   return lessonStore.getLessonsData.filter(l => 
-    l.attributes.day === moment(selectedDate.value).format('dddd') 
+    l.attributes.status === 'Active'
+    && l.attributes.day === moment(selectedDate.value).format('dddd') 
     && l.attributes.startDate <= moment(selectedDate.value).format('YYYY-MM-DD')
     && (l.attributes.endDate == null || l.attributes.endDate > moment(selectedDate.value).format('YYYY-MM-DD'))
   )
