@@ -2,7 +2,7 @@
   <div>
     <h3>School Permissions:</h3>
     <h4>Administrator:
-      <i :style="{ cursor: 'pointer' }" :class="getPermissionIconClass('administrator', 'administrator')" @click="toggleAdministrator()" />
+      <i :style="{ cursor: 'pointer' }" :class="getPermissionIconClass('Administrator', 'Administrator')" @click="toggleAdministrator()" />
     </h4>
     <table v-if="!mobileDevice">
       <thead>
@@ -15,7 +15,7 @@
           <th>Delete</th>
         </tr>
       </thead>
-      <tbody :class="{disabled: !user.hasPermission('STAFF_E', school.id) && !user.hasPermission('administrator', school.id)}">
+      <tbody :class="{disabled: !user.hasPermission('STAFF_E', school.id) && !user.hasPermission('Administrator', school.id)}">
         <tr v-for="permission in permissionsArray" :key="permission.access">
           <td>{{ permission.access }}</td>
           <td v-for="action in permission.actions" :key="action" :style="{ width: '15%' }">
@@ -56,7 +56,7 @@ const mobileDevice = computed(() => {
 })
 
 // Set whether staff member is an administrator or not
-const administrator = staff.permissions.some(p => p.type === 'administrator')
+const administrator = staff.permissions.some(p => p.type === 'Administrator')
 
 // Check if staff has permission already in staff permissions
 function StaffHasPermission(value) {
@@ -81,7 +81,7 @@ const permissionsArray = [
 
 // Display the correct icon for the permission access
 function getPermissionIconClass(permission, action) {
-  if(permission == 'administrator'){
+  if(permission == 'Administrator'){
     const hasPerm = StaffHasPermission(action);
     return `${hasPerm ? "fa-solid fa-circle-check" : "fa-regular fa-circle-xmark"}`;
   }
@@ -108,13 +108,13 @@ function togglePermission(action) {
 
 // Toggle whether a staff member is an administrator or not
 function toggleAdministrator(){
-  if(user.hasPermission('administrator', school.id) && (user.attributes.id != staff.id)) {
-    if(StaffHasPermission('administrator')) {
-      let permission = staff.permissions.find(p => p.type === 'administrator')
+  if(user.hasPermission('Administrator', school.id) && (user.attributes.id != staff.id)) {
+    if(StaffHasPermission('Administrator')) {
+      let permission = staff.permissions.find(p => p.type === 'Administrator')
       staffStore.removePermission(permission.id)
     }
     else {
-      staffStore.setPermission(staff.id, school.id, 'administrator')
+      staffStore.setPermission(staff.id, school.id, 'Administrator')
     }
   }
 }

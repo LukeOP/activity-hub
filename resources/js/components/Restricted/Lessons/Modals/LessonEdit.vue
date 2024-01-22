@@ -132,7 +132,7 @@ const fundingTypes = [
 ]
 
 const isAdmin = computed(() => {
-  if(user.permissions.find(p => p.school_id === currentLesson.school.id && p.type === 'administrator')) {
+  if(user.permissions.find(p => p.school_id === currentLesson.school.id && p.type === 'dministrator')) {
     return true
     } 
   // return false

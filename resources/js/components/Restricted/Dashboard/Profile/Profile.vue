@@ -46,7 +46,7 @@ function getFirstLetter(string){
 }
 
 function isAdmin(school){
-  if(user.permissions.find(p => p.school_id == school.id && p.type === 'administrator')) {
+  if(user.permissions.find(p => p.school_id == school.id && p.type === 'Administrator')) {
     return 'Admin'
     } 
   return null

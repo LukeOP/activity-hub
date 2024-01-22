@@ -44,7 +44,7 @@ const sorter = useSorter()
 const router = useRouter()
 
 function isAdmin(member){
-  return member.permissions.find(m => m.type === 'administrator') ? 'Yes' : ''
+  return member.permissions.find(m => m.type === 'Administrator') ? 'Yes' : ''
 }
 
 function sortData(field){

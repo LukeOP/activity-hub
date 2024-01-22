@@ -91,7 +91,7 @@ function setNavItems(){
 }
 
 function hasPermission(value){
-  if(user.permissions.find(p => p.type === 'administrator')) return true
+  if(user.permissions.find(p => p.type === 'Administrator')) return true
   return user.permissions.find(p => p.type === value)
 }
 setNavItems()

@@ -78,7 +78,7 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->userPermissions()->where('permission_type', 'administrator');
+        return $this->userPermissions()->where('permission_type', 'Administrator');
     }
 
     public function userPermissions()
