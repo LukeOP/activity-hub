@@ -35,7 +35,7 @@ export const useUserStore = defineStore('user', {
       this.setPermissions(res.data.data.user.permissions)
     },
     setUser(user){
-      this.id = user.id
+      this.attributes.id = user.id
       this.attributes.first_name = user.first_name
       this.attributes.last_name = user.last_name
       this.attributes.image = user.image
@@ -67,13 +67,13 @@ export const useUserStore = defineStore('user', {
       this.resetStores()
     },
     hasPermission(permission, school){
-      if(this.permissions.find(p => ((p.type === permission || p.type === 'administrator') && p.school_id === school))){
+      if(this.permissions.find(p => ((p.type === permission || p.type === 'Administrator') && p.school_id === school))){
         return true
       }
       else return false
     },
     hasPermissionAny(permission){
-      if(this.permissions.find(p => (p.type === permission || p.type === 'administrator'))){
+      if(this.permissions.find(p => (p.type === permission || p.type === 'Administrator'))){
         return true
       }
       else return false

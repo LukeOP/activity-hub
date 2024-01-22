@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\StudentsResource;
 use App\Models\Student;
+use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,7 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
+        $user = User::where('id', Auth::user()->id)->first();
         $schoolIds = $user->schools->pluck('id')->toArray();
 
         return StudentsResource::collection(
@@ -98,7 +99,7 @@ class StudentsController extends Controller
                 // Handle validation failure, e.g., log errors or return a response
                 return response()->json(['error' => $validator->errors()], 422);
             }
-            $existingStudent = Student::where('identifier', $record['Student ID'])->first();
+            $existingStudent = Student::where('school_id', $school_id)->where('identifier', $record['Student ID'])->first();
 
             if ($existingStudent) {
                 // If the student already exists, update the record

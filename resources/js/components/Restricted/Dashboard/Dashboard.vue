@@ -6,12 +6,12 @@
   <InfoTiles />
   <div id="dashboard-tiles">
     <div class="tile-row">
-      <div class="mobile-full" style="flex: 66%;"><LessonList /></div>
-      <div class="mobile-full" style="flex: 34%;"><AttendanceTile /></div>
+      <div class="mobile-full" style="flex: 66%;" v-if="checkPermission('LESSONS')"><LessonList /></div>
+      <div class="mobile-full" style="flex: 34%;" v-if="checkPermission('ATTENDANCE')"><AttendanceTile /></div>
     </div>
     <div class="tile-row">
-      <div class="mobile-full" style="flex: 50%;"><EventList /></div>
-      <div class="mobile-full" style="flex: 50%;"><RoomsTile /></div>
+      <div class="mobile-full" style="flex: 50%;" v-if="checkPermission('EVENTS')"><EventList /></div>
+      <div class="mobile-full" style="flex: 50%;" v-if="checkPermission('ROOMS')"><RoomsTile /></div>
     </div>
   </div>
 </div>
@@ -19,8 +19,8 @@
 
 <script setup>
 import { onMounted, ref, watch } from 'vue';
-// import { useActionsStore } from '../../../stores/actions'
-// import { useUserStore } from '../../../stores/user';
+import { useActionsStore } from '../../../stores/actions'
+import { useUserStore } from '../../../stores/user';
 import NewUserSetUp from './NewUserSetUp.vue';
 import LessonList from './LessonList.vue';
 import AttendanceTile from './AttendanceTile.vue';
@@ -28,37 +28,42 @@ import EventList from './EventList.vue';
 import RoomsTile from './RoomsTile.vue';
 import InfoTiles from './InfoTiles/InfoTiles.vue';
 
-// const user = useUserStore()
-// const actions = useActionsStore()
+const user = useUserStore()
+const actions = useActionsStore()
 const hasSchools = ref(false)
 const ready = ref(false)
 
-// const actionArray = []
+const actionArray = []
 
-// function setActions(){
-//   if(user.attributes.schools.length > 0) {
-//     if(user.hasPermissionAny('LESSONS_C')){
-//       actionArray.push({ header: 'New Lesson', to: { name: 'LessonCreate' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'})
-//     }
-//     if(user.hasPermissionAny('ATTENDANCE_R') || user.hasPermissionAny('ATTENDANCE_V')){
-//       actionArray.push({ header: 'Lesson Attendance', to: { name: 'LessonAttendanceOverview' }, showSubItems: false, icon: 'fa-solid fa-user-check'})
-//     }
-//     hasSchools.value = true
-//   }
-//   actions.setItems(actionArray)
-//   ready.value = true
-// }
+function setActions(){
+  if(user.attributes.schools.length > 0) {
+    if(user.hasPermissionAny('LESSONS_C')){
+      actionArray.push({ header: 'New Lesson', to: { name: 'LessonCreate' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'})
+    }
+    if(user.hasPermissionAny('ATTENDANCE_R') || user.hasPermissionAny('ATTENDANCE_V')){
+      actionArray.push({ header: 'Lesson Attendance', to: { name: 'LessonAttendanceOverview' }, showSubItems: false, icon: 'fa-solid fa-user-check'})
+    }
+    hasSchools.value = true
+  }
+  actions.setItems(actionArray)
+  ready.value = true
+}
 
-// watch(() => user.attributes.schools, (newValue) => {
-//   setActions()
-// })
+function checkPermission(value){
+  if(user.hasPermissionAny(`${value}_R`) || user.hasPermissionAny(`${value}_V`)) return true
+  return false
+}
 
-// onMounted(()=>{
-//   setTimeout(()=>{
-//     setActions()
-//   },500)
+watch(() => user.attributes.schools, (newValue) => {
+  setActions()
+})
+
+onMounted(()=>{
+  setTimeout(()=>{
+    setActions()
+  },500)
   
-// })
+})
 
 
 </script>

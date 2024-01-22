@@ -32,7 +32,7 @@ function StaffDetails(){
 }
 
 function isAdmin(member){
-  return member.permissions.find(m => m.type === 'administrator') ? 'Admin' : ''
+  return member.permissions.find(m => m.type === 'Administrator') ? 'Admin' : ''
 }
 
 </script>

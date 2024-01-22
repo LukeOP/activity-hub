@@ -2,7 +2,8 @@
   <div class="text-center">
     <h2>Enter Invite Code</h2>
     <form @submit.prevent="checkCode">
-      <input
+      <input type="text" class="text-center form-control" v-model="code" :maxlength="6" required>
+      <!-- <input
         v-for="(field, index) in fields"
         :key="index"
         v-model="field.value"
@@ -11,13 +12,13 @@
         @input="handleInput(index)"
         ref="inputFields"
         required
-      />
+      /> -->
       <input type="submit" class="btn btn-secondary submit" value="Submit">
       <p class="text-center error">{{error}}</p>
     </form>
     <div v-if="result" class="result">
       <span>{{result.school.name}}</span>
-      <span class="btn btn-primary join" @click="handleJoin">Join Staff</span>
+      <button class="btn btn-primary join" @click="handleJoin" :disabled="isDisabled">Join Staff</button>
     </div>
   </div>
 </template>
@@ -44,7 +45,9 @@ const schoolStore = useSchoolStore()
 
   const inputFields = ref([])
   const error = ref('')
+  const code = ref('')
   const result = ref(null)
+  const isDisabled = ref(false)
 
     const handleInput = (currentIndex) => {
       if (fields[currentIndex].value.length === 1) {
@@ -65,8 +68,9 @@ const schoolStore = useSchoolStore()
     const checkCode = () => {
       error.value = ''
       result.value = null
-      let concatenatedValue = fields.map(field => field.value).join('');
-      axiosClient.get(`school-invitation/${concatenatedValue}`).then(res => {
+      // let concatenatedValue = fields.map(field => field.value).join('');
+      // axiosClient.get(`school-invitation/${concatenatedValue}`).then(res => {
+      axiosClient.get(`school-invitation/${code.value}`).then(res => {
         result.value = res.data
       }).catch(err => {
         error.value = 'Invalid Code'
@@ -74,6 +78,7 @@ const schoolStore = useSchoolStore()
     };
     
     async function handleJoin(){
+      isDisabled.value = true
       let error = 0
 
       // Link user with the school
@@ -82,7 +87,7 @@ const schoolStore = useSchoolStore()
           // Do something with the response, if needed
           // console.log('user school success')
         })
-        .catch(error => {
+        .catch(err => {
           // console.log(error.message)
           // console.log('user school error')
           error++
@@ -95,7 +100,7 @@ const schoolStore = useSchoolStore()
             // Do something with the response, if needed
             // console.log('user postion success')
           })
-          .catch(error => {
+          .catch(err => {
             // console.log(error.message)
             // console.log('user position error')
             error++
@@ -109,9 +114,20 @@ const schoolStore = useSchoolStore()
             // Do something with the response, if needed
             // console.log('user permission success')
           })
-          .catch(error => {
+          .catch(err => {
             // console.log(error.message)
             // console.log('user permission error')
+            error++
+          });
+      }
+      
+      if(error === 0){
+        // Let the administrator know the user has joined the school
+        await axiosClient.post('user-linked-to-school', {user_id: user.attributes.id, school_id: result.value.school.id, invitation: result.value})
+          .then(response => {
+          })
+          .catch(err => {
+            error++
           });
       }
 
@@ -122,9 +138,10 @@ const schoolStore = useSchoolStore()
             // Do something with the response, if needed
             // console.log('invitation delete success')
           })
-          .catch(error => {
+          .catch(err => {
             // console.log(error.message)
             // console.log('invitation delete error')
+            error++
           });
       }
       if(error === 0){

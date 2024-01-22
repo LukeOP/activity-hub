@@ -6,6 +6,9 @@ import CreateOrJoin from "./NewUser/CreateOrJoin.vue";
 import InviteCodeEntryOnBoarding from "./NewUser/InviteCodeEntryOnBoarding.vue";
 import InviteCodeSuccessOnBoarding from "./NewUser/InviteCodeSuccessOnBoarding.vue"
 
+import CreateSchool from './School/CreateSchool.vue'
+import NewSchoolSuccess from './School/NewSchoolSuccess.vue'
+
 
 const dashboardModals = {
 InviteCodeEntry,
@@ -14,7 +17,10 @@ InviteCodeSuccess,
 NewUserWelcome,
 CreateOrJoin,
 InviteCodeEntryOnBoarding,
-InviteCodeSuccessOnBoarding
+InviteCodeSuccessOnBoarding,
+
+CreateSchool,
+NewSchoolSuccess
 }
 
 export default dashboardModals;

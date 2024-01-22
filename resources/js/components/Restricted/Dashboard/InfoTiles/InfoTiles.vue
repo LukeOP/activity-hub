@@ -10,8 +10,10 @@
 import useApi from '/resources/js/composables/useApi';
 import SingleTile from './SingleTile.vue';
 import { ref } from 'vue';
+import { useUserStore } from '/resources/js/stores/user';
 
 const tileArray = ref([])
+const user = useUserStore()
 
 const { data: lessons, fetchData: fetchLessons } = useApi('lessons')
 fetchLessons().then(()=> {
@@ -21,11 +23,13 @@ fetchLessons().then(()=> {
 })
 
 const { data: instruments, fetchData: fetchInstruments } = useApi('instruments')
-fetchInstruments().then(()=> {
-    let hiredOut = instruments.value.filter(i => i.attributes.state.id == 2)
-    let info = {boldText: `${hiredOut.length}`, subText: 'Hired Instruments', icon: 'users', color: 'blue', link: 'HiresList'}
-    tileArray.value.push(info)
-})
+if(user.hasPermissionAny('HIRES_V')){
+    fetchInstruments().then(()=> {
+        let hiredOut = instruments.value.filter(i => i.attributes.state.id == 2)
+        let info = {boldText: `${hiredOut.length}`, subText: 'Hired Instruments', icon: 'users', color: 'blue', link: 'HiresList'}
+        tileArray.value.push(info)
+    })
+}
 
 
 </script>

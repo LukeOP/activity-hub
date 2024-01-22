@@ -37,7 +37,7 @@ const lessonsRoutes = [
             if(Object.keys(lessonStore.getLessonData) == 0) next({ name: 'LessonsList'})
             else next()
           }, children: [
-            { path: '', name: 'LessonDetails', component: LessonDetails, props: true, meta: {title: 'lesson Details', section: "Lessons", depth: 2}, children: [
+            { path: '', name: 'LessonDetails', component: LessonDetails, meta: {title: 'lesson Details', section: "Lessons", depth: 2}, children: [
                 { path: 'edit', name: 'LessonEdit', component: LessonEdit, props: true, meta: { title: 'Edit Lesson', showModal: true} },
                 { path: 'create-note', name: 'LessonCreateNote', component: LessonCreateNote, props: true, meta: { title: 'Create Note Lesson', showModal: true} },
                 { path: 'confirm-active', name: 'LessonConfirmActive', component: LessonConfirmActive, props: true, meta: { title: 'Lesson Details', showModal: true} },

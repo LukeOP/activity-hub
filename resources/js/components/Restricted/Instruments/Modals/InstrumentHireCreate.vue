@@ -58,7 +58,7 @@ const hireStore = useHireStore()
 const modal = useModalStore()
 
 // Get User Schools
-const schools = ref(user.permissions.filter(p => (p.type === 'administrator' || p.type === 'INSTRUMENTS_C')))
+const schools = ref(user.permissions.filter(p => (p.type === 'Administrator' || p.type === 'INSTRUMENTS_C')))
 
 // Get Available instruments in selected school (that is instruments with state = 1)
 const instruments = ref(instrumentStore.getInstruments.filter(i => i.attributes.state.id === 1))

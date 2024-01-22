@@ -6,31 +6,31 @@
       <div class="row">
         <div class="col col-12 col-md-6">
           <label for="lessonDay">Day:</label>
-          <select name="lessonDay" class="form-control" v-model="lessonData.day" required>
+          <select name="lessonDay" class="form-control" v-model="lessonData.day">
             <option v-for="day in days" :key="day.index" :value="day.value">{{day.value}}</option>
           </select>
         </div>
 
         <div class="col col-12 col-md-6">
           <label for="lessonTime">Start Time:</label>
-          <input type="time" name="lessonTime" class="form-control mb-3" v-model="lessonData.time" required>
+          <input type="time" name="lessonTime" class="form-control mb-3" v-model="lessonData.time">
         </div>
         <div class="col col-12 col-md-6">
           <label for="lessonDuration">Duration:</label>
-          <select name="lessonDuration" class="form-control" v-model="lessonData.duration" required>
+          <select name="lessonDuration" class="form-control" v-model="lessonData.duration" :required="lessonData.time != null">
             <option v-for="duration in durations" :key="duration.index" :value="duration.value">{{duration.label}}</option>
           </select>
         </div>
       </div>
 
-      <span v-if="user.hasPermission('LESSONS_E', currentLesson.school.id)">
-        <div class="subHeading">Start and End Dates:</div>
+      <span >
+        <div class="subHeading">Lesson Dates:</div>
         <div class="row">
           <div class="col col-12 col-md-6">
             <label for="startDate">Start Date:</label>
-            <input type="date" name="startDate" class="form-control" v-model="lessonData.startDate" required>
+            <input type="date" name="startDate" class="form-control" v-model="lessonData.startDate">
           </div>
-          <div class="col col-12 col-md-6">
+          <div class="col col-12 col-md-6" v-if="user.hasPermission('LESSONS_E', currentLesson.school.id)">
             <label for="endDate">End Date:</label>
             <input type="date" name="endDate" class="form-control" v-model="lessonData.endDate">
           </div>
@@ -92,7 +92,7 @@ const lessonData = ref({
   status: attributes.status,
   day: attributes.day,
   time: attributes.start,
-  startDate: attributes.startDate ? attributes.startDate : new Date(),
+  startDate: attributes.startDate ? attributes.startDate : new Date().toISOString().split('T')[0],
   endDate: attributes.endDate ? attributes.endDate : null,
   funding_type: attributes.funding_type,
   fees: attributes.fee,
@@ -100,8 +100,11 @@ const lessonData = ref({
 })
 
 const getEndTime = computed(() => {
-  var time = lessonData.value.time.split(':')
-  return moment().hour(time[0]).minute(time[1]).add(lessonData.value.duration, 'minutes').format('HH:mm')
+  if(lessonData.value.time != null){
+    var time = lessonData.value.time.split(':')
+    return moment().hour(time[0]).minute(time[1]).add(lessonData.value.duration, 'minutes').format('HH:mm')
+  }
+  return null
 })
 
 const days = [
@@ -132,7 +135,7 @@ const fundingTypes = [
 ]
 
 const isAdmin = computed(() => {
-  if(user.permissions.find(p => p.school_id === currentLesson.school.id && p.type === 'administrator')) {
+  if(user.permissions.find(p => p.school_id === currentLesson.school.id && p.type === 'Administrator')) {
     return true
     } 
   // return false

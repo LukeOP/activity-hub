@@ -78,7 +78,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isAdmin()
     {
-        return $this->userPermissions()->where('permission_type', 'administrator');
+        return $this->userPermissions()->where('permission_type', 'Administrator');
     }
 
     public function userPermissions()
@@ -94,6 +94,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function hasPermissionForSchool($schoolId, $permission)
     {
+        // return $this->userPermissions()->where('school_id', $schoolId)->first();
         return $this->userPermissions()->where('school_id', $schoolId)->where('permission_type', $permission)->first() ? true : false;
     }
 
