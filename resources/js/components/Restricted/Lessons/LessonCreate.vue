@@ -68,7 +68,7 @@ export default {
   setup() {
     const user = useUserStore()
     const sorter = useSorter()
-    const schools = ref(user.permissions.filter(p => p.type === 'administrator'))
+    const schools = ref(user.permissions.filter(p => p.type === 'Administrator'))
     const loading = ref(true)
     const data = ref({
       students: null,

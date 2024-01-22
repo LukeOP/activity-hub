@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Mail\NewLessonRequestReceivedEmail;
 use App\Mail\TestEmail;
+use App\Mail\UserLinkedEmail;
+use App\Models\School;
 use App\Models\User;
+use App\Models\UserPermission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -15,8 +19,26 @@ class EmailController extends Controller
         Mail::to('luke.noble91@hotmail.com')->send(new TestEmail($user));
         return 'Email Sent... maybe?';
     }
-    public function linkUserToSchool(){
-        // TODO send email to user with code to link them to the school
+
+    public function UserLinkedToSchool(Request $request){
+        // TODO send email to administrator to indicate user has joined school
+        $adminUsers = UserPermission::where('school_id', $request->school_id)
+            ->where('permission_type', 'Administrator')
+            ->with('user')
+            ->get();
+        
+            $users = $adminUsers->pluck('user');
+            $usersArray = $users->toArray();
+
+            $linkedUser = User::where('id', $request->user_id)->first();
+            $school = School::where('id', $request->school_id)->first();
+        
+            foreach ($usersArray as $admin) {
+                Mail::to($admin->email)->send(new UserLinkedEmail($admin, $school, $linkedUser, $request->invitation));
+            }
+        
+            return $adminUsers;
+
     }
 
     public function newLessonRequestReceived(string $form_title){

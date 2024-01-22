@@ -1,7 +1,9 @@
 <template>
   <div>
-    <section v-if="invitations">
-      <component :is="InvitationComponent" :invitations="staffStore.getSchoolInvites" v-if="invitations.length > 0"/>
+    <section v-if="staffStore.getSchoolInvites.length > 0">
+    <!-- <section v-if="invitations"> -->
+      <!-- <component :is="InvitationComponent" :invitations="staffStore.getSchoolInvites" v-if="invitations.length > 0"/> -->
+      <component :is="InvitationComponent" :invitations="staffStore.getSchoolInvites" v-if="staffStore.getSchoolInvites.length > 0"/>
     </section>
   </div>
 </template>

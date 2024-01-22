@@ -4,7 +4,8 @@
     <p>This will be provided by the school.<br>
     If you have not received one and are expecting to, please contact the school administrator.</p>
     <form @submit.prevent="checkCode">
-      <input
+      <input type="text" class="text-center form-control" v-model="code" :maxlength="6" required>
+      <!-- <input
         v-for="(field, index) in fields"
         :key="index"
         v-model="field.value"
@@ -13,7 +14,7 @@
         @input="handleInput(index)"
         ref="inputFields"
         required
-      />
+      /> -->
       <input type="submit" class="btn btn-secondary submit" value="Submit">
       <p class="text-center error">{{error}}</p>
     </form>
@@ -46,6 +47,7 @@ const schoolStore = useSchoolStore()
   ];
 
   const inputFields = ref([])
+  const code = ref('')
   const error = ref('')
   const result = ref(null)
 
@@ -72,8 +74,9 @@ const schoolStore = useSchoolStore()
     function checkCode(){
       error.value = ''
       result.value = null
-      let concatenatedValue = fields.map(field => field.value).join('');
-      axiosClient.get(`school-invitation/${concatenatedValue}`).then(res => {
+      // let concatenatedValue = fields.map(field => field.value).join('');
+      // axiosClient.get(`school-invitation/${concatenatedValue}`).then(res => {
+      axiosClient.get(`school-invitation/${code.value}`).then(res => {
         result.value = res.data
       }).catch(err => {
         error.value = 'Invalid Code'
@@ -147,6 +150,14 @@ h2 {
   padding-bottom: 1rem;
   border-bottom: 2px solid $ah-secondary;
   margin-bottom: 1rem;
+}
+input[type="text"] {
+  background: #EFF2F5;
+  border: none;
+  margin-right: 1rem;
+  border-radius: 0.5rem;
+  padding: 10px;
+  font-size: 2rem;
 }
 .char-input {
   background: #EFF2F5;
