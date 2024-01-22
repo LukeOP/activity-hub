@@ -11,7 +11,7 @@
   </div>
   <div v-else>You must be an administrator to create lessons</div>
   
-  <form v-if="!loading" @submit.prevent="">
+  <form v-if="!loading" @submit.prevent="handleSubmit">
     <div class="row">
       <div class="col col-12 col-sm-6">
         <label>Student:</label>
@@ -42,7 +42,7 @@
 
     <div class="row">
       <div class="col col-12 col-sm-6 mt-3">
-        <input type="button" class="btn btn-primary form-control" value="Create Lesson" @click="handleSubmit">
+        <input type="submit" class="btn btn-primary form-control" value="Create Lesson">
       </div>
     </div>
     
