@@ -44,6 +44,8 @@ Route::post('lesson-request-form/create-public-request', [LessonRequestsControll
 Route::get('user-subjects-available/{school_id}', [UserSubjectsController::class, 'getAvailableTutorsAndSubjects']);
 Route::post('user-forgot-password', [UsersController::class, 'forgotPassword']);
 Route::post('user-reset-password', [UsersController::class, 'resetPassword']);
+Route::post('user-email-verify', [AuthController::class, 'sendEmailVerificationEmail']);
+Route::post('user-email-verify-check', [AuthController::class, 'checkEmailVerificationToken']);
 
 // Emails
 Route::post('email-lesson-request-received/{form_title}', [EmailController::class, 'newLessonRequestReceived']);
@@ -141,4 +143,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // EMAILS
     Route::post('email-test', [EmailController::class, 'test']);
+    Route::post('user-linked-to-school', [EmailController::class, 'UserLinkedToSchool']);
 });

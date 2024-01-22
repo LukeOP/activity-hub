@@ -6,8 +6,9 @@ namespace App\Providers;
 
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\Hash;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -26,7 +27,12 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         ResetPassword::createUrlUsing(function (User $user, string $token){
-            return 'https://activityhub.co.nz/password?token='.$token.'&email='.$user->email;
+            return env("APP_URL", "https://activityhub.co.nz").'/password?token='.$token.'&email='.$user->email;
+        });
+
+        VerifyEmail::createUrlUsing(function (User $user){
+            $token = Hash::make($user->email);
+            return env("APP_URL", "https://activityhub.co.nz").'/email-verified?token='.$token . '&email='.$user->email;
         });
     }
 }

@@ -118,12 +118,13 @@ h3 {
 }
   #student{
     background-color: lighten($ah-primary-background, 6%);
+    margin-left: 0;
   }
   #primary-caregiver{
-    background-color: lighten($ah-secondary-background, 6%);
+    background-color: lighten($ah-primary-background, 6%);
   }
   #secondary-caregiver{
-    background-color: $ah-grey-background;
+    background-color: lighten($ah-primary-background, 6%);
   }
 }
 </style>

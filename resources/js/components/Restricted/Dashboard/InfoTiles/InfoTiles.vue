@@ -1,7 +1,7 @@
 <template>
     <div id="tile-list">
-        <SingleTile class="tile" v-for="(tile, index) in tileArray" :key="index" 
-        :icon="tile.icon" :color="tile.color" :boldText="tile.boldText" :subText="tile.subText" type="info" 
+        <SingleTile class="tile" v-for="(tile, index) in tileArray" :key="index"
+        :icon="tile.icon" :color="tile.color" :boldText="tile.boldText" :subText="tile.subText" type="info" :link="tile.link"
         />
     </div>
 </template>
@@ -16,14 +16,14 @@ const tileArray = ref([])
 const { data: lessons, fetchData: fetchLessons } = useApi('lessons')
 fetchLessons().then(()=> {
     let active = lessons.value.filter(l => l.attributes.status == 'Active')
-    let info = {boldText: `${active.length}`, subText: 'Active Lessons', icon: 'users', color: 'green'}
+    let info = {boldText: `${active.length}`, subText: 'Active Lessons', icon: 'users', color: 'green', link: 'LessonsList'}
     tileArray.value.push(info)
 })
 
 const { data: instruments, fetchData: fetchInstruments } = useApi('instruments')
 fetchInstruments().then(()=> {
     let hiredOut = instruments.value.filter(i => i.attributes.state.id == 2)
-    let info = {boldText: `${hiredOut.length}`, subText: 'Hired Instruments', icon: 'users', color: 'blue'}
+    let info = {boldText: `${hiredOut.length}`, subText: 'Hired Instruments', icon: 'users', color: 'blue', link: 'HiresList'}
     tileArray.value.push(info)
 })
 
@@ -39,6 +39,14 @@ fetchInstruments().then(()=> {
         margin-right: 2rem;
         &:last-of-type {
             margin-right: 0rem;
+        }
+    }
+}
+@media (max-width: 768px){
+    #tile-list {
+        display: none;
+        .tile {
+            margin-right: 0;
         }
     }
 }

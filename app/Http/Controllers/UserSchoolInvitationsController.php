@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserSchoolInvitationsResource;
+use App\Mail\SchoolInviteEmail;
+use App\Models\School;
 use App\Models\UserSchoolInvitation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class UserSchoolInvitationsController extends Controller
 {
@@ -33,6 +36,10 @@ class UserSchoolInvitationsController extends Controller
             'email' => $request->email,
             'code' => bin2hex(random_bytes(3))
         ]);
+
+        $school = School::where('id', $request->school_id)->first();
+
+        Mail::to($request->email)->send(new SchoolInviteEmail($school, $invitation->code));
 
         return new UserSchoolInvitationsResource($invitation);
     }

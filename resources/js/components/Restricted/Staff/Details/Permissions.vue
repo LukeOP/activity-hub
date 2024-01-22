@@ -142,6 +142,10 @@ table {
     }
   }
 }
+tr:hover {
+  cursor: default;
+  background-color: transparent;
+}
 .Yes {
   color: $ah-secondary-dark;
 }

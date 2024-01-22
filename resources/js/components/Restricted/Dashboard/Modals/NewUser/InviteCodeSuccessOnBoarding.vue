@@ -2,7 +2,7 @@
   <div class="d-flex text-center" style="flex-direction:column; align-items:center">
     <h2 class=" text-green">Success!!!</h2>
     <div style="font-size:1.25rem">You are now connected with {{schoolStore.getSchool.name}}</div>
-    <div>We will let their administrator know so they can get you all set up!</div>
+    <div>We will let an administrator know so they can get you all set up!</div>
     <button class="btn btn-green mx-2" @click="close">Go to dashboard!</button>
   </div>
 </template>

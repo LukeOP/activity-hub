@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Http\Resources\SchoolsResource;
 use App\Http\Resources\SubjectResource;
@@ -15,7 +15,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, CanResetPassword;
 
@@ -94,7 +94,8 @@ class User extends Authenticatable
 
     public function hasPermissionForSchool($schoolId, $permission)
     {
-        return $this->userPermissions()->where('school_id', $schoolId)->where('permission_type', $permission)->first() ? true : false;
+        return $this->userPermissions()->where('school_id', $schoolId)->first();
+        // return $this->userPermissions()->where('school_id', $schoolId)->where('permission_type', $permission)->first() ? true : false;
     }
 
     public function getSubjects()

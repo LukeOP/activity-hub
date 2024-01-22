@@ -1,45 +1,38 @@
 <template>
-<div style="width: 100%;">
-  <div id="loginContainer" class="my-5">
-    <img id="logo-img" src="/images/ActivityHub_Logo_Main.png" alt="Activity Hub Logo">
     <h2>Log In To Your Account</h2>
     <form @submit.prevent="handleLogin">
-      <input type="text" class="form-control my-2" v-model="login.email" placeholder="email">
+      <input type="email" class="form-control my-2" v-model="login.email" placeholder="email">
       <input type="password" class="form-control" v-model="login.password" placeholder="password">
       <button class="btn btn-primary my-3 form-control" @click="handleLogin">Continue</button>
+      <p class="ah-link" @click="routeChange({name: 'RecoverAccount'})">Forgot your password?</p>
+      <p class="ah-link" @click="routeChange({name: 'Register'})">Not yet registered?</p>
+      <div v-if="error" class="error">{{error}}</div>
+      <div v-if="verification" id="verification" class="btn btn-primary form-control" @click="sendVerificationEmail">Send Verification Email</div>
     </form>
-    <p class="ah-link" @click="routeChange({name: 'RecoverAccount'})">Forgot your password?</p>
-    <p class="ah-link" @click="routeChange({name: 'Register'})">Not yet registered?</p>
-    <div v-if="error" class="error">{{error}}</div>
-    <!-- <router-link :to="{name: 'Register'}" id="register-btn">Or register an account.</router-link> -->
-    <!-- <button class="btn btn-outline-primary mt-3" @click="loginTutor">Log In Tutor</button>
-      <button class="btn btn-outline-primary mt-3" @click="loginAdmin">Log In Admin</button> -->
-      
-      
-    </div>
     <button id="demo-btn" class="btn btn-outline-primary mt-3" @click="loginUser">Log In Demo User</button>
-  <!-- <button @click="loginUser">Log In User/Admin Demo</button> -->
-  <!-- <button @click="loginTutor">Log In Tutor</button>-->
-  <!-- <button @click="loginNew">Log In New Member</button>  -->
-</div>
+
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../../../stores/user'
+import axiosClient from '/resources/js/axios';
 
 const user = useUserStore()
 const router = useRouter()
 const error = ref('')
+const verification = ref(false)
+const verification_email = ref('')
 
 const login = ref({
-  login: '',
+  email: '',
   password: ''
 })
 
 function handleLogin(){
   error.value = ''
+  verification.value = false
   user.login({
     email: login.value.email,
     password: login.value.password,
@@ -53,11 +46,17 @@ function handleLogin(){
   })
 }
 
-function setError(statusVal){
-  if(statusVal === 401) return 'Invalid login'
+function setError(error){
+  let statusVal = error.status
+  if(statusVal === 401) return 'Credentials Are Invalid.'
+  if(statusVal === 403) {
+    verification.value = true
+    verification_email.value = login.value.email
+    return error.data.message
+  }
   if(statusVal === 422) return 'All fields are required'
   if(statusVal === 500) return 'Error in fetching user'
-  else return 'An unexpected error has occured'
+  return 'An unexpected error has occured'
 }
 
 function routeChange(route){
@@ -70,22 +69,11 @@ function loginUser(){
   handleLogin()
 }
 
-function loginAdmin(){
-  login.value.email = 'l.williams@this.com'
-  login.value.password = 'Test1234!'
-  handleLogin()
-}
-
-function loginTutor(){
-  login.value.email = 't.tutor@this.com'
-  login.value.password = 'Test1234!'
-  handleLogin()
-}
-
-function loginNew(){
-  login.value.email = 'p.smith@this.com'
-  login.value.password = 'Test1234!'
-  handleLogin()
+function sendVerificationEmail(){
+  axiosClient.post('user-email-verify', {email: verification_email.value} ).then(res => {
+    verification.value = false
+    error.value = 'Please check your email shortly for a verification link.'
+  })
 }
 </script>
 
@@ -93,29 +81,10 @@ function loginNew(){
 h2 {
   font-size: 1.35rem;
 }
-#loginContainer {
-  position: relative;
-  max-width: 500px;
-  padding: 10px;
-  // border: 1px solid black;
-  border-radius: 10px;
-  text-align: center;
-
-  #logo-img {
-    width: 100%;
-    max-width: 250px;
-    margin: 0 auto;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-  }
-  .error {
-    max-width: 300px;
-    color: rgb(166, 0, 0);
-    background: rgba(166, 0, 0, 0.1);
-    border: 1px solid rgb(166, 0, 0);
-    padding: 5px;
-    margin: 1rem auto;
-  }
+.error {
+  max-width: 300px;
+  padding: 5px;
+  margin: 1rem auto;
 }
 form {
   max-width: 300px;
