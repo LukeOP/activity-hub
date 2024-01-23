@@ -50,8 +50,8 @@ jobs:
           ftp-server: ${{ env.FTP_SERVER }}
           ftp-username: ${{ env.FTP_USERNAME }}
           ftp-password: ${{ env.FTP_PASSWORD }}
-          local-dir: dist
-          remote-dir: /public_html
+          # local-dir: dist
+          # remote-dir: /public_html
           
       - name: Copy .env.example and update with secrets
         run: |
