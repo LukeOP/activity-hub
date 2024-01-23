@@ -12,10 +12,10 @@ jobs:
       DB_PORT: ${{ secrets.AH_DB_PORT }}
       DB_DATABASE: ${{ secrets.AH_DB_DATABASE }}
       DB_USERNAME: ${{ secrets.AH_DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.AH_DB_PASSWORD }}
-      MAIL_USERNAME: ${{ secrets.AH_MAIL_USERNAME }}
-      MAIL_PASSWORD: ${{ secrets.AH_MAIL_PASSWORD }}
-      MAIL_FROM_NAME: ${{ secrets.AH_MAIL_USERNAME }}
+      DB_PASSWORD: ${{ secrets.AH_PASSWORD }}
+      MAIL_USERNAME: ${{ secrets.AH_EMAIL_USERNAME }}
+      MAIL_PASSWORD: ${{ secrets.AH_EMAIL_PASSWORD }}
+      MAIL_FROM_NAME: ${{ secrets.AH_EMAIL_USERNAME }}
       FTP_SERVER: ${{ secrets.FTP_SERVER }}
       FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
       FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
