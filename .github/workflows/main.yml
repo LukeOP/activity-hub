@@ -1,24 +1,12 @@
-name: Deploy Site on push
+name: Build and Deploy Site on push
 on:
   push:
     branches:
       - master
 jobs:
-  web-deploy:
-    name: Deploy
+  build:
+    # name: Deploy
     runs-on: ubuntu-latest
-
-    env:
-      DB_PORT: ${{ secrets.AH_DB_PORT }}
-      DB_DATABASE: ${{ secrets.AH_DB_DATABASE }}
-      DB_USERNAME: ${{ secrets.AH_DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.AH_PASSWORD }}
-      MAIL_USERNAME: ${{ secrets.AH_EMAIL_USERNAME }}
-      MAIL_PASSWORD: ${{ secrets.AH_EMAIL_PASSWORD }}
-      MAIL_FROM_NAME: ${{ secrets.AH_EMAIL_USERNAME }}
-      FTP_SERVER: ${{ secrets.FTP_SERVER }}
-      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
       
     steps:
     - name: Get the latest code
@@ -31,8 +19,8 @@ jobs:
     - name: Building the project
       run: npm run production
       
-    - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+    # - name: Copy .env
+    #  run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       
     - name: Install Dependencies
       run: composer update --ignore-platform-reqs
@@ -43,9 +31,20 @@ jobs:
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
       
-    - name: Install lftp
-      run: sudo apt-get install lftp -y
-      
+    # - name: Install lftp
+    #  run: sudo apt-get install lftp -y
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    env:
+      FTP_SERVER: ${{ secrets.FTP_SERVER }}
+      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+
+    steps:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
       with:
@@ -55,8 +54,3 @@ jobs:
         # server: ftp.mgsmusic.co.nz
         # username: activityhubDeploy@mgsmusic.co.nz
         # password: ActivityHubGitHub
-        
-    - name: Copy .env.example and update with secrets
-      run: |
-        lftp -e "open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_SERVER; mirror --reverse .env.example .env; bye"
-        lftp -e "open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_SERVER; put - <<< 'DB_PORT=${DB_PORT}' .env; put - <<< 'DB_DATABASE=${DB_DATABASE}' .env; put - <<< 'DB_USERNAME=${DB_USERNAME}' .env; put - <<< 'DB_PASSWORD=${DB_PASSWORD}' .env; put - <<< 'MAIL_USERNAME=${MAIL_USERNAME}' .env; put - <<< 'MAIL_PASSWORD=${MAIL_PASSWORD}' .env; put - <<< 'MAIL_FROM_NAME=${MAIL_FROM_NAME}' .env; bye"
