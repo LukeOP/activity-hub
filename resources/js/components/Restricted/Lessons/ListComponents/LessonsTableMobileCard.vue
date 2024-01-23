@@ -19,7 +19,7 @@
       <p>Tutor: {{lesson.tutor.first_name}} {{lesson.tutor.last_name}}</p>
       <p v-if="lesson.attributes.funding_type">Funding: {{lesson.attributes.funding_type}}</p>
     </div>
-    <p v-if="active">School: {{lesson.school.name}}</p>
+    <p v-if="active && user.getSchools.length > 1">School: {{lesson.school.name}}</p>
   </div>
 </template>
 
@@ -28,10 +28,12 @@ import moment from "moment"
 import { useLessonsStore } from "/resources/js/stores/lessons"
 import { ref } from "vue"
 import { useRouter } from "vue-router"
+import { useUserStore } from "/resources/js/stores/user";
 const props = defineProps({lesson:Object})
 
 const router = useRouter()
 const lessonStore = useLessonsStore()
+const user = useUserStore()
 
 const active = ref(false)
 

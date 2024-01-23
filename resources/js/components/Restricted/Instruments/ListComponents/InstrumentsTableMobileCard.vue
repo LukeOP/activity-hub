@@ -7,12 +7,13 @@
     <div class="col col-2">
       <i class="fa-solid fa-magnifying-glass ms-2" :class="{active: active}" @click="InstrumentDetails"></i>
     </div>
-    <p v-if="active">{{instrument.school.name}}</p>
+    <p v-if="active && user.getSchools.length > 1">{{instrument.school.name}}</p>
     <p v-if="active">{{instrument.attributes.notes}}</p>
   </div>
 </template>
 
 <script setup>
+import { useUserStore } from "/resources/js/stores/user";
 import { useInstrumentStore } from "/resources/js/stores/instruments"
 import { ref } from "vue"
 import { useRouter } from "vue-router"
@@ -20,6 +21,7 @@ const props = defineProps({instrument:Object})
 
 const router = useRouter()
 const instrumentStore = useInstrumentStore()
+const user = useUserStore()
 
 const active = ref(false)
 

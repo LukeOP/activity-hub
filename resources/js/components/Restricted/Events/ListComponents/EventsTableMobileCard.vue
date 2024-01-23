@@ -7,12 +7,13 @@
     <div class="col col-2">
       <i class="fa-solid fa-magnifying-glass ms-2" :class="{active: active}" @click="EventDetails"></i>
     </div>
-    <p v-if="active">{{event.school.name}}</p>
+    <p v-if="active && user.getSchools.length > 1">{{event.school.name}}</p>
     <p v-if="active">{{event.attributes.notes}}</p>
   </div>
 </template>
 
 <script setup>
+import { useUserStore } from "/resources/js/stores/user";
 import { useEventStore } from "/resources/js/stores/events"
 import { ref } from "vue"
 import { useRouter } from "vue-router"
@@ -20,6 +21,7 @@ const props = defineProps({event:Object})
 
 const router = useRouter()
 const eventStore = useEventStore()
+const user = useUserStore()
 
 const active = ref(false)
 

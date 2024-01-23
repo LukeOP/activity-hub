@@ -8,7 +8,7 @@
           <th @click="sortData('student.full_name')">Student:</th>
           <th @click="sortData('attributes.start_date')">Hire Date:</th>
           <th style="width: 50%;">Notes:</th>
-          <th @click="sortData('instrument.school.name')">School:</th>
+          <th v-if="user.getSchools.length > 1" @click="sortData('instrument.school.name')">School:</th>
         </tr>
       </thead>
     </table>
@@ -22,7 +22,7 @@
           <td>{{hire.student.full_name}}</td>
           <td>{{formatDate(hire.attributes.start_date)}}</td>
           <td style="width: 50%;">{{hire.attributes.notes || '-'}}</td>
-          <td>{{hire.instrument.school.name}}</td>
+          <td v-if="user.getSchools.length > 1">{{hire.instrument.school.name}}</td>
         </tr>
       </tbody>
     </table>
@@ -39,11 +39,13 @@ import { useRouter } from 'vue-router'
 import useSorter from '../../../../../composables/useSorter'
 import { useHireStore } from '../../../../../stores/hires'
 import moment from 'moment'
+import { useUserStore } from '/resources/js/stores/user';
 
 
   const router = useRouter()
   const sorter = useSorter()
   const hireStore = useHireStore()
+  const user = useUserStore()
   const filteredHires = hireStore.getFilteredHires
 
 

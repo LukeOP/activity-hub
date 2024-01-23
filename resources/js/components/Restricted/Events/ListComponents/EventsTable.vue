@@ -7,7 +7,7 @@
           <th @click="sortData('attributes.name')">Event:</th>
           <th @click="sortData('attributes.description')">Description:</th>
           <th @click="sortData('attributes.date')">Date:</th>
-          <th @click="sortData('school.name')">School:</th>
+          <th @click="sortData('school.name')" v-if="user.getSchools.length > 1">School:</th>
         </tr>
       </thead>
     </table>
@@ -20,7 +20,7 @@
           <td>{{ event.attributes.name }}</td>
           <td>{{ event.attributes.description }}</td>
           <td>{{event.attributes.date}}</td>
-          <td>{{event.school.name}}</td>
+          <td v-if="user.getSchools.length > 1">{{event.school.name}}</td>
         </tr>
       </tbody>
     </table>
@@ -36,11 +36,13 @@
 import { useRouter } from 'vue-router'
 import useSorter from '../../../../composables/useSorter'
 import { useEventStore } from '../../../../stores/events'
+import { useUserStore } from '/resources/js/stores/user';
 
 
   const router = useRouter()
   const sorter = useSorter()
   const eventStore = useEventStore()
+  const user = useUserStore()
 
   const props = defineProps({events: Array})
 
