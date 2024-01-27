@@ -1,6 +1,7 @@
 <template>
   <div>
-    <HeaderLine :heading="'Return ' + currentHire.instrument.attributes.name + '?'"/>
+    <HeaderLine :heading="'Returning ' + currentHire.instrument.attributes.name" center="true"/>
+    <p class="text-center">Set the date {{ currentHire.instrument.attributes.name }} was returned.</p>
     <form @submit.prevent="handleHireReturn" class="row">
       <div class="col col-12 col-md-6 text-center"><label for="date">Returned Date:</label></div>
       <div class="col col-12 col-md-6"></div>
@@ -33,19 +34,16 @@ const returned_date = ref(moment().format('YYYY-MM-DD'))
 
 function handleHireReturn(){
   // update hire returned value
-  axiosClient.patch('hires/' + currentHire.id, returned_date.value)
+  axiosClient.patch('hires/' + currentHire.id, {returned_date: returned_date.value})
   .then(res => {
+    hireStore.updateHire(res.data.hire)
+    hireStore.setHires(hireStore.getHires.filter(h => h.id != currentHire.id))
     // update Instrument status to 'Available'
     axiosClient.patch('instruments/' + currentHire.instrument.id, {state_id: 1})
     .then(res => {
-      // archive hire by 'deleting' it
-      axiosClient.delete('hires/' + currentHire.id)
-      .then(res => {
-        hireStore.setHires(hireStore.getHires.filter(h => h.id != currentHire.id))
-      })
+        modal.close()
     })
   })
-  modal.close()
 }
 
 

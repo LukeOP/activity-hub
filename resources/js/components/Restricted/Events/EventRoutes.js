@@ -3,7 +3,7 @@ import EventsList from './EventsList.vue'
 import EventDetails from './EventDetails.vue'
 import EventCreate from './EventCreate.vue'
 import TemplateList from './Templates/TemplateList.vue'
-import TemplateDetails from './Templates/TemplateDetails.vue'
+import EventTemplateDetails from './Templates/TemplateDetails.vue'
 
 
 const eventsRoutes = [
@@ -20,7 +20,7 @@ const eventsRoutes = [
         {path: 'templates', meta: { title: 'Event Templates', breadcrumb: 'Templates'},
       children: [
         { path: '', name: 'TemplateList', component: TemplateList, meta: { section: "Events", depth: 2} },
-        { path: 'details', name: 'TemplateDetails', component: TemplateDetails, meta: { section: "Events", breadcrumb: ' / Details', depth: 3},
+        { path: 'details', name: 'EventTemplateDetails', component: EventTemplateDetails, meta: { section: "Events", breadcrumb: ' / Details', depth: 3},
         beforeEnter: (to, from, next) => {
           const eventStore = useEventStore()
           if(Object.keys(eventStore.getEventData) == 0) next({ name: 'TemplateList'})

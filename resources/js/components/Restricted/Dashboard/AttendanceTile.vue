@@ -1,6 +1,6 @@
 <template>
     <div class="user-element unavailable-section">
-        <UserElementHeader heading="Weekly Attendance" />
+        <UserElementHeader heading="Weekly Attendance: Coming Soon" />
       <div class="text-center mt-5" style="font-size: 1rem; color: #3B6580;">Section Under Development</div>
 
     </div>

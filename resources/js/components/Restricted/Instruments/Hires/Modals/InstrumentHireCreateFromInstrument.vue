@@ -41,7 +41,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import HeaderLine from '../../../Layouts/MainLayout/Elements/HeaderLine.vue';
+import HeaderLine from '../../../../Layouts/MainLayout/Elements/HeaderLine.vue';
 import { useUserStore } from '/resources/js/stores/user';
 import { useInstrumentStore } from '/resources/js/stores/instruments';
 import { useStudentStore } from '/resources/js/stores/students';

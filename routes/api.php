@@ -3,10 +3,13 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CalendarEventController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EventJobController;
 use App\Http\Controllers\EventSchoolJobController;
 use App\Http\Controllers\EventsController;
+use App\Http\Controllers\FormsController;
 use App\Http\Controllers\HiresController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\InstrumentsController;
@@ -144,4 +147,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // EMAILS
     Route::post('email-test', [EmailController::class, 'test']);
     Route::post('user-linked-to-school', [EmailController::class, 'UserLinkedToSchool']);
+
+    // FORMS
+    Route::get('forms/hires/templates/{school_id}', [FormsController::class, 'getHireAgreementTemplatesBySchool']);
+    Route::post('forms/hires/templates', [FormsController::class, 'createHireAgreementTemplate']);
+
+    // DOCUMENTS
+    Route::post('document/upload', [DocumentController::class, 'upload']);
+    Route::get('document/download/{id}', [DocumentController::class, 'download']);
+    Route::delete('document/delete/{id}', [DocumentController::class, 'delete']);
 });

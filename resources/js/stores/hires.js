@@ -4,7 +4,8 @@ function getState(){
     return {
       currentHire: {},
       hires: [],
-      filteredHires: []
+      filteredHires: [],
+      hireData: {}
     }
 }
 
@@ -23,6 +24,16 @@ export const useHireStore = defineStore('hires', {
     addHire(hireObject){
       this.hires = [...this.hires, hireObject]
     },
+    setHireData(hireData){
+      this.hireData = hireData
+    },
+    updateHire(hireObject){
+      const index = this.hires.findIndex(h => h.id === hireObject.id)
+      if (index !== -1){
+        this.hires.splice(index, 1, hireObject)
+        this.currentHire = hireObject
+      }
+    },
     reset(){
       this.currentHire = {}
       this.hires = []
@@ -38,6 +49,9 @@ export const useHireStore = defineStore('hires', {
     },
     getFilteredHires(){
       return this.filteredHires
+    },
+    getHireData(){
+      return this.hireData
     }
   }
 })

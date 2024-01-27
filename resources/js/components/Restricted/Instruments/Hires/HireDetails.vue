@@ -18,11 +18,17 @@ const currentHire = hireStore.getHire
 const user = useUserStore()
 const actions = useActionsStore()
 
-if(user.hasPermission('HIRES_E', currentHire.instrument.school.id)){
-  actions.setItems([
-    { header: 'Mark as returned', to: { name: 'HireDetails' }, modal: 'ReturnInstrumentHire', icon: 'fa-solid fa-circle-check', additional: true},
-  ])
+function setActions(){
+  let actionsArray = []
+  if(user.hasPermission('HIRES_E', currentHire.instrument.school.id)){
+    if(currentHire.attributes.returned_date === null){
+      actionsArray.push({ header: 'Mark As Returned', to: { name: 'HireDetails' }, modal: 'ReturnInstrumentHire', icon: 'fa-solid fa-circle-check', green:true, additional: true})
+    }
+    actionsArray.push({ header: 'Edit Hire', to: { name: 'HireDetails' }, modal: 'HireEdit', icon: 'fa-solid fa-pencil', additional: true})
+  }
+  actions.setItems(actionsArray)
 }
+setActions()
 
 
 </script>

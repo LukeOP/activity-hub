@@ -26,7 +26,7 @@
               </h2>
               <div id="template-container">
                 <div v-for="template in formData.templates" :key="template">
-                  <div class="template" @click="viewTemplateDetails(template)">
+                  <div class="template" @click="viewEventTemplateDetails(template)">
                     <span>{{ template.heading }}</span>
                   </div>
                 </div>
@@ -48,7 +48,7 @@
                 <p>{{ formData.selected_Template.notes }}</p>
                 <!-- <pre>{{ formData.selected_Template }}</pre> -->
               </div>
-              <button class="btn btn-primary hiddenOnMobile" @click="routeChange('TemplateDetails')">Manage Template</button>
+              <button class="btn btn-primary hiddenOnMobile" @click="routeChange('EventTemplateDetails')">Manage Template</button>
             </div>
             <div v-else class="text-center text-grey w-100" style="text-align: center; transform: translateY(45%);">
               <p>No Template Selected</p>
@@ -118,7 +118,7 @@ watch(() => formData.value.school, (newValue) => {
 })
 
 
-function viewTemplateDetails(template){
+function viewEventTemplateDetails(template){
   formData.value.selected_Template = template
   eventStore.setEventData(template)
 }

@@ -7,6 +7,7 @@ import { useHireStore } from '/resources/js/stores/hires'
 import HiresList from './Hires/HiresList.vue'
 import HireDetails from './Hires/HireDetails.vue'
 import HireFormList from './Hires/HireForms/HireFormList.vue'
+import HireAgreementTemplateDetails from './Hires/HireForms/TemplateDetails.vue'
 
 
 const instrumentRoutes = [
@@ -42,7 +43,16 @@ const instrumentRoutes = [
               else next()
             }
           },
-          {path: '', name: 'HireFormList', component: HireFormList, meta: { title: 'Hire Forms', breadcrumb: ' / Forms'}}
+          {path: 'templates', meta: { title: 'Hire Agreement Templates', breadcrumb: 'Templates'},
+          children: [
+            { path: '', name: 'HireFormList', component: HireFormList, meta: { section: "Instruments", depth: 4} },
+            { path: 'details', name: 'HireAgreementTemplateDetails', component: HireAgreementTemplateDetails, meta: { section: "Instruments", breadcrumb: ' / Details', depth: 5},
+            beforeEnter: (to, from, next) => {
+              const hireStore = useHireStore()
+              if(Object.keys(hireStore.getHireData) == 0) next({ name: 'HireFormList'})
+              else next()
+            } },
+          ]},
         ]
       },
     ]

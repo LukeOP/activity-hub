@@ -17,6 +17,7 @@ function getState(){
       },
       permissions: [],
       token: sessionStorage.getItem('AHT') || '',
+      timezone: ''
     }
 }
 
@@ -33,6 +34,7 @@ export const useUserStore = defineStore('user', {
       this.setUser(res.data.data.user)
       this.setToken(res.data.data.token)
       this.setPermissions(res.data.data.user.permissions)
+      this.timezone = res.data.data.user.timezone
     },
     setUser(user){
       this.attributes.id = user.id
@@ -57,6 +59,7 @@ export const useUserStore = defineStore('user', {
         this.setUser(res.data.user)
         this.setPermissions(res.data.permissions)
         this.setToken(sessionStorage.getItem('AHT'))
+        this.timezone = res.data.data.user.timezone
       }
     },
     async logout(){
@@ -95,6 +98,9 @@ export const useUserStore = defineStore('user', {
     },
     getSchools(){
       return this.attributes.schools
+    },
+    getAttributes(){
+      return this.attributes
     }
   }
 })

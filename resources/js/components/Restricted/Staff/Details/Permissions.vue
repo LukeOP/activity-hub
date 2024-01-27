@@ -74,6 +74,7 @@ const permissionsArray = [
   { access: "Event Templates", actions: ["", "EVENTS_TEMP_V", "EVENTS_TEMP_E", "EVENTS_TEMP_C", "EVENTS_TEMP_D"] },
   { access: "Instruments", actions: ["", "INSTRUMENTS_V", "INSTRUMENTS_E", "INSTRUMENTS_C", "INSTRUMENTS_D"] },
   { access: "Hires", actions: ["", "HIRES_V", "HIRES_E", "HIRES_C", "HIRES_D"] },
+  { access: "Hire Agreement Templates", actions: ["", "HIRES_TEMP_V", "HIRES_TEMP_E", "HIRES_TEMP_C", "HIRES_TEMP_D"] },
   { access: "Rooms", actions: ["ROOMS_R", "ROOMS_V", "ROOMS_E", "ROOMS_C", "ROOMS_D"] },
   { access: "Bookings", actions: ["BOOKINGS_R", "BOOKINGS_V", "BOOKINGS_E", "BOOKINGS_C", "BOOKINGS_D"] },
   { access: "Staff", actions: ["", "STAFF_V", "STAFF_E", "STAFF_C", "STAFF_D"] },

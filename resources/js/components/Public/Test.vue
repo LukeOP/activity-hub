@@ -1,35 +1,55 @@
 <template>
-  <div style="font-family: 'Arial', sans-serif; background-color: #f4f4f4; color: #333;">
-    
-    <div style="padding: 15px 0">
-      <div style="max-width: 600px; margin: 10px auto; display: flex; height: 100px;">
-        <img style="width: 150px; margin-left: 10px;"  src="/images/ActivityHub_Logo_Main_250W.png" alt="Activity Hub Logo">
-      </div>
-      <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-        
-        <div id="header-box" style="border-bottom: 1px solid lightgrey; margin-bottom: 1rem;">
-          <h2 style="color: #3B6580; font-size: 1.5rem;">A New Lesson Request Has Been Received</h2>
-        </div>
-
-        <!-- <p>Hi {{ $data->user->first_name }},</p> -->
-        <p>Hi User,</p>
-        <p>A new lesson request has been received for the form: <span style="color: #3B6580; font-weight: bold;">FORM</span> <br>
-          You can review it in the <a href="https://activityhub.co.nz/manage/lessons/requests">Lesson Request Management</a> section</p>
-        <p>Regards,
-          <br>
-          The Activity Hub Team.
-        </p>
-      </div>
-    </div>
-
+  <div>
+    <a :href="downloadUrl" class="btn btn-primary mt-2 ms-2" :download="downloadFileName">Download File</a>
   </div>
-  
 </template>
 
-<script setup>
+<script>
+import axiosClient from '/resources/js/axios';
 
+export default {
+  props: {
+    id: {
+      type: String,
+      // required: true,
+    },
+  },
+  data() {
+    return {
+      downloadUrl: '',
+      downloadFileName: '', // Add a property to store the download file name
+    };
+  },
+  mounted() {
+    this.fetchDownloadUrl();
+  },
+  methods: {
+    async fetchDownloadUrl() {
+      try {
+        const response = await axiosClient.get(`document/download/1f500249-0cd5-44b2-9a23-fd0bb5f8340f`, {
+          responseType: 'arraybuffer',
+        });
+
+        // Get the content-disposition header from the response
+        const contentDisposition = response.headers['content-disposition'];
+        
+        // Extract the file name from the content-disposition header
+        const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+        console.log(match[1]);
+        let serverFileName = match ? match[1] : 'downloaded_file.pdf';
+        console.log(serverFileName);
+        serverFileName = serverFileName.replace(/^[\d_]+/, '')
+        
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const downloadUrl = window.URL.createObjectURL(blob);
+
+        // Set both downloadUrl and downloadFileName
+        this.downloadUrl = downloadUrl;
+        this.downloadFileName = serverFileName;
+      } catch (error) {
+        console.error('Error fetching download URL', error);
+      }
+    },
+  },
+};
 </script>
-
-<style lang="scss" scoped>
-
-</style>

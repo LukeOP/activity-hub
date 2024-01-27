@@ -1,51 +1,84 @@
 <template>
-  <div v-if="formData.schools">
-    <HeaderLine heading="Manage Lesson Request Forms" link1="Lesson Requests" @link1="routeChange('RequestsList')"/>
-    <p>Create and manage online forms and get lesson signups digitally.</p>
-    
-    <div class="row" v-if="formData.schools.length > 1">
-      <h2>School to Manage:</h2>
-      <div class="col col-12 col-md-6">
-        <select name="school" id="school" class="form-control" v-model="formData.school">
-          <option v-for="school in formData.schools" :key="school.id" :value="school.id">{{ school.name }}</option>
-        </select>
-      </div>
-    </div>
+  <div>
+    <HeaderLine heading="Hire Agreement Templates" link1="Hires List" @link1="routeChange('HiresList')" />
 
-    <div class="row mt-3" v-if="formData.forms">
+    <section class="row">
       <div class="col col-12 col-md-6">
-        <h2>Existing Forms:</h2>
-        <div id="form-container">
-          <div v-for="form in formData.forms" :key="form">
-            <div class="form" @click="viewFormDetails(form)">
-              <span>{{ form.attributes.description }}</span>
-              <span class="float-end">{{ moment(form.timestamp.created).format('DD-MM-YYYY') }}</span>
+        <p>You can create a custom template for your hire agreements.<br> 
+          This can then be sent to the student or their parents/caregivers during hire creation.</p>
+      </div>
+      <div class="col col-12 col-md-6">
+      </div>
+    </section>
+
+    <div class="row">
+      <div class="col col-12 col-md-6">
+        <section>
+          <div v-if="formData.schools.length > 1">
+            <h2>School to Manage:</h2>
+              <select name="school" id="school" class="form-control" v-model="formData.school">
+                <option v-for="school in formData.schools" :key="school.id" :value="school.id">{{ school.name }}</option>
+              </select>
+          </div>
+
+          <div class="mt-3" v-if="formData.templates">
+              <h2 class="mb-3 mt-4">Existing Templates:
+                <button v-if="user.hasPermission('HIRES_TEMP_C', formData.school)" class="btn btn-outline-secondary float-end hiddenOnMobile" @click="createTemplate()">Create New Template</button>
+              </h2>
+              <div id="template-container">
+                <div v-for="template in formData.templates" :key="template">
+                  <div class="template" @click="viewEventTemplateDetails(template)">
+                    <span>{{ template.heading }}</span>
+                  </div>
+                </div>
+                <div v-if="formData.templates.length < 1" id="no-template">No event templates have been created</div>
+              </div>
+            <p v-if="windowSize.width < 1030" class="warning">Templates cannot be created or edited on a mobile device.</p>
+          </div>
+          
+        </section>
+      </div>
+
+      <div class="col col-12 col-md-6">
+        <section>
+          <div id="info-container">
+            <div v-if="formData.selected_Template != ''">
+              <div>
+                <h2>{{ formData.selected_Template.heading }}</h2>
+                <p>{{ formData.selected_Template.description }}</p>
+                <p>{{ formData.selected_Template.notes }}</p>
+                <!-- <pre>{{ formData.selected_Template }}</pre> -->
+              </div>
+              <button class="btn btn-primary hiddenOnMobile" @click="routeChange('HireAgreementTemplateDetails')">Manage Template</button>
+            </div>
+            <div v-else class="text-center text-grey w-100" style="text-align: center; transform: translateY(45%);">
+              <p>No Template Selected</p>
             </div>
           </div>
-          <div v-if="formData.forms.length < 1" id="no-form">No Lesson Request Forms To Display...</div>
-        </div>
-        <!-- <div class="btn btn-primary create">Create New Form</div> -->
+        </section>
       </div>
-      <p v-if="windowSize.width < 1030">Forms cannot be created or edited on a mobile device.</p>
-    </div>
 
+    </div>
 
   </div>
 </template>
 
 <script setup>
 import useApi from '/resources/js/composables/useApi';
-import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
+import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue';
 import { ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
-import { useLessonsStore } from '/resources/js/stores/lessons';
-import moment from 'moment';
-import { useWindowSize } from '/resources/js/composables/useWindowSize';
 import { useUserStore } from '/resources/js/stores/user';
+import { useWindowSize } from '/resources/js/composables/useWindowSize';
+import { useRouter } from 'vue-router';
+import { useModalStore } from '/resources/js/stores/modal';
+import { useSchoolStore } from '/resources/js/stores/schools';
+import { useHireStore } from '/resources/js/stores/hires';
 
 // Initiate Stores
-const lessonStore = useLessonsStore()
 const user = useUserStore()
+const hireStore = useHireStore()
+const modal = useModalStore()
+const schoolStore = useSchoolStore()
 
 // Initiate Composables
 const router = useRouter()
@@ -55,7 +88,8 @@ const { windowSize } = useWindowSize()
 const formData = ref({
   schools: [],
   school: '',
-  forms: []
+  templates: [],
+  selected_Template: ''
 })
 
 // Fetch user schools or set default school if only one exists for user
@@ -66,38 +100,42 @@ fetchSchools().then(()=>{
 
 function setSchools(){
   schools.value.forEach(school => {
-    if(user.hasPermission('LESSON_FRM_C', school.id)){
+    if(user.hasPermission('HIRES_TEMP_C', school.id)){
       formData.value.schools = [...formData.value.schools, school]
     }
   });
-  formData.value.school =formData.value.schools[0].id
+  formData.value.school = formData.value.schools[0].id
 }
 
-
-// Fetch school forms when school is selected
+// Fetch school templates when school is selected
 watch(() => formData.value.school, (newValue) => {
-  const {data: forms, fetchData: fetchSchoolForms} = useApi('school-lesson-request-forms/' + newValue)
-  fetchSchoolForms().then(()=>{
-    formData.value.forms = forms.value
-  })
+  if(formData.value.school != ''){
+    const {data, fetchData} = useApi('forms/hires/templates/' + newValue)
+    fetchData().then(()=>{
+      formData.value.templates = data.value
+      formData.value.selected_Template = ''
+    })
+  }else formData.value.templates = []
 })
 
-function viewFormDetails(form){
-  if(windowSize.value.width > 1030) {
-    lessonStore.setRequestForm(form)
-    router.push({
-      name: 'RequestFormDetails'
-    })
-  }
+
+function viewEventTemplateDetails(template){
+  formData.value.selected_Template = template
+  hireStore.setHireData({template: formData.value.selected_Template, school: formData.value.schools.filter(s => s.id == formData.value.school)[0] })
+}
+
+function createTemplate(){
+  schoolStore.setSchool(schools.value.filter(s => s.id == formData.value.school)[0])
+  modal.open('CreateHireAgreementTemplate')
 }
 
 // Handle Route Change
 function routeChange(route){
-  lessonStore.setRequestForm()
   router.push({
     name: route
   })
 }
+
 
 </script>
 
@@ -105,29 +143,50 @@ function routeChange(route){
 h2 {
   font-size: 1.5rem;
 }
-#form-container {
-  border: 1px solid lightgray;
-  border-radius: 0.375rem;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  padding-bottom: 20px;
+h3 {
+  font-size: 1.25rem;
 }
-.form {
+.template {
   padding: 1px 10px;
+  background-color: $ah-primary-light;
+  border-radius: 0.375rem;
+  padding: 5px 10px;
+  color: white;
+  margin-bottom: 0.5rem;
   &:hover {
-    background-color: $ah-primary-light;
+    background-color: $ah-primary;
     color: white;
     cursor: pointer;
   }
 }
-#no-form {
+#no-template {
   padding: 10px;
 }
 .create {
   width: 100%;
+}
+#info-container {
+  display: flex;
+  border: 1px solid $ah-grey;
+  padding: 10px;
   border-radius: 0.375rem;
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
+  min-height: 250px;
+}
+.hiddenOnMobile {
+  visibility: visible;
+}
+.warning {
+  color: $ah-red;
+  background-color: lighten($ah-red-background, 5%);
+  border: 1px dashed $ah-red;
+  padding: 10px;
+  border-radius: 0.375rem;
+}
+
+@media (max-width: 768px){
+  .hiddenOnMobile {
+    visibility: hidden;
+  }
 }
 
 </style>

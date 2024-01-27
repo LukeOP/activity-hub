@@ -97,17 +97,6 @@ function markActive(){
 </script>
 
 <style lang="scss" scoped>
-h2 {
-  color: $ah-primary-dark;
-  font-size: 1.5rem;
-}
-h3 {
-  font-size: 1rem;
-  display: inline-block;
-  color: $ah-primary-dark;
-  font-weight: bold;
-  margin-right: 0.3rem;
-}
 .section {
   padding: 10px;
   border-bottom: 1px dashed $ah-primary;
