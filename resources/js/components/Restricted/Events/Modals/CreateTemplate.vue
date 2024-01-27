@@ -41,7 +41,7 @@ function createTemplate(){
     eventStore.setEventData(res.data)
     modal.close()
     router.push({
-      name: 'TemplateDetails'
+      name: 'EventTemplateDetails'
     })
   })
 }

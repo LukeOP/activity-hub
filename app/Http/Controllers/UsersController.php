@@ -54,12 +54,14 @@ class UsersController extends Controller
         $token = \Laravel\Sanctum\PersonalAccessToken::findToken($localToken);
 
         if (!$token) {
+            return 'Token does not exist';
             return null;
         }
 
         $user = $token->tokenable;
 
         if (!$user) {
+            return 'User does not exist';
             return null;
         }
 

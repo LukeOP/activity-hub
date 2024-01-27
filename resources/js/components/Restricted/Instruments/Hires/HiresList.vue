@@ -1,6 +1,7 @@
 <template>
   <div class="row">
-    <HeaderLine heading="Instrument Hires" link2="Instrument List" @link2="routeChange" />
+    <!-- <HeaderLine heading="Instrument Hires" link2="Hire Agreement Templates" @link2="routeChange('HireFormList')" link1="Instrument List" @link1="routeChange('InstrumentList')" /> -->
+    <HeaderLine heading="Instrument Hires" link1="Instrument List" @link1="routeChange('InstrumentList')" />
 
     <div class="col col-12 col-md-6">
       <!-- Search input -->
@@ -109,7 +110,7 @@ setActions()
 
 // Handle Route Change
 function routeChange(value){
-  router.push({name: 'InstrumentList'})
+  router.push({name: value})
 }
 
 onMounted(() => {

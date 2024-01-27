@@ -27,14 +27,12 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->email)->first();
-
+        
         if($user->email_verified_at == null) {
             return $this->error('', 'Your email has not yet been verified. Please click the link in the email sent on registration. Or request a new email.', 403);
         }
-
-        // $user->is_admin = $user->adminSchools();
+        
         $user->schools = $user->userSchools();
-        // $user->permissions = $user->permissionsForSchool(2);
         $user->permissions = UserPermissionsResource::collection($user->userPermissions);
 
         return $this->success([

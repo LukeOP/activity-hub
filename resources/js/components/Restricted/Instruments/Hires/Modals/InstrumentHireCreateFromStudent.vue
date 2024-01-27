@@ -6,14 +6,14 @@
       <div class="row mt-2">
         <div class="col col-12 col-md-6">
           <label for="school">School</label>
-          <select name="school" class="form-control" v-model="formData.school" required>
-            <option v-for="school in schools" :key="school.id" :value="school.school_id">{{school.name}}</option>
+          <select name="school" class="form-control" v-model="formData.school" required disabled>
+            <option :value="currentStudent.school.id">{{currentStudent.school.name}}</option>
           </select>
         </div>
         <div class="col col-12 col-md-6">
           <label for="student">Student</label>
-          <select name="student" class="form-control" v-model="formData.student" required>
-            <option v-for="student in schoolStudents" :key="student.id" :value="student.id">{{student.full_name}}</option>
+          <select name="student" class="form-control" v-model="formData.student" required disabled>
+            <option :value="currentStudent.id">{{currentStudent.full_name}}</option>
           </select>
         </div>
       </div>
@@ -41,7 +41,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import HeaderLine from '../../../Layouts/MainLayout/Elements/HeaderLine.vue';
+import HeaderLine from '../../../../Layouts/MainLayout/Elements/HeaderLine.vue';
 import { useUserStore } from '/resources/js/stores/user';
 import { useInstrumentStore } from '/resources/js/stores/instruments';
 import { useStudentStore } from '/resources/js/stores/students';
@@ -52,16 +52,21 @@ import { useModalStore } from '/resources/js/stores/modal';
 
 // Initiate Stores
 const user = useUserStore()
-const instrumentStore = useInstrumentStore()
 const studentStore = useStudentStore()
+const instrumentStore = useInstrumentStore()
 const hireStore = useHireStore()
 const modal = useModalStore()
 
-// Get User Schools
-const schools = ref(user.permissions.filter(p => (p.type === 'Administrator' || p.type === 'INSTRUMENTS_C')))
+// Get current student
+const currentStudent = studentStore.getStudent
 
 // Get Available instruments in selected school (that is instruments with state = 1)
-const instruments = ref(instrumentStore.getInstruments.filter(i => i.attributes.state.id === 1))
+// const instruments = ref(instrumentStore.getInstruments.filter(i => i.attributes.state.id === 1))
+if (instrumentStore.getInstruments.length == 0) {
+  axiosClient.get('instruments').then(res => {
+    instrumentStore.setInstruments(res.data)
+  })
+}
 
 // set student list to existing list if available, otherwise fetch new students list and store in studentStore.
 const students = ref(studentStore.getStudents)
@@ -72,21 +77,16 @@ if (students.value.length == 0) {
 }
 
 const formData = ref({
-  school: schools.value[0].school_id,
-  student: '',
+  school: currentStudent.school.id,
+  student: currentStudent.id,
   instrument: '',
   start: moment().format('YYYY-MM-DD'),
   end: '',
   notes: ''
 })
 
-const schoolStudents = computed(() => {
-  let schoolStud = studentStore.getStudents.filter(s => s.school.id === formData.value.school)
-  return schoolStud
-})
-
 const schoolInstruments = computed(() => {
-  let schoolInst = instruments.value.filter(i => i.school.id === formData.value.school)
+  let schoolInst = instrumentStore.getInstruments.filter(i => (i.school.id === formData.value.school && i.attributes.state.id === 1))
   return schoolInst
 })
 

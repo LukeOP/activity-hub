@@ -9,6 +9,7 @@ import studentsRoutes from '../../components/Restricted/Students/StudentsRoutes'
 import instrumentRoutes from '../../components/Restricted/Instruments/InstrumentRoutes';
 import settingsRoutes from '/resources/js/components/Restricted/Settings/settingsRoutes';
 import { useFilterStore } from '/resources/js/stores/filter';
+import { useUserStore } from '/resources/js/stores/user';
 
 const authRoutes = [
   {
