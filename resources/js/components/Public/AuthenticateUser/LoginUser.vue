@@ -98,7 +98,7 @@ form {
 @media (max-width: 768px) {
   #demo-btn {
     top: 0;
-    left: 1rem;
+    margin: 0 auto;
   }
 }
 </style>

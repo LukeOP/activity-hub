@@ -15,7 +15,6 @@ export default function useSorter() {
       if (sortOrder === 'desc') {
         result *= -1;
       }
-      console.log(result);
       return result;
     });
   }

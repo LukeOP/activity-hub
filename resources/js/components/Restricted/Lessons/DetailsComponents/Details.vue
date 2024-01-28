@@ -38,8 +38,9 @@
       </div>
     </div>
 
-    <div class="checklist" v-if="lessonStore.getLessonData.attributes.status === 'Pending'">
-      <div class="heading" >Complete Lesson Setup</div>
+    <div class="checklist" v-if="lessonStore.getLessonData.attributes.status === 'Pending' && closedChecklist != true">
+      <div class="heading" >Complete Lesson Setup
+          <i @click="closeChecklist" class="close-icon" v-html="icons.xmark"></i></div>
       <div v-for="option in setupOptions" :key="option.text" class="setup-option" @click="modal.open('EditLesson')">
         <span class="icon">
           <StatusIconSVG :status="option.status === 'pending' ? 'pending' : 'complete'" />
@@ -63,11 +64,13 @@ import axiosClient from '/resources/js/axios';
 import { computed, ref } from 'vue';
 import { useLessonsStore } from '/resources/js/stores/lessons';
 import { useToastStore } from '/resources/js/stores/toast';
+import { icons } from '@/images/icons/icons'
 
 const modal = useModalStore()
 const toast = useToastStore()
 const lessonStore = useLessonsStore()
 const router = useRouter()
+const closedChecklist = ref(false)
 
 const setupOptions = computed(() => [
   { text: 'Set Lesson Day', status: lessonStore.getLessonData.attributes.day == null ? 'pending' : 'complete' },
@@ -93,6 +96,10 @@ function handleAttendanceClick(){
 
 function markActive(){
   modal.open('LessonConfirmActive')
+}
+function closeChecklist(){
+  console.log('click');
+  closedChecklist.value = true
 }
 </script>
 
@@ -127,6 +134,23 @@ function markActive(){
 .icon {
   display: inline-block;
   width: 30px;
+}
+.close-icon {
+  float: inline-end;
+  width: 20px;
+  fill: $ah-grey;
+  &:hover {
+    fill: $ah-primary;
+  }
+}
+
+@media (max-width: 768px){
+  .checklist {
+    bottom: 10px;
+    left: 0;
+    transform: none;
+    width: 100%;
+  }
 }
 
 </style>

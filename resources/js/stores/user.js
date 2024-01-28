@@ -12,7 +12,6 @@ function getState(){
         image: "",
         email: '',
         phone: '',
-        // admin: false,
         schools: [],
       },
       permissions: [],
@@ -64,9 +63,11 @@ export const useUserStore = defineStore('user', {
     },
     async logout(){
       const res = await axiosClient.post('/logout')
-      this.attributes = {}
-      this.token = ''
       sessionStorage.removeItem('AHT')
+      this.attributes = {}
+      this.permissions = [],
+      this.token = ''
+      this.timezone = ''
       this.resetStores()
     },
     hasPermission(permission, school){
@@ -91,13 +92,17 @@ export const useUserStore = defineStore('user', {
       return this.token
     },
     getName(){
-      return this.attributes.first_name + ' ' + this.attributes.last_name
+      let name = ''
+      if(this.attributes.first_name != undefined && this.attributes.last_name != undefined){
+        name = this.attributes.first_name + ' ' + this.attributes.last_name
+      }
+      return name
     },
     getPermissions(){
       return this.permissions
     },
     getSchools(){
-      return this.attributes.schools
+      return this.attributes.schools || []
     },
     getAttributes(){
       return this.attributes
