@@ -27,10 +27,14 @@
     background-color: #2e4f64cd;
 }
 .content {
+    position: fixed;
     display: flex;
-    margin: 3rem auto;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
     max-width: 500px;
-    // min-height: 700px;
+    // margin: 3rem auto;
     background-color: rgb(255, 255, 255);
     border-radius: 0.5rem;
 }
@@ -56,6 +60,16 @@
         height: 100vh;
         margin: 0;
         border-radius: 0;
+    }
+}
+@media (max-height: 645px) {
+    .content {
+        height: fit-content;
+        max-width: 100vw;
+        border-radius: 0;
+        #loginContainer {
+            margin: 0 auto;
+        }
     }
 }
 

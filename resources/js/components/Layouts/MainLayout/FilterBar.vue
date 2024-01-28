@@ -49,8 +49,8 @@ import { useMenuStore } from '../../../stores/menu'
     })
 
   watch(() => filter.data, (newValue) => {
-    if(newValue != null && Object.keys(newValue).length > 0) menu.filter = true
-    else menu.filter = false
+    // if(newValue != null && Object.keys(newValue).length > 0) menu.filter = true
+    // else menu.filter = false
   })
 
   watch(() => menu.filterActive, (newValue) => {
