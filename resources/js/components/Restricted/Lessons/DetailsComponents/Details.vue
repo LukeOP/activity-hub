@@ -94,6 +94,9 @@ function handleAttendanceClick(){
 function markActive(){
   modal.open('LessonConfirmActive')
 }
+function closeChecklist(){
+  closedChecklist.value = true
+}
 </script>
 
 <style lang="scss" scoped>

@@ -129,7 +129,7 @@ function handleRowClick(lesson){
 table {
   width: 100%;
   #category {
-    width: 25px;
+    width: 2px;
     padding:5px
   }
   #state {
@@ -157,8 +157,22 @@ table {
 .school {
   color: $ah-grey;
 }
-@media (max-width: 768){
-  
+@media (max-width: 768px){
+  table {
+    width: 100%;
+    #category {
+      display: none;
+    }
+    #state {
+      width: 30px;
+    }
+    tr {
+      border-bottom:1px dashed $ah-grey ;
+      td {
+        padding: 0px 0;
+      }
+    }
+  }
 }
 
 
