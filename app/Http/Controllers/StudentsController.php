@@ -66,7 +66,8 @@ class StudentsController extends Controller
     public function storeFromCSV(Request $request, string $school_id)
     {
         $request->validate([
-            'csv_file' => 'required|mimes:csv,text|max:2048'
+            // 'csv_file' => 'required|mimes:csv,text|max:2048'
+            'csv_file' => 'required|file|mimetypes:text/csv,text/plain|max:2048'
         ]);
 
         $file = $request->file('csv_file');
