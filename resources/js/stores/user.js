@@ -59,7 +59,7 @@ export const useUserStore = defineStore('user', {
         this.setUser(res.data.user)
         this.setPermissions(res.data.permissions)
         this.setToken(sessionStorage.getItem('AHT'))
-        this.timezone = res.data.data.user.timezone
+        this.timezone = res.data.user.timezone
       }
     },
     async logout(){
