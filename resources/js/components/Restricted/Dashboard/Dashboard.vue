@@ -36,7 +36,7 @@ const ready = ref(false)
 const actionArray = []
 
 function setActions(){
-  if(user.attributes.schools.length > 0) {
+  if(user.getSchools.length > 0) {
     if(user.hasPermissionAny('LESSONS_C')){
       actionArray.push({ header: 'New Lesson', to: { name: 'LessonCreate' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'})
     }

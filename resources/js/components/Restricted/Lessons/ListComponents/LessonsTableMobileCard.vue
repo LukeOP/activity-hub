@@ -38,7 +38,8 @@ const user = useUserStore()
 const active = ref(false)
 
 function formatTime(time){
-  return moment(time, 'HH:mm:ss').format('h:mma')
+  let date = moment(time, 'HH:mm:ss').format('h:mma')
+  return date != 'Invalid date' ? date : ''
 }
 function LessonDetails(){
   lessonStore.setLesson(props.lesson)
