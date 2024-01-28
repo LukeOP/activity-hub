@@ -10,7 +10,8 @@
                   <h2>File Format:</h2>
                   <ul>
                     <li>The students file must be a .csv</li>
-                    <li>Your file must contain all required columns and no extra ones.</li>
+                    <li>Your file must contain all required columns.</li>
+                    <li>Your file must not contain any additional columns.</li>
                     <li>Headings are required for all columns.</li>
                     <li>The following columns are required:</li>
                     <ul>
@@ -37,13 +38,19 @@
             <!-- <div class="mt-3" v-if="selectedSchool.id"> -->
             <div class="mt-3">
 
-                <input type="checkbox" v-model="unenrollStudents">
-
+                <input type="checkbox" v-model="unenrollStudents" :disabled="selectedSchool == null">
                 <span class="mx-2">Un-enroll Students not in csv file</span>
 
+                <div v-if="unenrollStudents" class="mt-2" style="border: 1px dashed red; padding: 10px; background:white">
+                  <p>NOTE: <strong>All students</strong> associated with {{ selectedSchool.name }} that are <strong>not listed in the csv file</strong> will be considered un-enrolled and will no longer appear in Activity Hub.</p>
+                  <p>It is recomended to only use this option at the start of the school year as a simple way of removing students who left the year prior and adding newly enrolled students.</p>
+                  <input type="checkbox" v-model="confirmUnenroll">
+                  <span class="mx-2">I understand and wish to continue with un-enrolling students.</span>
+                </div>
+
                 <br>
-                <input type="file" class="form-control mt-2" ref="fileInput" @change="handleFileChange"  id="fileInput"/>
-                <button class="btn btn-primary w-100 mt-2" @click="uploadCsv" :disabled="uploading">Upload Student CSV</button>
+                <input type="file" class="form-control mt-2" ref="fileInput" @change="handleFileChange"  id="fileInput" :disabled="selectedSchool == null"/>
+                <button class="btn btn-primary w-100 mt-2" @click="uploadCsv" :disabled="uploading || file == null || (unenrollStudents && !confirmUnenroll)">Upload Student CSV</button>
             </div>
         </div>
     </div>
@@ -63,6 +70,7 @@ import { useStudentStore } from '/resources/js/stores/students';
   const studentStore = useStudentStore()
   const selectedSchool = ref()
   const unenrollStudents = ref(false)
+  const confirmUnenroll = ref(false)
   const uploading = ref(false)
   const file = ref(null);
   
