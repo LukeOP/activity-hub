@@ -12,7 +12,7 @@ const studentsRoutes = [
         { path: 'details', name: 'StudentDetails', component: StudentDetails, meta: { title: 'Student Details', breadcrumb: ' / Details', section: "Students", depth: 2},
         beforeEnter: [
           () => checkPermission('STUDENTS_V', 'StudentsList'),
-          () => checkStudentObject()
+          () => checkStudentObject('StudentsList')
         ]},
         { path: 'bulk-update', name: "StudentsBulkUpdate", component: StudentsBulkUpdate, meta: { title: 'Bulk Update Students', breadcrumb: ' / Bulk Update', section: 'Students', depth: 2},
           beforeEnter: () => checkPermission('Administrator', 'StudentsList')}
@@ -27,7 +27,7 @@ function checkPermission(permission, redirect){
 
 function checkStudentObject(){
   const studentStore = useStudentStore()
-  if(Object.keys(studentStore.getStudent) == 0) return { name: 'StudentsList'}
+  if(Object.keys(studentStore.getStudent) == 0) return { name: redirect}
   else return true
 }
 
