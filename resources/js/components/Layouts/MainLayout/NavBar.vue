@@ -3,7 +3,7 @@
     <nav class="menu" :class="{ 'menu-visible': navVisible }">
       
       <div id="sideBar">
-        <!-- <img id="logo-img" src="/images/ActivityHub-Logo_JT.png" alt="Activity Hub Logo"> -->
+        <!-- <img id="logo-img" style="background-color: #3B6580; max-width: 250px; margin: 0 auto; padding: 25px;" src="/images/logos/EventFlow/EventFlow-Logo-Alt1.png" alt="Activity Hub Logo"> -->
         <img id="logo-img" src="/images/ActivityHub_Logo_Main.png" alt="Activity Hub Logo">
 
 
@@ -151,6 +151,7 @@ function handleSchools(){
   margin-right: 1rem;
   margin-left: 1rem;
   width: 25px;
+  // fill: $ah-primary-light;
 }
 #sideBar {
   display: flex;
@@ -158,6 +159,9 @@ function handleSchools(){
   height: 100vh;
   width: 250px;
   background-color: $ah-primary-dark;
+  // background-color: $ah-primary-background;
+  // background-color: #FCFCFC;
+  box-shadow: 0 10px 10px $ah-grey;
 
   img {
     width: 100%;
@@ -173,6 +177,7 @@ function handleSchools(){
     .link {
       display: block;
       color: lighten($ah-primary, 55%);
+      // color: $ah-primary-light;
       width: 100%;
       text-decoration: none;
       padding: 10px 8px;
@@ -180,6 +185,7 @@ function handleSchools(){
 
       &:hover {
         background-color: $ah-primary;
+        // background-color: $ah-primary-background;
         color: lighten($ah-primary, 55%);
       }
 
@@ -201,8 +207,10 @@ function handleSchools(){
     }
     .active {
       background-color: $ah-primary;
+      // background-color: $ah-primary-background;
       border-left: 8px solid $ah-primary-light;
       color: lighten($ah-primary, 55%);
+      // color: $ah-primary-light;
       font-weight: bold;
       padding: 10px 0px;
       .linkText {
@@ -218,6 +226,7 @@ function handleSchools(){
   #settings {
   height: 150px;
   background-color: $ah-primary;
+  // background-color: $ah-primary-background;
   padding-top: 10px;
 
     #user-img {

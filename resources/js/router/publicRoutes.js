@@ -1,5 +1,5 @@
 import Home from '../components/Public/Home.vue';
-import NotFound from '../components/Public/NotFound.vue'
+import NotFoundPublic from '../components/Public/NotFoundPublic.vue'
 import Login from '../components/Public/AuthenticateUser/LoginUser.vue';
 import RecoverAccount from '../components/Public/AuthenticateUser/RecoverAccount.vue';
 import SetPassword from '../components/Public/AuthenticateUser/SetPassword.vue';
@@ -8,8 +8,8 @@ import RegisterConfirm from '../components/Public/AuthenticateUser/RegisterConfi
 import EmailVerified from '../components/Public/AuthenticateUser/EmailVerified.vue';
 import LessonSignUpForm from '../components/Public/Forms/LessonSignup.vue'
 
-import MainLayout from '../components/Layouts/PublicLayout/MainLayout.vue'
 import AuthLayout from '../components/Layouts/PublicLayout/AuthLayout.vue'
+import axiosClient from '../axios';
 
 const publicRoutes = [
   {
@@ -24,14 +24,11 @@ const publicRoutes = [
       { path: 'email-verified', name: 'EmailVerified', component: EmailVerified, meta: {title: 'Register'} },
       { path: 'recover-account', name: 'RecoverAccount', component: RecoverAccount, meta: {title: 'Account Recovery'} },
       { path: 'password', name: 'Password', component: SetPassword, meta: {title: 'Reset Password'} },
-      { path: 'forms/:id', name: 'LessonSignUp', component: LessonSignUpForm, meta: {title: 'Lesson Signup'} },
-
-      { path: 'home', name: 'Home', component: Home, meta: {title: 'Welcome'} },
-
-
-      {path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound, meta: {title: '404 Not Found'}}
     ]
   },
+  { path: '/forms/:id', name: 'LessonSignUp', component: LessonSignUpForm, meta: {title: 'Lesson Signup'}},
+  // { path: '/home', name: 'Home', component: Home, meta: {title: 'Welcome'} },
+  { path: '/not-found', name: 'NotFoundPublic', component: NotFoundPublic, redirect: '/' }
 ];
 
 export default publicRoutes;

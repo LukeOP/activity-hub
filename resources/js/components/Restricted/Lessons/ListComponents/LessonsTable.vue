@@ -22,7 +22,7 @@
     <table>
       <tbody>
         <tr v-for="lesson in lessons" :key="lesson.id" @click="handleLessonClick(lesson)" :class="lesson.attributes.status">
-          <td style="display: flex; justify-content: space-between;"><span>{{lesson.student.full_name}}</span><span>({{ lesson.student.tutor_group }})</span></td>
+          <td style="display: flex; justify-content: space-between;"><span>{{lesson.student.full_name}}</span><span v-if="lesson.student.tutor_group">({{ lesson.student.tutor_group }})</span></td>
           <!-- <td>{{lesson.student.year_level || '-'}}</td> -->
           <td>{{lesson.attributes.instrument}}</td>
           <td>{{lesson.attributes.day || '-'}}</td>
