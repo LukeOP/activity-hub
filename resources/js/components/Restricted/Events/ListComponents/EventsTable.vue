@@ -7,6 +7,7 @@
           <th @click="sortData('attributes.name')">Event:</th>
           <th @click="sortData('attributes.description')">Description:</th>
           <th @click="sortData('attributes.date')">Date:</th>
+          <th @click="sortData('attributes.date')">Term:</th>
           <th @click="sortData('school.name')" v-if="user.getSchools.length > 1">School:</th>
         </tr>
       </thead>
@@ -20,6 +21,7 @@
           <td>{{ event.attributes.name }}</td>
           <td>{{ event.attributes.description }}</td>
           <td>{{event.attributes.date}}</td>
+          <td>{{event.attributes.term}}</td>
           <td v-if="user.getSchools.length > 1">{{event.school.name}}</td>
         </tr>
       </tbody>

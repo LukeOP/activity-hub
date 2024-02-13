@@ -1,7 +1,8 @@
 <template>
   <div>
     <HeaderLine heading="Settings" />
-    <button class="btn btn-primary" @click="routeChange('Privacy')">Privacy Policy</button>
+    <div class="btn btn-primary" @click="routeChange('Privacy')">Privacy Policy</div><br>
+    <div class="btn btn-primary mt-2" @click="routeChange('SchoolSetup')">School Setup</div>
 
   </div>
 </template>
