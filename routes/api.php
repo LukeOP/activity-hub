@@ -19,6 +19,7 @@ use App\Http\Controllers\LessonRequestsController;
 use App\Http\Controllers\LessonRequestsFormsController;
 use App\Http\Controllers\LessonsController;
 use App\Http\Controllers\SchoolsController;
+use App\Http\Controllers\SchoolTermsController;
 use App\Http\Controllers\StudentContactsController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TasksController;
@@ -156,4 +157,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('document/upload', [DocumentController::class, 'upload']);
     Route::get('document/download/{id}', [DocumentController::class, 'download']);
     Route::delete('document/delete/{id}', [DocumentController::class, 'delete']);
+
+    // SETTINGS
+    Route::get('settings/school-terms', [SchoolTermsController::class, 'index']);
 });

@@ -4,12 +4,11 @@ import NotFoundRestricted from '../../components/Restricted/NotFoundRestricted.v
 import lessonsRoutes from '../../components/Restricted/Lessons/LessonsRoutes';
 import eventsRoutes from '../../components/Restricted/Events/EventRoutes';
 import dashboardRoutes from './Dashboard';
-import staffRoutes from './Staff';
+import staffRoutes from '../../components/Restricted/Staff/StaffRoutes';
 import studentsRoutes from '../../components/Restricted/Students/StudentsRoutes';
 import instrumentRoutes from '../../components/Restricted/Instruments/InstrumentRoutes';
 import settingsRoutes from '/resources/js/components/Restricted/Settings/settingsRoutes';
 import { useFilterStore } from '/resources/js/stores/filter';
-import { useUserStore } from '/resources/js/stores/user';
 
 const authRoutes = [
   {

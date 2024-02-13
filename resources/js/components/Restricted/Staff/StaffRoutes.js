@@ -1,5 +1,5 @@
-import StaffList from '../../components/Restricted/Staff/StaffList.vue'
-import StaffDetails from '../../components/Restricted/Staff/StaffDetails.vue'
+import StaffList from './StaffList.vue'
+import StaffDetails from './StaffDetails.vue'
 import { useStaffStore } from '/resources/js/stores/staff'
 
 

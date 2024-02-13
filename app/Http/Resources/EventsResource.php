@@ -23,6 +23,7 @@ class EventsResource extends JsonResource
                 'location' => $this->location,
                 'date' => $this->date,
                 'time' => $this->time,
+                'term' => $this->school_term()
             ],
             'school' => new SchoolsResource($this->school),
             'timestamps' => [
