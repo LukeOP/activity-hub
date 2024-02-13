@@ -1,7 +1,9 @@
 <template>
   <div id="main-body">
     <Header />
-    <!-- <h1>Landing Page</h1> -->
+    <div class="container">
+      <h1>.</h1>
+    </div>
   </div>
 </template>
 

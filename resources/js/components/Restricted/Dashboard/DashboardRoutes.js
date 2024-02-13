@@ -1,5 +1,5 @@
-import Dashboard from '../../components/Restricted/Dashboard/Dashboard.vue'
-import Profile from '../../components/Restricted/Dashboard/Profile/Profile.vue'
+import Dashboard from './Dashboard.vue'
+import Profile from './Profile/Profile.vue'
 
 
 const dashboardRoutes = [

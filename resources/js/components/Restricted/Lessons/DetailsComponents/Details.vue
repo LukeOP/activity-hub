@@ -98,7 +98,6 @@ function markActive(){
   modal.open('LessonConfirmActive')
 }
 function closeChecklist(){
-  console.log('click');
   closedChecklist.value = true
 }
 </script>

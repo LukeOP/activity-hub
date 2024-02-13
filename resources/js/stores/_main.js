@@ -9,6 +9,7 @@ import { useStaffStore } from "./staff";
 import { useStudentStore } from "./students";
 import { useInstrumentStore } from "./instruments";
 import { useEventStore } from "./events";
+import { useUserStore } from "./user";
 
 
 function getState(){
@@ -48,6 +49,9 @@ export const useMainStore = defineStore('main', {
       
       const instrumentStore = useInstrumentStore()
         instrumentStore.reset()
+      
+      // const userStore = useUserStore()
+      //   userStore.reset()
     },
   },
   getters: {
