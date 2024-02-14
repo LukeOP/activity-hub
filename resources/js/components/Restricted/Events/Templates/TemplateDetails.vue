@@ -102,6 +102,9 @@ const actionArray = []
 if(user.hasPermission('EVENTS_TEMP_C', currentTemplate.value.school.id)){
   actionArray.push({ header: 'Add Template Job', to: { name: 'EventTemplateDetails' }, modal: 'AddTemplateJob', icon: 'fa-solid fa-plus'})
 }
+if(user.hasPermission('EVENTS_TEMP_D', currentTemplate.value.school.id)){
+  actionArray.push({ header: 'Delete Template', to: { name: 'EventTemplateDetails' }, modal: 'DeleteEventTemplate', icon: 'fa-solid fa-trash', additional: true, red: true})
+}
 actions.setItems(actionArray)
 
 </script>

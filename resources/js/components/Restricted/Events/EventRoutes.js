@@ -13,7 +13,7 @@ const eventsRoutes = [
       { path: '', name: 'EventsList', component: EventsList, meta: { title: 'Events', section: "Events", depth: 1},
         beforeEnter: () => checkPermission('EVENTS_V', 'Dashboard')},
       { path: 'create', name: 'EventCreate', component: EventCreate, meta: { title: 'Events', breadcrumb: ' / Create', section: "Events", depth: 2},
-        beforeEnter: [() => checkEventObject('EventsList'), () => checkPermission('EVENTS_C', 'EventsList')]},
+        beforeEnter: () => checkPermission('EVENTS_C', 'EventsList')},
       { path: 'details', name: 'EventDetails', component: EventDetails, meta: { title: 'Event Details', breadcrumb: ' / Details', section: "Events", depth: 2},
         beforeEnter: [() => checkEventObject('EventsList'), () => checkPermission('EVENTS_V', 'EventsList')]},
       

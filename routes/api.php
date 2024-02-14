@@ -85,6 +85,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('event-school-jobs/templates', [EventSchoolJobController::class, 'createEventTemplate']);
     Route::get('event-school-jobs/templates/{school_id}', [EventSchoolJobController::class, 'getSchoolEventJobTemplates']);
     Route::get('event-school-jobs/template/{template_id}', [EventSchoolJobController::class, 'getTemplateJobs']);
+    Route::delete('event-school-jobs/template/{template_id}', [EventSchoolJobController::class, 'deleteEventTemplate']);
     Route::patch('event-school-jobs/template/edit/{template_id}', [EventSchoolJobController::class, 'updateSchoolEventJobTemplate']);
 
     // INSTRUMENTS

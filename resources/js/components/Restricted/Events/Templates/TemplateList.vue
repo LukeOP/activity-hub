@@ -95,7 +95,7 @@ const formData = ref({
 
 function setActions(){
   let actionsArray = []
-  console.log(mobileFormat.value);
+  // console.log(mobileFormat.value);
   if(user.hasPermissionAny('EVENT_TEMP_C') && !mobileFormat.value){
     actionsArray.push({ header: 'Create New Template', to: { name: 'TemplateList' }, modal: 'CreateTemplate', icon: 'fa-solid fa-add'})
   }
@@ -120,6 +120,7 @@ function setSchools(){
 
 // Fetch school templates when school is selected
 watch(() => formData.value.school, (newValue) => {
+  schoolStore.setSchool(...schools.value.filter(s => s.id == newValue))
   if(formData.value.school != ''){
     const {data, fetchData} = useApi('event-school-jobs/templates/' + newValue)
     fetchData().then(()=>{

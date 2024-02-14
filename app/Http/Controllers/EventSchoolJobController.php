@@ -125,4 +125,15 @@ class EventSchoolJobController extends Controller
         if ($itemDeleted) return 'Item Deleted';
         else return 'Error deleting item';
     }
+
+    public function deleteEventTemplate(string $template_id)
+    {
+        $itemDeleted = EventSchoolJobTemplate::where('id', $template_id)->first()->delete();
+        if ($itemDeleted) {
+            return 'Item Deleted';
+        } else {
+            return 'Error deleting item';
+        }
+    }
+
 }
