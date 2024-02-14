@@ -36,6 +36,7 @@ const ready = ref(false)
 const actionArray = []
 
 function setActions(){
+  actions.setItems([])
   if(user.getSchools.length > 0) {
     if(user.hasPermissionAny('LESSONS_C')){
       actionArray.push({ header: 'New Lesson', to: { name: 'LessonCreate' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'})
@@ -53,16 +54,15 @@ function checkPermission(value){
   if(user.hasPermissionAny(`${value}_R`) || user.hasPermissionAny(`${value}_V`)) return true
   return false
 }
-
-watch(() => user.attributes.schools, (newValue) => {
-  setActions()
-})
+// console.log(user.getSchools.length);
+// watch(() => user.attributes.schools, (newValue) => {
+//   setActions()
+// })
 
 onMounted(()=>{
   setTimeout(()=>{
     setActions()
   },500)
-  
 })
 
 

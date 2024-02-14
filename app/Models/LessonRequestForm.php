@@ -10,11 +10,18 @@ use Illuminate\Support\Str;
 class LessonRequestForm extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
     public $incrementing = false;
     protected $keyType = 'string';
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->{$model->getKeyName()} = Str::uuid()->toString();
+        });
+    }
     protected $fillable = [
         'school_id',
         'description',
@@ -59,14 +66,6 @@ class LessonRequestForm extends Model
         'footer_content'
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->{$model->getKeyName()} = Str::uuid()->toString();
-        });
-    }
     public function school()
     {
         return $this->belongsTo(School::class);

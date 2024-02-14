@@ -22,7 +22,7 @@ const eventsRoutes = [
           { path: '', name: 'TemplateList', component: TemplateList, meta: { section: "Events", depth: 2},
             beforeEnter: [() => checkPermission('EVENTS_TEMP_V', 'EventsList')]},
           { path: 'details', name: 'EventTemplateDetails', component: EventTemplateDetails, meta: { section: "Events", breadcrumb: ' / Details', depth: 3},
-            beforeEnter: [() => checkEventObject('EventsList'), () => checkPermission('EVENTS_TEMP_V', 'EventsList')]},
+            beforeEnter: [() => checkEventData('TemplateList'), () => checkPermission('EVENTS_TEMP_V', 'EventsList')]},
         ]
       }
     ]
@@ -38,6 +38,12 @@ function checkPermission(permission, redirect){
 function checkEventObject(redirect){
   const eventStore = useEventStore()
   if(Object.keys(eventStore.getEvent) == 0) return { name: redirect}
+  else return true
+}
+
+function checkEventData(redirect){
+  const eventStore = useEventStore()
+  if(Object.keys(eventStore.eventData) == 0) return { name: redirect}
   else return true
 }
 

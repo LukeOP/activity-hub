@@ -8,6 +8,7 @@
           <th @click="sortData('student.full_name')">Student:</th>
           <th @click="sortData('attributes.start_date')">Hire Date:</th>
           <th style="width: 50%;">Notes:</th>
+          <th>Status:</th>
           <th v-if="user.getSchools.length > 1" @click="sortData('instrument.school.name')">School:</th>
         </tr>
       </thead>
@@ -22,6 +23,7 @@
           <td>{{hire.student.full_name}}</td>
           <td>{{formatDate(hire.attributes.start_date)}}</td>
           <td style="width: 50%;">{{hire.attributes.notes || '-'}}</td>
+          <td>{{ hire.attributes.returned_date != null ? 'Completed' : 'In Progress' }}</td>
           <td v-if="user.getSchools.length > 1">{{hire.instrument.school.name}}</td>
         </tr>
       </tbody>

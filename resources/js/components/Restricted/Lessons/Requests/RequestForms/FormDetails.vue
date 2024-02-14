@@ -182,14 +182,27 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axiosClient from '/resources/js/axios';
 import { useToastStore } from '/resources/js/stores/toast';
+import { useActionsStore } from '../../../../../stores/actions';
+import { useUserStore } from '../../../../../stores/user';
 
 // Initiate Stores
 const lessonStore = useLessonsStore()
 const currentForm = lessonStore.getRequestForm
 const toast = useToastStore()
+const actions = useActionsStore()
+const user = useUserStore()
 
 // Initiate Composables
 const router = useRouter()
+
+function setActions(){
+  let actionsArray = []
+  if(user.hasPermission('LESSON_FRM_D', currentForm.school.id)){
+    actionsArray.push({ header: 'Delete Request Form', to: { name: 'RequestFormDetails' }, modal: 'DeleteRequestForm', icon: 'fa-solid fa-trash', additional: true, red: true})
+  }
+  actions.setItems(actionsArray)
+}
+setActions()
 
 // Initiate Variables
 const thisYear = moment().format('YYYY')

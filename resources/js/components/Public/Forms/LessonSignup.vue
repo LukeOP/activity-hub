@@ -69,7 +69,7 @@
           </div>
           <div class="col col-12 col-md-6">
             <label v-if="form.inputs.experience">{{ form.field_labels.experience }}
-              <textarea rows="5" class="form-control" v-model="formData.experience" required></textarea>
+              <textarea rows="5" class="form-control" v-model="formData.experience"></textarea>
             </label>
           </div>
         </section>
@@ -93,13 +93,9 @@
         A tutor will be in touch once your application has been reviewed.</p>
       <button class="btn btn-primary" @click="resetForm()">Submit another request</button>
     </div>
+    <!-- <pre>{{ formData }}</pre> -->
 
   </div>
-    <!-- <pre>{{tutorArray}}</pre> -->
-    <!-- <pre>{{ form }}</pre> -->
-    <!-- <pre>{{ staffList }}</pre>
-    <pre>{{ formData }}</pre> -->
-    <!-- <pre>{{ route.params.id }}</pre> -->
 </template>
 
 <script setup>
@@ -127,7 +123,6 @@ const formData = ref({
   tutor: '',
   funding_type: '',
   experience: '',
-  school_id: ''
 })
 
 function resetForm(){
@@ -144,7 +139,7 @@ function resetForm(){
     tutor: '',
     funding_type: '',
     experience: '',
-    school_id: ''
+    school_id: form.value.school.id
   }
   submitted.value = false
 }
@@ -189,7 +184,7 @@ const tutorArray = computed(() => {
 
 function submitForm(){
   axiosClient.post('lesson-request-form/create-public-request', formData.value).then(res => {
-    axiosClient.post('email-lesson-request-received').then(res => {
+    axiosClient.post('email-lesson-request-received/' + form.value.content.heading).then(res => {
       if(res.data.response === "success"){
         submitted.value = true
       } else {

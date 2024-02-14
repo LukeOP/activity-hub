@@ -15,7 +15,11 @@
           <label for="reviewed-student">Name of Student:</label>
           <span style="display:flex">
             <select id="reviewed-student" class="form-control" v-model="selectedStudent" @change="updateStudentDetails" required>
-              <option v-for="student in students" :key="student.id" :value="student.id">{{student.full_name}} - {{ student.tutor_group }}</option>
+              <option v-for="student in students" :key="student.id" :value="student.id">
+                {{student.full_name}}
+                <span v-if="student.tutor_group"> - {{ student.tutor_group }}</span>
+                <span v-if="student.age"> - {{ student.age }}</span>
+              </option>
             </select>
           </span>
         </div>
@@ -31,7 +35,7 @@
           <label v-if="field.if">{{ field.label }}
             <span>
               <input :type="field.type" class="form-control" :value="field.reviewedValue" :disabled="field.disabled">
-              <span v-if="!field.disabled" class="copy-btn" @click="copyField(field.label)">copy</span>
+              <span v-if="!field.disabled" class="copy-btn" @click="copyField(field.label)">copy provided</span>
             </span>
           </label>
         </div>
@@ -56,7 +60,7 @@
           <label v-if="field.if">{{ field.label }}
             <span>
               <input :type="field.type" class="form-control" :value="field.reviewedValue" :disabled="field.disabled" :required="field.required">
-              <span v-if="!field.disabled" class="copy-btn" @click="copyField(field.label)">copy</span>
+              <span v-if="!field.disabled" class="copy-btn" @click="copyField(field.label)">copy provided</span>
             </span>
           </label>
         </div>
@@ -312,6 +316,7 @@ label, input, select {
       color: white;
       padding: 0.375rem 0.75rem;
       border-radius: 0 0.375rem 0.375rem 0;
+      min-width: fit-content;
       &:hover {
         cursor: pointer;
         background-color: $ah-primary-dark;

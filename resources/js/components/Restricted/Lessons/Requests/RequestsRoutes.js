@@ -25,7 +25,7 @@ const requestRoutes = [
               { path: '', name: 'RequestFormDetails', component: RequestFormDetails, meta: {section: "Lessons", depth: 4}},
               { path: 'preview', name: 'RequestFormPreview', component: FormPreview, meta: {section: "Lessons", breadcrumb: ' / Preview', depth: 5}}
             ],
-            beforeEnter: () => checkLessonObject('LessonsList')
+            beforeEnter: () => checkFormObject('LessonsList')
           }, 
         ]}
       ],
@@ -40,6 +40,12 @@ function checkPermission(permission, redirect){
 }
 
 function checkLessonObject(redirect){
+  const lessonStore = useLessonsStore()
+  if(Object.keys(lessonStore.getRequest) == 0) return { name: redirect}
+  else return true
+}
+
+function checkFormObject(redirect){
   const lessonStore = useLessonsStore()
   if(Object.keys(lessonStore.getRequestForm) == 0) return { name: redirect}
   else return true

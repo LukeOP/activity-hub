@@ -131,16 +131,15 @@ input[type='submit'] {
   cursor: pointer;
 }
 .job-item {
-  // background-color: $ah-primary-light;
-  // color: white;
-  border: 1px solid $ah-primary;
-  margin-top: 10px;
   border-radius: 0.375rem;
-  padding: 5px 10px;
+  padding: 10px 10px;
 
   #delete, #edit, #priority {
     float: right;
     margin-left: 2rem;
+  }
+  &:nth-child(even) {
+    background-color: $ah-primary-background;
   }
   &:hover {
     background-color: $ah-primary;

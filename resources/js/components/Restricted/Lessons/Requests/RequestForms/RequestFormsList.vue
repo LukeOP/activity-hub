@@ -42,10 +42,12 @@ import { useLessonsStore } from '/resources/js/stores/lessons';
 import moment from 'moment';
 import { useWindowSize } from '/resources/js/composables/useWindowSize';
 import { useUserStore } from '/resources/js/stores/user';
+import { useActionsStore } from '../../../../../stores/actions';
 
 // Initiate Stores
 const lessonStore = useLessonsStore()
 const user = useUserStore()
+const actions = useActionsStore()
 
 // Initiate Composables
 const router = useRouter()
@@ -57,6 +59,16 @@ const formData = ref({
   school: '',
   forms: []
 })
+
+// Set Actions for User
+function setActions() {
+  let actionsArray = []
+  if(user.hasPermissionAny('LESSON_REQ_C')) {
+    actionsArray.push({ header: 'Create Request Form', to: { name: 'RequestFormsList' }, modal: 'CreateLessonRequestform', icon: 'fa-solid fa-add'})
+  }
+  actions.setItems(actionsArray)
+}
+setActions()
 
 // Fetch user schools or set default school if only one exists for user
 const {data: schools, fetchData: fetchSchools} = useApi('schools')
