@@ -20,7 +20,7 @@ const eventsRoutes = [
       {path: 'templates', meta: { title: 'Event Templates', breadcrumb: 'Templates'},
         children: [
           { path: '', name: 'TemplateList', component: TemplateList, meta: { section: "Events", depth: 2},
-            beforeEnter: [() => checkEventObject('EventsList'), () => checkPermission('EVENTS_TEMP_V', 'EventsList')]},
+            beforeEnter: [() => checkPermission('EVENTS_TEMP_V', 'EventsList')]},
           { path: 'details', name: 'EventTemplateDetails', component: EventTemplateDetails, meta: { section: "Events", breadcrumb: ' / Details', depth: 3},
             beforeEnter: [() => checkEventObject('EventsList'), () => checkPermission('EVENTS_TEMP_V', 'EventsList')]},
         ]
