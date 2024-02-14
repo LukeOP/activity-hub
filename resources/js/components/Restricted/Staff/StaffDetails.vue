@@ -74,7 +74,7 @@ function deleteSubject(subject){
 }
 
 function handlePositionEdit(position){
-  axiosClient.patch(`user-position/${staff.position.id}/`, {position: position}).then(res =>{
+  axiosClient.patch(`user-position/${staff.position.id}`, {position: position}).then(res =>{
     editingPosition.value = false
   })
 }
