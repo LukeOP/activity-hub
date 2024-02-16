@@ -25,7 +25,7 @@ import { useWindowSize } from '/resources/js/composables/useWindowSize';
 import HeaderLine from '../../Layouts/MainLayout/Elements/HeaderLine.vue';
 import { useUserStore } from '/resources/js/stores/user';
 import { useActionsStore } from '/resources/js/stores/actions';
-import LoadingSpinner from '../../layouts/mainlayout/elements/LoadingSpinner.vue';
+import LoadingSpinner from '/resources/js/components/Layouts/MainLayout/Elements/LoadingSpinner.vue'
 
 // Initiate Stores
 const studentStore = useStudentStore()
