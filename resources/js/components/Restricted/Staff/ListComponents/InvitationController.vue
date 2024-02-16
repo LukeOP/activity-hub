@@ -14,7 +14,7 @@ import { computed, ref } from 'vue';
 import useApi from '/resources/js/composables/useApi';
 import { useSchoolStore } from '/resources/js/stores/schools';
 import InvitationTable from './InvitationTable.vue';
-import Loadingspinner from '../../../layouts/mainlayout/elements/loadingspinner.vue';
+import Loadingspinner from '../../../layouts/mainlayout/elements/LoadingSpinner.vue';
 
 
 // Initiate Stores

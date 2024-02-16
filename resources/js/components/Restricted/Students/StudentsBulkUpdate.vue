@@ -65,7 +65,7 @@
 import { useUserStore } from '/resources/js/stores/user';
 import { useToastStore } from '/resources/js/stores/toast';
 import { useStudentStore } from '/resources/js/stores/students';
-import Loadingspinner from '../../layouts/mainlayout/elements/loadingspinner.vue';
+import Loadingspinner from '../../layouts/mainlayout/elements/LoadingSpinner.vue';
   
   const user = useUserStore()
   const toast = useToastStore()
