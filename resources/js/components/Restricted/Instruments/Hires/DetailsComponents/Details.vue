@@ -1,7 +1,7 @@
 <template>
   <div>
     <section>
-      <h3>NOTE: This hire concluded on {{ moment(hire.attributes.returned_date).format('MMMM Do, YYYY') }}.</h3>
+      <h3 v-if="hire.attributes.returned_date">NOTE: This hire concluded on {{ moment(hire.attributes.returned_date).format('MMMM Do, YYYY') }}.</h3>
     </section>
     <section class="row">
       <h2>Details</h2>

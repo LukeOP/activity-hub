@@ -42,7 +42,7 @@
         <div class="row">
           <div class="col col-12 col-md-6">
             <label for="fundingType">Lesson Type:</label>
-            <select name="fundingType" class="form-control" v-model="lessonData.funding_type" required>
+            <select name="fundingType" class="form-control" v-model="lessonData.funding_type">
               <option v-for="option in fundingTypes" :key="option.index" :value="option.value">{{option.label}}</option>
             </select>
           </div>

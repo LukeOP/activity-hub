@@ -129,7 +129,7 @@ function handleRowClick(lesson){
 table {
   width: 100%;
   #category {
-    width: 2px;
+    width: 25px;
     padding:5px
   }
   #state {
