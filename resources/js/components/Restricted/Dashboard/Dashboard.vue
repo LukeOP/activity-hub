@@ -1,8 +1,8 @@
 <template>
 <div>
-  <div v-if="ready" class="row">
+  <!-- <div v-if="ready" class="row">
     <NewUserSetUp v-if="!hasSchools" />
-  </div>
+  </div> -->
   <InfoTiles />
   <div id="dashboard-tiles">
     <div class="tile-row">
@@ -21,7 +21,7 @@
 import { onMounted, ref, watch } from 'vue';
 import { useActionsStore } from '../../../stores/actions'
 import { useUserStore } from '../../../stores/user';
-import NewUserSetUp from './NewUserSetUp.vue';
+// import NewUserSetUp from './NewUserSetUp.vue';
 import LessonList from './LessonList.vue';
 import AttendanceTile from './AttendanceTile.vue';
 import EventList from './EventList.vue';
