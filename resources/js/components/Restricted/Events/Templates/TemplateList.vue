@@ -24,6 +24,7 @@
               <h2 class="mb-3 mt-4">Existing Templates:
                 <!-- <button v-if="user.hasPermission('EVENTS_TEMP_C', formData.school)" class="btn btn-outline-secondary float-end hiddenOnMobile" @click="createTemplate()">Create New Template</button> -->
               </h2>
+              <LoadingSpinner :isLoading="loading" color="primary" />
               <div id="template-container">
                 <div v-for="template in formData.templates" :key="template" class="template">
                   <div @click="viewEventTemplateDetails(template)">
@@ -73,6 +74,7 @@ import { useEventStore } from '/resources/js/stores/events';
 import { useModalStore } from '/resources/js/stores/modal';
 import { useSchoolStore } from '/resources/js/stores/schools';
 import { useActionsStore } from '/resources/js/stores/actions';
+import LoadingSpinner from '../../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 // Initiate Stores
 const user = useUserStore()
@@ -92,6 +94,7 @@ const formData = ref({
   templates: [],
   selected_Template: ''
 })
+const loading = ref(false)
 
 function setActions(){
   let actionsArray = []
@@ -122,10 +125,16 @@ function setSchools(){
 watch(() => formData.value.school, (newValue) => {
   schoolStore.setSchool(...schools.value.filter(s => s.id == newValue))
   if(formData.value.school != ''){
+    loading.value = true
     const {data, fetchData} = useApi('event-school-jobs/templates/' + newValue)
-    fetchData().then(()=>{
+    fetchData()
+    .then(()=>{
+      loading.value = false
       formData.value.templates = data.value
       formData.value.selected_Template = ''
+    })
+    .catch(e => {
+      loading.value = false
     })
   }else formData.value.templates = []
 })
@@ -134,11 +143,6 @@ watch(() => formData.value.school, (newValue) => {
 function viewEventTemplateDetails(template){
   formData.value.selected_Template = template
   eventStore.setEventData(template)
-}
-
-function createTemplate(){
-  schoolStore.setSchool(schools.value.filter(s => s.id == formData.value.school)[0])
-  modal.open('CreateTemplate')
 }
 
 // Handle Route Change

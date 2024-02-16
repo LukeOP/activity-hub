@@ -8,7 +8,7 @@
             <th>Hire Date:</th>
             <th>Expected Return:</th>
             <th>Returned:</th>
-            <th>Form Signed:</th>
+            <th>Agreement Uploaded:</th>
           </tr>
         </thead>
       </table>

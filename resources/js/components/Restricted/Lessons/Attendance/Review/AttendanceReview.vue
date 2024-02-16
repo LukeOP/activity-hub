@@ -6,6 +6,7 @@
 <section v-if="!loading">
   <component :is="currentComponent" :lessons="filter.getReturned" :key="key" />
 </section>
+<LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
     
 </div>
 </template>
@@ -20,6 +21,7 @@ import { useWindowSize } from '/resources/js/composables/useWindowSize'
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
 import { useRouter } from 'vue-router'
 import ReviewTableMobile from './ReviewTableMobile.vue'
+import LoadingSpinner from '../../../../Layouts/MainLayout/Elements/LoadingSpinner.vue'
 
 const { windowSize } = useWindowSize()
 const router = useRouter()

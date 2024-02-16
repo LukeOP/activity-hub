@@ -44,13 +44,18 @@ const formData = ref({
   last_name: currentStudent.last_name,
   tutor_group: currentStudent.tutor_group,
   year_level: currentStudent.year_level,
-  date_of_birth: moment(currentStudent.date_of_birth).format('YYYY-MM-DD'),
+  date_of_birth: checkDOB(currentStudent.date_of_birth),
   identifier: currentStudent.identifier,
 })
 
+function checkDOB(date){
+  let result = moment(date).format('YYYY-MM-DD') == 'Invalid date' ? null : moment(date).format('YYYY-MM-DD')
+  return result
+}
+
 function handleUpdate(){
   axiosClient.patch('students/' + currentStudent.id, formData.value).then(res => {
-    studentStore.setStudent(res.data)
+    studentStore.setStudent(res.data.student)
     toast.open('success', 'Student Updated', `Student details for ${currentStudent.first_name} have been updated`)
     modal.close()
   })

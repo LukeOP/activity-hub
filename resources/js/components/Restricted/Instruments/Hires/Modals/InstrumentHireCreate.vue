@@ -13,7 +13,13 @@
         <div class="col col-12 col-md-6">
           <label for="student">Student</label>
           <select name="student" class="form-control" v-model="formData.student" required>
-            <option v-for="student in schoolStudents" :key="student.id" :value="student.id">{{student.full_name}}</option>
+            <option v-for="student in schoolStudents" :key="student.id" :value="student.id">{{student.last_name}}, {{ student.first_name }}
+              <span v-if="student.year_level || student.tutor_group">(
+                <span v-if="student.year_level">Year {{ student.year_level }}</span>
+                <span v-if="student.year_level || student.tutor_group">,</span>
+                <span v-if="student.tutor_group"> Tutor {{ student.tutor_group }}</span>
+              )</span>
+            </option>
           </select>
         </div>
       </div>

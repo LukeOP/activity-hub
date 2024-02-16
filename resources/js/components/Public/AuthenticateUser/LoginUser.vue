@@ -3,7 +3,10 @@
     <form @submit.prevent="handleLogin">
       <input type="email" class="form-control my-2" v-model="login.email" placeholder="email">
       <input type="password" class="form-control" v-model="login.password" placeholder="password">
-      <button class="btn btn-primary my-3 form-control" @click="handleLogin">Continue</button>
+      <button class="btn btn-primary my-3 form-control" @click="handleLogin">Continue
+        <LoadingSpinner :isLoading="loading" class="float-end" />
+      </button>
+
       <p class="ah-link" @click="routeChange({name: 'RecoverAccount'})">Forgot your password?</p>
       <p class="ah-link" @click="routeChange({name: 'Register'})">Not yet registered?</p>
       <div v-if="error" class="error">{{error}}</div>
@@ -18,12 +21,14 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../../../stores/user'
 import axiosClient from '/resources/js/axios';
+import LoadingSpinner from '../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 const user = useUserStore()
 const router = useRouter()
 const error = ref('')
 const verification = ref(false)
 const verification_email = ref('')
+const loading = ref(false)
 
 const login = ref({
   email: '',
@@ -32,6 +37,7 @@ const login = ref({
 
 function handleLogin(){
   error.value = ''
+  loading.value = true
   verification.value = false
   user.login({
     email: login.value.email,
@@ -43,6 +49,7 @@ function handleLogin(){
     })
   }).catch(err => {
     error.value = setError(err.response)
+    loading.value = false
   })
 }
 

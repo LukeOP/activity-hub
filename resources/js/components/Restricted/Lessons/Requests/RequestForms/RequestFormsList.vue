@@ -15,7 +15,8 @@
     <div class="row mt-3" v-if="formData.forms">
       <div class="col col-12 col-md-6">
         <h2>Existing Forms:</h2>
-        <div id="form-container">
+        <LoadingSpinner :isLoading="loading" color="primary" />
+        <div id="form-container" v-if="!loading">
           <div v-for="form in formData.forms" :key="form">
             <div class="form" @click="viewFormDetails(form)">
               <span>{{ form.attributes.description }}</span>
@@ -43,6 +44,7 @@ import moment from 'moment';
 import { useWindowSize } from '/resources/js/composables/useWindowSize';
 import { useUserStore } from '/resources/js/stores/user';
 import { useActionsStore } from '../../../../../stores/actions';
+import LoadingSpinner from '../../../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 // Initiate Stores
 const lessonStore = useLessonsStore()
@@ -71,7 +73,7 @@ function setActions() {
 setActions()
 
 // Fetch user schools or set default school if only one exists for user
-const {data: schools, fetchData: fetchSchools} = useApi('schools')
+const {data: schools, loading, fetchData: fetchSchools} = useApi('schools')
 fetchSchools().then(()=>{
   setSchools()
 })
@@ -117,15 +119,12 @@ function routeChange(route){
 h2 {
   font-size: 1.5rem;
 }
-#form-container {
-  border: 1px solid lightgray;
-  border-radius: 0.375rem;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  padding-bottom: 20px;
-}
 .form {
-  padding: 1px 10px;
+  padding: 5px 10px;
+  &:nth-of-type(odd){
+    background-color: $ah-primary-background;
+    border-radius: 0.375rem;
+  }
   &:hover {
     background-color: $ah-primary-light;
     color: white;

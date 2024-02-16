@@ -16,6 +16,7 @@
       </div>
       <h3>Notes: <span class="value">{{ hire.attributes.notes }}</span></h3>
     </section>
+
     <section>
       <h2>Hire Agreement</h2>
       <h3 class="w-100">Agreement Uploaded: <span :class="{warning: hire.attributes.upload_id === null}" class="value">{{ formatForm(hire.attributes.upload_id) }}</span></h3>
@@ -24,6 +25,7 @@
       <span v-if="hire.attributes.upload_id" class="ah-link" style="width: fit-content; margin-right: 2rem;" @click="uploadAgreement" >Replace Agreement File</span>
       <span v-if="hire.attributes.upload_id" class="ah-link" style="width: fit-content;" @click="deleteAgreement" >Delete Agreement File</span>
     </section>
+
   </div>
 </template>
 
@@ -94,7 +96,7 @@ watch(() => hireStore.getHire, (newValue) => {
 section {
   border-bottom: 1px dashed $ah-primary;
   padding: 1rem 0;
-  &:last-of-type {
+  &:last-of-type, &:first-of-type {
     border: none;
   }
 }

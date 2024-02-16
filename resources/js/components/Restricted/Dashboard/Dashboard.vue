@@ -6,11 +6,11 @@
   <InfoTiles />
   <div id="dashboard-tiles">
     <div class="tile-row">
-      <div class="mobile-full" style="flex: 66%;" v-if="checkPermission('LESSONS')"><LessonList /></div>
+      <div class="mobile-full" style="flex: 66%;" v-if="checkPermission('LESSONS')"><LessonTile /></div>
       <div class="mobile-full" style="flex: 34%;" v-if="checkPermission('ATTENDANCE')"><AttendanceTile /></div>
     </div>
     <div class="tile-row">
-      <div class="mobile-full" style="flex: 50%;" v-if="checkPermission('EVENTS')"><EventList /></div>
+      <div class="mobile-full" style="flex: 50%;" v-if="checkPermission('EVENTS')"><EventTile /></div>
       <div class="mobile-full" style="flex: 50%;" v-if="checkPermission('ROOMS')"><RoomsTile /></div>
     </div>
   </div>
@@ -22,11 +22,11 @@ import { onMounted, ref, watch } from 'vue';
 import { useActionsStore } from '../../../stores/actions'
 import { useUserStore } from '../../../stores/user';
 // import NewUserSetUp from './NewUserSetUp.vue';
-import LessonList from './LessonList.vue';
 import AttendanceTile from './AttendanceTile.vue';
-import EventList from './EventList.vue';
+import EventTile from './EventTile.vue';
 import RoomsTile from './RoomsTile.vue';
 import InfoTiles from './InfoTiles/InfoTiles.vue';
+import LessonTile from './LessonTile.vue';
 
 const user = useUserStore()
 const actions = useActionsStore()

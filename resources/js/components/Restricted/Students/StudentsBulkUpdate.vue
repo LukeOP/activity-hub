@@ -50,7 +50,8 @@
 
                 <br>
                 <input type="file" class="form-control mt-2" ref="fileInput" @change="handleFileChange"  id="fileInput" :disabled="selectedSchool == null"/>
-                <button class="btn btn-primary w-100 mt-2" @click="uploadCsv" :disabled="uploading || file == null || (unenrollStudents && !confirmUnenroll)">Upload Student CSV</button>
+                <button class="btn btn-primary w-100 mt-2" @click="uploadCsv" :disabled="uploading || file == null || (unenrollStudents && !confirmUnenroll)">Upload Student CSV
+                <Loadingspinner class="float-end ps-2" :isLoading="uploading" /></button>
             </div>
         </div>
     </div>
@@ -64,6 +65,7 @@
 import { useUserStore } from '/resources/js/stores/user';
 import { useToastStore } from '/resources/js/stores/toast';
 import { useStudentStore } from '/resources/js/stores/students';
+import Loadingspinner from '../../layouts/mainlayout/elements/loadingspinner.vue';
   
   const user = useUserStore()
   const toast = useToastStore()

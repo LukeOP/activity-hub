@@ -1,5 +1,9 @@
 <template>
-  <div v-if="!loading" class="user-element">
+  <LoadingSkeleton v-if="loading" class="user-element">
+    <UserElementHeader heading="Upcoming Events" />
+    <LoadingSpinner :isLoading="true" :loadingText="true" color="primary" />
+  </LoadingSkeleton>
+  <div v-else class="user-element">
     <UserElementHeader heading="Upcoming Events" />
     <!-- {{ events }} -->
 
@@ -22,6 +26,8 @@ import UserElementHeader from '../../Layouts/MainLayout/Elements/UserElementHead
 import { useEventStore } from '/resources/js/stores/events';
 import useSorter from '/resources/js/composables/useSorter';
 import { computed } from 'vue';
+import LoadingSpinner from '../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import LoadingSkeleton from '../../Layouts/MainLayout/Elements/LoadingSkeleton.vue';
 
 // Initiate Stores
 const eventStore = useEventStore()

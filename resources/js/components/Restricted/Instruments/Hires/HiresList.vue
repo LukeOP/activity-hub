@@ -9,9 +9,10 @@
     </div>
 
     <!-- Table component -->
-    <section v-if="filteredHires">
+    <section v-if="filteredHires && !loading">
       <component :is="currentComponent" :hires="filteredHires" :key="key" />
     </section>
+    <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
 
   </div>
 </template>
@@ -30,6 +31,7 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '/resources/js/stores/user';
 import { useActionsStore } from '/resources/js/stores/actions';
 import { useFilterStore } from '/resources/js/stores/filter';
+import LoadingSpinner from '../../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 const key = ref(0)
 
@@ -50,7 +52,7 @@ const currentComponent = computed(() => {
 })
 
 // Fetch Hire data and add to store
-const { data: allHires, fetchData: fetchHires } = useApi('hires')
+const { data: allHires, loading, fetchData: fetchHires } = useApi('hires')
 if(hireStore.getHires.length < 1){
   fetchHires().then(()=>{
     hireStore.setHires(allHires.value)

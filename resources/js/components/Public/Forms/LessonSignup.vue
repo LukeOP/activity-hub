@@ -1,5 +1,6 @@
 <template>
-  <div class="container" v-if="form">
+  <LoadingSpinner :isLoading="loadingForm" :loadingText="true" />
+  <div class="container" v-if="!loadingForm">
     <section id="header" class="row">
       <img v-if="form.inputs.logo && form.school.logo" id="logo-img" :src="form.school.logo" alt="Activity Hub Logo">
       <img v-else id="logo-img" src="/images/ActivityHub_Logo_Main.png" alt="Activity Hub Logo">
@@ -76,7 +77,10 @@
 
         <section>
           <p>{{ form.content.footer_content }}</p>
-          <input type="submit" class="btn btn-primary" value="Send Request">
+          <button type="submit" class="btn btn-primary" :disabled="submittingForm">
+            Send Request
+            <LoadingSpinner class="float-end ps-2" :isLoading="submittingForm" />
+          </button>
         </section>
 
       </form>
@@ -104,11 +108,13 @@ import useApi from '/resources/js/composables/useApi';
 import { useRoute } from 'vue-router';
 import moment from 'moment';
 import axiosClient from '/resources/js/axios';
+import LoadingSpinner from '../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 const route = useRoute()
 
 const staffList = ref([])
 const submitted = ref(false)
+const submittingForm = ref(false)
 
 const formData = ref({
   student_name: '',
@@ -144,7 +150,7 @@ function resetForm(){
   submitted.value = false
 }
 
-const { data: form, fetchData: fetchFormData } = useApi('lesson-request-form/' + route.params.id)
+const { data: form, loading:loadingForm, fetchData: fetchFormData } = useApi('lesson-request-form/' + route.params.id)
 fetchFormData().then(()=>{
   formData.value.school_id = form.value.school.id
   // Fetch school staff from database and add to store
@@ -183,10 +189,12 @@ const tutorArray = computed(() => {
 })
 
 function submitForm(){
+  submittingForm.value = true
   axiosClient.post('lesson-request-form/create-public-request', formData.value).then(res => {
     axiosClient.post('email-lesson-request-received/' + form.value.content.heading).then(res => {
       if(res.data.response === "success"){
         submitted.value = true
+        submittingForm.value = false
       } else {
         console.log(res.data.response.message);
       }
