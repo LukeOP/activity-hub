@@ -3,7 +3,7 @@
     <section v-if="staffStore.getSchoolInvites.length > 0 && !loading">
       <component :is="InvitationComponent" :invitations="staffStore.getSchoolInvites" v-if="staffStore.getSchoolInvites.length > 0"/>
     </section>
-    <Loadingspinner :isLoading="loading" :loadingText="true" color="primary" />
+    <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
   </div>
 </template>
 
@@ -14,7 +14,7 @@ import { computed, ref } from 'vue';
 import useApi from '/resources/js/composables/useApi';
 import { useSchoolStore } from '/resources/js/stores/schools';
 import InvitationTable from './InvitationTable.vue';
-import Loadingspinner from '../../../layouts/mainlayout/elements/LoadingSpinner.vue';
+import LoadingSpinner from '/resources/js/components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 
 // Initiate Stores

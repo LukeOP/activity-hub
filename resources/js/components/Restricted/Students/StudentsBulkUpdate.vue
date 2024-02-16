@@ -51,7 +51,7 @@
                 <br>
                 <input type="file" class="form-control mt-2" ref="fileInput" @change="handleFileChange"  id="fileInput" :disabled="selectedSchool == null"/>
                 <button class="btn btn-primary w-100 mt-2" @click="uploadCsv" :disabled="uploading || file == null || (unenrollStudents && !confirmUnenroll)">Upload Student CSV
-                <Loadingspinner class="float-end ps-2" :isLoading="uploading" /></button>
+                <LoadingSpinner class="float-end ps-2" :isLoading="uploading" /></button>
             </div>
         </div>
     </div>
@@ -62,10 +62,10 @@
   import { ref } from 'vue';
   import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue';
   import axiosClient from '/resources/js/axios';
-import { useUserStore } from '/resources/js/stores/user';
-import { useToastStore } from '/resources/js/stores/toast';
-import { useStudentStore } from '/resources/js/stores/students';
-import Loadingspinner from '../../layouts/mainlayout/elements/LoadingSpinner.vue';
+  import { useUserStore } from '/resources/js/stores/user';
+  import { useToastStore } from '/resources/js/stores/toast';
+  import { useStudentStore } from '/resources/js/stores/students';
+  import LoadingSpinner from '/resources/js/components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
   
   const user = useUserStore()
   const toast = useToastStore()
