@@ -20,7 +20,9 @@
     <section>
       <h2>Hire Agreement</h2>
       <h3 class="w-100">Agreement Uploaded: <span :class="{warning: hire.attributes.upload_id === null}" class="value">{{ formatForm(hire.attributes.upload_id) }}</span></h3>
+      
       <div v-if="!hire.attributes.upload_id" class="btn btn-primary" @click="uploadAgreement" >Upload Hire Agreement</div>
+      
       <DownloadDocument v-if="hire.attributes.upload_id" :id="hire.attributes.upload_id" label="Download Agreement" :key="refresh" />
       <span v-if="hire.attributes.upload_id" class="ah-link" style="width: fit-content; margin-right: 2rem;" @click="uploadAgreement" >Replace Agreement File</span>
       <span v-if="hire.attributes.upload_id" class="ah-link" style="width: fit-content;" @click="deleteAgreement" >Delete Agreement File</span>

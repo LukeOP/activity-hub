@@ -1,5 +1,6 @@
 <template>
     <div>
+        {{ downloadUrl }} {{ downloadFileName }}  {{ loading }}
         <a v-if="downloadUrl != '' && !loading" :href="downloadUrl" class="btn btn-primary" :download="downloadFileName">{{ downloadFileName }}</a>
         <LoadingSpinner :isLoading="loading" class="btn btn-primary" :loadingText="true" style="width: fit-content;" />
     </div>
@@ -23,7 +24,7 @@
     data() {
         return {
             downloadUrl: '',
-            downloadFileName: '', // Add a property to store the download file name
+            downloadFileName: '',
             loading: false
         };
     },
