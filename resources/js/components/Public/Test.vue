@@ -1,6 +1,7 @@
 <template>
   <div>
     Inline <ToolTip tip="Here is a tip"><div class="btn btn-primary">Hover</div></ToolTip> Inline
+    Testing...
   </div>
 </template>
 
