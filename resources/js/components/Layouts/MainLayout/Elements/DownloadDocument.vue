@@ -42,7 +42,7 @@
                 // Get the content-disposition header from the response
                 const contentDisposition = response.headers['content-disposition'];
 
-                if (contentDisposition) {
+                if (typeof contentDisposition === 'string') {
                     // Extract the file name from the content-disposition header
                     const match = contentDisposition.match(/filename[^;=\n]*=([^;\n]*)/);
                     let serverFileName = match ? match[1] : 'downloaded_file';
@@ -53,7 +53,7 @@
                     this.downloadFileName = serverFileName;
                     this.downloadUrl = downloadUrl;
                 } else {
-                    console.error('Content-Disposition header not found in the response.');
+                    console.error('Content-Disposition header is not a string:', contentDisposition);
                 }
 
                 this.loading = false;
@@ -62,6 +62,7 @@
                 this.loading = false;
             }
         },
+
 
     },
     components: { LoadingSpinner }
