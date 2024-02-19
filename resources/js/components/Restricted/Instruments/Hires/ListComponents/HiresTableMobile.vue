@@ -1,16 +1,18 @@
 <template>
-  <!-- <div v-for="instrument in instruments" :key="instrument" class="instrument">
-    <InstrumentsTableMobileCard :instrument="instrument" />
-  </div> -->
+  <div v-for="hire in filteredHires" :key="hire" class="hire">
+    <HiresTableMobileCard :hire="hire" />
+  </div>
 </template>
 
 <script setup>
-// import InstrumentsTableMobileCard from './InstrumentsTableMobileCard.vue'
-const props = defineProps({instruments:Array});
+import { useHireStore } from '../../../../../stores/hires';
+import HiresTableMobileCard from './HiresTableMobileCard.vue';
+const hireStore = useHireStore()
+const filteredHires = hireStore.getFilteredHires
 </script>
 
 <style lang="scss" scoped>
-.instrument {
+.hire {
   &:nth-child(odd){
     background-color: lighten($ah-primary-background, 6%);
   }

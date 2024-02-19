@@ -5,7 +5,8 @@
             <p>Keep track of your documentation by uploading it here.<br>
                 You can then download it anytime it is needed.</p>
             <input class="form-control" type="file" ref="fileInput" @change="handleFileChange"  id="fileInput"/>
-            <button class="btn btn-primary form-control mt-2" @click="uploadFile" :disabled="uploading">Upload Hire Agreement</button>
+            <button class="btn btn-primary form-control mt-2" @click="uploadFile" :disabled="uploading">Upload Hire Agreement
+            <LoadingSpinner :isLoading="uploading" /></button>
         </div>
     </div>
   </template>
@@ -17,6 +18,7 @@ import axiosClient from '/resources/js/axios';
 import { useToastStore } from '/resources/js/stores/toast';
 import { useModalStore } from '/resources/js/stores/modal';
 import { useHireStore } from '/resources/js/stores/hires';
+import LoadingSpinner from '../../../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 const hireStore = useHireStore()
 const toast = useToastStore()

@@ -1,6 +1,6 @@
 <template>
     <div>
-        {{ downloadUrl }} {{ downloadFileName }}  {{ loading }}
+        <!-- {{ downloadUrl }} {{ downloadFileName }}  {{ loading }} -->
         <a v-if="downloadUrl != '' && !loading" :href="downloadUrl" class="btn btn-primary" :download="downloadFileName">{{ downloadFileName }}</a>
         <LoadingSpinner :isLoading="loading" class="btn btn-primary" :loadingText="true" style="width: fit-content;" />
     </div>

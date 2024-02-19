@@ -1,32 +1,37 @@
 <template>
   <div class="row" :class="{active: active}" @click="active = !active">
     <div class="col col-10">
-      <p>{{instrument.attributes.name}}</p>
-      <p>{{instrument.attributes.state.description}}</p>
+      <p>{{hire.instrument.attributes.name}}</p>
+      <p>{{hire.student.full_name}}</p>
     </div>
     <div class="col col-2">
-      <i class="fa-solid fa-magnifying-glass ms-2" :class="{active: active}" @click="InstrumentDetails"></i>
+      <i class="fa-solid fa-magnifying-glass ms-2" :class="{active: active}" @click="HireDetails"></i>
     </div>
-    <p v-if="active">{{instrument.school.name}}</p>
-    <p v-if="active">{{instrument.attributes.notes}}</p>
+    <p v-if="active">Started: {{formatDate(hire.attributes.start_date)}}</p>
+    <p v-if="active">Expected Return: {{formatDate(hire.attributes.return_date)}}</p>
   </div>
 </template>
 
 <script setup>
-import { useInstrumentStore } from "/resources/js/stores/instruments"
+import moment from "moment";
 import { ref } from "vue"
 import { useRouter } from "vue-router"
-const props = defineProps({instrument:Object})
+import { useHireStore } from "../../../../../stores/hires";
+const props = defineProps({hire:Object})
+
+const hireStore = useHireStore()
 
 const router = useRouter()
-const instrumentStore = useInstrumentStore()
-
 const active = ref(false)
 
-function InstrumentDetails(){
-  instrumentStore.setInstrument(props.instrument)
+function formatDate(date){
+  return moment(date).format('MMMM Do, YYYY')
+}
+
+function HireDetails(){
+  hireStore.setHire(props.hire)
   router.push({
-    name: 'InstrumentDetails'
+    name: 'HireDetails'
   })
 }
 
