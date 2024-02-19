@@ -40,7 +40,8 @@
                 // Get the content-disposition header from the response
                 const contentDisposition = response.headers['content-disposition'];
                 // Extract the file name from the content-disposition header
-                const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                // const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                const match = contentDisposition.match(/filename[^;=\n]*=([^;\n]*)/);
                 let serverFileName = match ? match[1] : 'downloaded_file';
                 //   serverFileName = serverFileName.replace(/^[\d_]+/, '')
                 const blob = new Blob([response.data], { type: 'application/pdf' });

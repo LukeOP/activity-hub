@@ -1,14 +1,17 @@
 <template>
   <div>
     <HeaderLine heading="Create Event Template" />
-    <form @submit.prevent="">
+    <form @submit.prevent="createTemplate">
       <label>School
         <input type="text" disabled :value="schoolStore.getSchool.name" class="form-control">
       </label>
       <label>Template Title
         <input type="text" class="form-control" v-model="formData.heading">
       </label>
-      <input type="submit" class="btn btn-primary float-end mt-2" value="Create Template" :disabled="disabled" @click="createTemplate()">
+
+      <button type="submit" aria-label="submit" class="form-control float-end btn btn-primary mt-2">Create Template
+        <LoadingSpinner :isLoading="submitting" />
+      </button>
     </form>
   </div>
 </template>
@@ -21,11 +24,13 @@ import axiosClient from '/resources/js/axios';
 import { useRouter } from 'vue-router';
 import { useEventStore } from '/resources/js/stores/events';
 import { useModalStore } from '/resources/js/stores/modal';
+import LoadingSpinner from '../../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 const schoolStore = useSchoolStore()
 const eventStore = useEventStore()
 const modal = useModalStore()
 const router = useRouter()
+const submitting = ref(false)
 
 const formData = ref({
   school_id: schoolStore.getSchool.id,
@@ -37,8 +42,10 @@ const disabled = computed(()=>{
 })
 
 function createTemplate(){
+  submitting.value = true
   axiosClient.post('event-school-jobs/templates', formData.value).then((res)=>{
     eventStore.setEventData(res.data)
+    submitting.value = false
     modal.close()
     router.push({
       name: 'EventTemplateDetails'

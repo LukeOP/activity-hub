@@ -42,7 +42,10 @@
 
     <div class="row">
       <div class="col col-12 col-sm-6 mt-3">
-        <input type="submit" class="btn btn-primary form-control" value="Create Lesson">
+
+      <button type="submit" aria-label="submit" class="form-control btn btn-primary" :disabled="submitting">Create Lesson
+        <LoadingSpinner :isLoading="submitting" />
+      </button>
       </div>
     </div>
     
@@ -60,11 +63,13 @@ import useSorter from '../../../composables/useSorter'
 import HeaderLine from '../../Layouts/MainLayout/Elements/HeaderLine.vue'
 import axiosClient from '/resources/js/axios'
 import router from '/resources/js/router/router'
+import LoadingSpinner from '../../Layouts/MainLayout/Elements/LoadingSpinner.vue'
 
 export default {
   components: {
-    HeaderLine
-  },
+    HeaderLine,
+    LoadingSpinner
+},
   setup() {
     const user = useUserStore()
     const sorter = useSorter()

@@ -40,7 +40,9 @@
       <label for="notes" class="mt-2">Hire Notes</label>
       <textarea name="notes" class="form-control" cols="30" rows="3" v-model="formData.notes"></textarea>
 
-      <input type="submit" aria-label="submit" class="form-control btn btn-primary mt-2" value="Create Hire">
+      <button type="submit" aria-label="submit" class="form-control btn btn-primary mt-2">Create Hire
+        <LoadingSpinner :isLoading="submitting" />
+      </button>
     </form>
   </div>
 </template>
@@ -55,6 +57,7 @@ import { useHireStore } from '/resources/js/stores/hires';
 import axiosClient from '/resources/js/axios';
 import moment from 'moment';
 import { useModalStore } from '/resources/js/stores/modal';
+import LoadingSpinner from '../../../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 // Initiate Stores
 const user = useUserStore()
@@ -62,6 +65,8 @@ const instrumentStore = useInstrumentStore()
 const studentStore = useStudentStore()
 const hireStore = useHireStore()
 const modal = useModalStore()
+
+const submitting = ref(false)
 
 // Get User Schools
 const schools = ref(user.permissions.filter(p => (p.type === 'Administrator' || p.type === 'INSTRUMENTS_C')))
@@ -97,9 +102,11 @@ const schoolInstruments = computed(() => {
 })
 
 function createHire(){
+  submitting.value = true
   axiosClient.post(`hires`, formData.value).then(res =>{
     hireStore.addHire(res.data)
     instrumentStore.instruments.find(i => i.id === formData.value.instrument).attributes.state = {description: 'Hired Out', id: 2}
+    submitting.value = false
   })
   modal.close()
 }

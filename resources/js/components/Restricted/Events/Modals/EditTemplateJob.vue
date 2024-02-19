@@ -17,7 +17,10 @@
       </div>
       <div class="col col-12 col-md-6">
         <br>
-        <input type="submit" class="btn btn-primary form-control" value="Edit Job">
+        
+      <button type="submit" aria-label="submit" class="form-control btn btn-primary">Edit Job
+        <LoadingSpinner :isLoading="submitting" />
+      </button>
       </div>
     </form>
   </div>
@@ -32,12 +35,15 @@ import axiosClient from '/resources/js/axios';
 import { useToastStore } from '/resources/js/stores/toast';
 import { useModalStore } from '/resources/js/stores/modal';
 import { priorities } from '/resources/js/composables/usePriorities'
+import LoadingSpinner from '../../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 const eventStore = useEventStore()
 const toast = useToastStore()
 const modal = useModalStore()
 const currentTemplate = eventStore.getEventData
 const currentJob = eventStore.getSingleJob
+
+const submitting = ref(false)
 
 const formData = ref({
   job_id: currentJob.id,
@@ -46,9 +52,11 @@ const formData = ref({
 })
 
 function addJob(){
+  submitting.value = true
   axiosClient.patch('event-school-jobs/' + formData.value.job_id, formData.value).then((res)=>{
     updateDom(res.data)
     toast.open('success', 'Job Added', 'Job added to Template')
+    submitting.value = false
     modal.close()
   })
 }

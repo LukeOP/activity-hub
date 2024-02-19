@@ -14,9 +14,7 @@ export default function useApi(url) {
     } catch (e) {
       error.value = e;
     } finally {
-      // setTimeout(()=>{
-        loading.value = false;
-      // },3000)
+      loading.value = false;
     }
   };
   

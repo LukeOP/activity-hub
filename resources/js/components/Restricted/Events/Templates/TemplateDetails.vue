@@ -14,7 +14,10 @@
         <label>Notes
           <textarea rows="4" class="form-control" v-model="currentTemplate.notes"></textarea>
         </label>
-        <input type="submit" class="btn btn-primary" value="Save Changes" :disabled="disabled">
+
+      <button type="submit" aria-label="submit" class="form-control btn btn-primary mt-2" :disabled="submitting">Save Changes
+        <LoadingSpinner :isLoading="submitting" />
+      </button>
         <!-- {{ currentTemplate.id }} -->
       </div>
     </form>
@@ -47,6 +50,7 @@ import { useToastStore } from '/resources/js/stores/toast';
 import { priorities } from '/resources/js/composables/usePriorities'
 import { useActionsStore } from '/resources/js/stores/actions';
 import { useUserStore } from '/resources/js/stores/user';
+import LoadingSpinner from '../../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 const eventStore = useEventStore()
 const modal = useModalStore()
@@ -54,7 +58,7 @@ const toast = useToastStore()
 const actions = useActionsStore()
 const user = useUserStore()
 const currentTemplate = ref(eventStore.getEventData)
-const disabled = ref(false)
+const submitting = ref(false)
 
 const {data: jobs, fetchData: fetchJobs} = useApi('event-school-jobs/template/' + currentTemplate.value.id)
 fetchJobs().then(()=>{
@@ -68,10 +72,10 @@ function refreshJobs(){
 }
 
 function saveChanges(){
-  disabled.value = true
+  submitting.value = true
   axiosClient.patch('/event-school-jobs/template/edit/' + eventStore.getEventData.id, currentTemplate.value).then((res)=>{
     toast.open(...res.data)
-    disabled.value = false
+    submitting.value = false
   })
 }
 

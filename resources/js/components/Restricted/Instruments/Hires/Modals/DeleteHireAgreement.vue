@@ -5,7 +5,8 @@
             <p>Are you sure you wish to delete the associated hire agreement?</p>
             <p>The cannot be undone.</p>
             <button class="btn btn-grey form-control mt-2" style="width: 100px; margin: 0 2rem 0 0;" @click="modal.close()">Cancel</button>
-            <button class="btn btn-red form-control mt-2" style="width: 100px; margin: 0 2rem 0 0;" @click="deleteAgreement">Delete</button>
+            <button class="btn btn-red form-control mt-2" style="width: 100px; margin: 0 2rem 0 0;" @click="deleteAgreement">Delete
+            <LoadingSpinner :isLoading="deleting" class="float-end ps-2" /></button>
         </div>
     </div>
   </template>
@@ -15,14 +16,19 @@ import axiosClient from '/resources/js/axios';
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue';
 import { useModalStore } from '/resources/js/stores/modal';
 import { useHireStore } from '/resources/js/stores/hires';
+import { ref } from 'vue';
+import LoadingSpinner from '/resources/js/components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 const modal = useModalStore()
 const hireStore = useHireStore()
+const deleting = ref(false)
 
 function deleteAgreement(){
+    deleting.value = true
     axiosClient.delete('document/delete/' + hireStore.getHire.attributes.upload_id)
     .then(()=> {
         axiosClient.patch('hires/' + hireStore.getHire.id, {upload_id: null}).then(res => {
+            deleting.value = false
             hireStore.updateHire(res.data.hire)
             modal.close()
         })

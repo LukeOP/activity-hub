@@ -1,6 +1,5 @@
 import InstrumentList from './InstrumentList.vue'
 import InstrumentDetails from './InstrumentDetails.vue'
-// import InstrumentCreate from './InstrumentCreate.vue'
 import { useInstrumentStore } from '/resources/js/stores/instruments'
 import { useUserStore } from '/resources/js/stores/user'
 
