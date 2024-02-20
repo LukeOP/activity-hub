@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\InstrumentResource;
 use App\Models\Instrument;
 use App\Models\InstrumentState;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,8 @@ class InstrumentsController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
+        $user = User::where('id', Auth::user()->id)->first();
+        // $user = Auth::user();
         $userSchools = $user->schools;
         $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
         $instrumentCollection = new Collection();
@@ -26,8 +28,8 @@ class InstrumentsController extends Controller
 
             if ($hasPermission || in_array($school->id, $userAdmin)) {
                 $instrumentsAtSchool = InstrumentResource::collection(Instrument::where('school_id', $school->id)->get());
+                $instrumentCollection = $instrumentCollection->concat($instrumentsAtSchool);
             }
-            $instrumentCollection = $instrumentCollection->concat($instrumentsAtSchool);
         }
 
         return $instrumentCollection;

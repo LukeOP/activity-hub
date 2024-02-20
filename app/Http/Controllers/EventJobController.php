@@ -36,8 +36,9 @@ class EventJobController extends Controller
         ]);
 
         $job = EventJob::create($validatedData);
+        $newJob = EventJob::where('id', $job->id)->first();
 
-        return new EventJobResource($job);
+        return new EventJobResource($newJob);
     }
 
     /**
