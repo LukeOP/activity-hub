@@ -3,7 +3,7 @@
     <form @submit.prevent="handleLogin">
       <input type="email" class="form-control my-2" v-model="login.email" placeholder="email">
       <input type="password" class="form-control" v-model="login.password" placeholder="password">
-      <button class="btn btn-primary my-3 form-control" @click="handleLogin">Continue
+      <button class="btn btn-primary my-3 form-control" @click="handleLogin" :disabled="loading">Continue
         <LoadingSpinner :isLoading="loading" class="float-end" />
       </button>
 

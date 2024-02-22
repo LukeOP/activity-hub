@@ -38,14 +38,20 @@ class DocumentController extends Controller
         ]);
     }
 
-    public function download(string $id)
+    // public function download(string $id)
+    public function download(Request $request)
     {
-        $document = Document::findOrFail($id);
-
-        $newName = preg_replace('/^\d+[_-]/', '', $document->name);
-
-        return response()
-            ->download(storage_path("app/".$document->path), $newName);
+        $document = Document::where('id', $request->document)->first();
+        if($document){
+            if (Storage::exists($document->path)){
+                $path = Storage::path($document->path);
+                $content = file_get_contents($path);
+                return response($content)->withHeaders([
+                    'Content-Type' => mime_content_type($path)
+                ]);
+            }
+        }
+        return redirect('/404');
     }
 
     public function delete(string $id)

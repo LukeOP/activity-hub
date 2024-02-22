@@ -16,7 +16,13 @@
       <div class="col col-12 col-sm-6">
         <label>Student:</label>
         <select name="studentName" class="form-control" required v-model="formData.student">
-          <option v-for="student in data.students" :key="student.id" :value="student.id">{{student.full_name}}</option>
+          <option v-for="student in data.students" :key="student.id" :value="student.id">{{student.last_name}}, {{ student.first_name }}
+              <span v-if="student.year_level || student.tutor_group">(
+                <span v-if="student.year_level">Year {{ student.year_level }}</span>
+                <span v-if="student.year_level || student.tutor_group">,</span>
+                <span v-if="student.tutor_group"> Tutor {{ student.tutor_group }}</span>
+              )</span>
+          </option>
         </select>
       </div>
 
@@ -51,11 +57,12 @@
     
 
   </form>
+  <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
 </div>
   
 </template>
 
-<script>
+<script setup>
 import { ref, watch, watchEffect } from 'vue'
 import useApi from '../../../composables/useApi'
 import { useUserStore } from '../../../stores/user'
@@ -65,71 +72,56 @@ import axiosClient from '/resources/js/axios'
 import router from '/resources/js/router/router'
 import LoadingSpinner from '../../Layouts/MainLayout/Elements/LoadingSpinner.vue'
 
-export default {
-  components: {
-    HeaderLine,
-    LoadingSpinner
-},
-  setup() {
-    const user = useUserStore()
-    const sorter = useSorter()
-    const schools = ref(user.permissions.filter(p => p.type === 'Administrator'))
-    const loading = ref(true)
-    const data = ref({
-      students: null,
-      tutors: null,
-    })
+  const user = useUserStore()
+  const sorter = useSorter()
+  const schools = ref(user.permissions.filter(p => p.type === 'Administrator'))
+  const loading = ref(false)
+  const submitting = ref(false)
+  const data = ref({
+    students: null,
+    tutors: null,
+  })
 
-    const formData = ref({
-      school: "",
-      student: "",
-      tutor: "",
-      instrument: ""
-    })
+  const formData = ref({
+    school: "",
+    student: "",
+    tutor: "",
+    instrument: ""
+  })
 
-    watchEffect(() => {
-      const school = formData.value.school
+  watchEffect(() => {
+    const school = formData.value.school
 
-      if (school) {
-        loading.value = true
+    if (school) {
+      loading.value = true
 
-        const { data: students, fetchData: fetchStudents } = useApi('school-students/' + school)
-        const { data: tutors, fetchData: fetchTutors } = useApi('school-users/' + school)
+      const { data: students, fetchData: fetchStudents } = useApi('school-students/' + school)
+      const { data: tutors, fetchData: fetchTutors } = useApi('school-users/' + school)
 
-        Promise.all([fetchStudents(), fetchTutors()]).then(() => {
-          data.value.students = students
-          data.value.tutors = tutors
+      Promise.all([fetchStudents(), fetchTutors()]).then(() => {
+        data.value.students = students
+        data.value.tutors = tutors
 
-          sorter.sort(students.value, 'last_name')
+        sorter.sort(students.value, 'last_name')
 
-          loading.value = false
-        })
-      }
-    })
-    
-    if(schools.value.length > 0){
-      formData.value.school = schools.value[0].school_id
-    }
-
-    function handleSubmit(){
-      axiosClient.post('lessons', {student: formData.value.student, instrument: formData.value.instrument, tutor: formData.value.tutor.id}).then(()=>{
-        router.push({
-          name: 'LessonsList'
-        })
+        loading.value = false
       })
     }
-
-    return {
-      data, 
-      formData,
-      schools, 
-      loading, 
-      handleSubmit
-      }
-    
+  })
+  
+  if(schools.value.length > 0){
+    formData.value.school = schools.value[0].school_id
   }
 
-}
+  function handleSubmit(){
+    submitting.value = true
+    axiosClient.post('lessons', {student: formData.value.student, instrument: formData.value.instrument, tutor: formData.value.tutor.id}).then(()=>{
+      submitting.value = false
+      router.push({
+        name: 'LessonsList'
+      })
+    })
+  }
 </script>
 
 <style>

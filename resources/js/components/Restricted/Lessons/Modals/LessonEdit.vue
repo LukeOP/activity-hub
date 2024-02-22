@@ -54,7 +54,8 @@
       </span>
        
       <div class="pb-4 mt-3" style="height:50px">
-        <input type="submit" class="btn btn-primary float-end" value="Save">
+        <button type="submit" class="btn btn-primary float-end" :disabled="submitting">Save
+        <LoadingSpinner :isLoading="submitting" /></button>
         <input type="button" class="btn btn-grey mx-2 float-end" value="Cancel" @click="modal.close()">
       </div>
     </form>
@@ -72,6 +73,7 @@ import { useLessonsStore } from '../../../../stores/lessons'
 import { useModalStore } from '@/stores/modal'
 import { useToastStore } from '/resources/js/stores/toast'
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
+import LoadingSpinner from '../../../Layouts/MainLayout/Elements/LoadingSpinner.vue'
 
 // const toast = useToast()
 const toast = useToastStore()
@@ -82,6 +84,7 @@ const modal = useModalStore()
 const currentLesson = lessonStore.getLessonData
   
 const attributes = currentLesson.attributes
+const submitting = ref(false)
 
 const currentDuration = computed(()=>{
   var minutes = moment(attributes.end, 'HH:mm:ss').diff(moment(attributes.start, 'HH:mm:ss'), 'minutes')
@@ -144,6 +147,7 @@ const isAdmin = computed(() => {
 
 function updateValues(){
   // console.log(lessonData.value)
+  submitting.value = true
   axiosClient.patch('lessons/' + currentLesson.id, 
   {
     start: lessonData.value.time, 
@@ -157,6 +161,7 @@ function updateValues(){
     })
     .then((res) => {
       lessonStore.setLesson(res.data.lesson)
+      submitting.value = false
       toast.open('success', 'Lesson Updated Successfully!', 'The lesson details have been updated')
       modal.close()
     })
