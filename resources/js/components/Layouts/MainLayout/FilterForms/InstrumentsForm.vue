@@ -1,15 +1,15 @@
 <template>
 <div>
+  <label for="instrumentFamily" class="ms-1">Instrument Family</label>
+  <select name="instrumentFamily" id="instrumentFamily" class="form-control mb-2" v-model="filtering.family" @change="returnFiltered">
+    <option value="" selected>All Families</option>
+    <option v-for="(instrument, index) in instrumentFamilyArray" :key="index" :value="instrument">{{ instrument }}</option>
+  </select>
+
   <label for="instrument" class="ms-1">Instrument Type</label>
   <select name="instrument" id="instrument" class="form-control mb-2" v-model="filtering.type" @change="returnFiltered">
     <option value="" selected>All Instruments</option>
     <option v-for="(instrument, index) in instrumentTypeArray" :key="index" :value="instrument">{{ instrument }}</option>
-  </select>
-
-  <label for="instrumentFamily" class="ms-1">Instrument family</label>
-  <select name="instrumentFamily" id="instrumentFamily" class="form-control mb-2" v-model="filtering.family" @change="returnFiltered">
-    <option value="" selected>All Families</option>
-    <option v-for="(instrument, index) in instrumentFamilyArray" :key="index" :value="instrument">{{ instrument }}</option>
   </select>
 
   <label for="status" class="ms-1">Status</label>
@@ -18,8 +18,8 @@
     <option v-for="(status, index) in statusArray" :key="index" :value="status.id">{{ status.description }}</option>
   </select>
 
-  <label for="school" class="ms-1">School</label>
-  <select name="school" id="school" class="form-control mb-2" v-model="filtering.school" @change="returnFiltered">
+  <label v-if="user.getSchools.length > 1" for="school" class="ms-1">School</label>
+  <select v-if="user.getSchools.length > 1" name="school" id="school" class="form-control mb-2" v-model="filtering.school" @change="returnFiltered">
     <option value="" selected>All schools</option>
     <option v-for="(school, index) in schoolArray" :key="index" :value="school.id">{{ school.name }}</option>
   </select>
@@ -31,9 +31,11 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { useFilterStore } from '../../../../stores/filter'
+import { useUserStore } from '/resources/js/stores/user';
 
 const filter = useFilterStore()
 const originalData = ref(filter.data)
+const user = useUserStore()
 const filtering = ref({
   type: '',
   family: '',

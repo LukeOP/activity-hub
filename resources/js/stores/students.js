@@ -23,6 +23,13 @@ export const useStudentStore = defineStore('students', {
     addStudent(studentObject){
       this.students = [...this.students, studentObject]
     },
+    updateStudent(studentObject){
+      const index = this.students.findIndex(s => s.id === studentObject.id)
+      if (index !== -1){
+        this.students.splice(index, 1, studentObject)
+        this.currentStudent = studentObject
+      }
+    },
     reset(){
       this.currentStudent = {}
       this.students = []

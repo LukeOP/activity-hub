@@ -1,13 +1,18 @@
 <template>
   <div id="parent-details" class="section row">
     <h2>Contact Details:</h2>
+    <!-- {{ student }} -->
     <div id="student" class="col col-12 col-sm-6 col-md-3">
       <h2>Student:</h2>
+      <span v-if="student.year_level">
+        <h3>Year Level:</h3>
+        {{student.year_level}}<br/>
+      </span>
+      <span v-if="student.tutor_group">
+        <h3>Tutor Group:</h3>
+        {{student.tutor_group}}<br/>
+      </span>
       <span v-if="student.contacts">
-        <span v-if="student.year_level">
-          <h3>Year Level:</h3>
-          {{student.year_level}}<br/>
-        </span>
         <span v-if="student.contacts.student.email">
           <h3>Email:</h3>
           {{student.contacts.student.email}}<br/>
