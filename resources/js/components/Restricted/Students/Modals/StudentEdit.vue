@@ -15,7 +15,7 @@
         <input type="text" class="form-control" v-model="formData.year_level">
       </label>
       <label>Date of Birth
-        <input type="date" class="form-control" v-model="formData.date_of_birth" :max="moment().format('YYYY-MM-DD')">
+        <input type="date" class="form-control" v-model="selectedDate" :max="moment().format('YYYY-MM-DD')">
       </label>
       <label>Student Identifier
         <input type="text" class="form-control" v-model="formData.identifier">
@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue';
 import { useStudentStore } from '/resources/js/stores/students';
 import moment from 'moment';
@@ -38,19 +38,26 @@ const studentStore = useStudentStore()
 const toast = useToastStore()
 const modal = useModalStore()
 const currentStudent = studentStore.getStudent
+const selectedDate = ref(currentStudent.date_of_birth)
+
+const getDOB = computed(() => {
+  let date = moment(selectedDate.value).format('YYYY-MM-DD')
+  return date == 'Invalid date' ? null : date
+})
 
 const formData = ref({
   first_name: currentStudent.first_name,
   last_name: currentStudent.last_name,
   tutor_group: currentStudent.tutor_group,
   year_level: currentStudent.year_level,
-  date_of_birth: moment(currentStudent.date_of_birth).format('YYYY-MM-DD'),
+  date_of_birth: getDOB,
   identifier: currentStudent.identifier,
 })
 
 function handleUpdate(){
-  axiosClient.patch('students/' + currentStudent.id, formData.value).then(res => {
-    studentStore.setStudent(res.data)
+  axiosClient.patch('students/' + currentStudent.id, formData.value)
+  .then(res => {
+    studentStore.updateStudent(res.data.student)
     toast.open('success', 'Student Updated', `Student details for ${currentStudent.first_name} have been updated`)
     modal.close()
   })
