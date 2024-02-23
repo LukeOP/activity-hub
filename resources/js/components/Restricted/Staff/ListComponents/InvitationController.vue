@@ -1,10 +1,9 @@
 <template>
   <div>
-    <section v-if="staffStore.getSchoolInvites.length > 0">
-    <!-- <section v-if="invitations"> -->
-      <!-- <component :is="InvitationComponent" :invitations="staffStore.getSchoolInvites" v-if="invitations.length > 0"/> -->
+    <section v-if="staffStore.getSchoolInvites.length > 0 && !loading">
       <component :is="InvitationComponent" :invitations="staffStore.getSchoolInvites" v-if="staffStore.getSchoolInvites.length > 0"/>
     </section>
+    <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
   </div>
 </template>
 
@@ -15,6 +14,7 @@ import { computed, ref } from 'vue';
 import useApi from '/resources/js/composables/useApi';
 import { useSchoolStore } from '/resources/js/stores/schools';
 import InvitationTable from './InvitationTable.vue';
+import LoadingSpinner from '/resources/js/components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 
 // Initiate Stores
@@ -30,7 +30,7 @@ const InvitationComponent = computed(() => {
 })
 
 // Fetch school staff Invitations from database and add to store
-const { data: invitations, fetchData } = useApi('school-invitations/' + schoolStore.getSchool.id)
+const { data: invitations, loading, fetchData } = useApi('school-invitations/' + schoolStore.getSchool.id)
 fetchData().then(()=>{
   staffStore.setSchoolInvites(invitations.value)
 })

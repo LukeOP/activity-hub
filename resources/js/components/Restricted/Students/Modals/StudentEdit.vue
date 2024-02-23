@@ -54,6 +54,11 @@ const formData = ref({
   identifier: currentStudent.identifier,
 })
 
+function checkDOB(date){
+  let result = moment(date).format('YYYY-MM-DD') == 'Invalid date' ? null : moment(date).format('YYYY-MM-DD')
+  return result
+}
+
 function handleUpdate(){
   axiosClient.patch('students/' + currentStudent.id, formData.value)
   .then(res => {

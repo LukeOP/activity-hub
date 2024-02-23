@@ -9,9 +9,10 @@
     </div>
 
     <!-- Table component -->
-    <section v-if="filteredInstruments">
+    <section v-if="filteredInstruments && !loading">
       <component :is="currentComponent" :instruments="filteredInstruments" :key="key" />
     </section>
+    <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
 
   </div>
 </template>
@@ -30,6 +31,7 @@ import { useUserStore } from '/resources/js/stores/user';
 import router from '/resources/js/router/router';
 import { useActionsStore } from '/resources/js/stores/actions';
 import { useFilterStore } from '/resources/js/stores/filter';
+import LoadingSpinner from '../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 const key = ref(0)
 const links = ref({link1: ''})
@@ -53,7 +55,7 @@ const currentComponent = computed(() => {
 if(user.hasPermissionAny('HIRES_V')) links.value.link1 = 'Instrument Hire'
 
 // Fetch Instrument data and add to store
-const { data: allInstruments, fetchData: fetchInstruments } = useApi('instruments')
+const { data: allInstruments, loading, fetchData: fetchInstruments } = useApi('instruments')
 
 function getInstruments(){
   if(instrumentStore.getInstruments.length < 1){

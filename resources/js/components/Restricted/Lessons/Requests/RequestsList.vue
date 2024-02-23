@@ -8,9 +8,10 @@
   </section>
 
   <!-- Table component -->
-  <section v-if="filteredRequests">
+  <section v-if="filteredRequests && !loading">
     <component :is="currentComponent" :requests="filteredRequests" :key="key" />
   </section>
+  <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
 </div>
 </template>
 
@@ -28,6 +29,7 @@ import { useLessonsStore } from '../../../../stores/lessons'
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '/resources/js/stores/user'
+import LoadingSpinner from '../../../Layouts/MainLayout/Elements/LoadingSpinner.vue'
 
 const key = ref(0)
 
@@ -48,7 +50,7 @@ const currentComponent = computed(() => {
 
 // fetch lessons data from the database and add to store
 const filteredRequests = ref([])
-const {data:lessons, fetchData} = useApi('lesson-requests')
+const {data:lessons, loading, fetchData} = useApi('lesson-requests')
 
 
 // Set side actions available on this page

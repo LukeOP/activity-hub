@@ -6,7 +6,9 @@
       <input type="text" class="form-control my-2" v-model="register.email" placeholder="Email">
       <input type="password" class="form-control my-2" v-model="register.password" placeholder="Password">
       <input type="password" class="form-control" v-model="register.password_confirmation" placeholder="Confirm Password">
-      <button type="submit" class="btn btn-primary my-3 form-control">Continue</button>
+      <button type="submit" class="btn btn-primary my-3 form-control" :disabled="loading">Continue
+        <loading-spinner :isLoading="loading" class="float-end" />
+      </button>
     </form>
     <router-link :to="{name: 'Login'}" class="ah-link">Or login to an existing account.</router-link>
     <div v-if="error" class="error">{{error}}</div>
@@ -17,16 +19,19 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../../../stores/user'
 import Calendar from '../../Restricted/Dashboard/Calendar.vue'
+import LoadingSpinner from '../../Layouts/MainLayout/Elements/LoadingSpinner.vue'
 
 
 export default {
   components: {
-    Calendar
-  },
+    Calendar,
+    LoadingSpinner
+},
   setup(){
     const user = useUserStore()
     const router = useRouter()
     const error = ref('')
+    const loading = ref(false)
 
     const register = ref({
       first_name: '',
@@ -38,12 +43,14 @@ export default {
 
     function handleRegister(){
       error.value = ''
+      loading.value = true
       user.register(register.value).then((res) => {
         router.push({
           name: 'RegisterConfirm'
         })
       }).catch(err => {
         error.value = err.response.message
+        loading.value = false
       })
     }
 

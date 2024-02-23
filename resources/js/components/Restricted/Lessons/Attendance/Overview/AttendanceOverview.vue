@@ -42,7 +42,7 @@ function filteredLessons(type){
 }
 
 function handleClick(lesson){
-  const { data: lessonData, fetchData} = useApi('lessons/' + lesson.id)
+  const { data: lessonData, loading, fetchData} = useApi('lessons/' + lesson.id)
   fetchData().then(()=>{
     lessonStore.setLesson(lessonData.value)
     router.push({

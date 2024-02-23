@@ -41,23 +41,20 @@ export default {
       axiosClient.patch('lessons/' + lesson.id, {status: 'Active'})
       .then((res) => {
         toast.open('success', 'Lesson State Changed', 'The lesson is now set as active.')
-        axiosClient.post('calendar-events', CalendarData())
-        .then(() => { 
-          lesson.attributes.status = 'Active'
-          modal.close()
-        })
+        lesson.attributes.status = 'Active'
+        modal.close()
       })
     }
 
-    function CalendarData(){
-      return {
-        school_id: lesson.school.id,
-        user_id: lesson.tutor.id,
-        start: lesson.attributes.startDate ? lesson.attributes.startDate : new Date(),
-        reference_type: 'lesson',
-        reference_type_id: lesson.id
-      }
-    }
+    // function CalendarData(){
+    //   return {
+    //     school_id: lesson.school.id,
+    //     user_id: lesson.tutor.id,
+    //     start: lesson.attributes.startDate ? lesson.attributes.startDate : new Date(),
+    //     reference_type: 'lesson',
+    //     reference_type_id: lesson.id
+    //   }
+    // }
     const returnDetails = { name: 'LessonDetails', params: { id: lesson.id } }
 
     return {

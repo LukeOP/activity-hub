@@ -7,9 +7,10 @@
     </div>
 
     <!-- Table component -->
-    <section v-if="filteredStudents">
+    <section v-if="filteredStudents && !loading">
       <component :is="currentComponent" />
     </section>
+    <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
 
   </div>
 </template>
@@ -24,6 +25,7 @@ import { useWindowSize } from '/resources/js/composables/useWindowSize';
 import HeaderLine from '../../Layouts/MainLayout/Elements/HeaderLine.vue';
 import { useUserStore } from '/resources/js/stores/user';
 import { useActionsStore } from '/resources/js/stores/actions';
+import LoadingSpinner from '/resources/js/components/Layouts/MainLayout/Elements/LoadingSpinner.vue'
 
 // Initiate Stores
 const studentStore = useStudentStore()
@@ -39,7 +41,7 @@ const currentComponent = computed(() => {
 })
 
 // Fetch Student data and add to store
-const { data: allStudents, fetchData: fetchStudents } = useApi('students')
+const { data: allStudents, loading, fetchData: fetchStudents } = useApi('students')
 if(studentStore.getStudents.length < 1){
   fetchStudents().then(()=>{
     studentStore.setStudents(allStudents.value)

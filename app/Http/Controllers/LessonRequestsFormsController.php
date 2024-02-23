@@ -25,19 +25,18 @@ class LessonRequestsFormsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $form = LessonRequestForm::create([
+            'school_id' => $request->school_id,
+            'description' => $request->description,
+        ]);
+
+        $newForm = LessonRequestForm::where('id', $form->id)->first();
+
+        return new LessonRequestFormResource($newForm);
     }
 
     /**
@@ -119,6 +118,6 @@ class LessonRequestsFormsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        return LessonRequestForm::where('id', $id)->first()->delete();
     }
 }

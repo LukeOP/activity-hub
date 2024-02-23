@@ -155,7 +155,9 @@ class StudentsController extends Controller
         $student->fill($request->all());
         $student->save();
 
-        return ['success', 'Student updated', 'student' => $student];
+        $updatedStudent = Student::where('id', $student->id)->first();
+
+        return ['success', 'Student updated', 'student' => new StudentsResource($updatedStudent)];
     }
 
     /**

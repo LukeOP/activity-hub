@@ -26,7 +26,6 @@ const props = defineProps({
 })
 
 function newRoute(routeName){
-    console.log('click');
     router.push({
         name: routeName
     })

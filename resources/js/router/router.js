@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import { useUserStore } from "../stores/user";
 import publicRoutes from "./publicRoutes";
-import authRoutes from "./authRoutes/authRoutes";
+import authRoutes from "./authRoutes";
 
 import Test from '../components/Public/Test.vue'
 
@@ -13,7 +13,18 @@ const routes = [
     component: Test,
   },
   ...publicRoutes,
-  ...authRoutes
+  ...authRoutes,
+  {
+    path: "/:catchAll(.*)",
+    redirect: (to) => {
+      const user = useUserStore()
+      if(user.token){
+        return { name: "NotFoundRestricted"}
+      } else {
+        return { name: "NotFoundPublic"}
+      }
+    }
+  }
 ]
 
 const router = createRouter({

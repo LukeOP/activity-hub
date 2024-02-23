@@ -6,7 +6,8 @@
   <input type="password" class="form-control my-2" v-model="formData.password" placeholder="new password" required>
   <input type="password" class="form-control my-2" v-model="formData.password_confirmation" placeholder="confirm password" required>
   <p v-show="passwordTooShort">Password must be at least 8 characters.</p>
-  <button :disabled="!passwordsMatch || processing" class="btn btn-primary my-3 form-control">Reset Password</button>
+  <button :disabled="!passwordsMatch || processing" class="btn btn-primary my-3 form-control">Reset Password
+    <LoadingSpinner :isLoading="loading" class="float-end" /></button>
   </form>
   <div v-if="error" class="error">{{error}}</div>
   <div v-if="message" class="message">{{message}}</div>
@@ -16,6 +17,7 @@
 import axiosClient from '/resources/js/axios';
 import { ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import LoadingSpinner from '../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 const route = useRoute()
 const router = useRouter()

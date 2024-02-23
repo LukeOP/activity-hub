@@ -8,9 +8,10 @@
     </div>
 
     <!-- Table Component -->
-    <section v-if="filteredEvents">
+    <section v-if="filteredEvents && !loading">
       <component :is="currentComponent" :events="filteredEvents" :key="key" />
     </section>
+    <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
 
   </div>
 </template>
@@ -27,6 +28,7 @@ import EventsTableMobile from './ListComponents/EventsTableMobile.vue'
 import { useFilterStore } from '/resources/js/stores/filter';
 import { useUserStore } from '/resources/js/stores/user';
 import { useActionsStore } from '/resources/js/stores/actions';
+import LoadingSpinner from '../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 const key = ref(0)
 
@@ -39,6 +41,7 @@ const actions  = useActionsStore()
 // Initiate Composables
 const { windowSize } = useWindowSize()
 const router = useRouter()
+// const loading = ref(false)
 
 const jobs = ref({jobs: ''})
 
@@ -62,11 +65,12 @@ if(user.hasPermissionAny('EVENTS_TEMP_V')){
 
 
 // Fetch Event data and add to store
-const { data: allEvents, fetchData: fetchEvents } = useApi('events')
+const { data: allEvents, loading, fetchData: fetchEvents } = useApi('events')
 
 function getEvents(){
   if(eventStore.getEvents.length < 1){
-    fetchEvents().then(()=>{
+    fetchEvents()
+    .then(()=>{
       eventStore.setEvents(allEvents.value)
       key.value++
     })
@@ -109,7 +113,7 @@ const filteredEvents = computed(() => {
 // Handle route change
 function routeChange(value) {
   let route = {}
-  if(value === 'link1') route = {name: 'TemplateList'}
+  if(value == 'link1') route = {name: 'TemplateList'}
   router.push(route)
 }
 

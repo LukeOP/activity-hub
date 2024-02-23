@@ -1,8 +1,9 @@
 <template>
   <div>
-    <section v-if="staff">
+    <section v-if="staff && !loading">
       <component :is="StaffTableComponent" :staff="staff" />
     </section>
+    <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
   </div>
 </template>
 
@@ -14,6 +15,7 @@ import StaffTable from './StaffTable.vue';
 import StaffTableMobile from './StaffTableMobile.vue';
 import useApi from '/resources/js/composables/useApi';
 import { useSchoolStore } from '/resources/js/stores/schools';
+import LoadingSpinner from '../../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 
 // Initiate Stores
@@ -29,7 +31,7 @@ const StaffTableComponent = computed(() => {
 })
 
 // Fetch school staff from database and add to store
-const { data: staff, fetchData: fetchStaff } = useApi('school-users/' + schoolStore.getSchool.id)
+const { data: staff, loading, fetchData: fetchStaff } = useApi('school-users/' + schoolStore.getSchool.id)
 fetchStaff().then(() => {
   staffStore.setStaffList(staff.value)
 })

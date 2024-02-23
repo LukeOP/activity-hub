@@ -5,9 +5,10 @@
     @link1="changeRoute" @link2="changeRoute"/>
 
   <!-- Table component -->
-  <section v-if="filteredLessons">
+  <section v-if="filteredLessons && !loading">
     <component :is="currentComponent" :lessons="filteredLessons" />
   </section>
+  <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
 </div>
 </template>
 
@@ -25,6 +26,7 @@ import { useActionsStore } from '../../../stores/actions'
 import { useLessonsStore } from '../../../stores/lessons'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
+import LoadingSpinner from '../../Layouts/MainLayout/Elements/LoadingSpinner.vue'
 
 //  Initiate Stores
 const filter = useFilterStore()
@@ -43,7 +45,7 @@ const currentComponent = computed(() => {
 
 // fetch lessons data from the database and add to store
 const filteredLessons = ref([])
-const {data:lessons, fetchData} = useApi('lessons')
+const {data:lessons, loading, fetchData} = useApi('lessons')
 
 fetchData().then(() => {
   filteredLessons.value = lessons.value

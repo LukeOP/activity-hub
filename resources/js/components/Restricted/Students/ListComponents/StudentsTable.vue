@@ -6,7 +6,9 @@
         <tr>
           <th role="columnheader" @click="sortData('first_name')" style="width: 1%">First Name:</th>
           <th role="columnheader" @click="sortData('last_name')" style="width: 1%">Last Name:</th>
-          <th role="columnheader" @click="sortData('school.name')" style="width: 1%">School:</th>
+          <th role="columnheader" @click="sortData('tutor_group')" style="width: 1%">Year Level:</th>
+          <th role="columnheader" @click="sortData('year_level')" style="width: 1%">Tutor Group:</th>
+          <th role="columnheader" @click="sortData('school.name')" style="width: 1%" v-if="user.getSchools.length > 1">School:</th>
         </tr>
       </thead>
      </table>
@@ -17,7 +19,9 @@
         <tr v-for="member in studentList" :key="member.id" @click="handleRowClick(member)">
           <td role="cell">{{member.first_name}}</td>
           <td role="cell">{{member.last_name}}</td>
-          <td role="cell">{{member.school.name}}</td>
+          <td role="cell">{{member.year_level}}</td>
+          <td role="cell">{{member.tutor_group}}</td>
+          <td role="cell" v-if="user.getSchools.length > 1">{{member.school.name}}</td>
         </tr>
       </tbody>
     </table>
@@ -30,9 +34,11 @@ import { useRouter } from 'vue-router';
 import useSorter from '/resources/js/composables/useSorter';
 import { useStudentStore } from '/resources/js/stores/students';
 import { computed } from 'vue';
+import { useUserStore } from '../../../../stores/user';
 const sorter = useSorter()
 const router = useRouter()
 const studentStore = useStudentStore()
+const user = useUserStore()
 
 const studentList = computed(()=>{
   return studentStore.getFilteredStudents

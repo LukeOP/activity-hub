@@ -28,6 +28,12 @@
           </select>
         </div>
       </div>
+
+      <div class="row">
+        <label id="notes">Notes
+          <textarea class="form-control" rows="2" v-model="formData.notes"></textarea>
+        </label>
+      </div>
       <input type="submit" aria-label="submit" value="Submit" class="form-control btn btn-primary">
     </form>
   </div>
@@ -37,10 +43,12 @@
 import { ref } from 'vue';
 import { useInstrumentStore } from '/resources/js/stores/instruments';
 import useApi from '/resources/js/composables/useApi';
+import { useToastStore } from '/resources/js/stores/toast';
 import { useModalStore } from '/resources/js/stores/modal';
 import axiosClient from '/resources/js/axios';
 
 const modal = useModalStore()
+const toast = useToastStore()
 
 const { data: states, fetchData: fetchStates } = useApi('instrument-states')
 fetchStates()
@@ -53,12 +61,14 @@ const formData = ref({
   type: instrument.attributes.type,
   family: instrument.attributes.family,
   fee: instrument.attributes.fee,
-  state_id: instrument.attributes.state.id
+  state_id: instrument.attributes.state.id,
+  notes: instrument.attributes.notes
 })
 
 function updateInstrument(){
   axiosClient.patch(`instruments/${instrument.id}`, formData.value).then(res =>{
-    instrumentStore.setInstrument(res.data.instrument)
+    instrumentStore.updateInstrument(res.data.instrument)
+    toast.open('success', 'Instrument details updated.', '')
   })
   modal.close()
 }
@@ -71,7 +81,7 @@ form select {
   margin-bottom: 1rem;
 }
 
-#state, #fee {
+#notes {
   padding-top: 10px;
   margin-bottom: 1rem;
 }

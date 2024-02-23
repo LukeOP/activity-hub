@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Resources\HireAgreementResource;
 use App\Http\Resources\InstrumentResource;
 use App\Http\Resources\StudentsResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,5 +39,10 @@ class Hire extends Model
     public function getStudent($student_id)
     {
         return new StudentsResource(Student::where('id', $student_id)->first());
+    }
+
+    public function getHireAgreement($upload_id)
+    {
+        return new HireAgreementResource(Document::where('id', $upload_id)->first());
     }
 }

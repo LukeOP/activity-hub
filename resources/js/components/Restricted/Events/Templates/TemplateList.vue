@@ -22,17 +22,18 @@
 
           <div class="mt-3" v-if="formData.templates">
               <h2 class="mb-3 mt-4">Existing Templates:
-                <button v-if="user.hasPermission('EVENTS_TEMP_C', formData.school)" class="btn btn-outline-secondary float-end hiddenOnMobile" @click="createTemplate()">Create New Template</button>
+                <!-- <button v-if="user.hasPermission('EVENTS_TEMP_C', formData.school)" class="btn btn-outline-secondary float-end hiddenOnMobile" @click="createTemplate()">Create New Template</button> -->
               </h2>
+              <LoadingSpinner :isLoading="loading" color="primary" />
               <div id="template-container">
-                <div v-for="template in formData.templates" :key="template">
-                  <div class="template" @click="viewEventTemplateDetails(template)">
+                <div v-for="template in formData.templates" :key="template" class="template">
+                  <div @click="viewEventTemplateDetails(template)">
                     <span>{{ template.heading }}</span>
                   </div>
                 </div>
                 <div v-if="formData.templates.length < 1" id="no-template">No event templates have been created</div>
               </div>
-            <p v-if="windowSize.width < 1030" class="warning">Templates cannot be created or edited on a mobile device.</p>
+            <p v-if="mobileFormat" class="warning">Templates cannot be created or edited on a mobile device.</p>
           </div>
           
         </section>
@@ -72,16 +73,19 @@ import { useRouter } from 'vue-router';
 import { useEventStore } from '/resources/js/stores/events';
 import { useModalStore } from '/resources/js/stores/modal';
 import { useSchoolStore } from '/resources/js/stores/schools';
+import { useActionsStore } from '/resources/js/stores/actions';
+import LoadingSpinner from '../../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 // Initiate Stores
 const user = useUserStore()
 const eventStore = useEventStore()
 const modal = useModalStore()
 const schoolStore = useSchoolStore()
+const actions = useActionsStore()
 
 // Initiate Composables
 const router = useRouter()
-const { windowSize } = useWindowSize()
+const { mobileFormat } = useWindowSize()
 
 // Initiate Data Variables
 const formData = ref({
@@ -90,6 +94,17 @@ const formData = ref({
   templates: [],
   selected_Template: ''
 })
+const loading = ref(false)
+
+function setActions(){
+  let actionsArray = []
+  // console.log(mobileFormat.value);
+  if(user.hasPermissionAny('EVENT_TEMP_C') && !mobileFormat.value){
+    actionsArray.push({ header: 'Create New Template', to: { name: 'TemplateList' }, modal: 'CreateTemplate', icon: 'fa-solid fa-add'})
+  }
+  actions.setItems(actionsArray)
+}
+setActions()
 
 // Fetch user schools or set default school if only one exists for user
 const {data: schools, fetchData: fetchSchools} = useApi('schools')
@@ -108,11 +123,18 @@ function setSchools(){
 
 // Fetch school templates when school is selected
 watch(() => formData.value.school, (newValue) => {
+  schoolStore.setSchool(...schools.value.filter(s => s.id == newValue))
   if(formData.value.school != ''){
+    loading.value = true
     const {data, fetchData} = useApi('event-school-jobs/templates/' + newValue)
-    fetchData().then(()=>{
+    fetchData()
+    .then(()=>{
+      loading.value = false
       formData.value.templates = data.value
       formData.value.selected_Template = ''
+    })
+    .catch(e => {
+      loading.value = false
     })
   }else formData.value.templates = []
 })
@@ -121,11 +143,6 @@ watch(() => formData.value.school, (newValue) => {
 function viewEventTemplateDetails(template){
   formData.value.selected_Template = template
   eventStore.setEventData(template)
-}
-
-function createTemplate(){
-  schoolStore.setSchool(schools.value.filter(s => s.id == formData.value.school)[0])
-  modal.open('CreateTemplate')
 }
 
 // Handle Route Change
@@ -146,12 +163,12 @@ h3 {
   font-size: 1.25rem;
 }
 .template {
-  padding: 1px 10px;
-  background-color: $ah-primary-light;
   border-radius: 0.375rem;
-  padding: 5px 10px;
-  color: white;
-  margin-bottom: 0.5rem;
+  padding: 10px 10px;
+
+  &:nth-child(odd) {
+    background-color: $ah-primary-background;
+  }
   &:hover {
     background-color: $ah-primary;
     color: white;

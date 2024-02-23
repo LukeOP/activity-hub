@@ -7,6 +7,7 @@
           <th @click="sortData('attributes.name')">Event:</th>
           <th @click="sortData('attributes.description')">Description:</th>
           <th @click="sortData('attributes.date')">Date:</th>
+          <th @click="sortData('attributes.date')">Term:</th>
           <th @click="sortData('school.name')" v-if="user.getSchools.length > 1">School:</th>
         </tr>
       </thead>
@@ -19,7 +20,8 @@
         <tr v-for="event in events" :key="event.id" @click="handleClick(event)">
           <td>{{ event.attributes.name }}</td>
           <td>{{ event.attributes.description }}</td>
-          <td>{{event.attributes.date}}</td>
+          <td>{{formatDate(event.attributes.date)}}</td>
+          <td>{{event.attributes.term}}</td>
           <td v-if="user.getSchools.length > 1">{{event.school.name}}</td>
         </tr>
       </tbody>
@@ -37,6 +39,7 @@ import { useRouter } from 'vue-router'
 import useSorter from '../../../../composables/useSorter'
 import { useEventStore } from '../../../../stores/events'
 import { useUserStore } from '/resources/js/stores/user';
+import moment from 'moment';
 
 
   const router = useRouter()
@@ -66,6 +69,13 @@ import { useUserStore } from '/resources/js/stores/user';
 
   function sortData(field){
     sorter.sort(props.events, field)
+  }
+
+  function formatDate(date){
+    let formattedDate = moment(date).format('MMMM Do, YYYY');
+    if(formattedDate != 'Invalid date'){
+      return formattedDate
+    } return '-'
   }
 
 </script>

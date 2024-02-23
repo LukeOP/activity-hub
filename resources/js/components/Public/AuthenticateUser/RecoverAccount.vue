@@ -3,7 +3,8 @@
       <p>Provide your account email to reset your password.</p>
       <form @submit.prevent="sendRecoveryInfo" >
         <input type="email" class="form-control my-2" v-model="formData.email" placeholder="email" required>
-        <button :disabled="processing" class="btn btn-primary my-3 form-control">Send Recovery Details</button>
+        <button :disabled="processing" class="btn btn-primary my-3 form-control">Send Recovery Details
+            <LoadingSpinner class="float-end ps-2" :isLoading="processing" /></button>
         <p class="ah-link" @click="returnToLoginPage">Back to login page</p>
       </form>
       <div v-if="error" class="error">{{error}}</div>
@@ -14,6 +15,7 @@
 import { useRouter } from 'vue-router';
 import axiosClient from '/resources/js/axios';
 import { ref } from 'vue';
+import LoadingSpinner from '../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 const router = useRouter()
 const error = ref('')

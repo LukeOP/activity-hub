@@ -1,5 +1,9 @@
 <template>
-  <div v-if="!loading" class="user-element">
+  <LoadingSkeleton v-if="loading" class="user-element">
+    <UserElementHeader heading="Lessons By Date" />
+    <LoadingSpinner :isLoading="true" :loadingText="true" color="primary" />
+  </LoadingSkeleton>
+  <div v-else class="user-element">
     <UserElementHeader heading="Lessons By Date" />
     <div id="date-banner">
       <div id="date" v-if="!mobileFormat">{{ moment(selectedDate).format('dddd - MMMM DD') }}</div>
@@ -36,6 +40,8 @@ import { icons } from '@/images/icons/icons'
 import { useWindowSize } from '/resources/js/composables/useWindowSize';
 import StatusIconSVG from '../../Layouts/MainLayout/Elements/SVG/StatusIconSVG.vue';
 import UserElementHeader from '../../Layouts/MainLayout/Elements/UserElementHeader.vue';
+import LoadingSpinner from '../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import LoadingSkeleton from '../../Layouts/MainLayout/Elements/LoadingSkeleton.vue';
 
 const house = icons.question
 
@@ -129,7 +135,7 @@ function handleRowClick(lesson){
 table {
   width: 100%;
   #category {
-    width: 2px;
+    width: 25px;
     padding:5px
   }
   #state {

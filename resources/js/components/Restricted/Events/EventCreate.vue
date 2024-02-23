@@ -36,7 +36,10 @@
               <option v-for="template in eventJobTemplates" :key="template" :value="template.id">{{ template.heading }}</option>
             </select>
           </label>
-          <input type="submit" class="btn btn-primary form-control" value="Create">
+
+        <button type="submit" aria-label="submit" class="form-control btn btn-primary mt-2" :disabled="submitting">Create Event
+          <LoadingSpinner :isLoading="submitting" />
+        </button>
         </div>
 
       </div>
@@ -53,6 +56,7 @@ import useApi from '/resources/js/composables/useApi';
 import axiosClient from '/resources/js/axios';
 import { useToastStore } from '/resources/js/stores/toast';
 import { useRouter } from 'vue-router';
+import LoadingSpinner from '../../Layouts/MainLayout/Elements/LoadingSpinner.vue';
 
 // Initiate Stores
 const user = useUserStore()
@@ -72,6 +76,7 @@ const formData = ref({
   time: '',
   template: ''
 })
+const submitting = ref(false)
 
 // Get schools user can create events for
 const userSchools = computed(()=>{
@@ -99,11 +104,13 @@ function setupEvent(){
 }
 
 function createEvent(){
+  submitting.value = true
   axiosClient.post('events', formData.value)
     .then((res) => {
       createEventJobs(res.data.event)
       events.addEvent(res.data.event)
       toast.open('success', 'Event Created!', 'Template jobs have been setup for your event')
+      submitting.value = false
       router.push({
         name: 'EventsList'
       })

@@ -51,7 +51,6 @@ import { useActionsStore } from "@/stores/actions";
 
 const staffStore = useStaffStore()
 const staff = staffStore.getStaff
-console.log(staff);
 const schoolStore = useSchoolStore()
 const currentSchool = schoolStore.getSchool
 const modal = useModalStore()
@@ -75,7 +74,7 @@ function deleteSubject(subject){
 }
 
 function handlePositionEdit(position){
-  axiosClient.patch(`user-position/${staff.position.id}/`, {position: position}).then(res =>{
+  axiosClient.patch(`user-position/${staff.position.id}`, {position: position}).then(res =>{
     editingPosition.value = false
   })
 }

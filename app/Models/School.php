@@ -34,6 +34,6 @@ class School extends Model
     }
     public function students()
     {
-        return $this->HasMany(Students::class);
+        return $this->HasMany(Student::class);
     }
 }

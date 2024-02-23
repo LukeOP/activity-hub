@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DocumentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -18,8 +19,9 @@ Route::get('/', function () {
     return view('app');
 });
 
-Auth::routes(['verify' => true]);
+Route::get('download', [DocumentController::class, 'download']);
 
+Auth::routes(['verify' => true]);
 
 Route::get('/{any}', function () {
     return view('app');
