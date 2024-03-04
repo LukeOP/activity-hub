@@ -1,14 +1,10 @@
 <template>
-    <h2>Log In To Your Account</h2>
+    <h2>Try Out Activity Hub with a<br /> Demo Account</h2>
     <form @submit.prevent="handleLogin">
-      <input type="email" class="form-control my-2" v-model="login.email" placeholder="email">
-      <input type="password" class="form-control" v-model="login.password" placeholder="password">
-      <button class="btn btn-primary my-3 form-control" @click="handleLogin" :disabled="loading">Continue
+      <button class="btn btn-primary my-3 form-control" @click="loginUser" :disabled="loading">Login Demo User
         <LoadingSpinner :isLoading="loading" class="float-end" />
       </button>
-
-      <p class="ah-link" @click="routeChange({name: 'RecoverAccount'})">Forgot your password?</p>
-      <p class="ah-link" @click="routeChange({name: 'Register'})">Not yet registered?</p>
+      <p class="ah-link" @click="routeChange({name: 'Register'})">Ready to signup?</p>
       <div v-if="error" class="error">{{error}}</div>
       <div v-if="verification" id="verification" class="btn btn-primary form-control" @click="sendVerificationEmail">Send Verification Email</div>
     </form>
@@ -67,6 +63,12 @@ function setError(error){
 
 function routeChange(route){
   router.push(route)
+}
+
+function loginUser(){
+  login.value.email = 'j.smith@this.com'
+  login.value.password = 'Test1234!'
+  handleLogin()
 }
 
 function sendVerificationEmail(){

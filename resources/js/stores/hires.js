@@ -1,17 +1,25 @@
 import { defineStore } from "pinia";
+import axiosClient from "../axios";
 
 function getState(){
     return {
       currentHire: {},
       hires: [],
       filteredHires: [],
-      hireData: {}
+      hireData: {},
+      loading: false
     }
 }
 
 export const useHireStore = defineStore('hires', {
   state: () => (getState()),
   actions: {
+    async fetchHires(){
+      this.loading = true
+      const hires = await axiosClient.get('hires')
+      this.setHires(hires.data)
+      this.loading = false
+    },
     setHire(hireObject){
       this.currentHire = hireObject
     },
@@ -45,6 +53,9 @@ export const useHireStore = defineStore('hires', {
       return this.currentHire
     },
     getHires(){
+      if(this.hires.length < 1) {
+        this.fetchHires()
+      }
       return this.hires
     },
     getFilteredHires(){
@@ -52,6 +63,9 @@ export const useHireStore = defineStore('hires', {
     },
     getHireData(){
       return this.hireData
+    },
+    isLoading(){
+      return this.loading
     }
   }
 })
