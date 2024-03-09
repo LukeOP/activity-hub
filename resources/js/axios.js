@@ -8,7 +8,7 @@ else url = 'http://localhost:8000'
 
 
 const axiosClient = axios.create({
-  baseURL: url + 'api',
+  baseURL: url + '/api',
   headers: {
     'Accept': 'application/vnd.api+json',
     'Content-Type': "application/vnd.api+json",
