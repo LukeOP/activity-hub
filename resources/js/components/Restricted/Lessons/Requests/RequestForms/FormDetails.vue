@@ -2,7 +2,7 @@
   <div>
     <HeaderLine heading="Lesson Signup Form Details" link1="Forms List" link2="Preview Form" @link1="returnToFormList" @link2="previewForm" />
     <!-- <pre>{{ formData }}</pre> -->
-    <button class="btn btn-secondary float-end top-btn" @click="saveUpdates">Save Form</button>
+    <button class="btn btn-secondary float-end top-btn" @click="saveUpdates" :disabled="saving">Save Form</button>
     <button class="btn btn-primary float-end top-btn" @click="copyURL">Copy Form URL</button>
     <form @submit.prevent="">
       <section id="main-details">
@@ -22,7 +22,7 @@
             <option v-for="year in yearSelect" :key="year" :value="year">{{ year }}</option>
           </select>
         </div>
-
+        <hr />
       </section>
 
       <section id="header-section">
@@ -33,12 +33,13 @@
         <div class="checkbox-option">
           <input type="checkbox" v-model="formData.logo_cb" :disabled="!currentForm.school.logo">
           <div class="description">Display School Logo</div>
+          <img style="height: 50px" :src="currentForm.school.logo" alt="">
         </div>
 
         <div class="checkbox-option">
           <input type="checkbox" v-model="formData.school_name_cb">
           <div class="description">Display School Name:</div>
-          <input type="text" v-model="formData.school_name" class="form-control" disabled>
+          <input type="text" v-model="formData.school_name" class="form-control" style="background-color: transparent; border: none; color: black;" disabled>
         </div>
 
         <div class="checkbox-option">
@@ -50,9 +51,9 @@
         <div class="checkbox-option">
           <input type="checkbox" v-model="formData.header_content_cb">
           <div class="description">Header Information Field:</div>
-          <textarea class="form-control text-center" v-model="formData.header_content" :disabled="!formData.header_content_cb"></textarea>
+          <textarea class="form-control" v-model="formData.header_content" :disabled="!formData.header_content_cb"></textarea>
         </div>
-
+        <hr/>
       </section>
 
       <section id="contact-section">
@@ -117,7 +118,7 @@
           <div class="description">Parent/Caregiver Email Field:</div>
           <input type="text" class="form-control" v-model="formData.pc_email" :disabled="!formData.pc_email_cb">
         </div>
-
+        <hr/>
       </section>
 
       <section id="lesson-options">
@@ -132,9 +133,22 @@
         </div>
 
         <div class="checkbox-option">
-          <input type="checkbox" checked disabled v-model="formData.instrument_cb">
+          <input type="checkbox" checked disabled>
           <span class="description">Instrument:</span>
           <input type="text" class="form-control" v-model="formData.instrument">
+        </div>
+
+        <div class="checkbox-option" style="display: block;">
+          <div class="description text-primary">Instruments to display on the form:</div>
+          <div class="instrumentSelection mb-3">
+            <div class="instrument" 
+              v-for="instrument in staffStore.getSubjects" :key="instrument" 
+              :class="{selected: isSelected(instrument)}" 
+              @click="instrumentClick(instrument)">{{ instrument }}</div>
+          </div>
+          <!-- <pre>
+            {{ selectedInstruments }}
+          </pre> -->
         </div>
 
         <div class="checkbox-option">
@@ -154,7 +168,7 @@
           <div class="description">Previous Experience Field:</div>
           <input type="text" class="form-control" v-model="formData.experience" :disabled="!formData.experience_cb">
         </div>
-
+        <hr />
       </section>
 
       <section id="footer-options">
@@ -184,13 +198,17 @@ import axiosClient from '/resources/js/axios';
 import { useToastStore } from '/resources/js/stores/toast';
 import { useActionsStore } from '../../../../../stores/actions';
 import { useUserStore } from '../../../../../stores/user';
+import { useStaffStore } from '../../../../../stores/staff';
+
 
 // Initiate Stores
 const lessonStore = useLessonsStore()
+const staffStore = useStaffStore()
 const currentForm = lessonStore.getRequestForm
 const toast = useToastStore()
 const actions = useActionsStore()
 const user = useUserStore()
+const saving = ref(false)
 
 // Initiate Composables
 const router = useRouter()
@@ -213,6 +231,22 @@ const yearSelect = ref({
   year4: moment(thisYear, 'YYYY').add(3, 'years').format('YYYY'),
   year5: moment(thisYear, 'YYYY').add(4, 'years').format('YYYY')
 })
+
+let selectedInstruments = ref(currentForm.available_instruments)
+
+
+function isSelected(instrument){
+  return selectedInstruments.value.filter(i => i == instrument)[0] != undefined
+}
+
+function instrumentClick(instrument){
+  if(isSelected(instrument)){
+    const index = selectedInstruments.value.indexOf(instrument)
+    selectedInstruments.value.splice(index, 1)
+  } else {
+    selectedInstruments.value.push(instrument)
+  }
+}
 
 // const formData = ref(currentForm)
 const formData = ref({
@@ -272,10 +306,12 @@ function convertToBool(value){
 }
 
 function saveUpdates(){
-  // console.log(formData.value);
+  saving.value = true
+  formData.value.available_instruments = selectedInstruments.value
   axiosClient.patch('/lesson-request-forms/' + currentForm.id, formData.value).then(res => {
     // console.log(res.data)
     toast.open('success', 'Form Updated', 'Form changes have been saved. ')
+    saving.value = false
   })
 }
 
@@ -308,13 +344,13 @@ function returnToFormList(){
 
 <style lang="scss" scoped>
 section {
-  border-top: 1px dashed $ah-primary;
-  margin-top: 2rem;
+  // border-top: 1px dashed $ah-primary;
+  // margin-top: 2rem;
   padding-top: 10px;
   padding-left: 20px;
-  &:first-of-type {
-    border: none;
-  }
+  // &:first-of-type {
+  //   border: none;
+  // }
 }
 .checkbox-option {
     display: flex;
@@ -328,9 +364,43 @@ section {
     margin-right: 1rem;
     min-width: 250px;
   }
-  input[type="text"], textarea, .editField{
+  input[type="text"], textarea, select, .editField{
     display: inline-block;
     width: 300px;
+  }
+  .noBox {
+    visibility: hidden;
+  }
+  .instrumentSelection {
+    // background-color: brown;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 595px;
+    padding: 0.375rem;
+    .instrument {
+      text-align: center;
+      min-width: 95px;
+      padding: 5px 10px;
+      margin: 0.25rem 1rem 0.25rem 0;
+      border-radius: 1rem;
+      border:1px solid $ah-grey;
+      color: $ah-grey;
+      &:hover {
+        cursor: pointer;
+        color: $ah-primary;
+        border-color: $ah-primary;
+      }
+    }
+    .selected {
+      background-color: $ah-primary;
+      border-color: $ah-primary;
+      color: white;
+      &:hover {
+        background-color: $ah-grey;
+        border-color: $ah-grey;
+        color: white;
+      }
+    }
   }
 }
 .btn {
@@ -349,5 +419,10 @@ section {
 .top-btn {
   min-width: 125px;
 }
+.form-control:disabled {
+  color: grey;
+}
+
+
 
 </style>

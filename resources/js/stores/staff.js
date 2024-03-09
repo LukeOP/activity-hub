@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import axiosClient from "../axios";
+import useApi from '/resources/js/composables/useApi';
 
 function getState(){
     return {
@@ -13,6 +14,26 @@ function getState(){
 export const useStaffStore = defineStore('staff', {
   state: () => (getState()),
   actions: {
+    async fetchStaff() {
+      this.isLoading = true;
+    
+      const { data: staff, error, fetchData } = useApi('school-users/5f6a486f-ae48-4755-be6c-0d86ef491f68');
+      
+      try {
+        await fetchData();
+        
+        if (error.value) {
+          throw new Error(error.value); // Throw an error if API request fails
+        }
+    
+        // Update store state with fetched data
+        this.setStaffList(staff.value);
+      } catch (error) {
+        console.error('Error fetching data: ', error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     setStaff(staffObject){
       this.singleStaff = staffObject
     },
@@ -61,6 +82,23 @@ export const useStaffStore = defineStore('staff', {
     },
     getSchoolInvites(){
       return this.schoolInvites
+    },
+    getSubjects(){
+      if (!this.staffList.length) {
+        this.fetchStaff();
+        return;
+      }
+    
+      var subjectTitlesSet = new Set();
+    
+      this.staffList.forEach(function(person) {
+        person.subjects.forEach(function(subject){
+          subjectTitlesSet.add(subject.title)
+        })
+      })
+    
+      var subjectTitles = Array.from(subjectTitlesSet);
+      return subjectTitles;
     }
   }
 })

@@ -53,12 +53,12 @@
       <div class="col col-12 col-md-6">
         <label>{{ formData.instrument }}
           <select class="form-control" v-model="inputData.instrument">
-            <option v-for="instrument in SubjectsArray" :key="instrument" :value="instrument">{{ instrument }}</option>
+            <option v-for="instrument in lessonStore.lessonRequestForm.available_instruments" :key="instrument" :value="instrument">{{ instrument }}</option>
           </select>
         </label>
         <label v-if="formData.tutor_cb">{{ formData.tutor }}
           <select class="form-control" v-model="inputData.tutor">
-            <option v-for="staff in tutorArray" :key="staff" :value="staff.tutor.id">{{ staff.tutor.full_name }}</option>
+            <option v-for="staff in tutorArray" :key="staff" :value="staff.id">{{ staff.full_name }}</option>
           </select>
         </label>
         <label v-if="formData.funding_type_cb">{{ formData.funding_type }}
@@ -120,36 +120,36 @@ const inputData = ref({
 })
 
 // Fetch school staff from database and add to store
-const { data: staff, fetchData: fetchStaff } = useApi('user-subjects-available/' + lessonStore.getRequestForm.school.id)
-fetchStaff().then(() => {
-  staffStore.setStaffList(staff.value)
-})
+// const { data: staff, fetchData: fetchStaff } = useApi('user-subjects-available/' + lessonStore.getRequestForm.school.id)
+// fetchStaff().then(() => {
+//   staffStore.setStaffList(staff.value)
+// })
 
 // Function to filter subjects and remove duplicates
-const getUniqueSubjects = (item) => {
-  const uniqueTitles = new Set();
+// const getUniqueSubjects = (item) => {
+//   const uniqueTitles = new Set();
 
-  return item
-    .filter((subject) => {
-      // Check if the title is already in the Set, if not, add it and return true
-      if (!uniqueTitles.has(subject.subject)) {
-        uniqueTitles.add(subject.subject);
-        return true;
-      }
-      return false;
-    })
-    .map((subject) => subject.subject);
-};
+//   return item
+//     .filter((subject) => {
+//       // Check if the title is already in the Set, if not, add it and return true
+//       if (!uniqueTitles.has(subject.subject)) {
+//         uniqueTitles.add(subject.subject);
+//         return true;
+//       }
+//       return false;
+//     })
+//     .map((subject) => subject.subject);
+// };
 
 // Create a new array of unique subjects
-const SubjectsArray = computed(() => {
-  if(staff.value) {
-    return getUniqueSubjects(staff.value);
-  } else return []
-})
+// const SubjectsArray = computed(() => {
+//   if(staff.value) {
+//     return getUniqueSubjects(staff.value);
+//   } else return []
+// })
 
 const tutorArray = computed(() => {
-  return staffStore.getStaffList.filter(s => s.subject === inputData.value.instrument)
+  return staffStore.getStaffList.filter(s => s.subjects.some(sub => sub.title === inputData.value.instrument))
 })
 
 

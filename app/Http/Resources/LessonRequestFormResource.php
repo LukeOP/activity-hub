@@ -63,6 +63,7 @@ class LessonRequestFormResource extends JsonResource
                 'footer_content' => $this->footer_content_cb,
             ],
             'school' => new SchoolsResource($this->school),
+            'available_instruments' => $this->instruments(),
             'timestamp' => [
                 'created' => $this->created_at,
                 'updated' => $this->updated_at,

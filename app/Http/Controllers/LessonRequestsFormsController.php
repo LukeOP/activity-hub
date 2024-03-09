@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\LessonRequestFormResource;
 use App\Models\LessonRequestForm;
+use App\Models\LessonRequestFormData;
 use Illuminate\Http\Request;
 
 class LessonRequestsFormsController extends Controller
@@ -110,7 +111,27 @@ class LessonRequestsFormsController extends Controller
             'footer_content' => $request->footer_content,
         ]);
 
-        return response()->json(['message' => 'lesson updated successfully', 'form' => $requestForm]);
+        $data = LessonRequestFormData::where('lesson_request_form_id', $id)->where('type', 'instrument')->get();
+        foreach($data as $singleEntry){
+            $singleEntry->update(['available' => false]);
+        }
+
+        foreach ($request->available_instruments as $instrument) {
+            $formDataRecord = LessonRequestFormData::where('lesson_request_form_id', $id)->where('value', $instrument)->first();
+            if($formDataRecord){
+                $formDataRecord->update(['available' => true]);
+            } else {
+                LessonRequestFormData::create([
+                    'lesson_request_form_id' => $id,
+                    'type' => 'instrument',
+                    'value' => $instrument
+                ]);
+            }
+        }
+
+        $form = LessonRequestForm::where('id', $id)->first();
+
+        return response()->json(['message' => 'lesson updated successfully', 'form' => new LessonRequestFormResource($form)]);
     }
 
     /**
