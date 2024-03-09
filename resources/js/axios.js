@@ -2,9 +2,9 @@ import axios from 'axios'
 import { useUserStore } from './stores/user'
 
 
-let url = import.meta.env.VITE_APP_URL
-// if(import.meta.env.VITE_ENV === 'production') url = 'https://activityhub.co.nz'
-// else url = 'http://localhost:8000'
+let url = ''
+if(import.meta.env.VITE_ENV === 'production') url = 'https://activityhub.co.nz'
+else url = 'http://localhost:8000'
 
 
 const axiosClient = axios.create({
