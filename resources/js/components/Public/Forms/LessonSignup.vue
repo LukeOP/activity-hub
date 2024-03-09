@@ -54,7 +54,7 @@
           <div class="col col-12 col-md-6">
             <label>{{ form.field_labels.instrument }}
               <select class="form-control" v-model="formData.instrument" required>
-                <option v-for="instrument in SubjectsArray" :key="instrument" :value="instrument">{{ instrument }}</option>
+                <option v-for="instrument in form.available_instruments" :key="instrument" :value="instrument">{{ instrument }}</option>
               </select>
             </label>
             <label v-if="form.inputs.tutor == 1 && formData.instrument != ''">{{ form.field_labels.tutor }}
@@ -86,9 +86,9 @@
       </form>
       
       
-      <section id="footer">
-        <!-- <span v-html="" class="icon fill-white"></span> -->
-        <p>Powered by Activity Hub {{ moment().format('YYYY') }}</p>
+      <section id="footer" class="mt-4">
+        <img style="max-width: 30px; margin-right: 0.5rem" src="/images/ActivityHub_01.png" alt="Activity Hub Logo Icon">
+        <span>Powered by <a href="https://activityhub.co.nz" class="link">Activity Hub</a> {{ moment().format('YYYY') }}</span>
       </section>
       
     </div>
@@ -179,9 +179,7 @@ const getUniqueSubjects = (item) => {
 
 // Create a new array of unique subjects
 const SubjectsArray = computed(() => {
-  if(staffList.value) {
-    return getUniqueSubjects(staffList.value);
-  } else return []
+  return form.available_instruments
 })
 
 const tutorArray = computed(() => {
@@ -236,5 +234,13 @@ label {
 p {
   font-size: 1rem;
 }
+a {
+  color: $ah-primary;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 
 </style>

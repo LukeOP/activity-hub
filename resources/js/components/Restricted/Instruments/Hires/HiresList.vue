@@ -9,10 +9,10 @@
     </div>
 
     <!-- Table component -->
-    <section v-if="filteredHires && !loading">
+    <section v-if="filteredHires || hireStore.isLoading">
       <component :is="currentComponent" :hires="filteredHires" :key="key" />
     </section>
-    <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
+    <LoadingSpinner :isLoading="hireStore.isLoading" :loadingText="true" color="primary" />
 
   </div>
 </template>
@@ -50,15 +50,6 @@ const router = useRouter()
 const currentComponent = computed(() => {
   return windowSize.value.width > 1030 ? HiresTable : HiresTableMobile
 })
-
-// Fetch Hire data and add to store
-const { data: allHires, loading, fetchData: fetchHires } = useApi('hires')
-if(hireStore.getHires.length < 1){
-  fetchHires().then(()=>{
-    hireStore.setHires(allHires.value)
-    key.value++
-  })
-}
 
 // Watch for changes in hire data and update list
 watch(() => hireStore.getHires, (newValue) => {

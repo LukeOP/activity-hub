@@ -27,6 +27,7 @@ import EventTile from './EventTile.vue';
 import RoomsTile from './RoomsTile.vue';
 import InfoTiles from './InfoTiles/InfoTiles.vue';
 import LessonTile from './LessonTile.vue';
+import { useHireStore } from '../../../stores/hires';
 
 const user = useUserStore()
 const actions = useActionsStore()

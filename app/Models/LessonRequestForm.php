@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class LessonRequestForm extends Model
@@ -69,5 +68,8 @@ class LessonRequestForm extends Model
     public function school()
     {
         return $this->belongsTo(School::class);
+    }
+    public function instruments(){
+        return $this->hasMany(LessonRequestFormData::class, 'lesson_request_form_id')->where('available', '!=', 0)->pluck('value');
     }
 }

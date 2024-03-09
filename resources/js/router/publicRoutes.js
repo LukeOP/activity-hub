@@ -1,6 +1,7 @@
 import Home from '../components/Public/Home.vue';
 import NotFoundPublic from '../components/Public/NotFoundPublic.vue'
 import Login from '../components/Public/AuthenticateUser/LoginUser.vue';
+import Demo from '../components/Public/AuthenticateUser/LoginDemo.vue';
 import RecoverAccount from '../components/Public/AuthenticateUser/RecoverAccount.vue';
 import SetPassword from '../components/Public/AuthenticateUser/SetPassword.vue';
 import RegisterUser from '../components/Public/AuthenticateUser/RegisterUser.vue';
@@ -19,6 +20,7 @@ const publicRoutes = [
     redirect: {name: 'Login'},
     children: [
       { path: 'user-login', name: 'Login', component: Login, meta: {title: 'Login'}},
+      { path: 'demo', name: 'DemoLogin', component: Demo, meta: {title: 'Login Demo'}},
       { path: 'registration', name: 'Register', component: RegisterUser, meta: {title: 'Register'} },
       { path: 'registration-confirm', name: 'RegisterConfirm', component: RegisterConfirm, meta: {title: 'Register'} },
       { path: 'email-verified', name: 'EmailVerified', component: EmailVerified, meta: {title: 'Register'} },
