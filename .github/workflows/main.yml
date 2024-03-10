@@ -27,5 +27,5 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
       with:
         server: ftp.mgsmusic.co.nz
-        username: activityhubDeploy@mgsmusic.co.nz
+        username: activityhubDemoDeploy@mgsmusic.co.nz
         password: ActivityHubGitHub
