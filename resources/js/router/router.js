@@ -4,7 +4,7 @@ import { useUserStore } from "../stores/user";
 import publicRoutes from "./publicRoutes";
 import authRoutes from "./authRoutes";
 
-import Test from '../components/Public/Test.vue'
+import Test from '../views/Public/Test.vue'
 
 const routes = [
   {

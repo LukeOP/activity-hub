@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axiosClient from "../axios";
 import { useMainStore } from './_main'
+import { useStaffStore } from "./staff";
 
 
 function getState(){
@@ -43,6 +44,7 @@ export const useUserStore = defineStore('user', {
       this.attributes.email = user.email
       this.attributes.phone = user.phone
       this.attributes.schools = user.schools
+      useStaffStore()
     },
     setPermissions(permissions){
       this.permissions = permissions

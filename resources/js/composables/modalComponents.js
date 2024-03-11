@@ -1,11 +1,11 @@
-import StaffDeleteSubject from '../components/Restricted/Staff/Modals/Details/DeleteSubject.vue'
-import NewStaff from "../components/Restricted/Staff/Modals/NewStaff.vue";
+import StaffDeleteSubject from '../views/Restricted/Staff/Modals/Details/DeleteSubject.vue'
+import NewStaff from "../views/Restricted/Staff/Modals/NewStaff.vue";
 
-import lessonModals from '../components/Restricted/Lessons/Modals/LessonModals';
-import dashboardModals from '../components/Restricted/Dashboard/Modals/DashboardModals';
-import instrumentModals from '../components/Restricted/Instruments/Modals/InstrumentModals';
-import eventModals from '../components/Restricted/Events/Modals/EventModals';
-import studentModals from '../components/Restricted/Students/Modals/StudentModals';
+import lessonModals from '../views/Restricted/Lessons/Modals/LessonModals';
+import dashboardModals from '../views/Restricted/Dashboard/Modals/DashboardModals';
+import instrumentModals from '../views/Restricted/Instruments/Modals/InstrumentModals';
+import eventModals from '../views/Restricted/Events/Modals/EventModals';
+import studentModals from '../views/Restricted/Students/Modals/StudentModals';
 
 const modalComponents = {
   ...lessonModals,

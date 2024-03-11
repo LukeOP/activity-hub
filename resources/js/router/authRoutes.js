@@ -1,13 +1,13 @@
 import MainLayout from '../components/Layouts/MainLayout/MainLayout.vue'
-import NotFoundRestricted from '../components/Restricted/NotFoundRestricted.vue'
+import NotFoundRestricted from '../views/Restricted/NotFoundRestricted.vue'
 
-import lessonsRoutes from '../components/Restricted/Lessons/LessonsRoutes';
-import eventsRoutes from '../components/Restricted/Events/EventRoutes';
-import dashboardRoutes from '../components/Restricted/Dashboard/DashboardRoutes';
-import staffRoutes from '../components/Restricted/Staff/StaffRoutes';
-import studentsRoutes from '../components/Restricted/Students/StudentsRoutes';
-import instrumentRoutes from '../components/Restricted/Instruments/InstrumentRoutes';
-import settingsRoutes from '/resources/js/components/Restricted/Settings/settingsRoutes';
+import lessonsRoutes from '../views/Restricted/Lessons/LessonsRoutes';
+import eventsRoutes from '../views/Restricted/Events/EventRoutes';
+import dashboardRoutes from '../views/Restricted/Dashboard/DashboardRoutes';
+import staffRoutes from '../views/Restricted/Staff/StaffRoutes';
+import studentsRoutes from '../views/Restricted/Students/StudentsRoutes';
+import instrumentRoutes from '../views/Restricted/Instruments/InstrumentRoutes';
+import settingsRoutes from '/resources/js/views/Restricted/Settings/settingsRoutes';
 import { useFilterStore } from '/resources/js/stores/filter';
 
 const authRoutes = [
