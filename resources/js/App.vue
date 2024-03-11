@@ -7,7 +7,7 @@ export default {
   computed: {
     pageTitle() {
       // compute the title based on some state in your component
-      return `Activity Hub | ${this.$route.meta.title}`;
+      return `[DEMO] Activity Hub | ${this.$route.meta.title}`;
     }
   },
   watch: {
