@@ -2,11 +2,11 @@ import axios from 'axios'
 import { useUserStore } from './stores/user'
 
 
-let url = ''
-if(import.meta.env.VITE_ENV === 'production') url = 'https://activityhub.co.nz'
-else if(import.meta.env.VITE_ENV === 'demo') url = 'https://demo.activityhub.co.nz'
-else if(import.meta.env.VITE_ENV === 'staging') url = 'http://dev.activityhub.co.nz'
-else url = 'http://localhost:8000'
+let url = 'https://demo.activityhub.co.nz'
+// if(import.meta.env.VITE_ENV === 'production') url = 'https://activityhub.co.nz'
+// else if(import.meta.env.VITE_ENV === 'demo') url = 'https://demo.activityhub.co.nz'
+// else if(import.meta.env.VITE_ENV === 'staging') url = 'http://dev.activityhub.co.nz'
+// else url = 'http://localhost:8000'
 
 
 const axiosClient = axios.create({
