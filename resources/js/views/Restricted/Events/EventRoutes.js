@@ -14,13 +14,18 @@ const eventsRoutes = [
       { path: '', name: 'EventsList', component: EventsList, meta: { title: 'Events', section: "Events", depth: 1},      
         beforeEnter: () => {
           const { checkPermissions } = usePermissions()
-          checkPermissions(['EVENTS_R', 'EVENTS_V'], 'Dashboard')
+          checkPermissions(['EVENTS_R', 'EVENTS_V'])
         }},
       { path: 'create', name: 'EventCreate', component: EventCreate, meta: { title: 'Events', breadcrumb: ' / Create', section: "Events", depth: 2},
         beforeEnter: () => checkPermission('EVENTS_C', 'EventsList')},
       { path: 'details', name: 'EventDetails', component: EventDetails, meta: { title: 'Event Details', breadcrumb: ' / Details', section: "Events", depth: 2},
-        beforeEnter: [() => checkEventObject('EventsList'), () => checkPermission('EVENTS_V', 'EventsList')]},
-      
+        beforeEnter: [
+          () => checkEventObject('EventsList'),
+          () => {
+          const { checkPermissions } = usePermissions()
+          checkPermissions(['EVENTS_R', 'EVENTS_V'])
+        }]
+      },
       {path: 'templates', meta: { title: 'Event Templates', breadcrumb: 'Templates'},
         children: [
           { path: '', name: 'TemplateList', component: TemplateList, meta: { section: "Events", depth: 2},
