@@ -91,9 +91,9 @@ function countdownText(jobs){
 
 // Handle job click to change status
 function toggleStatus(job){
-  let status = job.status === 0 ? 1 : 0
+  let status = job.status == 0 ? 1 : 0
   axiosClient.patch(`event-jobs/${job.id}`, {status: status}).then((res)=>{
-    job.status === 0 ? job.status = 1 : job.status = 0
+    job.status == 0 ? job.status = 1 : job.status = 0
   })
 }
 
