@@ -9,6 +9,8 @@
                 {{ school.name }}
             </div>
         </div>
+        <div v-if="user.getAdminSchools.length < 1">
+        <p>You are not an adminstrator for any schools.</p></div>
     </div>
 </template>
 

@@ -22,7 +22,7 @@ export default function useApi(url, requestData = null, method = 'GET' ) {
       data.value = response.data;
     } catch (e) {
       error.value = e;
-      console.log(e);
+      console.error(e.response.data.message);
     } finally {
       loading.value = false;
     }

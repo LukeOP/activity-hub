@@ -5,13 +5,17 @@ import EventCreate from './EventCreate.vue'
 import TemplateList from './Templates/TemplateList.vue'
 import EventTemplateDetails from './Templates/TemplateDetails.vue'
 import { useUserStore } from '/resources/js/stores/user'
+import { usePermissions } from '../../../composables/usePermissions'
 
 
 const eventsRoutes = [
   {path: 'events', name: 'Events', meta: { title: 'Events', breadcrumb: 'Events'}, redirect: 'EventsList',
     children: [
-      { path: '', name: 'EventsList', component: EventsList, meta: { title: 'Events', section: "Events", depth: 1},
-        beforeEnter: () => checkPermission('EVENTS_V', 'Dashboard')},
+      { path: '', name: 'EventsList', component: EventsList, meta: { title: 'Events', section: "Events", depth: 1},      
+        beforeEnter: () => {
+          const { checkPermissions } = usePermissions()
+          checkPermissions(['EVENTS_R', 'EVENTS_V'], 'Dashboard')
+        }},
       { path: 'create', name: 'EventCreate', component: EventCreate, meta: { title: 'Events', breadcrumb: ' / Create', section: "Events", depth: 2},
         beforeEnter: () => checkPermission('EVENTS_C', 'EventsList')},
       { path: 'details', name: 'EventDetails', component: EventDetails, meta: { title: 'Event Details', breadcrumb: ' / Details', section: "Events", depth: 2},

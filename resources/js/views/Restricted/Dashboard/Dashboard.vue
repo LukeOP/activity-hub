@@ -7,7 +7,7 @@
   <div id="dashboard-tiles">
     <div class="tile-row">
       <div class="mobile-full" style="flex: 66%;" v-if="checkPermission('LESSONS')"><LessonTile /></div>
-      <div class="mobile-full" style="flex: 34%;" v-if="checkPermission('ATTENDANCE')"><AttendanceTile /></div>
+      <div class="mobile-full" style="flex: 34%;" v-if="user.hasPermissionAny('ATTENDANCE_V')"><AttendanceTile /></div>
     </div>
     <div class="tile-row">
       <div class="mobile-full" style="flex: 50%;" v-if="checkPermission('EVENTS')"><EventTile /></div>

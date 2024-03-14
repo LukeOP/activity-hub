@@ -10,10 +10,10 @@ import LessonAttendanceSingle from './Attendance/SingleLesson/AttendanceSingleDe
 
 import requestRoutes from './Requests/RequestsRoutes'
 
-
-
 import { useLessonsStore } from '/resources/js/stores/lessons'
 import { useUserStore } from '/resources/js/stores/user'
+import { usePermissions } from '../../../composables/usePermissions'
+
 
 
 const lessonsRoutes = [
@@ -40,9 +40,23 @@ const lessonsRoutes = [
       // Lesson Requests
       ...requestRoutes,
     ],
-    beforeEnter: () => checkPermission('LESSONS_V', 'Dashboard')
+    beforeEnter: () => {
+      const { checkPermissions } = usePermissions()
+      checkPermissions(['LESSONS_R', 'LESSONS_V'])
+    }
   },
 ] 
+
+// function checkPermissions(permissionsArray, redirect){
+//   const user = useUserStore()
+//   let permitted = false
+//   permissionsArray.forEach(permission => {
+//     if(user.hasPermissionAny(permission)){
+//       permitted = true
+//     }
+//   });
+//   return permitted == true ? true : { name: redirect}
+// }
 
 function checkPermission(permission, redirect){
   const user =  useUserStore()

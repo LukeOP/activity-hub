@@ -9,11 +9,14 @@
 
   <section style="overflow-y:auto">
     <table>
-      <tbody v-if="events">
+      <tbody v-if="events.length > 0">
         <tr v-for="event in events" :key="event.id">
           <td>{{ event.attributes.name }}</td>
           <td>{{event.attributes.date}}</td>
         </tr>
+      </tbody>
+      <tbody v-else>
+        <tr><td>No Upcoming Events</td></tr>
       </tbody>
     </table>
   </section>
@@ -39,7 +42,7 @@ const sorter = useSorter()
 // Fetch Lesson Data
 const { data: events, loading, fetchData: fetchLessons } = useApi('events')
 fetchLessons().then(()=> {
-  sorter.sort(events.value, 'id', 'desc')
+  if(events.value != null) sorter.sort(events.value, 'id', 'desc')
   eventStore.setEvents(events.value)
 })
 
