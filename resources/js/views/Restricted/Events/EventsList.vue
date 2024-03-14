@@ -117,7 +117,7 @@ const filteredEvents = computed(() => {
 // Handle route change
 function routeChange(value) {
   let route = {}
-  if(value == 'link1') route = {name: 'TemplateList'}
+  if(value == 'link2') route = {name: 'TemplateList'}
   router.push(route)
 }
 
