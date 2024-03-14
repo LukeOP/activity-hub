@@ -8,8 +8,8 @@
   </section>
 
   <!-- Table component -->
-  <section v-if="filteredRequests && !loading">
-    <component :is="currentComponent" :requests="filteredRequests" :key="key" />
+  <section v-if="lessonStore.getRequests.length && !loading">
+    <component :is="currentComponent" :requests="lessonStore.getRequests" :key="key" />
   </section>
   <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
 </div>
@@ -82,7 +82,7 @@ function routeChange(route){
 onMounted(()=>{
   fetchData().then(() => {
     filteredRequests.value = lessons.value
-    lessonStore.setLessons(lessons.value)
+    lessonStore.setRequests(lessons.value)
     key.value++
   })
 })

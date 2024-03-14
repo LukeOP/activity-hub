@@ -25,7 +25,7 @@
           <td>{{lesson.attributes.requested_instrument}}</td>
           <td><span>{{lesson.attributes.status}}</span></td>
           <td v-if="user.getSchools.length > 1">{{lesson.school.name}}</td>
-          <td>{{formatDate(lesson.created_at)}}</td>
+          <td>{{formatDate(lesson.timestamps.created)}}</td>
           <td>{{ lesson.attributes.form_description }}</td>
         </tr>
       </tbody>
