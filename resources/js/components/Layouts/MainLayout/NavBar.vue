@@ -38,6 +38,7 @@ import { useMenuStore } from '../../../stores/menu'
 import { useRoute, useRouter } from 'vue-router'
 import { useFilterStore } from '../../../stores/filter'
 import { icons } from '@/images/icons/icons'
+import { usePermissions } from '../../../composables/usePermissions'
 
 const props = defineProps({state: String})
 const emit = defineEmits(['setState'])
@@ -48,6 +49,7 @@ const user = useUserStore()
 const menu = useMenuStore()
 const userImage = ref(null)
 const navVisible = ref(false)
+const { checkPermissions } = usePermissions()
 
 function getUserImage(){
   let path = '/storage/userImages/'
@@ -73,7 +75,7 @@ const navItems = ref([
 
 const navOptions = [
   { header: 'Lessons', to: { name: 'LessonsList' }, icon: icons.chalkboard, permission: 'LESSONS_V', additional_permission: 'LESSONS_R'},
-  { header: 'Events', to: { name: 'EventsList' }, icon: icons.ticket, permission: 'EVENTS_V'},
+  { header: 'Events', to: { name: 'EventsList' }, icon: icons.ticket, permission: 'EVENTS_V', additional_permission: 'LESSONS_R'},
   { header: 'Instruments', to: { name: 'InstrumentList' }, icon: icons.guitar, permission: 'INSTRUMENTS_V'},
   // { header: 'Hires', to: { name: 'HiresList' }, icon: icons.xmark, permission: 'HIRES_V'},
   // { header: 'Rooms', to: { name: 'StudentsTable' }, icon: 'fa-solid fa-book', permission: 'ROOMS_V'},
@@ -82,11 +84,16 @@ const navOptions = [
 ]
 function setNavItems(){
   navOptions.forEach(option => {
-    if(hasPermission(option.permission) || hasPermission(option.additional_permission)){
+    if(checkPermissions([option.permission, option.additional_permission])){
       if(!navItems.value.find(i => i.header === option.header)){
         navItems.value.push(option)
       }
     }
+    // if(hasPermission(option.permission) || hasPermission(option.additional_permission)){
+    //   if(!navItems.value.find(i => i.header === option.header)){
+    //     navItems.value.push(option)
+    //   }
+    // }
   });
 }
 

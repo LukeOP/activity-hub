@@ -130,7 +130,7 @@ export const useUserStore = defineStore('user', {
       var AdminSchoolsSet = new Set();
     
       this.permissions.forEach(function(permission) {
-          AdminSchoolsSet.add(permission.school_id)
+        if(permission.type == 'Administrator') AdminSchoolsSet.add(permission.school_id)
         })
     
       let schoolIds = Array.from(AdminSchoolsSet)
