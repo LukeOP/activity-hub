@@ -40,10 +40,10 @@
       <span v-if="user.hasPermission('LESSONS_E', currentLesson.school.id)">
         <div class="subHeading">Financial:</div>
         <div class="row">
-          <div class="col col-12 col-md-6">
-            <label for="fundingType">Lesson Type:</label>
-            <select name="fundingType" class="form-control" v-model="lessonData.funding_type">
-              <option v-for="option in fundingTypes" :key="option.index" :value="option.value">{{option.label}}</option>
+          <div class="col col-12 col-md-6" v-if="schoolStore.getSchool.data.funding.length">
+            <label for="fundingType">Funding Type:</label>
+            <select name="fundingType" class="form-control" v-model="lessonData.funding_type" required>
+              <option v-for="option in schoolStore.getSchool.data.funding" :key="option.index" :value="option.value">{{option.value}}</option>
             </select>
           </div>
           <div class="col col-12 col-md-6" v-if="currentLesson.attributes.fee">
@@ -74,10 +74,12 @@ import { useModalStore } from '@/stores/modal'
 import { useToastStore } from '/resources/js/stores/toast'
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
 import LoadingSpinner from '../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue'
+import { useSchoolStore } from '../../../../stores/schools'
 
 // const toast = useToast()
 const toast = useToastStore()
 const user = useUserStore()
+const schoolStore = useSchoolStore()
 const lessonStore = useLessonsStore()
 const modal = useModalStore()
 
