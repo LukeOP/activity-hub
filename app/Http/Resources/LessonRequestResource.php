@@ -22,6 +22,7 @@ class LessonRequestResource extends JsonResource
                 'requested_instrument' => $this->requested_instrument,
                 'experience' => $this->experience,
                 'funding_type' => $this->funding_type,
+                'form_description' => $this->form_description
             ],
             'student' => [
                 'name' => $this->student_name,

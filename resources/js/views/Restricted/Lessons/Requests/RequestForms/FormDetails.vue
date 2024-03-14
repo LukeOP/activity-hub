@@ -140,10 +140,10 @@
 
         <div class="checkbox-option" style="display: block;">
           <div class="description text-primary">Instruments to display on the form:</div>
-          <div class="instrumentSelection mb-3">
-            <div class="instrument" 
+          <div class="optionSelection mb-3">
+            <div class="option" 
               v-for="instrument in staffStore.getSubjects" :key="instrument" 
-              :class="{selected: isSelected(instrument)}" 
+              :class="{selected: isSelectedInstrument(instrument)}" 
               @click="instrumentClick(instrument)">{{ instrument }}</div>
           </div>
           <!-- <pre>
@@ -161,6 +161,15 @@
           <input type="checkbox" checked  v-model="formData.funding_type_cb">
           <span class="description">Funding Type:</span>
           <input type="text" class="form-control" v-model="formData.funding_type" :disabled="!formData.funding_type_cb">
+        </div>
+        <div class="checkbox-option" style="display: block;">
+          <div class="description text-primary">Funding Types to display on the form:</div>
+          <div class="optionSelection mb-3">
+            <div class="option" 
+              v-for="fundingOption in schoolStore.getFunding" :key="fundingOption" 
+              :class="{selected: isSelectedFunding(fundingOption)}" 
+              @click="fundingClick(fundingOption)">{{ fundingOption }}</div>
+          </div>
         </div>
 
         <div class="checkbox-option">
@@ -192,23 +201,26 @@
 import { useLessonsStore } from '/resources/js/stores/lessons';
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue';
 import moment from 'moment';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axiosClient from '/resources/js/axios';
 import { useToastStore } from '/resources/js/stores/toast';
 import { useActionsStore } from '../../../../../stores/actions';
 import { useUserStore } from '../../../../../stores/user';
 import { useStaffStore } from '../../../../../stores/staff';
+import { useSchoolStore } from '../../../../../stores/schools';
 
 
 // Initiate Stores
 const lessonStore = useLessonsStore()
 const staffStore = useStaffStore()
+const schoolStore = useSchoolStore()
 const currentForm = lessonStore.getRequestForm
 const toast = useToastStore()
 const actions = useActionsStore()
 const user = useUserStore()
 const saving = ref(false)
+const subjects = ref([])
 
 // Initiate Composables
 const router = useRouter()
@@ -233,18 +245,43 @@ const yearSelect = ref({
 })
 
 let selectedInstruments = ref(currentForm.available_instruments)
+let selectedFunding = ref(currentForm.available_funding)
 
 
-function isSelected(instrument){
+function isSelectedInstrument(instrument){
   return selectedInstruments.value.filter(i => i == instrument)[0] != undefined
 }
 
 function instrumentClick(instrument){
-  if(isSelected(instrument)){
+  if(isSelectedInstrument(instrument)){
     const index = selectedInstruments.value.indexOf(instrument)
     selectedInstruments.value.splice(index, 1)
   } else {
     selectedInstruments.value.push(instrument)
+  }
+}
+
+function isSelectedFunding(funding){
+  return selectedFunding.value.filter(f => f == funding)[0] != undefined
+}
+
+function fundingClick(funding){
+  if(isSelectedFunding(funding)){
+    const index = selectedFunding.value.indexOf(funding)
+    selectedFunding.value.splice(index, 1)
+  } else {
+    selectedFunding.value.push(funding)
+  }
+}
+
+const fetchSubjects = async () => {
+  try {
+    loading.value = true;
+    subjects.value = staffStore.getSubjects();
+  } catch (err) {
+    error.value = err.message || 'An error occurred';
+  } finally {
+    loading.value = false;
   }
 }
 
@@ -308,6 +345,7 @@ function convertToBool(value){
 function saveUpdates(){
   saving.value = true
   formData.value.available_instruments = selectedInstruments.value
+  formData.value.available_funding = selectedFunding.value
   axiosClient.patch('/lesson-request-forms/' + currentForm.id, formData.value).then(res => {
     // console.log(res.data)
     toast.open('success', 'Form Updated', 'Form changes have been saved. ')
@@ -315,9 +353,7 @@ function saveUpdates(){
   })
 }
 
-let url = ''
-if(import.meta.env.VITE_ENV === 'production') url = 'https://activityhub.co.nz'
-else url = 'http://localhost:8000'
+let url = import.meta.env.VITE_URL
 
 async function copyURL(){
   try {
@@ -339,6 +375,9 @@ function returnToFormList(){
     name: 'RequestFormsList'
   })
 }
+onMounted(()=>{
+  fetchSubjects
+})
 
 </script>
 
@@ -371,13 +410,13 @@ section {
   .noBox {
     visibility: hidden;
   }
-  .instrumentSelection {
+  .optionSelection {
     // background-color: brown;
     display: flex;
     flex-wrap: wrap;
     max-width: 595px;
     padding: 0.375rem;
-    .instrument {
+    .option {
       text-align: center;
       min-width: 95px;
       padding: 5px 10px;

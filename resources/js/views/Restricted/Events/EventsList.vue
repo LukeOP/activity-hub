@@ -1,6 +1,9 @@
 <template>
   <div class="row">
-    <HeaderLine heading="Events" :link1="jobs.link1" @link1="routeChange"/>
+    <HeaderLine heading="Events" 
+      :link1="jobs.link1" @link1="routeChange"
+      :link2="jobs.link2" @link2="routeChange"
+    />
 
     <div class="col col-12 col-md-6">
       <!-- Search input -->
@@ -17,7 +20,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import HeaderLine from '../../../components/Layouts/MainLayout/Elements/HeaderLine.vue'
 import { useEventStore } from '/resources/js/stores/events';
 import { useWindowSize } from '/resources/js/composables/useWindowSize';
@@ -60,7 +63,8 @@ const currentComponent = computed(() => {
 
 // Set Links
 if(user.hasPermissionAny('EVENTS_TEMP_V')){
-  jobs.value.link1 = 'Job Templates'
+  jobs.value.link1 = 'Archived Events'
+  jobs.value.link2 = 'Event Templates'
 }
 
 
@@ -116,6 +120,10 @@ function routeChange(value) {
   if(value == 'link1') route = {name: 'TemplateList'}
   router.push(route)
 }
+
+onMounted(()=>{
+  eventStore.fetchEvents()
+})
 
 </script>
 

@@ -1,11 +1,11 @@
 <template>
   <div v-if="lesson.student">
-    <HeaderLine :heading="lesson.student.full_name + `'s Attendance:`" :school="lesson.attributes.instrument + ' lessons with ' + lesson.tutor.full_name"
+    <HeaderLine :heading="lesson.student.full_name + `'s Attendance:`" :school="lesson.attributes.funding_type + ' ' +lesson.attributes.instrument + ' lessons with ' + lesson.tutor.full_name"
       :link1="link1" @link1="routeChange({name: 'LessonAttendanceOverview'})"
       link2="Lesson Details" @link2="routeChange({name: 'LessonDetails'})"/>
     
     <div class="row mb-4">
-      <div class="col-12 col-sm-4">
+      <div class="col col-12 col-sm-4">
         <AttendanceSnapshot :lesson="lesson" heading="Overall Attendance" :stats="true" />
       </div>
     </div>

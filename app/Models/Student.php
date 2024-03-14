@@ -48,6 +48,7 @@ class Student extends Model
     {
         return $this->hasMany(Lesson::class);
     }
+    
     public function getAge(?string $dob): ?int
     {
         if ($dob === null) return null;

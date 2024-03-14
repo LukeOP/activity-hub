@@ -64,7 +64,7 @@
         </label>
         <label v-if="formData.funding_type_cb">{{ formData.funding_type }}
           <select class="form-control" v-model="inputData.funding_type">
-            <option value=""></option>
+            <option v-for="fundingOption in lessonStore.lessonRequestForm.available_funding" :key="fundingOption" :value="fundingOption">{{ fundingOption }}</option>
           </select>
         </label>
       </div>

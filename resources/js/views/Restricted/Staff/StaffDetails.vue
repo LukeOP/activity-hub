@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useStaffStore } from "../../../stores/staff";
 import { useSchoolStore } from "../../../stores/schools";
 import axiosClient from "../../../axios";
@@ -81,12 +81,22 @@ function handlePositionEdit(position){
 
 function setActions(){
   const actionsArray = []
+  if(user.hasPermission('Administrator', currentSchool.id) && !staffStore.singleStaff.permissions.some(p => p.type === 'Administrator') && user.attributes.id != staff.id){
+    actionsArray.push({ header: 'Promote to Administrator', to: { name: 'StaffDetails' }, modal: 'PromoteToAdmin', icon: 'fa-solid fa-star', additional: true, green: true})
+  }
+  if(user.hasPermission('Administrator', currentSchool.id) && staffStore.singleStaff.permissions.some(p => p.type === 'Administrator')&& user.attributes.id != staff.id){
+    actionsArray.push({ header: 'Demote Administrator', to: { name: 'StaffDetails' }, modal: 'DemoteAdmin', icon: 'fa-solid fa-user-slash', additional: true, red: true})
+  }
   if(user.hasPermission('STAFF_D', currentSchool.id) && user.attributes.id != staff.id){
     actionsArray.push({ header: 'Unlink From School', to: { name: 'StaffDetails' }, modal: 'DeleteLesson', icon: 'fa-solid fa-link-slash', additional: true, red: true})
   }
   actions.setItems(actionsArray)
 }
 setActions()
+
+watch(() => staffStore.getStaff.permissions, (newValue) => {
+  setActions()
+}, {deep: true})
 
 </script>
 

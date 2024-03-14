@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import axiosClient from "../axios";
 import { useMainStore } from './_main'
 import { useStaffStore } from "./staff";
+import { useSchoolStore } from "./schools";
 
 
 function getState(){
@@ -44,7 +45,12 @@ export const useUserStore = defineStore('user', {
       this.attributes.email = user.email
       this.attributes.phone = user.phone
       this.attributes.schools = user.schools
-      useStaffStore()
+      this.setStores()
+    },
+    setStores(){
+      const schoolStore = useSchoolStore()
+      schoolStore.setSchools(this.attributes.schools)
+      schoolStore.setSchool(this.attributes.schools[0])
     },
     setPermissions(permissions){
       this.permissions = permissions
@@ -84,6 +90,17 @@ export const useUserStore = defineStore('user', {
       }
       else return false
     },
+    addFundingData(data){
+      let school = this.attributes.schools.find(s => s.id === data.school_id)
+      school.data.funding.push(data)
+    },
+    removeFundingData(data){
+      const school = this.attributes.schools.find(s => s.id === data.school_id)
+      const dataIndex = school.data.funding.findIndex(f => f.id === data.id )
+      if (dataIndex !== -1){
+        school.data.funding.splice(dataIndex, 1)
+      }
+    },
     resetStores(){
       const mainStore = useMainStore()
       mainStore.resetStores()
@@ -108,6 +125,19 @@ export const useUserStore = defineStore('user', {
     },
     getAttributes(){
       return this.attributes
+    },
+    getAdminSchools(){
+      var AdminSchoolsSet = new Set();
+    
+      this.permissions.forEach(function(permission) {
+          AdminSchoolsSet.add(permission.school_id)
+        })
+    
+      let schoolIds = Array.from(AdminSchoolsSet)
+
+      const AdminSchools = this.attributes.schools.filter(school => schoolIds.includes(school.id))
+
+      return AdminSchools
     }
   }
 })

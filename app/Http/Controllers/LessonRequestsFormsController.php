@@ -111,7 +111,7 @@ class LessonRequestsFormsController extends Controller
             'footer_content' => $request->footer_content,
         ]);
 
-        $data = LessonRequestFormData::where('lesson_request_form_id', $id)->where('type', 'instrument')->get();
+        $data = LessonRequestFormData::where('lesson_request_form_id', $id)->get();
         foreach($data as $singleEntry){
             $singleEntry->update(['available' => false]);
         }
@@ -125,6 +125,19 @@ class LessonRequestsFormsController extends Controller
                     'lesson_request_form_id' => $id,
                     'type' => 'instrument',
                     'value' => $instrument
+                ]);
+            }
+        }
+
+        foreach ($request->available_funding as $fundingOption) {
+            $formDataRecord = LessonRequestFormData::where('lesson_request_form_id', $id)->where('value', $fundingOption)->first();
+            if($formDataRecord){
+                $formDataRecord->update(['available' => true]);
+            } else {
+                LessonRequestFormData::create([
+                    'lesson_request_form_id' => $id,
+                    'type' => 'funding',
+                    'value' => $fundingOption
                 ]);
             }
         }

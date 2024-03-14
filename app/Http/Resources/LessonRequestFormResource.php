@@ -64,6 +64,7 @@ class LessonRequestFormResource extends JsonResource
             ],
             'school' => new SchoolsResource($this->school),
             'available_instruments' => $this->instruments(),
+            'available_funding' => $this->funding(),
             'timestamp' => [
                 'created' => $this->created_at,
                 'updated' => $this->updated_at,

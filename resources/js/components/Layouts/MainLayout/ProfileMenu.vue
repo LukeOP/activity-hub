@@ -1,17 +1,17 @@
 <template>
-  <div :class="{background: showDropDown}" @click.self="showDropDown = false">
+  <div :class="{background: showDropDown || loggingOut}" @click.self="showDropDown = false">
     <div v-if="!mobileFormat" id="profile-container" @click="showDropDown = !showDropDown">
-    <div id="user-img" @click.self="showDropDown = true">
-      <span id="icon-text">{{initials}}</span>
-    </div>
+      <div id="user-img" @click.self="showDropDown = true">
+        <span id="icon-text">{{initials}}</span>
+      </div>
 
-    <div id="profile-drop-down" v-if="showDropDown">
-      <div id="triangle"></div>
-      <div class="drop-down-item" @click="handleProfile">Profile</div>
-      <div class="drop-down-item" @click="routerChange('Settings')">Settings</div>
-      <div class="drop-down-item" @click="handleLogout">Log Out</div>
+      <div id="profile-drop-down" v-if="showDropDown">
+        <div id="triangle"></div>
+        <div class="drop-down-item" @click="handleProfile">Profile</div>
+        <div class="drop-down-item" @click="routerChange('Settings')">Settings</div>
+        <div class="drop-down-item" @click="handleLogout">Log Out</div>
+      </div>
     </div>
-  </div>
   </div>
   
 </template>
@@ -25,6 +25,7 @@ import { useWindowSize } from '../../../composables/useWindowSize'
 const router = useRouter()
 const user = useUserStore()
 const showDropDown = ref(false)
+const loggingOut = ref(false)
 const { mobileFormat } = useWindowSize()
 
 const initials = computed(()=>{
@@ -52,6 +53,7 @@ function routerChange(path_name){
 }
 
 function handleLogout(){
+  loggingOut.value = true
   user.logout().then(()=>{
     routerChange('Login')
     // router.push({

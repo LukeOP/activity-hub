@@ -12,6 +12,12 @@
     <option v-for="(tutor, index) in tutorArray" :key="index" :value="tutor.id">{{ tutor.name }}</option>
   </select>
 
+  <label for="funding" class="ms-1">Funding</label>
+  <select name="funding" id="funding" class="form-control mb-2" v-model="filtering.funding">
+    <option value="" selected>All Funding Options</option>
+    <option v-for="(funding, index) in fundingArray" :key="index" :value="funding">{{ funding }}</option>
+  </select>
+
   <label for="start-date" class="ms-1">From</label>
   <input type="date" name="start-date" v-model="filtering.start_date" class="form-control" :max="filtering.end_date">
 
@@ -38,13 +44,16 @@ import moment from 'moment'
 import { computed, ref } from 'vue'
 import useSorter from '../../../../composables/useSorter'
 import { useFilterStore } from '../../../../stores/filter'
+import { useLessonsStore } from '../../../../stores/lessons';
 
 const filter = useFilterStore()
+const lessonStore = useLessonsStore()
 const sorter = useSorter()
 filter.setReturned({})
 const originalData = ref(filter.getData)
 
 const attendanceArray = ref(Array.from(new Set(originalData.value.map(d => d.attendance))))
+
 const tutorArray = computed(()=>{
   return originalData.value.reduce((result, d) => {
     const tutor = { id: d.tutor.id, name: `${d.tutor.first_name} ${d.tutor.last_name}` };
@@ -58,18 +67,35 @@ const tutorArray = computed(()=>{
   }, []);
 })
 
+const fundingArray = computed(() => {
+  // creates a set of tutors for the selected instrument
+  var fundingSet = new Set();
+  lessonStore.getLessonsData
+  .forEach(function(lesson) {
+    if(lesson.attributes.funding_type != null) fundingSet.add(lesson.attributes.funding_type)
+    })
+  // converts set to array
+  let fundingTypeArray = Array.from(fundingSet)
+
+  // returns array of instrument tutors
+  return fundingTypeArray
+})
+
 const filtering = ref({
   attendance: '',
   tutor: '',
+  funding: '',
   start_date: formatDate(moment().subtract(7,'d')),
   end_date: formatDate(moment())
 })
 
 function returnFiltered(){
   let filteredAttendance = originalData.value
+  console.log(filteredAttendance);
   filteredAttendance = filteredAttendance.filter(att => att.date >= filtering.value.start_date && att.date <= filtering.value.end_date)
   if(filtering.value.attendance != '') filteredAttendance = filteredAttendance.filter(att => att.attendance == filtering.value.attendance)
   if(filtering.value.tutor != '') filteredAttendance = filteredAttendance.filter(d => d.tutor.id == filtering.value.tutor)
+  if(filtering.value.funding != '') filteredAttendance = filteredAttendance.filter(d => d.funding_type == filtering.value.funding)
   sorter.sort(filteredAttendance, 'date', 'desc')
   Object.keys(filteredAttendance).length > 0 
   ? filter.setReturned(filteredAttendance)
@@ -83,6 +109,7 @@ function clearFilter(){
   filtering.value = {
     attendance: '',
     tutor: '',
+    funding: '',
     start_date: formatDate(moment().subtract(7,'d')),
     end_date: formatDate(moment())
   }

@@ -29,7 +29,7 @@ class EventsController extends Controller
             $hasPermission = $user->hasPermissionForSchool($school->id, 'EVENTS_V');
 
             if ($hasPermission || in_array($school->id, $userAdmin)) {
-                $eventsAtSchool = EventsResource::collection(Event::where('school_id', $school->id)->get());
+                $eventsAtSchool = EventsResource::collection(Event::where('school_id', $school->id)->where('archived', false)->get());
             } 
             // else {
             //     $eventsAtSchool = EventsResource::collection(Event::where('user_id', $user->id)->get());

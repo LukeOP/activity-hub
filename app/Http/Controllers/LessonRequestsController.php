@@ -54,7 +54,8 @@ class LessonRequestsController extends Controller
             'experience' => $request->experience,
             'requested_tutor' => $request->tutor,
             'funding_type' => $request->funding_type,
-            'school_id' => $request->school_id
+            'school_id' => $request->school_id,
+            'form_description' => $request->form_description
         ]);
 
         return new LessonRequestResource($lessonRequest);

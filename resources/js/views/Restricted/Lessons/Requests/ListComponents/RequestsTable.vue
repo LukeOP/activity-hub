@@ -21,12 +21,12 @@
       <tbody>
         <tr v-for="lesson in requests" :key="lesson.id" @click="handleLessonClick(lesson)" :class="lesson.status">
           <td>{{lesson.student.name}}</td>
-          <td>{{lesson.student.year || '-'}}</td>
+          <td>{{lesson.student.year || ''}}</td>
           <td>{{lesson.attributes.requested_instrument}}</td>
           <td><span>{{lesson.attributes.status}}</span></td>
           <td v-if="user.getSchools.length > 1">{{lesson.school.name}}</td>
           <td>{{formatDate(lesson.created_at)}}</td>
-          <td></td>
+          <td>{{ lesson.attributes.form_description }}</td>
         </tr>
       </tbody>
     </table>

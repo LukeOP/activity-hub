@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import useApi from "../../../composables/useApi";
 import { useSchoolStore } from "../../../stores/schools";
 import { useUserStore } from "../../../stores/user";
@@ -53,21 +53,27 @@ const key = ref(0)
 const key2 = ref(0)
 
 // Fetch Schools Data based on Logged in User's school associations. Set selectedSchool to first school on list
-const { data: schools, fetchData: fetchSchools } = useApi('schools')
-if(Object.keys(schoolStore.getSchool).length > 0){
+// const { data: schools, fetchData: fetchSchools } = useApi('schools')
+// if(Object.keys(schoolStore.getSchool).length > 0){
+//   selectedSchool.value = schoolStore.getSchool
+//   defineActions()
+// } else {
+//   fetchSchools().then(()=>{
+//     schoolStore.setSchools(schools.value)
+//     selectedSchool.value = schools.value[0]
+//     staffStore.fetchStaff(selectedSchool.value.id)
+//     defineActions()
+//   })
+// }
+onMounted(()=>{
   selectedSchool.value = schoolStore.getSchool
   defineActions()
-} else {
-  fetchSchools().then(()=>{
-    schoolStore.setSchools(schools.value)
-    selectedSchool.value = schools.value[0]
-    defineActions()
-  })
-}
+})
 
 // Watch for a change in selected school an update components
 watch(() => selectedSchool.value, (newValue) => {
   schoolStore.setSchool(newValue)
+  staffStore.fetchStaff(newValue.id)
   defineActions()
   key.value++
   key2.value++

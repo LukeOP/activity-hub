@@ -1,19 +1,32 @@
 <template>
     <div>
         <h2>Schools you are an Administrator for:</h2>
-        <div class="user-element school-tile" v-for="(school, index) in adminSchools" :key="index">{{ school.name }}</div>
+        <div class="user-element school-tile" @click="viewSchool(school)" style="display: flex;" v-for="(school, index) in user.getAdminSchools" :key="index">
+            <div style="min-width: 100px;">
+                <img style="height: 80px" :src="school.logo" alt="">
+            </div>
+            <div>
+                {{ school.name }}
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
 import { useUserStore } from '/resources/js/stores/user';
+import { useSchoolStore } from '/resources/js/stores/schools';
+import { useRouter } from 'vue-router';
 
 const user = useUserStore()
+const schoolStore = useSchoolStore()
+const router = useRouter()
 
-const adminSchools = computed(() => {
-    return user.getPermissions.filter(p => p.type == 'Administrator')
-})
+function viewSchool(school){
+    schoolStore.setSchool(school)
+    router.push({
+        name: 'SchoolDetails'
+    })
+}
 
 </script>
 

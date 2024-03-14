@@ -65,9 +65,9 @@
                 <option v-for="staff in tutorArray" :key="staff" :value="staff.tutor.id">{{ staff.tutor.full_name }}</option>
               </select>
             </label>
-            <label v-if="form.inputs.type == 1">{{ form.field_labels.lesson_type }}
+            <label v-if="form.inputs.funding_type == 1 && formData.instrument != ''">{{ form.field_labels.funding_type }}
               <select class="form-control" v-model="formData.funding_type" required>
-                <option value=""></option>
+                <option v-for="type in form.available_funding" :key="type" :value="type">{{ type }}</option>
               </select>
             </label>
           </div>
@@ -91,7 +91,7 @@
       
       <section id="footer" class="mt-4">
         <img style="max-width: 30px; margin-right: 0.5rem" src="/images/ActivityHub_01.png" alt="Activity Hub Logo Icon">
-        <span>Powered by <a href="https://activityhub.co.nz" class="link">Activity Hub</a> {{ moment().format('YYYY') }}</span>
+        <span>Powered by <a href="https://activityhub.co.nz" class="link" target="_blank">Activity Hub</a> {{ moment().format('YYYY') }}</span>
       </section>
       
     </div>
@@ -131,7 +131,7 @@ const formData = ref({
   instrument: '',
   tutor: '',
   funding_type: '',
-  experience: '',
+  experience: ''
 })
 
 function resetForm(){
@@ -194,7 +194,9 @@ const tutorArray = computed(() => {
 
 function submitForm(){
   submittingForm.value = true
-  axiosClient.post('lesson-request-form/create-public-request', formData.value).then(res => {
+  
+  console.log(formData.value);
+  axiosClient.post('lesson-request-form/create-public-request', {...formData.value, form_description: form.value.attributes.description }).then(res => {
     axiosClient.post('email-lesson-request-received/' + form.value.content.heading).then(res => {
       if(res.data.response === "success"){
         submitted.value = true

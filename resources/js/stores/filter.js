@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { useMenuStore } from "./menu";
 
 function getState(){
     return {
@@ -19,6 +20,11 @@ export const useFilterStore = defineStore('filter', {
     },
     setReturned(data){
       this.returned = data
+    },
+    close(){
+      const menuStore = useMenuStore()
+      menuStore.setFilterActive(false)
+      this.reset()
     },
     reset(){
       this.data = {}, 

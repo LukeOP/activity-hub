@@ -1,5 +1,5 @@
 import Dashboard from './Dashboard.vue'
-import Profile from './Profile/Profile.vue'
+import Profile from '../Profile/Profile.vue'
 
 
 const dashboardRoutes = [

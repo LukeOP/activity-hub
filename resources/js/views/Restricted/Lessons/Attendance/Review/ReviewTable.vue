@@ -19,7 +19,7 @@
   <section id="table-body-section" style="overflow-y:auto" v-if="lessons.length > 0">
     <table>
       <tbody>
-        <tr v-for="record in lessons" :key="record" @click="editAttendance(record)">
+        <tr v-for="record in lessons" :key="record" @click="handleClick(record)">
           <td style="width:10%">{{record.date}}</td>
           <td style="width:10%">{{record.time}}</td>
           <td style="width:15%">{{record.student.full_name}}</td>
@@ -40,10 +40,15 @@
 <script setup>
 import { useModalStore } from '/resources/js/stores/modal'
 import { useLessonsStore } from '/resources/js/stores/lessons'
+import useApi from '../../../../../composables/useApi';
+import { useRouter } from 'vue-router';
+import { useFilterStore } from '../../../../../stores/filter';
 
 const props = defineProps({lessons:Array})
 const lessonStore = useLessonsStore()
 const modal = useModalStore()
+const router = useRouter()
+const filter = useFilterStore()
 
 function capitalizeFirstLetter(string){
   return string.charAt(0).toUpperCase() + string.slice(1)
@@ -59,6 +64,16 @@ function editAttendance(record){
     })
     modal.open('EditAttendance')
   }
+function handleClick(lesson){
+  filter.close()
+  const { data: lessonData, loading, fetchData} = useApi('lessons/' + lesson.lesson_id)
+  fetchData().then(()=>{
+    lessonStore.setLesson(lessonData.value)
+    router.push({
+      name: 'LessonAttendanceSingle'
+    })
+  })
+}
 
 </script>
 

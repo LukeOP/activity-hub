@@ -32,8 +32,19 @@ class School extends Model
     {
         return $this->belongsToMany(User::class, 'User_Schools', 'school_id', 'user_id');
     }
+    
     public function students()
     {
         return $this->HasMany(Student::class);
+    }
+
+    public function funding()
+    {
+        return $this->hasMany(SchoolData::class)->where('type', 'funding type');
+    }
+
+    public function terms()
+    {
+        return $this->hasMany(SchoolTerms::class);
     }
 }

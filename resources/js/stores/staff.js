@@ -7,31 +7,43 @@ function getState(){
       singleStaff: {},
       staffList: [],
       subject: {},
-      schoolInvites: []
+      schoolInvites: [],
+      loading: false,
+      permissionsArray: [
+        { access: "Lessons", actions: ["LESSONS_R", "LESSONS_V", "LESSONS_E", "LESSONS_C", "LESSONS_D"] },
+        { access: "Lesson Requests", actions: ["", "LESSON_REQ_V", "LESSON_REQ_E", "LESSON_REQ_C", "LESSON_REQ_D"] },
+        { access: "Lesson Forms", actions: ["", "", "", "LESSON_FRM_C", "LESSON_FRM_D"] },
+        { access: "Attendance", actions: ["ATTENDANCE_R", "ATTENDANCE_V", "ATTENDANCE_E", "ATTENDANCE_C", "ATTENDANCE_D"] },
+        { access: "Students", actions: ["STUDENTS_R", "STUDENTS_V", "STUDENTS_E", "STUDENTS_C", "STUDENTS_D"] },
+        { access: "Events", actions: ["EVENTS_R", "EVENTS_V", "EVENTS_E", "EVENTS_C", "EVENTS_D"] },
+        { access: "Event Templates", actions: ["", "EVENTS_TEMP_V", "EVENTS_TEMP_E", "EVENTS_TEMP_C", "EVENTS_TEMP_D"] },
+        { access: "Instruments", actions: ["", "INSTRUMENTS_V", "INSTRUMENTS_E", "INSTRUMENTS_C", "INSTRUMENTS_D"] },
+        { access: "Hires", actions: ["", "HIRES_V", "HIRES_E", "HIRES_C", "HIRES_D"] },
+        { access: "Hire Agreement Templates", actions: ["", "HIRES_TEMP_V", "HIRES_TEMP_E", "HIRES_TEMP_C", "HIRES_TEMP_D"] },
+        { access: "Rooms", actions: ["ROOMS_R", "ROOMS_V", "ROOMS_E", "ROOMS_C", "ROOMS_D"] },
+        { access: "Bookings", actions: ["BOOKINGS_R", "BOOKINGS_V", "BOOKINGS_E", "BOOKINGS_C", "BOOKINGS_D"] },
+        { access: "Staff", actions: ["", "STAFF_V", "STAFF_E", "STAFF_C", "STAFF_D"] },
+      ]
     }
 }
 
 export const useStaffStore = defineStore('staff', {
   state: () => (getState()),
   actions: {
-    async fetchStaff() {
-      this.isLoading = true;
-    
-      const { data: staff, error, fetchData } = useApi('school-users/5f6a486f-ae48-4755-be6c-0d86ef491f68');
-      
+    async fetchStaff(school_id) {
+      this.loading = true;
+      const { data: staff, error, fetchData } = useApi('school-users/' + school_id);
       try {
         await fetchData();
-        
         if (error.value) {
-          throw new Error(error.value); // Throw an error if API request fails
+          throw new Error(error.value)
         }
-    
         // Update store state with fetched data
-        this.setStaffList(staff.value);
+        this.setStaffList(staff.value)
       } catch (error) {
         console.error('Error fetching data: ', error);
       } finally {
-        this.isLoading = false;
+        this.loading = false;
       }
     },
     setStaff(staffObject){
@@ -43,18 +55,26 @@ export const useStaffStore = defineStore('staff', {
     setSubject(subject){
       this.subject = subject
     },
-    setPermission(user_id, school_id, permission){
-      axiosClient.post('user-permissions', {user_id: user_id, school_id: school_id, permission_type: permission}).then(res => {
-        this.singleStaff.permissions.push(res.data)
-      })
+    async setPermission(user_id, school_id, permission) {
+      try {
+        const { data: newPermission, fetchData } = useApi('user-permissions', {user_id: user_id, school_id: school_id, permission_type: permission}, 'POST')
+        await fetchData()
+        this.singleStaff.permissions.push(newPermission.value)
+      } catch (error) {
+        console.error(error);
+      }
     },
-    removePermission(id){
-      axiosClient.delete('user-permissions/' + id).then(res => {
-        if(res.data.message === 'successfully deleted'){
-          const permissionIndex = this.getStaff.permissions.findIndex(permission => ( permission.id === id ));
+    async removePermission(id){
+      try {
+        const { fetchData } = useApi('user-permissions/' + id, '', 'DELETE')
+        await fetchData('DELETE')
+        const permissionIndex = this.singleStaff.permissions.findIndex(permission => permission.id === id )
+        if (permissionIndex !== -1){
           this.singleStaff.permissions.splice(permissionIndex, 1)
         }
-      })
+      } catch (error) {
+        console.log(error);
+      }
     },
     setSchoolInvites(value){
       this.schoolInvites = value
@@ -84,11 +104,6 @@ export const useStaffStore = defineStore('staff', {
       return this.schoolInvites
     },
     getSubjects(){
-      if (!this.staffList.length) {
-        this.fetchStaff();
-        return;
-      }
-    
       var subjectTitlesSet = new Set();
     
       this.staffList.forEach(function(person) {
@@ -97,8 +112,7 @@ export const useStaffStore = defineStore('staff', {
         })
       })
     
-      var subjectTitles = Array.from(subjectTitlesSet);
-      return subjectTitles;
+      return Array.from(subjectTitlesSet)
     }
   }
 })

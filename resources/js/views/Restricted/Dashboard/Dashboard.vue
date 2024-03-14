@@ -28,11 +28,14 @@ import RoomsTile from './RoomsTile.vue';
 import InfoTiles from './InfoTiles/InfoTiles.vue';
 import LessonTile from './LessonTile.vue';
 import { useHireStore } from '../../../stores/hires';
+import { useSchoolStore } from '../../../stores/schools';
 
 const user = useUserStore()
 const actions = useActionsStore()
 const hasSchools = ref(false)
 const ready = ref(false)
+const schoolStore = useSchoolStore()
+schoolStore.setSchool(user.getSchools[0])
 
 const actionArray = []
 

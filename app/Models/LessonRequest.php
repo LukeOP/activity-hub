@@ -25,7 +25,8 @@ class LessonRequest extends Model
         'requested_tutor',
         'funding_type',
         'option_music',
-        'school_id'
+        'school_id',
+        'form_description'
     ];
 
     public function school()

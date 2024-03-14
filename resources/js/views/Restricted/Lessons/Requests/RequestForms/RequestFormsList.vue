@@ -15,8 +15,8 @@
     <div class="row mt-3" v-if="formData.forms">
       <div class="col col-12 col-md-6">
         <h2>Existing Forms:</h2>
-        <LoadingSpinner :isLoading="loading" color="primary" />
-        <div id="form-container" v-if="!loading">
+        <LoadingSpinner :isLoading="schoolStore.loading" color="primary" />
+        <div id="form-container" v-if="!schoolStore.loading">
           <div v-for="form in formData.forms" :key="form">
             <div class="form" @click="viewFormDetails(form)">
               <span>{{ form.attributes.description }}</span>
@@ -37,7 +37,7 @@
 <script setup>
 import useApi from '/resources/js/composables/useApi';
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLessonsStore } from '/resources/js/stores/lessons';
 import moment from 'moment';
@@ -45,9 +45,13 @@ import { useWindowSize } from '/resources/js/composables/useWindowSize';
 import { useUserStore } from '/resources/js/stores/user';
 import { useActionsStore } from '../../../../../stores/actions';
 import LoadingSpinner from '../../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import { useSchoolStore } from '../../../../../stores/schools';
+import { useStaffStore } from '../../../../../stores/staff';
 
 // Initiate Stores
 const lessonStore = useLessonsStore()
+const schoolStore = useSchoolStore()
+const staffStore = useStaffStore()
 const user = useUserStore()
 const actions = useActionsStore()
 
@@ -73,13 +77,13 @@ function setActions() {
 setActions()
 
 // Fetch user schools or set default school if only one exists for user
-const {data: schools, loading, fetchData: fetchSchools} = useApi('schools')
-fetchSchools().then(()=>{
-  setSchools()
-})
+// const {data: schools, loading, fetchData: fetchSchools} = useApi('schools')
+// fetchSchools().then(()=>{
+//   setSchools()
+// })
 
 function setSchools(){
-  schools.value.forEach(school => {
+  schoolStore.getSchools.forEach(school => {
     if(user.hasPermission('LESSON_FRM_C', school.id)){
       formData.value.schools = [...formData.value.schools, school]
     }
@@ -90,6 +94,8 @@ function setSchools(){
 
 // Fetch school forms when school is selected
 watch(() => formData.value.school, (newValue) => {
+  schoolStore.setSchoolFromId(newValue)
+  staffStore.fetchStaff(newValue)
   const {data: forms, fetchData: fetchSchoolForms} = useApi('school-lesson-request-forms/' + newValue)
   fetchSchoolForms().then(()=>{
     formData.value.forms = forms.value
@@ -112,6 +118,11 @@ function routeChange(route){
     name: route
   })
 }
+
+onMounted(async ()=>{
+  await schoolStore.fetchSchools()
+  setSchools()
+})
 
 </script>
 

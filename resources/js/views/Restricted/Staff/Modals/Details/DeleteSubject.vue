@@ -3,7 +3,7 @@
   <h2 class="text-red"> Delete {{staff.getSubject.title}}?</h2>
   <p>{{staff.getSubject.title}} will be removed from {{staff.getStaff.first_name}}'s assignable lessons at {{staff.getSubject.school.name}}.</p>
   <div>
-    <button class="btn btn-primary" @click="cancel">Cancel</button>
+    <button class="btn btn-grey" @click="cancel">Cancel</button>
     <button class="btn btn-red ms-3" @click="deleteSubject">Delete</button>
   </div>
 </div>

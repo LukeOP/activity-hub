@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import useApi from '/resources/js/composables/useApi';
 
 function getState(){
     return {
@@ -7,13 +8,31 @@ function getState(){
       filteredEvents: [],
       eventJobs: [],
       singleJob: {},
-      eventData: {}
+      eventData: {},
+      loading: false
     }
 }
 
 export const useEventStore = defineStore('events', {
   state: () => (getState()),
   actions: {
+    async fetchEvents(){
+      this.loading = true;
+      const { data: events, error, fetchData } = useApi('events');
+      try {
+        await fetchData();
+        if (error.value) {
+          throw new Error(error.value)
+        }
+        // Update store state with fetched data
+        this.setEvents(events.value)
+      } catch (error) {
+        console.error('Error fetching data: ', error);
+      } finally {
+        this.loading = false;
+      }
+
+    },
     setEvent(eventObject){
       this.singleEvent = eventObject
     },

@@ -42,12 +42,12 @@ class Event extends Model
     
     public function school_term(){
         $term = SchoolTerms::where('school_id', $this->school_id)
-            ->where('start_date', '<', $this->date)
-            ->where('end_date', '>', $this->date)
+            ->where('start_date', '<=', $this->date)
+            ->where('end_date', '>=', $this->date)
             ->first();
         if($term){
             return $term->description;
         }
-        return null;
+        return $term;
     }
 }

@@ -18,6 +18,7 @@ use App\Http\Controllers\LessonNotesController;
 use App\Http\Controllers\LessonRequestsController;
 use App\Http\Controllers\LessonRequestsFormsController;
 use App\Http\Controllers\LessonsController;
+use App\Http\Controllers\SchoolDataController;
 use App\Http\Controllers\SchoolsController;
 use App\Http\Controllers\SchoolTermsController;
 use App\Http\Controllers\StudentContactsController;
@@ -118,6 +119,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // SCHOOLS
     Route::resource('/schools', SchoolsController::class);
+    Route::resource('/school-data', SchoolDataController::class);
+    Route::resource('school-terms', SchoolTermsController::class);
 
     // SCHOOL INVITATIONS
     Route::get('/school-invitations/{school}', [UserSchoolInvitationsController::class, 'getInvitesForSchool']);

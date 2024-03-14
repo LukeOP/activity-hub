@@ -21,10 +21,14 @@ class SchoolsResource extends JsonResource
             'colors' => [
                 'primary' => $this->primary_color,
                 'secondary' => $this->secondary_color
-            ]
+            ],
+            'data' => [
+                'funding' => $this->funding,
+                'terms' => $this->terms
+            ],
             // 'subscription' => $this->subscription,
-            // 'number' => $this->number,
-            // 'address' => $this->address,
+            'number' => $this->number,
+            'address' => $this->address,
             // 'public_id' => $this->public_id,
             // 'created_at' => $this->created_at,
             // 'updated_at' => $this->updated_at

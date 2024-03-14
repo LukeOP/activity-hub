@@ -70,6 +70,9 @@ class LessonRequestForm extends Model
         return $this->belongsTo(School::class);
     }
     public function instruments(){
-        return $this->hasMany(LessonRequestFormData::class, 'lesson_request_form_id')->where('available', '!=', 0)->pluck('value');
+        return $this->hasMany(LessonRequestFormData::class, 'lesson_request_form_id')->where('type', 'instrument')->where('available', '!=', 0)->pluck('value');
+    }
+    public function funding(){
+        return $this->hasMany(LessonRequestFormData::class, 'lesson_request_form_id')->where('type', 'funding')->where('available', '!=', 0)->pluck('value');
     }
 }

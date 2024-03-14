@@ -26,6 +26,11 @@
       </tbody>
     </table>
   </section>
+
+  <div class="col-12 col-md-4 totals">
+    <span>Displaying: {{getNum('filtered')}}/{{getNum('total')}}</span>
+  </div>
+
   </div>
 </template>
 
@@ -43,6 +48,16 @@ const user = useUserStore()
 const studentList = computed(()=>{
   return studentStore.getFilteredStudents
 })
+
+function getNum(type){
+  if(type === 'filtered'){
+    return studentStore.getFilteredStudents.length
+  }
+  if(type === 'total'){
+    return studentStore.getStudents.length
+  }
+  return studentStore.getStudents.length
+}
 
 function sortData(field){
   sorter.sort(studentList.value, field)

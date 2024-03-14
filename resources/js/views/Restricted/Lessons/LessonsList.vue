@@ -3,6 +3,10 @@
   <!-- Header -->
   <HeaderLine heading="Lessons" :link1="link1" :link2="link2" 
     @link1="changeRoute" @link2="changeRoute"/>
+  <div class="col col-12 col-md-6">
+    <!-- Search input -->
+    <input type="text" class="form-control mb-2" placeholder="Lesson search..." v-model="search">
+  </div>
 
   <!-- Table component -->
   <section v-if="filteredLessons && !loading">
@@ -44,16 +48,16 @@ const currentComponent = computed(() => {
 })
 
 // fetch lessons data from the database and add to store
-const filteredLessons = ref([])
+// const filteredLessons = ref([])
 const {data:lessons, loading, fetchData} = useApi('lessons')
 
 fetchData().then(() => {
-  filteredLessons.value = lessons.value
+  // filteredLessons.value = lessons.value
   lessonStore.setLessons(lessons.value)
-  setTimeout(()=>{
-    filter.setData(lessons.value)
-    filter.setType('LessonsForm')
-  },300)
+  // setTimeout(()=>{
+  //   filter.setData(lessons.value)
+  //   filter.setType('LessonsForm')
+  // },300)
 })
 
 // Set side actions available on this page
@@ -72,6 +76,39 @@ const link2 = computed(()=>{
   if(user.hasPermissionAny('LESSON_REQ_V'))
   return 'Lesson Requests'
 })
+
+// Initiate search variable
+const search = ref('')
+
+// Returns array of students based on search term, stores array in student Store
+const filteredLessons = computed(() => {
+  let searchTerm = search.value.toLowerCase();
+  const filterFunction = l => {
+    const attributes = l.attributes || {}; // Handle null attributes
+    const fundingType = attributes.funding_type || ''; // Handle null funding_type
+    const day = attributes.day || ''; // Handle null day
+    const start = attributes.start || ''; // Handle null day
+
+    return (
+      l.student.full_name.toLowerCase().includes(searchTerm) ||
+      (day && day.toLowerCase().includes(searchTerm)) ||
+      (start && start.includes(searchTerm)) ||
+      l.attributes.instrument.toLowerCase().includes(searchTerm) ||
+      (fundingType && fundingType.toLowerCase().includes(searchTerm)) || 
+      l.attributes.status.toLowerCase().includes(searchTerm) ||
+      l.school.name.toLowerCase().includes(searchTerm) ||
+      l.school.room.toLowerCase().includes(searchTerm) ||
+      l.tutor.full_name.toLowerCase().includes(searchTerm)
+    );
+  };
+
+  const filtered = searchTerm.length > 0
+    ? lessonStore.getLessonsData.filter(filterFunction)
+    : lessonStore.getLessonsData;
+
+  lessonStore.setFilteredLessons(filtered);
+  return filtered;
+});
 
 // if(user.hasPermissionAny('ATTENDANCE_R') || user.hasPermission('ATTENDANCE_V')){
 //   actionArray.push({ header: 'Attendance', to: { name: 'LessonAttendanceOverview' }, icon: 'fa-solid fa-user-check', additional: true})

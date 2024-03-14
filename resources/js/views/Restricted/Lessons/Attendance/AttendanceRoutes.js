@@ -5,14 +5,9 @@ import { useUserStore } from '/resources/js/stores/user'
 
 
 const attendanceRoutes = [
-  { path: 'attendance', meta: { title: 'Lesson Attendance', breadcrumb: 'Attendance'},
-    children: [
-      { path: 'overview', name: 'LessonAttendanceOverview', component: LessonAttendanceOverview, meta: { title: 'Attendance Overview', breadcrumb: ' / Attendance Overview', section: "Lessons", depth: 2}, 
-      beforeEnter: () => checkLessonObject('LessonsList')},
-      { path: 'review', name: 'LessonAttendanceReview', component: LessonAttendanceReview, meta: { title: 'Attendance Review', breadcrumb: ' / Attendance Review', section: "Lessons", depth: 3} },
-    ],
-    beforeEnter: () => checkPermission('ATTENDANCE_V', 'Dashboard')
-  }
+  { path: 'overview', name: 'LessonAttendanceOverview', component: LessonAttendanceOverview, meta: { title: 'Attendance Overview', breadcrumb: ' / Attendance Overview', section: "Lessons", depth: 2}, 
+  beforeEnter: () => checkLessonObject('LessonsList')},
+  { path: 'review', name: 'LessonAttendanceReview', component: LessonAttendanceReview, meta: { title: 'Attendance Review', breadcrumb: ' / Attendance Review', section: "Lessons", depth: 3} },
 ] 
 
 function checkPermission(permission, redirect){

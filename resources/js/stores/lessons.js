@@ -4,6 +4,7 @@ function getState(){
     return {
       singleLesson: {},
       lessons: [],
+      filteredLessons: [],
       singleAttendance: {},
       attendanceArray: [],
       singleRequest: {},
@@ -21,6 +22,9 @@ export const useLessonsStore = defineStore('lessons', {
     },
     setLessons(lessonsArray){
       this.lessons = lessonsArray
+    },
+    setFilteredLessons(lessonsArray){
+      this.filteredLessons = lessonsArray
     },
     updateLessonRecord(record){
       // console.log(record)
