@@ -69,6 +69,7 @@ class LessonsController extends Controller
             'student_id' => $request->student,
             'instrument' => $request->instrument,
             'experience' => $request->experience,
+            'funding_type' => $request->funding_type
         ]);
 
         return new LessonsResource($lesson);

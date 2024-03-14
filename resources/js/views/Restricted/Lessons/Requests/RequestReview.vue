@@ -4,103 +4,117 @@
     <div class="w-100" style="text-align: end;"><span class="text-primary">Form:</span> {{ request.attributes.form_description }}</div>
     
     <form @submit.prevent="assignLesson">
-      <div class="row">
-        <div class="col col-12 col-md-6">
-          <h4 class="mt-2">Student Information:</h4>
-          <label for="provided-student">Name of Student:
-            <input type="text" id="provided-student" class="form-control" v-model="request.student.name" disabled>
-          </label> 
-        </div>
-        <div class="col col-12 col-md-6">
-          <h4 class="mt-2">Reviewed Student Information:</h4>
-          <label for="reviewed-student">Name of Student:</label>
-          <span style="display:flex">
-            <select id="reviewed-student" class="form-control" v-model="selectedStudent" @change="updateStudentDetails" required>
-              <option v-for="student in students" :key="student.id" :value="student.id">
-                {{student.last_name}}, {{ student.first_name }}
-                <span v-if="student.tutor_group"> - {{ student.tutor_group }}</span>
-                <span v-if="student.age"> - {{ student.age }}</span>
-              </option>
-            </select>
-          </span>
-        </div>
-      </div>
-
-      <div class="row" v-for="field in studentDetailsArray" :key="field">
-        <div class="col col-12 col-md-6">
-          <label v-if="field.if">{{ field.label }}
-            <input :type="field.type" class="form-control" :value="field.value" disabled>
-          </label>
-        </div>
-        <div v-if="selectedStudent" class="col col-12 col-md-6">
-          <label v-if="field.if">{{ field.label }}
-            <span>
-              <input :type="field.type" class="form-control" :value="field.reviewedValue" :disabled="field.disabled">
-              <span v-if="!field.disabled" class="copy-btn" @click="copyField(field.label)">copy provided</span>
+      <section>
+        <div class="row">
+          <div class="col col-12 col-md-6">
+            <h4 class="mt-2">Student Information:</h4>
+            <label for="provided-student">Name of Student:
+              <input type="text" id="provided-student" class="form-control" v-model="request.student.name" disabled>
+            </label> 
+          </div>
+          <div class="col col-12 col-md-6">
+            <h4 class="mt-2">Reviewed Student Information:</h4>
+            <label for="reviewed-student">Name of Student:</label>
+            <span style="display:flex">
+              <select id="reviewed-student" class="form-control" v-model="selectedStudent" @change="updateStudentDetails" required>
+                <option v-for="student in students" :key="student.id" :value="student.id">
+                  {{student.last_name}}, {{ student.first_name }}
+                  <span v-if="student.tutor_group"> - {{ student.tutor_group }}</span>
+                  <span v-if="student.age"> - {{ student.age }}</span>
+                </option>
+              </select>
             </span>
-          </label>
+          </div>
         </div>
-      </div>
+  
+        <div class="row" v-for="field in studentDetailsArray" :key="field">
+          <div class="col col-12 col-md-6">
+            <label v-if="field.if">{{ field.label }}
+              <input :type="field.type" class="form-control" :value="field.value" disabled>
+            </label>
+          </div>
+          <div v-if="selectedStudent" class="col col-12 col-md-6">
+            <label v-if="field.if">{{ field.label }}
+              <span>
+                <input :type="field.type" class="form-control" :value="field.reviewedValue" :disabled="field.disabled">
+                <span v-if="!field.disabled" class="copy-btn" @click="copyField(field.label)">copy provided</span>
+              </span>
+            </label>
+          </div>
+        </div>
+        <hr />
+      </section>
 
-      <div class="row mt-4">
-        <div class="col col-12 col-md-6">
-          <h4 class="mt-2">Parent / Caregiver Information:</h4>
+      <section v-if="request.parent.email != null || request.parent.name != null || request.parent.phone != null">
+        <div class="row mt-4">
+          <div class="col col-12 col-md-6">
+            <h4 class="mt-2">Parent / Caregiver Information:</h4>
+          </div>
+          <div class="col col-12 col-md-6">
+            <h4 v-if="selectedStudent" class="mt-2">Reviewed Parent / Caregiver Information:</h4>
+          </div>
         </div>
-        <div class="col col-12 col-md-6">
-          <h4 v-if="selectedStudent" class="mt-2">Reviewed Parent / Caregiver Information:</h4>
+  
+        <div class="row" v-for="field in contactDetailsArray" :key="field">
+          <div class="col col-12 col-md-6">
+            <label v-if="field.if && field.value">{{ field.label }}
+              <input :type="field.type" class="form-control" :value="field.value" disabled>
+            </label>
+          </div>
+          <div v-if="selectedStudent" class="col col-12 col-md-6" :class="{divider: field.divider}">
+            <label v-if="field.if">{{ field.label }}
+              <span>
+                <input :type="field.type" class="form-control" :value="field.reviewedValue" :disabled="field.disabled" :required="field.required">
+                <span v-if="!field.disabled" class="copy-btn" @click="copyField(field.label)">copy provided</span>
+              </span>
+            </label>
+          </div>
         </div>
-      </div>
-
-      <div class="row" v-for="field in contactDetailsArray" :key="field">
-        <div class="col col-12 col-md-6">
-          <label v-if="field.if && field.value">{{ field.label }}
-            <input :type="field.type" class="form-control" :value="field.value" disabled>
-          </label>
-        </div>
-        <div v-if="selectedStudent" class="col col-12 col-md-6" :class="{divider: field.divider}">
-          <label v-if="field.if">{{ field.label }}
-            <span>
-              <input :type="field.type" class="form-control" :value="field.reviewedValue" :disabled="field.disabled" :required="field.required">
-              <span v-if="!field.disabled" class="copy-btn" @click="copyField(field.label)">copy provided</span>
-            </span>
-          </label>
-        </div>
-      </div>
+        <hr />
+      </section>
     
-      <div class="row">
-        <h2 class="text-primary">Lesson Details:</h2>
-
-        <div class="col col-12 col-md-6">
-          <label>Requested Instrument
-            <input type="text" class="form-control" :value="request.attributes.requested_instrument" disabled>
-          </label>
-          <label>Requested Tutor
-            <input type="text" class="form-control" :value="getTutor(request.attributes.requested_tutor)" disabled>
-          </label>
-          <label>Previous Experience
-            <input type="text" class="form-control" :value="request.attributes.experience || 'None provided'" disabled>
-          </label>
+      <section>
+        <div class="row">
+          <h2 class="text-primary">Lesson Details:</h2>
+  
+          <div class="col col-12 col-md-6">
+            <label>Requested Instrument
+              <input type="text" class="form-control" :value="request.attributes.requested_instrument" disabled>
+            </label>
+            <label>Requested Tutor
+              <input type="text" class="form-control" :value="getTutor(request.attributes.requested_tutor)" disabled>
+            </label>
+            <label v-if="fundingOptions.length">Requested Funding
+              <input type="text" class="form-control" :value="request.attributes.funding_type" disabled>
+            </label>
+            <label>Previous Experience
+              <input type="text" class="form-control" :value="request.attributes.experience || 'None provided'" disabled>
+            </label>
+          </div>
+  
+          <div class="col col-12 col-md-6 mb-5">
+            <label>Instrument
+              <input type="text" class="form-control" :value="request.attributes.requested_instrument" disabled>
+            </label>
+            <label for="tutor">Assigned Tutor:
+              <select v-if="filteredTutors.length > 0" name="tutor" class="form-control" v-model="reviewedLessonData.tutor" >
+                <option v-for="tutor in filteredTutors" :key="tutor.id" :value="tutor.id">{{tutor.first_name}} {{tutor.last_name}}</option>
+              </select>
+              <p v-else class="error">You don't have any {{request.attributes.requested_instrument.toLowerCase()}} tutors registered at {{request.school.name}}!<br>
+                You can edit tutor subjects in the staff menu.</p>
+            </label>
+            <label for="funding" v-if="fundingOptions.length">Funding Type:
+              <select name="funding" class="form-control" v-model="reviewedLessonData.funding_type">
+                <option v-for="option in fundingOptions" :key="option" :value="option.value">{{option.value}}</option>
+              </select>
+            </label>
+            <button class="btn btn-primary form-control mt-4" :disabled="!formCompleted || assigningLesson">Assign Lesson To Tutor</button>
+          </div>
         </div>
-
-        <div class="col col-12 col-md-6 mb-5">
-          <label for="funding" v-if="request.attributes.funding_type">Funding Type:
-            <select name="funding" class="form-control" :v-model="reviewedLessonData.funding_type">
-              <option v-for="option in fundingOptions" :key="option" :value="option">{{option}}</option>
-            </select>
-          </label>
-          <label for="tutor">Assigned Tutor:
-            <select v-if="filteredTutors.length > 0" name="tutor" class="form-control" v-model="reviewedLessonData.tutor" >
-              <option v-for="tutor in filteredTutors" :key="tutor.id" :value="tutor.id">{{tutor.first_name}} {{tutor.last_name}}</option>
-            </select>
-            <p v-else class="error">You don't have any {{request.attributes.requested_instrument.toLowerCase()}} tutors registered at {{request.school.name}}!<br>
-              You can edit tutor subjects in the staff menu.</p>
-          </label>
-          <button class="btn btn-primary form-control mt-4" :disabled="!formCompleted || assigningLesson">Assign Lesson To Tutor</button>
-        </div>
-
-      </div>
+      </section>
 
     </form>
+    <!-- {{ reviewedLessonData }} -->
       
       <!-- <pre>{{ request }}</pre> -->
   </div>
@@ -118,10 +132,12 @@ import { useUserStore } from "/resources/js/stores/user";
 import { useActionsStore } from "/resources/js/stores/actions";
 import HeaderLine from "/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue";
 import { useStaffStore } from "../../../../stores/staff";
+import { useSchoolStore } from "../../../../stores/schools";
 
 // Init Stores
 const lessonStore = useLessonsStore()
 const staffStore = useStaffStore()
+const schoolStore = useSchoolStore()
 const toast = useToastStore()
 const modal = useModalStore()
 const user = useUserStore()
@@ -147,7 +163,7 @@ const reviewedStudentData = ref({
 const reviewedLessonData = ref({
   student: null,
   tutor: null,
-  funding_type: request.funding_type || '',
+  funding_type: null,
   experience: request.attributes.experience,
   instrument: request.attributes.requested_instrument
 })
@@ -260,10 +276,7 @@ function copyField(label){
 }
 
 // Array of funding options
-const fundingOptions = [
-  'Private',
-  'Funded',
-]
+const fundingOptions = schoolStore.getSchool.data.funding
 
 function getTutor(tutor_id){
   let selectedStaff = staffStore.getStaffList.find(s => s.id == tutor_id)
@@ -304,6 +317,9 @@ function assignLesson(){
     })
   })
 }
+onMounted(async()=>{
+  await staffStore.fetchStaff(schoolStore.getSchool.id)
+})
 </script>
 
 <style lang="scss" scoped>
