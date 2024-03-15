@@ -53,10 +53,10 @@ const modal = useModalStore()
 const refresh = ref(0)
 
 const URLString = computed(() => {
-  let url = ''
-  if(import.meta.env.VITE_ENV === 'production') url = 'https://activityhub.co.nz/'
-  else url = 'http://localhost:8000/'
-  return url + 'download?document=' + hire.value.attributes.upload_id
+  // let url = ''
+  // if(import.meta.env.VITE_ENV === 'production') url = 'https://activityhub.co.nz/'
+  // else url = 'http://localhost:8000/'
+  return import.meta.env.VITE_URL + 'download?document=' + hire.value.attributes.upload_id
 })
 
 function formatDate(date){
