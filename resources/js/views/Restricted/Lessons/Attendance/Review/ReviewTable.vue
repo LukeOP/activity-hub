@@ -21,7 +21,7 @@
       <tbody>
         <tr v-for="record in lessons" :key="record" @click="handleClick(record)">
           <td style="width:10%">{{record.date}}</td>
-          <td style="width:10%">{{record.time}}</td>
+          <td style="width:10%"><pre>{{ record }}</pre></td>
           <td style="width:15%">{{record.student.full_name}}</td>
           <td style="width:10%">{{record.instrument}}</td>
           <td style="width:15%; text-align:center; padding-left:10px; padding-right:10px"><span class="attendance" :class="record.attendance">{{capitalizeFirstLetter(record.attendance)}}</span></td>
