@@ -4,7 +4,7 @@
     <form style="padding:1rem" @submit.prevent="handleClick('custom')">
       <div class="row">
         <div class="heading">{{lesson.student.full_name}}</div>
-        <div style="text-align:center" :class="{lineThrough: advancedOptions}">{{formatDatetime(currentCalendar.dateTime)}}</div>
+        <div style="text-align:center" :class="{lineThrough: advancedOptions}">{{formatDatetime(currentCalendar.dateTime)}} {{ currentCalendar.lesson.attributes.start }}</div>
 
         <!-- Attendance Button Section -->
         <div class="col-12 col-md-4">
@@ -70,7 +70,7 @@ const attendanceData = ref({
   lesson_id: currentCalendar.lesson_id,
   attendance: "",
   date: moment(currentCalendar.dateTime).format('YYYY-MM-DD'),
-  time: moment(currentCalendar.dateTime).format('hh:mm'),
+  time: currentCalendar.lesson.attributes.start,
   tutor_id: user.attributes.id
 })
 
@@ -100,7 +100,7 @@ function submitRecord(result){
 }
 
 function formatDatetime(dateTime){
-  return moment(dateTime).format('dddd, MMM DD YYYY, hh:mma')
+  return moment(dateTime).format('dddd, MMM DD YYYY')
 }
 
 </script>
