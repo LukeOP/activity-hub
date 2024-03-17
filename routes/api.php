@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CalendarEventController;
+use App\Http\Controllers\DataProcessingController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\EmailController;
@@ -164,4 +165,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // SETTINGS
     Route::get('settings/school-terms', [SchoolTermsController::class, 'index']);
+
+    Route::post('convertLessonData', [DataProcessingController::class, 'convertLessonData']);
 });
