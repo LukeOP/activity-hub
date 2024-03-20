@@ -22,6 +22,7 @@ class DataProcessingController extends Controller
                 if ($existingStudentId !== null) {
                     $existingLesson = Lesson::where('user_id', $this->getTutor($lesson['email']))
                         ->where('student_id', $existingStudentId)
+                        ->where('deleted_at', null)
                         ->get();
                     if (count($existingLesson) < 1) {
                         Lesson::create([
@@ -52,7 +53,7 @@ class DataProcessingController extends Controller
             }
         }
 
-        return $responseData;
+        return [$responseData, $errors];
     }
 
     public function onlyOneStudent($studentData)
