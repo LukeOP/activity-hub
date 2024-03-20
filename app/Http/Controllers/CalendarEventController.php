@@ -7,6 +7,7 @@ use App\Http\Resources\CalendarEventsResource;
 use App\Models\CalendarEvent;
 use App\Traits\HttpResponses;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -70,7 +71,11 @@ class CalendarEventController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+
+        } catch (ModelNotFoundException $e) {
+
+        }
     }
 
     /**

@@ -1,41 +1,44 @@
-# Use an official PHP runtime as a parent image
-FROM php:8.1-apache
+# Set the base image for subsequent instructions
+FROM php:8.1-fpm
 
-# Set the working directory to /var/www/html
-WORKDIR /var/www/html
-
-# Copy the Laravel backend files to the container
-COPY . .
-
-# Install necessary dependencies for Laravel and Node.js
+# Install dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
+    build-essential \
+    libpng-dev \
     libonig-dev \
+    libxml2-dev \
+    zip \
+    curl \
+    unzip \
+    git \
     libzip-dev \
-    nodejs \
-    npm \
-    && docker-php-ext-install pdo_mysql zip
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev && \
+    docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Install Laravel dependencies
-RUN composer install --no-interaction
+# Set working directory
+WORKDIR /var/www
 
-# Install Vue.js dependencies
-RUN npm install
-# RUN npm run dev
-RUN npm run prod
+# Remove default server definition
+RUN rm -rf /var/www/html
 
+# Copy existing application directory contents
+COPY . /var/www
 
+# Copy existing application directory permissions
+COPY --chown=www-data:www-data . /var/www
 
-# Configure Apache for Laravel
-RUN a2enmod rewrite
-COPY docker/apache2.conf /etc/apache2/sites-available/000-default.conf
+# Change current user to www
+USER www-data
 
-# Expose ports
-EXPOSE 80
+# Expose port 9000 and start php-fpm server
+EXPOSE 9000
+CMD ["php-fpm"]
 
-# Start Apache server
-CMD ["apache2-foreground"]
