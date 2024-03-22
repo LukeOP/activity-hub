@@ -1,8 +1,8 @@
-name: Deploy Site on pull demo
+name: Deploy Site on pull
 on:
   push:
     branches:
-      - demo
+      - master
 jobs:
   web-deploy:
     name: Deploy
