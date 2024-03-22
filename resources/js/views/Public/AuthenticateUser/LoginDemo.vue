@@ -66,7 +66,7 @@ function routeChange(route){
 }
 
 function loginUser(){
-  login.value.email = 'j.smith@this.com'
+  login.value.email = 'd.demo@activityhub.co.nz'
   login.value.password = 'Test1234!'
   handleLogin()
 }
