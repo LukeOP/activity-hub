@@ -9,6 +9,7 @@ import attendanceRoutes from './Attendance/AttendanceRoutes'
 import LessonAttendanceSingle from './Attendance/SingleLesson/AttendanceSingleDetails.vue'
 
 import requestRoutes from './Requests/RequestsRoutes'
+import plannerRoutes from './Planner/PlannerRoutes'
 
 import { useLessonsStore } from '/resources/js/stores/lessons'
 import { useUserStore } from '/resources/js/stores/user'
@@ -39,6 +40,9 @@ const lessonsRoutes = [
 
       // Lesson Requests
       ...requestRoutes,
+
+      // Planner Routes
+      ...plannerRoutes
     ],
     beforeEnter: () => {
       const { checkPermissions } = usePermissions()

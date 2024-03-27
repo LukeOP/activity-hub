@@ -22,8 +22,12 @@ class StoreLessonNoteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'lesson_id' => ['required'],
-            'comment' => ['required'],
+            'lesson_id' => 'required|exists:lessons,id',
+            'attendance_id' => 'nullable|exists:lesson_attendance,id',
+            'user_id' => 'required|exists:users,id',
+            'tutor_id' => 'required|exists:users,id',
+            'date' => 'required|date',
+            'time' => 'required|date_format:H:i:s',
         ];
     }
 }

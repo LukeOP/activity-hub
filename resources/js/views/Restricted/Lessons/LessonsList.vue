@@ -1,8 +1,8 @@
 <template>
 <div>
   <!-- Header -->
-  <HeaderLine heading="Lessons" :link1="link1" :link2="link2" 
-    @link1="changeRoute" @link2="changeRoute"/>
+  <HeaderLine heading="Lessons" :link1="link1" :link2="link2" :link3="link3" 
+    @link1="changeRoute" @link2="changeRoute" @link3="changeRoute"/>
   <div class="col col-12 col-md-6">
     <!-- Search input -->
     <input type="text" class="form-control mb-2" placeholder="Lesson search..." v-model="search">
@@ -69,10 +69,13 @@ actions.setItems(actionArray)
 
 // Set User Permissions in Header
 const link1 = computed(()=>{
+  return 'Lesson Planner'
+})
+const link2 = computed(()=>{
   if(user.hasPermissionAny('ATTENDANCE_V') || user.hasPermissionAny('ATTENDANCE_R'))
   return 'Attendance Data'
 })
-const link2 = computed(()=>{
+const link3 = computed(()=>{
   if(user.hasPermissionAny('LESSON_REQ_V'))
   return 'Lesson Requests'
 })
@@ -110,13 +113,6 @@ const filteredLessons = computed(() => {
   return filtered;
 });
 
-// if(user.hasPermissionAny('ATTENDANCE_R') || user.hasPermission('ATTENDANCE_V')){
-//   actionArray.push({ header: 'Attendance', to: { name: 'LessonAttendanceOverview' }, icon: 'fa-solid fa-user-check', additional: true})
-// }
-// if(user.hasPermissionAny('LESSONS_REQ_R') || user.hasPermission('LESSONS_REQ_V')){
-//   actionArray.push({ header: 'Lesson Requests', to: { name: 'LessonRequests' }, showSubItems: false, icon: 'fa-solid fa-square-plus'})
-// }
-
 // Check for update to filtered lessons and display to user
 watch(() => filter.getReturned, (newValue) => {
   filteredLessons.value = newValue
@@ -124,8 +120,9 @@ watch(() => filter.getReturned, (newValue) => {
 
 function changeRoute(value){
   let newRoute = {}
-  if(value === 'link1') newRoute = 'LessonAttendanceOverview'
-  if(value === 'link2') newRoute = 'RequestsList'
+  if(value === 'link1') newRoute = 'LessonPlanner'
+  if(value === 'link2') newRoute = 'LessonAttendanceOverview'
+  if(value === 'link3') newRoute = 'RequestsList'
   router.push({name: newRoute})
 }
 

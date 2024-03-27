@@ -9,12 +9,14 @@ import LessonConfirmActive from './LessonConfirmActive.vue'
 import EditAttendance from './Attendance/EditAttendance.vue'
 
 import requestModals from "../Requests/Modals/requestModals";
+import plannerModals from "../Planner/Modals/PlannerModals";
 
 
 const lessonModals = {
   ...requestModals,
+  ...plannerModals,
   LessonCalendarClick,
-  LessonRecordAttendanceSingle,
+  // LessonRecordAttendanceSingle,
   LessonRecordReviewAttendanceSingle,
   LessonCreateNote,
   LessonNoteDeleteConfirm,

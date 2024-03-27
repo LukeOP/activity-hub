@@ -12,6 +12,9 @@ import UserElementHeader from '../../../components/Layouts/MainLayout/Elements/U
 </script>
 
 <style lang="scss" scoped>
+.user-element {
+  min-height: 215px;
+}
 
 
 </style>

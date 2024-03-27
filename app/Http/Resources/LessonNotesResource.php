@@ -18,12 +18,19 @@ class LessonNotesResource extends JsonResource
         return [
             'id' => $this->id,
             'lesson_id' => $this->lesson_id,
+            'attendance_id' => $this->attendance_id,
             'created_by' => [
                 'id' => $this->user->id,
                 'first_name' => $this->user->first_name,
                 'last_name' => $this->user->last_name,
+                'full_name' => $this->user->first_name . ' ' .$this->user->last_name,
             ],
-            'comment' => $this->comment,
+            'comments' => [
+                'planning' => $this->planning_comment,
+                'progress' => $this->progress_comment,
+                'next_steps' => $this->next_steps_comment,
+                'general' => $this->general_comment,
+            ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
