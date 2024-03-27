@@ -1,119 +1,109 @@
 <template>
-  <LoadingSkeleton v-if="loading" class="user-element">
+  <LoadingSkeleton v-if="lessonStore.loading" class="user-element">
     <UserElementHeader heading="Lessons By Date" />
     <LoadingSpinner :isLoading="true" :loadingText="true" color="primary" />
   </LoadingSkeleton>
-  <div v-else class="user-element">
+  <div v-else class="user-element" @click="changeRoute()">
     <UserElementHeader heading="Lessons By Date" />
-    <div id="date-banner">
-      <div id="date" v-if="!mobileFormat">{{ moment(selectedDate).format('dddd - MMMM DD') }}</div>
+    <div id="date-banner" style="padding: 0 10px;">
+      <div id="date" v-if="!mobileFormat">{{ moment(selectedDate).format('dddd - MMMM Do') }}</div>
       <div id="date" v-else>{{ moment(selectedDate).format('ddd - MMM Do') }}</div>
       <div id="btn-container">
-        <button class="btn btn-primary me-2" id="btn2" @click="subtractDay">&lt;</button>
-        <button class="btn btn-primary me-2" id="btn1" @click="getToday">Today</button>
-        <button class="btn btn-primary" id="btn3" @click="addDay">></button>
+        <DateScroller @click.stop="" @selectedDate="changeDate" />
       </div>
     </div>
-    <table v-if="dayLessons.length > 0">
-      <tr v-for="lesson in dayLessons" :key="lesson" @click="handleRowClick(lesson)">
-        <td id="category"><i class="fa-solid fa-circle" :class="{own: lesson.tutor.id = user.attributes.id, school: lesson.tutor.id != user.attributes.id}"></i></td>
-        <td>{{ formatTime(lesson.attributes.start) }} - {{ formatTime(lesson.attributes.end) }}</td>
-        <td>{{ lesson.student.full_name }}</td>
-        <td>{{ lesson.attributes.instrument }}</td>
-        <td id="state"><StatusIconSVG :status="getLessonAttendance(lesson.attendance)" /></td>
-      </tr>
-    </table>
-    <div class="text-center" v-else>No Lessons To Display</div>
-
+    <div style="padding: 0 10px;">Scheduled Lessons: {{ dayLessons.length }}</div>
+    <div id="lesson-stats">
+      <div class="stat-item">
+        <span><StatusIconSVG status="present" /></span>
+        <span class="item-text">Present: {{ getMarkedLessons('present') }}</span>
+      </div>
+      <div class="stat-item">
+        <span><StatusIconSVG status="late" /></span>
+        <span class="item-text">Late: {{ getMarkedLessons('late') }}</span></div>
+      <div class="stat-item">
+        <span><StatusIconSVG status="absent" /></span>
+        <span class="item-text">Absent: {{ getMarkedLessons('absent') }}</span></div>
+      <div class="stat-item" v-if="getMarkedLessons('custom') > 0">
+        <span><StatusIconSVG status="custom" /></span>
+        <span class="item-text">Custom: {{ getMarkedLessons('custom') }}</span></div>
+      <div class="stat-item">
+        <span><StatusIconSVG status="pending" /></span>
+        <span class="item-text">Unmarked: {{ getUnmarkedLessons() }}</span></div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import useApi from '/resources/js/composables/useApi';
 import { computed, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import moment from 'moment';
-import { useUserStore } from '/resources/js/stores/user';
-import { useModalStore } from '/resources/js/stores/modal';
-import { useCalendarStore } from '/resources/js/stores/calendar';
 import { useLessonsStore } from '/resources/js/stores/lessons';
-import { icons } from '@/images/icons/icons'
-import { useWindowSize } from '/resources/js/composables/useWindowSize';
+import { useAppStore } from '/resources/js/stores/appStore';
 import StatusIconSVG from '../../../components/Layouts/MainLayout/Elements/SVG/StatusIconSVG.vue';
 import UserElementHeader from '../../../components/Layouts/MainLayout/Elements/UserElementHeader.vue';
 import LoadingSpinner from '../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
 import LoadingSkeleton from '../../../components/Layouts/MainLayout/Elements/LoadingSkeleton.vue';
+import DateScroller from '../../../components/Layouts/MainLayout/Elements/DateScroller.vue';
+import { useWindowSize } from '../../../composables/useWindowSize';
 
-const house = icons.question
 
 // Initiate Stores
-const user = useUserStore()
-const modal = useModalStore()
-const calendar = useCalendarStore()
 const lessonStore = useLessonsStore()
+const appStore = useAppStore()
+lessonStore.checkLessonData()
 
 // Initiate Composables
+const router = useRouter()
 const { mobileFormat } = useWindowSize()
 
 // Initiate Variables
 const selectedDate = ref(moment())
-const key = ref(0)
 
-// Fetch Lesson Data
-const { data: lessons, loading, fetchData: fetchLessons } = useApi('lessons')
-fetchLessons().then(()=> {
-  lessonStore.setLessons(lessons.value)
-})
-
-// Manipulate Selected Day
-function addDay(){
-  selectedDate.value = moment(selectedDate.value).add(1, 'days')
-}
-function getToday(){
-  selectedDate.value = moment()
-}
-function subtractDay(){
-  selectedDate.value = moment(selectedDate.value).subtract(1, 'days')
-}
-
-// Format Date
-function formatTime(date){
-  return moment(date, 'hh:mm:ss').format('hh:mma')
+function changeDate(newDate){
+  selectedDate.value = newDate
 }
 
 const dayLessons = computed(() => {
+  const selectedDateString = moment(selectedDate.value).format('YYYY-MM-DD');
   return lessonStore.getLessonsData.filter(l => 
-    l.attributes.status === 'Active'
-    && l.attributes.day === moment(selectedDate.value).format('dddd') 
-    && l.attributes.startDate <= moment(selectedDate.value).format('YYYY-MM-DD')
-    && (l.attributes.endDate == null || l.attributes.endDate > moment(selectedDate.value).format('YYYY-MM-DD'))
-  )
-})
+    l.attributes.status === 'Active' &&
+    l.attributes.day === moment(selectedDate.value).format('dddd') &&
+    l.attributes.startDate <= selectedDateString &&
+    (!l.attributes.endDate || l.attributes.endDate >= selectedDateString)
+  );
+});
 
-function getLessonAttendance(attendanceArray){
-  let response = 'pending'
-  let currentDate = moment(selectedDate.value).format('YYYY-MM-DD')
-  if(attendanceArray.length > 0){
-    attendanceArray.find(a => a.date === currentDate) 
-    ? response = attendanceArray.find(a => a.date === currentDate).attendance 
-    : response = 'pending'
-  }
-  if(currentDate > moment().format('YYYY-MM-DD')) response = 'pending'
-  return response
+function getMarkedLessons(type) {
+  return dayLessons.value.filter(lesson =>
+    lesson.attendance.some(a => a.attendance === type)
+  ).length;
+}
+function getUnmarkedLessons(){
+  return dayLessons.value.filter(lesson =>
+    !lesson.attendance.some(a => ['present', 'late', 'absent', 'custom'].includes(a.attendance))
+  ).length;
 }
 
-function handleRowClick(lesson){
-  calendar.setEventData({
-    lesson_id: lesson.id, 
-    dateTime: selectedDate.value,
-    lesson: lesson})
-  lessonStore.setLesson(lesson)
-  modal.open('LessonCalendarClick')
+function changeRoute(){
+  appStore.setItems({date: moment(selectedDate.value).format('YYYY-MM-DD')})
+  router.push({
+    name: 'LessonPlanner',
+  })
 }
 
 
 </script>
 
 <style lang="scss" scoped>
+.user-element {
+  min-height: fit-content;
+  &:hover {
+    cursor: pointer;
+  box-shadow: 0 5px 10px rgb(223, 223, 223);
+  }
+}
 #date-banner {
   display: flex;
   justify-content: space-between;
@@ -132,37 +122,27 @@ function handleRowClick(lesson){
     }
   }
 }
-table {
-  width: 100%;
-  #category {
-    width: 25px;
-    padding:5px
-  }
-  #state {
-    width: 30px;
-  }
-  tr {
-    // border-bottom: 1px solid $ah-grey;
-    &:hover {
-      background-color: $ah-primary-background;
-      cursor: pointer;
+#lesson-stats {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  .stat-item {
+    display: flex;
+    border: 1px solid $ah-grey;
+    color: $ah-primary;
+    padding: 5px 1rem;
+    border-radius: 0.25rem;
+    margin: 10px;
+    width: calc(25% - 20px);
+    height: 50px;
+    .item-text {
+      align-self: center;
+      padding-left: 20px;
     }
-    td {
-      padding: 10px 0;
-    }
   }
 }
-.icon {
-  display: inline-flex;
-  height: 1.25rem;
-  width: 25px;
-}
-.own {
-  color: $ah-primary;
-}
-.school {
-  color: $ah-grey;
-}
+
 @media (max-width: 768px){
   table {
     width: 100%;

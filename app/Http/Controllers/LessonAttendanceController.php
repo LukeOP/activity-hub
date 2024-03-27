@@ -6,19 +6,26 @@ use App\Http\Resources\LessonAttendanceResource;
 use App\Http\Resources\LessonsResource;
 use App\Models\Lesson;
 use App\Models\LessonAttendance;
+use App\Models\User;
+use App\Traits\HttpResponses;
+use App\Traits\LessonTraits;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class LessonAttendanceController extends Controller
 {
+    use HttpResponses;
+    use LessonTraits;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         // Get User's List of associated-schools and create an array of school ids
-        $user = Auth::user();
+        $user = User::where('id', Auth::user()->id)->first();
         $userSchools = $user->schools;
         $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
         $lessonCollection = new Collection();
@@ -66,20 +73,20 @@ class LessonAttendanceController extends Controller
      */
     public function store(Request $request)
     {
-        $lessonRecord = LessonAttendance::create([
-            'lesson_id' => $request->lesson_id,
-            'attendance' => $request->attendance,
-            'date' => $request->date,
-            'time' => $request->time,
-            'user_id' => $request->tutor_id
-        ]);
+        $attendance = $this->createLessonAttendance($request->all());
 
-        return response()->json(
-            [
-                'message' => 'lesson Attendance Added successfully',
-                'lesson' => new LessonsResource(Lesson::where('id', $request->lesson_id)->first())
-            ]
-        );
+        if ($attendance){
+            return $this->success(
+                new LessonsResource(Lesson::where('id', $request->lesson_id)->first()),
+                'Lesson attendance added successfully'
+            );
+        } else {
+            return $this->error(
+                '',
+                'Error creating attendance record',
+                500
+            );
+        }
     }
 
     /**
@@ -93,19 +100,32 @@ class LessonAttendanceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(int $id, Request $request)
+    public function update(string $id, Request $request)
     {
-        $attendance = LessonAttendance::findOrFail($id);
+        try{
+            $attendance = LessonAttendance::findOrFail($id);
+    
+            $attendance->fill($request->all());
+            $attendance->save();
 
-        $attendance->fill($request->all());
-        $attendance->save();
+            return $this->success(
+                new LessonsResource(Lesson::where('id', $attendance->lesson_id)->first()),
+                'Lesson attendance successfully updated'
+            );
 
-        return response()->json(
-            [
-                'message' => 'lesson updated successfully',
-                'lesson' => $attendance
-            ]
-        );
+        } catch (ModelNotFoundException $e) {
+            return $this->error(
+                $e,
+                'Existing lesson attendance was not found',
+                404
+            );
+        } catch (Exception $e) {
+            return $this->error(
+                $e,
+                'An unknown error has occured',
+                404
+            );
+        }
     }
 
     /**

@@ -337,3 +337,43 @@
   box-shadow: none;
 }
 
+// Red Outline Button
+.btn.btn-outline-red {
+  color: $ah-red;
+  border-color: $ah-red;
+}
+.btn.btn-outline-red.focus,
+.btn.btn-outline-red:focus {
+  color: #fff;
+  background-color: $ah-red;
+  border-color: $ah-red;
+  outline: none;
+  box-shadow: none;
+}
+.btn.btn-outline-red:hover {
+  color: #fff;
+  background-color: $ah-red;
+  border-color: $ah-red;
+  outline: none;
+  box-shadow: none;
+}
+.btn.btn-outline-red.active,
+.btn.btn-outline-red:active {
+  color: #fff;
+  background-color: $ah-red;
+  border-color: $ah-red;
+  outline: none;
+}
+.btn.btn-outline-red.active.focus,
+.btn.btn-outline-red.active:focus,
+.btn.btn-outline-red.active:hover,
+.btn.btn-outline-red:active.focus,
+.btn.btn-outline-red:active:focus,
+.btn.btn-outline-red:active:hover {
+  color: #fff;
+  background-color: $ah-red;
+  border-color: $ah-red;
+  outline: none;
+  box-shadow: none;
+}
+

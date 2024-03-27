@@ -1,22 +1,46 @@
 import { defineStore } from "pinia";
+import useApi from '/resources/js/composables/useApi';
 
 function getState(){
     return {
       singleLesson: {},
       lessons: [],
       filteredLessons: [],
+      selectedLessons: [],
       singleAttendance: {},
       attendanceArray: [],
       singleRequest: {},
       lessonRequests: [],
       lessonRequestForm: {},
-      formPreview: {}
+      formPreview: {},
+      loading: false
     }
 }
 
 export const useLessonsStore = defineStore('lessons', {
   state: () => (getState()),
   actions: {
+    async fetchLessons() {
+      this.loading = true;
+      const { data: Lessons, error, fetchData } = useApi('lessons');
+      try {
+        await fetchData();
+        if (error.value) {
+          throw new Error(error.value)
+        }
+        // Update store state with fetched data
+        this.setLessons(Lessons.value)
+      } catch (error) {
+        console.error('Error fetching data: ', error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    checkLessonData(){
+      if(this.lessons.length < 1){
+        this.fetchLessons()
+      }
+    },
     setLesson(lessonObject){
       this.singleLesson = lessonObject
     },
@@ -25,6 +49,9 @@ export const useLessonsStore = defineStore('lessons', {
     },
     setFilteredLessons(lessonsArray){
       this.filteredLessons = lessonsArray
+    },
+    setSelectedLessons(lessonsArray){
+      this.selectedLessons = lessonsArray
     },
     updateLessonRecord(record){
       // console.log(record)
@@ -62,6 +89,13 @@ export const useLessonsStore = defineStore('lessons', {
       this.singleLesson.attendance = this.singleLesson.attendance.filter(a => a.id != record.id)
       this.addAttendanceRecord(record)
     },
+    updateLessonRecord(record){
+      const index = this.lessons.findIndex(l => l.id === record.id)
+      if( index != -1){
+        this.lessons.splice(index, 1, record)
+        this.singleLesson = record
+      }
+    },
     addNote(note){
       this.singleLesson.notes = [note, ...this.singleLesson.notes]
     },
@@ -80,11 +114,30 @@ export const useLessonsStore = defineStore('lessons', {
     getLessonsData(){
       return this.lessons
     },
+    getSelectedLessons(){
+      return this.selectedLessons
+    },
     getAttendanceArray(){
       return this.attendanceArray
     },
     getAttendance(){
       return this.singleAttendance
+    },
+    getLessonAttendance(){
+      return this.singleLesson.attendance
+    },
+    getLessonNotes(){
+      return this.singleLesson.notes
+    },
+    getLessonNotesAndAttendance(){
+      const combinedArray = this.getLessonNotes.map(note => {
+        const matchingAttendance = this.getLessonAttendance.find(attendance => attendance.id === note.attendance_id);
+        return {
+          ...note,
+          attendance: matchingAttendance
+        }
+      })
+      return combinedArray
     },
     getRequest(){
       return this.singleRequest
