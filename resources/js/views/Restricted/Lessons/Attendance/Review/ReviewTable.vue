@@ -21,7 +21,7 @@
       <tbody>
         <tr v-for="record in lessons" :key="record" @click="handleClick(record)">
           <td style="width:10%">{{record.date}}</td>
-          <td style="width:10%"><pre>{{ record }}</pre></td>
+          <td style="width:10%">{{ formatTime(record.time) }}</td>
           <td style="width:15%">{{record.student.full_name}}</td>
           <td style="width:10%">{{record.instrument}}</td>
           <td style="width:15%; text-align:center; padding-left:10px; padding-right:10px"><span class="attendance" :class="record.attendance">{{capitalizeFirstLetter(record.attendance)}}</span></td>
@@ -34,6 +34,9 @@
   <section v-else>
     <p id="no-records">No records for this time period</p>
   </section>
+  <div class="col-12 col-md-4 totals">
+    <span>Total: {{lessons.length}}</span>
+  </div>
   </div>
 </template>
 
@@ -43,6 +46,7 @@ import { useLessonsStore } from '/resources/js/stores/lessons'
 import useApi from '../../../../../composables/useApi';
 import { useRouter } from 'vue-router';
 import { useFilterStore } from '../../../../../stores/filter';
+import moment from 'moment';
 
 const props = defineProps({lessons:Array})
 const lessonStore = useLessonsStore()
@@ -64,6 +68,11 @@ function editAttendance(record){
     })
     modal.open('EditAttendance')
   }
+
+  function formatTime(time){
+    return moment(time, 'HH:mm:ss').format('h:mma')
+  }
+
 function handleClick(lesson){
   filter.close()
   const { data: lessonData, loading, fetchData} = useApi('lessons/' + lesson.lesson_id)
@@ -108,6 +117,9 @@ function handleClick(lesson){
 }
 .custom {
   background-color: $ah-green;
+}
+.incomplete {
+  background-color: $ah-grey;
 }
 
 </style>

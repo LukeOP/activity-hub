@@ -87,7 +87,7 @@ function sortData(field){
 }
 @media (min-width: 768px){
   .status {
-    width: 90px;
+    width: 150px;
     padding: 5px;
     border: 1px solid black;
   }

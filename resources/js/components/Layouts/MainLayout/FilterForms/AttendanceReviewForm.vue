@@ -91,7 +91,6 @@ const filtering = ref({
 
 function returnFiltered(){
   let filteredAttendance = originalData.value
-  console.log(filteredAttendance);
   filteredAttendance = filteredAttendance.filter(att => att.date >= filtering.value.start_date && att.date <= filtering.value.end_date)
   if(filtering.value.attendance != '') filteredAttendance = filteredAttendance.filter(att => att.attendance == filtering.value.attendance)
   if(filtering.value.tutor != '') filteredAttendance = filteredAttendance.filter(d => d.tutor.id == filtering.value.tutor)

@@ -1,6 +1,6 @@
 <template>
     <div id="attendanceRecordLine" style="display: flex; justify-content: space-between;">
-        <h4 style="margin: auto; width: fit-content; min-width: 150px;">{{getHeading()}}</h4>
+        <h4 style="margin: auto; width: fit-content; min-width: 200px;">{{getHeading()}}</h4>
         <div style="flex-grow: 1; display: flex; flex-wrap: wrap; height: 50px; align-content: center;">
             <div class="progress mx-5" style="height: 10px; width: 100%;">
                 <div class="progress-bar bg-primary" role="progressbar" :style="'width: '+ getPercentage(present) + '%;'" :aria-valuenow="present" aria-valuemin="0" aria-valuemax="100"></div>

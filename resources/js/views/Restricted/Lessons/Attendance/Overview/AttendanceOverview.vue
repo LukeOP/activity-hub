@@ -10,7 +10,7 @@
         {{ subject }}
       </div>
     </div>
-    <div style="display: flex;">
+    <div id="options-group" style="display: flex;">
       <div id="funding" v-if="fundingArray.length">
         <select class="form-control" v-model="selectedFunding">
           <option v-for="funding in fundingArray" :key="funding" :value="funding">{{ funding }}</option>
@@ -53,29 +53,47 @@ const router = useRouter()
 const lessonStore = useLessonsStore()
 const schoolStore = useSchoolStore()
 const sorter = useSorter()
-const subjectArray = ref(Array.from(new Set(lessonStore.getLessonsData.map(l => l.attributes.instrument))))
+const subjectArray = ref(Array.from(new Set(lessonStore.getLessonsData.map(l => l.attributes.instrument ))))
+// sorter.sort(subjectArray.value, 'instrument')
+// console.log(subjectArray.value);
 const selectedSubject = ref(subjectArray.value[0])
 const selectedTutor = ref(0)
 const selectedFunding = ref(`All Funding Options`)
 
 const tutorArray = computed(() => {
-  // creates a set of tutors for the selected instrument
-  var tutorSet = new Set();
-  lessonStore.getLessonsData.filter(l => l.attributes.instrument == selectedSubject.value && l.attendance.length > 0)
-  .forEach(function(lesson) {
-      tutorSet.add(lesson.tutor)
-    })
-  // converts set to array
-  let tutorsArray = Array.from(tutorSet)
+  // Create a Map to store unique tutors
+  const tutorMap = new Map();
 
-    // adds 'all tutors' option if more than one tutor exists for selected instrument
-  if(tutorsArray.length > 1){
-    tutorsArray.unshift({id: 0, full_name: `All ${selectedSubject.value} Tutors`})
+  // Iterate through lessons and add tutors to the map
+  lessonStore.getLessonsData
+    .filter(lesson => lesson.attributes.instrument === selectedSubject.value && lesson.attendance.length > 0)
+    .forEach(lesson => {
+      const tutorId = lesson.tutor.id;
+      const tutorName = lesson.tutor.full_name;
+      const tutorInstrument = lesson.attributes.instrument;
+      const tutorKey = `${tutorId}_${tutorInstrument}`;
+
+      // If tutor doesn't exist in the map, add it
+      if (!tutorMap.has(tutorKey)) {
+        tutorMap.set(tutorKey, { id: tutorId, full_name: tutorName, instrument: tutorInstrument });
+      }
+    });
+
+  // Convert the Map values to an array
+  let tutorsArray = Array.from(tutorMap.values());
+
+  // Add 'all tutors' option if more than one tutor exists for selected instrument
+  if (tutorsArray.length > 1) {
+    tutorsArray.unshift({ id: 0, full_name: `All ${selectedSubject.value} Tutors`, instrument: selectedSubject.value });
+  }
+  if(tutorsArray.length > 0){
+    selectedTutor.value = tutorsArray[0].id
   }
 
-  // returns array of instrument tutors
-  return tutorsArray
-})
+  // Return array of instrument tutors
+  return tutorsArray;
+});
+
 
 const fundingArray = computed(() => {
   // creates a set of tutors for the selected instrument
@@ -90,6 +108,10 @@ const fundingArray = computed(() => {
   // adds 'all funding' option if more than one funding option exists for selected instrument
   if(fundingTypeArray.length > 1){
     fundingTypeArray.unshift(`All Funding Options`)
+  }
+
+  if(fundingTypeArray.length > 0) {
+    selectedFunding.value = fundingTypeArray[0]
   }
 
   // returns array of instrument tutors
@@ -151,13 +173,17 @@ function routeChange(route){
   justify-content: space-between;
   #subject-group {
     display: flex;
+    flex-wrap: wrap;
+    row-gap: 10px;
+    column-gap: 10px;
     .menuItem {
       text-align: center;
-      width: 100px;
+      width: fit-content;
+      min-width: 100px;
       background-color: transparent;
       border: 1px solid $ah-grey;
       border-radius: 0.5rem;
-      margin-right: 1rem;
+      // margin-right: 1rem;
       padding: 5px 10px;
       &:hover {
         cursor: pointer;
@@ -175,6 +201,10 @@ function routeChange(route){
         color: white;
       }
     }
+  }
+  #options-group {
+    min-width: 300px;
+    justify-content: end;
   }
 }
 #funding {

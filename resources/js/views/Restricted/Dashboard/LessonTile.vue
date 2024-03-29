@@ -12,8 +12,8 @@
         <DateScroller @click.stop="" @selectedDate="changeDate" />
       </div>
     </div>
-    <div style="padding: 0 10px;">Scheduled Lessons: {{ dayLessons.length }}</div>
-    <div id="lesson-stats">
+    <div v-if="selectedDate <= moment() && dayLessons.length > 0" style="padding: 0 10px;">Scheduled Lessons: {{ dayLessons.length }}</div>
+    <div id="lesson-stats" v-if="selectedDate <= moment() && dayLessons.length > 0">
       <div class="stat-item">
         <span><StatusIconSVG status="present" /></span>
         <span class="item-text">Present: {{ getMarkedLessons('present') }}</span>
@@ -31,6 +31,11 @@
         <span><StatusIconSVG status="pending" /></span>
         <span class="item-text">Unmarked: {{ getUnmarkedLessons() }}</span></div>
     </div>
+    <div v-else-if="selectedDate > moment() && dayLessons.length > 0">
+      <div style="padding: 0 10px; font-size: 1.5rem;" class="text-primary text-center">{{ dayLessons.length }} Upcoming Lessons Scheduled</div>
+    </div>
+    <div v-else>
+      <div style="padding: 0 10px; font-size: 1.5rem;" class="text-primary text-center">No Lessons On This Day</div></div>
   </div>
 </template>
 
@@ -98,7 +103,8 @@ function changeRoute(){
 
 <style lang="scss" scoped>
 .user-element {
-  min-height: fit-content;
+  min-height: 215px;
+  height: fit-content;
   &:hover {
     cursor: pointer;
   box-shadow: 0 5px 10px rgb(223, 223, 223);

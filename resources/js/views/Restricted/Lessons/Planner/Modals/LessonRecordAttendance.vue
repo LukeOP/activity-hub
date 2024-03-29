@@ -26,10 +26,13 @@ import { useLessonsStore } from '../../../../../stores/lessons';
 import useApi from '../../../../../composables/useApi';
 import { useUserStore } from '../../../../../stores/user';
 import { useModalStore } from '../../../../../stores/modal';
+import { useAppStore } from '../../../../../stores/appStore';
 
     const lessonStore = useLessonsStore()
     const user = useUserStore()
     const lesson = lessonStore.getLessonData
+    const appStore = useAppStore()
+    const lessonDate = moment(appStore.getItems.date).format('YYYY-MM-DD')
     const modal = useModalStore()
     const loading = ref(false)
 
@@ -37,7 +40,7 @@ import { useModalStore } from '../../../../../stores/modal';
         lesson_id: lesson.id,
         tutor_id: user.attributes.id,
         attendance: 'present',
-        date: moment(lesson.currentDate).format('YYYY-MM-DD'),
+        date: moment(lessonDate).format('YYYY-MM-DD'),
         time: lesson.attributes.start
     })
 
