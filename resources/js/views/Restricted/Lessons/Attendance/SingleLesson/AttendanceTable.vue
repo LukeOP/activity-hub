@@ -18,7 +18,7 @@
           <th>Time:</th>
           <th>Attendance:</th>
           <th class="hide">Recorded By:</th>
-          <th class="hide">Last Modified:</th>
+          <!-- <th class="hide">Last Modified:</th> -->
           <th style="width: 30px;"></th>
         </tr>
       </thead>
@@ -36,7 +36,7 @@
             <div class="attendance" :class="record.attendance">{{capitalizeFirstLetter(record.attendance)}}</div>
           </td>
           <td class="hide">{{lesson.tutor.first_name}} {{lesson.tutor.last_name}}</td>
-          <td class="hide">{{formatModified(record.updated_at)}}</td>
+          <!-- <td class="hide">{{formatModified(record.updated_at)}}</td> -->
           <td style="width: 30px;"><i class="fa-solid fa-edit edit" @click="editAttendance(record)"></i></td>
         </tr>
       </tbody>
@@ -155,6 +155,9 @@ export default {
 }
 .custom {
   background-color: $ah-green;
+}
+.incomplete {
+  background-color: $ah-grey;
 }
 .edit:hover {
   color: $ah-primary;

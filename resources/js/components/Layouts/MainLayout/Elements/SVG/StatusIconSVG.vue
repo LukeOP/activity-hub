@@ -8,16 +8,16 @@
           <path d="M20.333,37.747l16.427,-16.427" />
           <path d="M20.333,21.32l16.427,16.427" />
       </g>
-      <g v-if="status === 'pending'">
+      <g v-if="status === 'pending' || status === 'incomplete'">
         <text style="fill: rgb(255, 255, 255); font-size: 40px; font-weight: 550; white-space: pre;" transform="matrix(1, 0, 0, 1, 1.323214054107666, 18.292226791381832)">
           <tspan x="18" y="25">?</tspan><tspan x="10.633" dy="1em">​</tspan>
         </text>
       </g>
-      <g v-if="status === 'incomplete'">
+      <!-- <g v-if="status === 'incomplete'">
         <text style="fill: rgb(255, 255, 255); font-size: 33px; font-weight: 550; white-space: pre;" transform="matrix(1, 0, 0, 1, 1.323214054107666, 18.292226791381832)">
           <tspan x="23" y="23">!</tspan><tspan x="10.633" dy="1em">​</tspan>
         </text>
-      </g>
+      </g> -->
     </svg>
 </template>
   
@@ -26,11 +26,13 @@
 <script>
 const colors = {
   complete: '#198754',
-  incomplete: '#e4002b',
+  // incomplete: '#e4002b',
+  incomplete: '#bababa',
   pending: '#bababa',
   present: '#3B657F',
   late: '#FFAE33',
-  absent: '#e4002b',
+  absent: '#c60024',
+  // absent: '#c60024',
   custom: '#800080'
 }
 

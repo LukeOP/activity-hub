@@ -15,11 +15,13 @@ import moment from 'moment';
 import { useRouter } from 'vue-router';
 import { useModalStore } from '../../../../../stores/modal';
 import { useLessonsStore } from '../../../../../stores/lessons';
+import { useAppStore } from '../../../../../stores/appStore';
 
     const router = useRouter()
     const modal = useModalStore()
     const lessonStore = useLessonsStore()
-    const currentDate = moment(lessonStore.getLessonData.currentDate).format('YYYY-MM-DD')
+    const appStore = useAppStore()
+    const currentDate = moment(appStore.getItems.date).format('YYYY-MM-DD')
     const today = moment().format('YYYY-MM-DD')
     const actions = [
         {title: 'View Lesson Details', route: 'LessonDetails', modal: null, icon: 'fa-regular fa-file-lines'},

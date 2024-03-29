@@ -26,11 +26,13 @@ import { useLessonsStore } from '../../../../../stores/lessons';
 import useApi from '../../../../../composables/useApi';
 import { useUserStore } from '../../../../../stores/user';
 import { useModalStore } from '../../../../../stores/modal';
+import { useAppStore } from '../../../../../stores/appStore';
 
     const lessonStore = useLessonsStore()
     const user = useUserStore()
     const lesson = lessonStore.getLessonData
-    const lessonDate = moment(lesson.currentDate).format('YYYY-MM-DD')
+    const appStore = useAppStore()
+    const lessonDate = moment(appStore.getItems.date).format('YYYY-MM-DD')
     const attendance = lesson.attendance.find(a => a.date === lessonDate)
     const modal = useModalStore()
     const loading = ref(false)

@@ -22,6 +22,14 @@
       <PlannerTableRow v-if="dayLessons.length > 0" :dayLessons="dayLessons" :date="selectedDate" :key="refresh"/>
       <div v-else class="text-center" style="height: 50px; padding: 13px;">No lessons on this day</div>
     </TableBody>
+    <div class="col-12 col-md-6 totals">
+      <span>Total: {{getNum('total')}}</span>
+      <span>Present: {{getMarkedLessons('present')}}</span>
+      <span>Late: {{getMarkedLessons('late')}}</span>
+      <span>Absent: {{getMarkedLessons('absent')}}</span>
+      <span>Unmarked: {{getUnmarkedLessons()}}</span>
+      <span>Overdue: {{getMarkedLessons('incomplete')}}</span>
+    </div>
   </div>      
 </template>
 
@@ -54,6 +62,7 @@ const dayLessons = computed(() => {
     (!l.attributes.endDate || l.attributes.endDate >= selectedDateString)
   );
 });
+
 sorter.sort(dayLessons.value, 'attributes.start')
 
 function sortLessons(sortValue){
@@ -64,6 +73,24 @@ function sortLessons(sortValue){
 function updateDate(newDate){
   selectedDate.value = newDate
   sorter.sort(dayLessons.value, 'attributes.start')
+}
+
+function getNum(type){
+  if(type != 'total'){
+    console.log(dayLessons.value.filter(l => l.attendance.filter(a => a.attendance === type)).length);
+    return dayLessons.value.filter(l => l.attendance.filter(a => a.attendance === type)).length
+  }
+  return dayLessons.value.length
+}
+function getMarkedLessons(type) {
+  return dayLessons.value.filter(lesson =>
+    lesson.attendance.some(a => a.attendance === type)
+  ).length;
+}
+function getUnmarkedLessons(){
+  return dayLessons.value.filter(lesson =>
+    !lesson.attendance.some(a => ['present', 'late', 'absent', 'custom'].includes(a.attendance))
+  ).length;
 }
 
 watch(() => dayLessons.value, () => {

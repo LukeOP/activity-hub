@@ -1,5 +1,5 @@
 <template>
-    <tr v-for="lesson in dayLessons" :key="lesson" @click="lessonClick(lesson)">
+    <tr v-for="lesson in dayLessons" :key="lesson" @click="lessonClick(lesson)" :class="{redText: getLessonAttendance(lesson.attendance) === 'incomplete'}">
         <td id="category" style="width: 80px;">
             <i class="fa-solid fa-circle" :class="{own: lesson.tutor.id == user.attributes.id, school: lesson.tutor.id != user.attributes.id}"></i>
         </td>
@@ -60,5 +60,12 @@ function lessonClick(lesson){
   }
 .icons {
   justify-content: center;
+}
+.redText {
+  background-color: #fdefef;
+  color: #C50023;
+  &:hover {
+  background-color: #fde0e0;
+  }
 }
 </style>
