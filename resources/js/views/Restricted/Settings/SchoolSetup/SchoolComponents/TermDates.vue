@@ -1,35 +1,31 @@
 <template>
     <section>
-        <h3>Term Dates:</h3>
-        <div class="label-group" style="display: flex;">
-            <label>Year
-            <select class="form-control editField" v-model="formData.year">
-                <option v-for="year in yearSelect" :key="year" :value="year">{{ year }}</option>
-            </select>
-            </label>
-            <label>Number of Terms
-            <select class="form-control editField" v-model="numOfTerms">
-                <option v-for="term in termSelect" :key="term" :value="term">{{ term }}</option>
-            </select>
-            </label>
-        </div>
+      <hr>
+        <h3 style="width: 100%;">Term Dates:</h3>
+        <label style="display: flex;">Year
+          <select class="form-control editField" v-model="formData.year">
+              <option v-for="year in [thisYear, nextYear]" :key="year" :value="year">{{ year }}</option>
+          </select>
+        </label>
         <form @submit.prevent="saveTerms">
             <table id="term-table">
                 <tr style="background-color: #3B6580; color: white;">
-                <th>Term Description</th>
-                <th>Term Start Date</th>
-                <th>Term End Date</th>
+                  <th>Term Description</th>
+                  <th>Term Start Date</th>
+                  <th>Term End Date</th>
                 </tr>
                 <tr v-for="index in parseInt(numOfTerms)" :key="index">
-                <td>Term {{ index }}, {{ formData.terms[index - 1].year }}</td>
-                <td><input type="date" class="form-control" v-model="formData.terms[index - 1].startDate" required></td>
-                <td><input type="date" class="form-control" v-model="formData.terms[index - 1].endDate" required></td>
+                  <td>Term {{ index }}, {{ formData.terms[index - 1].year }}</td>
+                  <td><input type="date" class="form-control" v-model="formData.terms[index - 1].start_date" :min="formData.terms[index - 2] ? formData.terms[index - 2].end_date : thisYear + '-01-01'" required></td>
+                  <td><input type="date" class="form-control" v-model="formData.terms[index - 1].end_date" :min="formData.terms[index - 1].start_date"required></td>
                 </tr>
             </table>
             <button class="btn btn-primary mt-2 float-end">Save {{ formData.year }} Term Dates</button>
         </form>
-        {{ currentTermData }}
-        {{ formData }}
+        <!-- <pre>
+          {{ currentTermData }}
+        </pre>
+        {{ formData }} -->
     </section>
   </template>
   
@@ -37,20 +33,14 @@
   import { ref, watchEffect } from 'vue';
   import { useSchoolStore } from '../../../../../stores/schools';
   import moment from 'moment';
-import axiosClient from '../../../../../axios';
+  import axiosClient from '../../../../../axios';
+import useApi from '../../../../../composables/useApi';
   
   const schoolStore = useSchoolStore()
   
   const thisYear = moment().format('YYYY')
-  const yearSelect = [
-    moment(thisYear, 'YYYY').format('YYYY'),
-    moment(thisYear, 'YYYY').add(1, 'years').format('YYYY'),
-    moment(thisYear, 'YYYY').add(2, 'years').format('YYYY'),
-    moment(thisYear, 'YYYY').add(3, 'years').format('YYYY'),
-    moment(thisYear, 'YYYY').add(4, 'years').format('YYYY')
-  ]
+  const nextYear = moment(thisYear, 'YYYY').add(1, 'years').format('YYYY')
   
-  const termSelect = ['1', '2', '3', '4', '5']
   const numOfTerms = ref(4)
   
   const formData = ref({
@@ -61,42 +51,49 @@ import axiosClient from '../../../../../axios';
   
   watchEffect(() => {
     formData.value.terms = Array.from({ length: numOfTerms.value}, () => ({
-      startDate: '',
-      endDate: ''
+      start_date: '',
+      end_date: ''
     }))
   })
 
   const currentTermData = ref([])
   watchEffect(()=>{
-    currentTermData.value = schoolStore.getSchool.data.terms.filter(t => t.year == formData.year)
-    console.log(formData.year, currentTermData.value);
+    currentTermData.value = schoolStore.getSchool.data.terms.filter(t => t.year == formData.value.year)
+    if(currentTermData.value.length > 0) populateTermData(currentTermData.value)
+    else formData.value.terms = [{ "start_date": "", "end_date": "" }, { "start_date": "", "end_date": "" }, { "start_date": "", "end_date": "" }, { "start_date": "", "end_date": "" } ]
   })
+
+  function populateTermData(data){
+    data.forEach(term => {
+      let index = term.description.split(" ")[1]
+      setSingleTermData(term, index)
+    });
+  }
+
+  function setSingleTermData(data, index){
+    formData.value.terms[index -1].start_date = data.start_date
+    formData.value.terms[index -1].end_date = data.end_date
+  }
   
   function saveTerms() {
-    axiosClient.post('school-terms', formData.value).then(res => {
-        console.log(res.data);
+    const {data, loading, fetchData} = useApi('school-terms', formData.value, 'POST', true)
+    fetchData().then(() => {
+      schoolStore.updateSchool(data.value.data)
     })
   }
   
   </script>  
 
 <style lang="scss" scoped>
-
 label {
-    width: 100%;
-}
-.label-group {
-    label {
-        &:first-of-type {
-            margin-right: 1rem;
-        }
-        &:last-of-type {
-            margin-left: 1rem;
-        }
-    }
+  width: 25%;
+  margin-bottom: 1rem;
+  align-items: center;
+  select {
+    margin-left: 1rem;
+  }
 }
 #term-table {
-    margin-top: 2rem;
     tr td, tr th {
         padding: 10px;
     }

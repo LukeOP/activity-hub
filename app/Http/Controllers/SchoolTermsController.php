@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreSchoolTermsRequest;
+use App\Http\Resources\SchoolsResource;
+use App\Models\School;
 use App\Models\SchoolTerms;
+use App\Traits\HttpResponses;
+use Exception;
 use Illuminate\Http\Request;
 
 class SchoolTermsController extends Controller
 {
+    use HttpResponses;
     /**
      * Display a listing of the resource.
      */
@@ -18,20 +24,41 @@ class SchoolTermsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
+    public function store(StoreSchoolTermsRequest $request)
+    {  
         $newTerms = [];
-        foreach ($request->terms as $index => $term) {
-            $newTerm = SchoolTerms::create([
-                'school_id' => $request->school_id,
-                'year' => $request->year,
-                'description' => "Term " . ($index + 1),
-                'start_date' => $term["startDate"],
-                'end_date' => $term["endDate"]
-            ]);
-            $newTerms = [...$newTerms, $newTerm];
+        try {
+            foreach ($request->terms as $index => $term) {
+                $existing = SchoolTerms::where('description', "Term " . ($index + 1))->where('year', $request->year)->first();
+                if($existing != NULL){
+                    $existing->update([
+                        'start_date' => $term["start_date"],
+                        'end_date' => $term["end_date"]
+                    ]);
+                    $newTerm = $existing;
+                } else {
+                    $newTerm = SchoolTerms::create([
+                        'school_id' => $request->school_id,
+                        'year' => $request->year,
+                        'description' => "Term " . ($index + 1),
+                        'start_date' => $term["start_date"],
+                        'end_date' => $term["end_date"]
+                    ]);
+                }
+                $newTerms = [...$newTerms, $newTerm];
+            }
+            $school = new SchoolsResource(School::where('id', $newTerms[0]->school_id)->first());
+            return $this->success(
+                $school,
+                'Term dates updated for ' . $request->year . "."
+            );
+        } catch (Exception $e){
+            return $this->error(
+                $e->getMessage(),
+                'Error encounted while adding term dates.',
+                500
+            );
         }
-        return $newTerms;
     }
 
     /**

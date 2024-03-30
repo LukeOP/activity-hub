@@ -25,6 +25,6 @@ class SchoolTerms extends Model
     }
 
     protected $fillable = [
-        'school_id', 'description', 'start_date', 'end_date'
+        'school_id', 'description', 'year', 'start_date', 'end_date'
     ];
 }
