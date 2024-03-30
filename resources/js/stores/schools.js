@@ -38,6 +38,11 @@ export const useSchoolStore = defineStore('schools', {
     setSchools(schoolsArray){
       this.schools = schoolsArray
     },
+    updateSchool(schoolObject){
+      this.schools = this.schools.filter(s => s.id != schoolObject.id)
+      this.schools = [schoolObject, ...this.schools]
+      this.currentSchool = schoolObject
+    },
     reset(){
       this.currentSchool = {}
       this.schools = []
