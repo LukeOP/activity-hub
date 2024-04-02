@@ -27,6 +27,7 @@ class SchoolTermsController extends Controller
     public function store(StoreSchoolTermsRequest $request)
     {  
         $newTerms = [];
+        $created = 0;
         try {
             foreach ($request->terms as $index => $term) {
                 $existing = SchoolTerms::where('description', "Term " . ($index + 1))->where('year', $request->year)->first();
@@ -44,13 +45,16 @@ class SchoolTermsController extends Controller
                         'start_date' => $term["start_date"],
                         'end_date' => $term["end_date"]
                     ]);
+                    $created++;
                 }
                 $newTerms = [...$newTerms, $newTerm];
             }
             $school = new SchoolsResource(School::where('id', $newTerms[0]->school_id)->first());
+            $status = $created == 0 ? 200 : 201;
             return $this->success(
                 $school,
-                'Term dates updated for ' . $request->year . "."
+                'Term dates updated for ' . $request->year . ".",
+                $status
             );
         } catch (Exception $e){
             return $this->error(

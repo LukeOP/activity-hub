@@ -163,5 +163,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('document/delete/{id}', [DocumentController::class, 'delete']);
 
     // SETTINGS
-    Route::get('settings/school-terms', [SchoolTermsController::class, 'index']);
+    Route::resource('settings/school-terms', SchoolTermsController::class);
 });
