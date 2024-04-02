@@ -1,8 +1,5 @@
-name: Deploy Site on pull
-on:
-  push:
-    branches:
-      - master
+name: Deploy Site to Demo
+on: workflow_dispatch
 jobs:
   web-deploy:
     name: Deploy
