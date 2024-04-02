@@ -15,6 +15,9 @@
       
         <Toast />
 
+        <pre>Length: {{ schoolStore.getSchool.data.terms.length }}
+          {{ schoolStore.getSchool.data.terms }}</pre>
+
       </div>
     </div>
   </div>
@@ -27,6 +30,9 @@ import BreadCrumbs from './BreadCrumbs.vue'
 import { useRoute, useRouter } from 'vue-router';
 import { computed, ref } from 'vue';
 import Toast from './Elements/Toast.vue';
+import { useSchoolStore } from '../../../stores/schools';
+
+const schoolStore = useSchoolStore()
 
 const router = useRouter()
 
