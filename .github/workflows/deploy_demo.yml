@@ -12,8 +12,8 @@ jobs:
       run: npm install
     - name: Building the project
       run: npm run production
-    #- name: Copy .env
-    #  run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+    - name: Copy .env
+      run: php -r "copy('.env.demo', '.env');"
     - name: Install Dependencies
       run: composer update --ignore-platform-reqs
     - name: Generate key
