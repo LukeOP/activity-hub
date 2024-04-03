@@ -64,6 +64,7 @@ class LessonNotesController extends Controller
             } else {
                 return $this->error(
                     '',
+                    null,
                     'Error creating attendance record',
                     500
                 );
@@ -71,12 +72,36 @@ class LessonNotesController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->error(
                 '',
+                null,
                 'An attendance id was provided but a record was not found.',
                 404
             );
         } catch (Exception $e) {
             return $this->generalError();
         }
+    }
+
+    public function storeGeneralNote(Request $request){
+        try {
+            LessonNotes::create([
+            'lesson_id' => $request->lesson_id,
+            'user_id' => $request->user_id,
+            'general_comment' => $request->general_comment,
+        ]);
+
+        return $this->success(
+            new LessonsResource(Lesson::findOrFail($request->lesson_id)),
+            'Comment Created',
+            'Lesson comment added successfully'
+        );
+    } catch (Exception $e) {
+        return $this->error(
+            $e,
+            null,
+            'Error creating general comment',
+            500
+        );
+    }
     }
     
 
@@ -109,7 +134,7 @@ class LessonNotesController extends Controller
     private function isNotAuthorized(LessonNotes $note)
     {
         if (false) {
-            return $this->error('', 'You are not authorized to make this request', 403);
+            return $this->authenticationError();
         }
     }
 }

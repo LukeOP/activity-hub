@@ -1,8 +1,5 @@
 <template>
 <div>
-  <!-- <div v-if="ready" class="row">
-    <NewUserSetUp v-if="!hasSchools" />
-  </div> -->
   <InfoTiles />
   <div id="dashboard-tiles">
     <div class="tile-row">
@@ -20,16 +17,14 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useActionsStore } from '../../../stores/actions'
 import { useUserStore } from '../../../stores/user';
-// import NewUserSetUp from './NewUserSetUp.vue';
 import AttendanceTile from './AttendanceTile.vue';
 import EventTile from './EventTile.vue';
 import RoomsTile from './RoomsTile.vue';
 import InfoTiles from './InfoTiles/InfoTiles.vue';
 import LessonTile from './LessonTile.vue';
-import { useHireStore } from '../../../stores/hires';
 import { useSchoolStore } from '../../../stores/schools';
 
 const user = useUserStore()
@@ -37,7 +32,7 @@ const actions = useActionsStore()
 const hasSchools = ref(false)
 const ready = ref(false)
 const schoolStore = useSchoolStore()
-schoolStore.setSchool(user.getSchools[0])
+if(schoolStore.getSchool == {}) schoolStore.setSchool(user.getSchools[0])
 
 const actionArray = []
 
@@ -60,10 +55,6 @@ function checkPermission(value){
   if(user.hasPermissionAny(`${value}_R`) || user.hasPermissionAny(`${value}_V`)) return true
   return false
 }
-// console.log(user.getSchools.length);
-// watch(() => user.attributes.schools, (newValue) => {
-//   setActions()
-// })
 
 onMounted(()=>{
   setTimeout(()=>{

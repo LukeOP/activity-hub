@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\LessonsResource;
-use App\Http\Resources\SchoolsResource;
 use App\Models\Lesson;
-use App\Models\LessonNotes;
 use App\Models\User;
 use App\Traits\HttpResponses;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -89,15 +89,27 @@ class LessonsController extends Controller
      */
     public function update($id, Request $request)
     {
-        $lesson = Lesson::findOrFail($id);
-
-        $lesson->fill($request->all());
-        $lesson->save();
-
-        return response()->json([
-            'message' => 'lesson updated successfully',
-            'lesson' => new LessonsResource(Lesson::where('id', $lesson['id'])->first())
-        ]);
+        try {
+            $lesson = Lesson::findOrFail($id);
+    
+            $lesson->fill($request->all());
+            $lesson->save();
+    
+            return $this->success(
+                new LessonsResource(Lesson::where('id', $lesson['id'])->first()),
+                'Lesson Updated Successfully',
+                'Lesson details for ' . $lesson->student->first_name . ' have been updated.'
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->error(
+                $e,
+                null,
+                'Error in updating lesson details',
+                404
+            );
+        } catch (Exception $e){
+            return $this->generalError();
+        }
     }
 
     /**
@@ -113,7 +125,7 @@ class LessonsController extends Controller
     {
         if (count(Auth::user()->isAdmin) < 1) {
             if (Auth::user()->id != $lesson->user_id) {
-                return $this->error('', 'You are not authorized to make this request', 403);
+                return $this->authenticationError();
             }
         }
     }

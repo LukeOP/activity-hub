@@ -57,7 +57,7 @@ class SchoolsController extends Controller
     public function update(Request $request, School $school)
     {
         if (Auth::user()->school_id != $school->id) {
-            return $this->error('', 'You are not authorized to make this request', 403);
+            return $this->authenticationError();
         }
 
         $school->update($request->all());
@@ -76,7 +76,7 @@ class SchoolsController extends Controller
     private function isNotAuthorized(School $school)
     {
         // if (Auth::user()->school_id != $school->id) {
-        //     return $this->error('', 'You are not authorized to make this request', 403);
+        //     return $this->authenticationError();
         // }
     }
 }

@@ -53,12 +53,14 @@ class SchoolTermsController extends Controller
             $status = $created == 0 ? 200 : 201;
             return $this->success(
                 $school,
+                'Terms Updated',
                 'Term dates updated for ' . $request->year . ".",
                 $status
             );
         } catch (Exception $e){
             return $this->error(
                 $e->getMessage(),
+                null,
                 'Error encounted while adding term dates.',
                 500
             );

@@ -105,6 +105,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //LESSONS
     Route::resource('/lessons', LessonsController::class);
     Route::resource('/lesson-notes', LessonNotesController::class);
+    Route::post('/lesson-notes-general', [LessonNotesController::class, 'storeGeneralNote']);
     Route::resource('/lesson-requests', LessonRequestsController::class);
     Route::get('school-lesson-request-forms/{school_id}', [LessonRequestsFormsController::class, 'indexOfRequestFormsForSchool']);
     Route::resource('lesson-request-forms', LessonRequestsFormsController::class);
