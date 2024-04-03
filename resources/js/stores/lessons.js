@@ -54,9 +54,9 @@ export const useLessonsStore = defineStore('lessons', {
       this.selectedLessons = lessonsArray
     },
     updateLessonRecord(record){
-      // console.log(record)
       this.lessons = this.lessons.filter(l => l.id != record.id)
       this.lessons = [record, ...this.lessons]
+      this.singleLesson = record
     },
     setAttendanceArray(attendanceArray){
       this.attendanceArray = attendanceArray
@@ -130,7 +130,8 @@ export const useLessonsStore = defineStore('lessons', {
       return this.singleLesson.notes
     },
     getLessonNotesAndAttendance(){
-      const combinedArray = this.getLessonNotes.map(note => {
+      const lessonNotes = this.getLessonNotes.filter(n => n.attendance_id != null)
+      const combinedArray = lessonNotes.map(note => {
         const matchingAttendance = this.getLessonAttendance.find(attendance => attendance.id === note.attendance_id);
         return {
           ...note,

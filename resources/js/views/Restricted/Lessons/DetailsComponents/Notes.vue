@@ -1,17 +1,24 @@
 <template>
   <div id="lesson-notes" class="section row">
-      <h2 style="width:fit-content; flex-grow:1">Lesson Notes:</h2>
-      <div class="btn btn-secondary add-btn float-end" @click="handleAddNote" style="margin-right:20px"><i class="add-icon" v-html="icons.add"></i></div>
-      <h3>Recent Notes:</h3>
-      <div id="recent-comments" v-if="lesson.notes.length > 0">
-        <span>
+    <h2 style="width:fit-content; flex-grow:1">Lesson Notes:</h2>
+    <div class="btn btn-secondary add-btn float-end" @click="handleAddNote" style="margin-right:20px"><i class="add-icon" v-html="icons.add"></i></div>
+    <h3>Recent Notes:</h3>
+    <div id="recent-comments" v-if="lesson.notes.length > 0">
+      <!-- <pre>{{ lesson.notes }}</pre> -->
+        <div class="comment-item">
           <div class="comment-date">{{convertDate(lesson.notes[0].created_at)}} - {{lesson.notes[0].created_by.first_name}} {{lesson.notes[0].created_by.last_name}}</div>
-          <div class="comment">"{{lesson.notes[0].comment}}"</div>
-        </span>
-        <span v-if="lesson.notes[1]">
+          <div class="comment" v-if="lesson.notes[0].comments.planning">Planning: "{{lesson.notes[0].comments.planning}}"</div>
+          <div class="comment" v-if="lesson.notes[0].comments.progress">Progress: "{{lesson.notes[0].comments.progress}}"</div>
+          <div class="comment" v-if="lesson.notes[0].comments.next_steps">Next Steps: "{{lesson.notes[0].comments.next_steps}}"</div>
+          <div class="comment" v-if="lesson.notes[0].comments.general">General: "{{lesson.notes[0].comments.general}}"</div>
+        </div>
+        <div v-if="lesson.notes[1]" class="comment-item">
           <div class="comment-date">{{convertDate(lesson.notes[1].created_at)}} - {{lesson.notes[1].created_by.first_name}} {{lesson.notes[1].created_by.last_name}}</div>
-          <div class="comment">"{{lesson.notes[1].comment}}"</div>
-        </span>
+          <div class="comment" v-if="lesson.notes[1].comments.planning">Planning: "{{lesson.notes[1].comments.planning}}"</div>
+          <div class="comment" v-if="lesson.notes[1].comments.progress">Progress: "{{lesson.notes[1].comments.progress}}"</div>
+          <div class="comment" v-if="lesson.notes[1].comments.next_steps">Next Steps: "{{lesson.notes[1].comments.next_steps}}"</div>
+          <div class="comment" v-if="lesson.notes[1].comments.general">General: "{{lesson.notes[1].comments.general}}"</div>
+        </div>
         <router-link :to="{ name: 'LessonNotes'}" class="link-primary-secondary" style="max-width:fit-content">View all lesson notes...</router-link >
       </div>
       <div v-else>
@@ -69,6 +76,12 @@ h3 {
 }
 .add-icon {
   fill: white;
+}
+.comment-item {
+  background-color: $ah-primary-light-background;
+  margin-bottom: 1rem;
+  border-left: 4px solid $ah-primary;
+  padding-left: 10px;
 }
 
 </style>

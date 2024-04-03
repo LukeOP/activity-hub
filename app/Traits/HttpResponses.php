@@ -3,19 +3,19 @@
 namespace App\Traits;
 
 trait HttpResponses {
-    protected function success($data, $message = null, $code = 200)
+    protected function success($data, $status = null, $message = null, $code = 200)
     {
         return response()->json([
-            'status' => 'Request was successful',
+            'status' => $status ?: 'Request was successful',
             'message' => $message,
             'data' => $data
         ], $code);
     }
 
-    protected function error($data, $message = null, $code)
+    protected function error($data, $status = null, $message = null, $code)
     {
         return response()->json([
-            'status' => 'Error has occurred...',
+            'status' => $status ?: 'Error has occurred...',
             'message' => $message,
             'data' => $data
         ], $code);
@@ -28,5 +28,14 @@ trait HttpResponses {
             'message' => 'An unknown error has occured...',
             'data' => null
         ], 500);
+    }
+
+    protected function authenticationError()
+    {
+        return response()->json([
+            'status' => 'Unathorized',
+            'message' => 'You are not authorized to take this action',
+            'data' => null
+        ], 403);
     }
 }

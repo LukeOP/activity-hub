@@ -21,6 +21,13 @@
             <option v-for="duration in durations" :key="duration.index" :value="duration.value">{{duration.label}}</option>
           </select>
         </div>
+        <div class="col col-12 col-md-6" style="display: flex; align-items: center;">
+          <label style="display: flex;">
+            <input type="checkbox" v-model="lessonData.term_link">
+            <span class="custom-checkbox me-2"></span>
+            <span style="background-color: white;"> Link to school terms</span>
+          </label>
+        </div>
       </div>
 
       <span >
@@ -65,19 +72,15 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import axiosClient from '../../../../axios'
 import moment from 'moment'
 import { useUserStore } from '../../../../stores/user'
-// import { useToast } from 'vue-toast-notification'
 import { useLessonsStore } from '../../../../stores/lessons'
 import { useModalStore } from '@/stores/modal'
-import { useToastStore } from '/resources/js/stores/toast'
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
 import LoadingSpinner from '../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue'
 import { useSchoolStore } from '../../../../stores/schools'
+import useApi from '../../../../composables/useApi'
 
-// const toast = useToast()
-const toast = useToastStore()
 const user = useUserStore()
 const schoolStore = useSchoolStore()
 const lessonStore = useLessonsStore()
@@ -102,6 +105,7 @@ const lessonData = ref({
   funding_type: attributes.funding_type,
   fees: attributes.fee,
   duration: currentDuration.value,
+  term_link: attributes.term_link == 1
 })
 
 const getEndTime = computed(() => {
@@ -120,38 +124,14 @@ const days = [
   {value: "Friday"},
 ]
 
-const durations = [
-  {value: 10, label: "10 mins"},
-  {value: 15, label: "15 mins"},
-  {value: 20, label: "20 mins"},
-  {value: 25, label: "25 mins"},
-  {value: 30, label: "30 mins"},
-  {value: 35, label: "35 mins"},
-  {value: 40, label: "40 mins"},
-  {value: 45, label: "45 mins"},
-  {value: 50, label: "50 mins"},
-  {value: 55, label: "55 mins"},
-  {value: 60, label: "60 mins"},
-]
-
-const fundingTypes = [
-  {value: 'Funded', label: 'Funded'},
-  {value: 'Private', label: 'Private'},
-]
-
-const isAdmin = computed(() => {
-  if(user.permissions.find(p => p.school_id === currentLesson.school.id && p.type === 'Administrator')) {
-    return true
-    } 
-  // return false
-  return true
-})
+const durations = []
+for (let index = 10; index <= 60; index += 5) {
+  durations.push({value: index, label: `${index} mins`})  
+}
 
 function updateValues(){
-  // console.log(lessonData.value)
   submitting.value = true
-  axiosClient.patch('lessons/' + currentLesson.id, 
-  {
+  const { data, fetchData} = useApi('lessons/' + currentLesson.id, {
     start: lessonData.value.time, 
     end: getEndTime.value, 
     day: lessonData.value.day,
@@ -159,17 +139,15 @@ function updateValues(){
     end_date: lessonData.value.endDate,
     funding_type: lessonData.value.funding_type,
     fee: lessonData.value.fees,
-    status: lessonData.value.status
-    })
-    .then((res) => {
-      lessonStore.setLesson(res.data.lesson)
+    status: lessonData.value.status,
+    term_link: lessonData.value.term_link
+    }, 'PATCH', true)
+  fetchData().then(() => {
+      lessonStore.updateLessonRecord(data.value.data)
       submitting.value = false
-      toast.open('success', 'Lesson Updated Successfully!', 'The lesson details have been updated')
       modal.close()
     })
 }
-
-const returnDetails = { name: 'LessonDetails', params: { id: currentLesson.id } }
 
 </script>
 
@@ -183,6 +161,40 @@ const returnDetails = { name: 'LessonDetails', params: { id: currentLesson.id } 
 }
 .btn {
   min-width: 100px;
+}
+/* Hide the default checkbox */
+input[type='checkbox'] {
+    display: none;
+}
+
+/* Style the custom checkbox */
+.custom-checkbox {
+    width: 20px;
+    height: 20px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+/* Change background color when checked */
+input[type='checkbox']:checked + .custom-checkbox {
+    background-color: $ah-primary;
+}
+
+/* Style the checkmark */
+.custom-checkbox::after {
+    content: '\2713'; /* Unicode character for checkmark */
+    color: white;
+    font-size: 16px;
+    display: none;
+}
+
+/* Show the checkmark when checkbox is checked */
+input[type='checkbox']:checked + .custom-checkbox::after {
+    display: block;
+    text-align: center;
+    line-height: 20px;
 }
 
 </style>

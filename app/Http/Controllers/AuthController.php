@@ -23,13 +23,13 @@ class AuthController extends Controller
         $request->validated($request->all());
 
         if (!Auth::attempt($request->only('email', 'password'))) {
-            return $this->error('', 'Your password or email address was incorrect, please try again', 401);
+            return $this->error('', null, 'Your password or email address was incorrect, please try again', 401);
         }
 
         $user = User::where('email', $request->email)->first();
         
         if($user->email_verified_at == null) {
-            return $this->error('', 'Your email has not yet been verified. Please click the link in the email sent on registration. Or request a new email.', 403);
+            return $this->error('', null, 'Your email has not yet been verified. Please click the link in the email sent on registration. Or request a new email.', 403);
         }
         
         $user->schools = $user->userSchools();
@@ -65,9 +65,11 @@ class AuthController extends Controller
     {
         Auth::user()->currentAccessToken()->delete();
 
-        return $this->success([
-            'message' => 'You have been successfully logged out and your token has been deleted'
-        ]);
+        return $this->success(
+            null,
+            'Successfully Logged Out',
+            'You have been successfully logged out and your token has been deleted',
+        );
     }
 
     public function sendEmailVerificationEmail(Request $request){
@@ -82,6 +84,6 @@ class AuthController extends Controller
             $user->markEmailAsVerified();
             return $this->success('', 'Email validated');
         }
-        else return $this->error('', 'Error in validating email', 401);
+        else return $this->error('', 'Validation Error', 'Error in validating email', 401);
     }
 }

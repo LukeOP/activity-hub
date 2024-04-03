@@ -1,8 +1,8 @@
 <template>
   <div class="text-center">
-    <h2>Create A Note</h2>
+    <h2>Create a General Comment</h2>
     <div class="container body-notes">
-      <textarea v-model="noteData.comment" rows="5" placeholder="Today we worked on..." style="resize:none"></textarea>
+      <textarea v-model="noteData.general_comment" rows="5" :placeholder="'e.g, ' + currentLesson.student.first_name + ' has borrowed a learning book...'" style="resize:none"></textarea>
       <button class="btn btn-primary mt-2" @click="handleCreateNote">Submit</button>
     </div>
   </div>
@@ -12,7 +12,6 @@
 <script>
 import moment from 'moment'
 import { ref } from 'vue'
-import axiosClient from '../../../../../axios'
 import { useRouter } from 'vue-router'
 
 import ModalTemplate from '../../../../../components/Layouts/MainLayout/Elements/Modal.vue'
@@ -20,6 +19,7 @@ import { useLessonsStore } from '../../../../../stores/lessons'
 import { useUserStore } from '../../../../../stores/user'
 import { useModalStore } from '../../../../../stores/modal'
 import { useToastStore } from '/resources/js/stores/toast'
+import useApi from '../../../../../composables/useApi'
 
 export default {
   props: {
@@ -41,7 +41,8 @@ export default {
     const noteData = ref({
       lesson_id: currentLesson.id,
       user_id: user.attributes.id,
-      comment: ''
+      tutor_id: currentLesson.tutor.id,
+      general_comment: ''
     })
 
     function convertDate(date){
@@ -49,9 +50,11 @@ export default {
     }
 
     function handleCreateNote(){
-      axiosClient.post('/lesson-notes', noteData.value)
-      .then((res) => {
-        lessonStore.addNote(res.data)
+      console.log(noteData.value);
+      const {data, fetchData} = useApi('/lesson-notes-general', noteData.value, 'POST', true)
+      fetchData()
+      .then(() => {
+        lessonStore.addNote(data.value.data)
         modal.close()
       })
     }
@@ -62,7 +65,7 @@ export default {
       router.push(returnDetails)
     }
 
-    return { noteData, convertDate, handleCreateNote, close, returnDetails }
+    return { currentLesson, noteData, convertDate, handleCreateNote, close, returnDetails }
   }
 
 }

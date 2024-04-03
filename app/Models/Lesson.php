@@ -35,6 +35,7 @@ class Lesson extends Model
         'day',
         'start_date',
         'end_date',
+        'term_link',
         'funding_type',
         'fee',
         'experience'

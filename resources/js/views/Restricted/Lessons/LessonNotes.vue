@@ -4,11 +4,22 @@
     <div></div>
     <div class="container body-notes" v-if="allNotes.length > 0">
       <div v-for="comment in allNotes" :key="comment.id" class="comment-container">
-        <span id="comment-section">
-          <div class="comment-date">{{convertDate(comment.created_at)}} - {{comment.created_by.first_name}} {{comment.created_by.last_name}}</div>
-          <div class="comment">"{{comment.comment}}"</div>
-        </span>
-        <div v-html="icons.trash" class="trash" @click="handleNoteDelete(comment)"></div>
+        <div style="display: flex; justify-content: space-between;">
+          <div>
+            <span class="comment-tag" :class="comment.comments.general != null ? 'general' : 'lesson'">{{comment.comments.general != null ? 'General' : 'Lesson'}} Comment</span>
+            <span class="comment-date">{{convertDate(comment.created_at)}} - {{comment.created_by.first_name}} {{comment.created_by.last_name}}</span>
+          </div>
+          <div v-html="icons.trash" class="trash" @click="handleNoteDelete(comment)"></div>
+        </div>
+        <div style="display: flex;">
+          <span id="comment-section">
+            <div class="comment" v-if="comment.comments.planning">Planning: "{{comment.comments.planning}}"</div>
+            <div class="comment" v-if="comment.comments.progress">Progress: "{{comment.comments.progress}}"</div>
+            <div class="comment" v-if="comment.comments.next_steps">Next Steps: "{{comment.comments.next_steps}}"</div>
+            <div class="comment" v-if="comment.comments.general">General: "{{comment.comments.general}}"</div>
+          </span>
+        </div>
+        <hr />
       </div>    
     </div>
     <div v-else class="container text-center mt-5">
@@ -38,7 +49,7 @@ const router = useRouter()
 const subHeading = `${currentLesson.student.full_name} ${currentLesson.attributes.instrument} Lessons`
   
 const allNotes = computed(()=>{
-  return lessonStore.getLessonData.notes
+  return lessonStore.getLessonNotes
 })
 
 function convertDate(date){
@@ -67,36 +78,40 @@ function handleReturnToDetails(){
   height: calc(100vh - 250px);
   display: flex;
   flex-direction: column;
-  background: white;
-  overflow-y: scroll;
+  overflow: hidden;
 }
 .comment-container {
-  // box-shadow: 0px 5px 10px $ah-grey;
-  display:flex;
-  border: 1px solid $ah-grey;
-  border-radius: 0.5rem;
-  padding: 10px;
   margin-bottom: 6px;
-  &:hover {
-    background-color: lighten($ah-primary-background, 6%);
-    border-color: $ah-primary;
-  }
   #comment-section {
     flex-grow: 1;
+    margin-top: 10px;
   }
   .comment-date {
     color: grey;
+    margin-left: 1rem;
   }
   .trash {
     fill: $ah-primary;
-    height: 100%;
     width: 1.5rem;
-    margin-top: 0.5rem;
     &:hover {
       fill: darkred;
       cursor: pointer;
     }
   }
+}
+.comment-tag {
+  width: fit-content;
+  padding: 0 10px;
+  border-radius: 10px;
+  margin: auto 0;
+}
+.general {
+  background-color: $ah-primary-light;
+  color: white;
+}
+.lesson {
+  background-color: $ah-primary-dark;
+  color: white;
 }
 
 

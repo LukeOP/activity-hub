@@ -26,7 +26,8 @@ class LessonsResource extends JsonResource
                 'fee' => $this->fee,
                 'startDate' => $this->start_date,
                 'endDate' => $this->end_date,
-                'experience' => $this->experience
+                'experience' => $this->experience,
+                'term_link' => $this->term_link
             ],
             'attendance' => $this->attendance,
             'notes' => LessonNotesResource::collection($this->notes),
