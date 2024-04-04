@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CalendarEventController;
+use App\Http\Controllers\DataProcessingController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\EmailController;
@@ -51,6 +52,8 @@ Route::post('user-forgot-password', [UsersController::class, 'forgotPassword']);
 Route::post('user-reset-password', [UsersController::class, 'resetPassword']);
 Route::post('user-email-verify', [AuthController::class, 'sendEmailVerificationEmail']);
 Route::post('user-email-verify-check', [AuthController::class, 'checkEmailVerificationToken']);
+
+Route::post('convertLessonData', [DataProcessingController::class, 'convertLessonData']);
 
 // Emails
 Route::post('email-lesson-request-received/{form_title}', [EmailController::class, 'newLessonRequestReceived']);
