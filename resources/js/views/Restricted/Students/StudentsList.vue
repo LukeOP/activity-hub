@@ -7,10 +7,10 @@
     </div>
 
     <!-- Table component -->
-    <section v-if="filteredStudents && !loading">
+    <section v-if="filteredStudents">
       <component :is="currentComponent" />
     </section>
-    <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
+    <LoadingSpinner :isLoading="filteredStudents.length < 1 && loading" :loadingText="true" color="primary" />
 
   </div>
 </template>
@@ -20,7 +20,7 @@ import useApi from '/resources/js/composables/useApi';
 import StudentsTable from './ListComponents/StudentsTable.vue'
 import StudentsTableMobile from './ListComponents/StudentsTableMobile.vue'
 import { useStudentStore } from '/resources/js/stores/students';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useWindowSize } from '/resources/js/composables/useWindowSize';
 import HeaderLine from '../../../components/Layouts/MainLayout/Elements/HeaderLine.vue';
 import { useUserStore } from '/resources/js/stores/user';
@@ -35,18 +35,16 @@ const actions = useActionsStore()
 // Initiate Composables
 const { windowSize } = useWindowSize()
 
+const loading = ref(false)
+
 // Get appropriate component based on window size
 const currentComponent = computed(() => {
   return windowSize.value.width > 1030 ? StudentsTable : StudentsTableMobile
 })
 
 // Fetch Student data and add to store
-const { data: allStudents, loading, fetchData: fetchStudents } = useApi('students')
-if(studentStore.getStudents.length < 1){
-  fetchStudents().then(()=>{
-    studentStore.setStudents(allStudents.value)
-  })
-}
+const { data: allStudents, fetchData: fetchStudents } = useApi('students')
+
 
 // Set side actions available on this page
 const actionArray = []
@@ -74,6 +72,19 @@ const filteredStudents = computed(() => {
   studentStore.setFilteredStudents(filtered);
   return filtered;
 });
+
+onMounted(() => {  
+  loading.value = true
+  setTimeout(() => {
+    
+    fetchStudents().then(()=>{
+      if(allStudents.value != studentStore.getStudents){
+        studentStore.setStudents(allStudents.value)
+      }
+      loading.value = false
+    })
+  }, 3000);
+})
 
 </script>
 

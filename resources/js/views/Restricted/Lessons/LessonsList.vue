@@ -9,15 +9,15 @@
   </div>
 
   <!-- Table component -->
-  <section v-if="filteredLessons && !loading">
+  <section v-if="filteredLessons">
     <component :is="currentComponent" :lessons="filteredLessons" />
   </section>
-  <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
+  <LoadingSpinner :isLoading="filteredLessons.length < 1 && loading" :loadingText="true" color="primary" />
 </div>
 </template>
 
 <script setup>
-import { computed, ref, shallowRef, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
  
 import { useFilterStore } from '../../../stores/filter'
 import useApi from '../../../composables/useApi'
@@ -42,6 +42,8 @@ const user = useUserStore()
 const router = useRouter()
 const { windowSize } = useWindowSize()
 
+const loading = ref(false)
+
 // Get appropriate component based on window size
 const currentComponent = computed(() => {
   return windowSize.value.width > 1030 ? LessonsTable : LessonsTableMobile
@@ -49,16 +51,7 @@ const currentComponent = computed(() => {
 
 // fetch lessons data from the database and add to store
 // const filteredLessons = ref([])
-const {data:lessons, loading, fetchData} = useApi('lessons')
-
-fetchData().then(() => {
-  // filteredLessons.value = lessons.value
-  lessonStore.setLessons(lessons.value)
-  // setTimeout(()=>{
-  //   filter.setData(lessons.value)
-  //   filter.setType('LessonsForm')
-  // },300)
-})
+const {data:lessons, fetchData} = useApi('lessons')
 
 // Set side actions available on this page
 const actionArray = []
@@ -125,5 +118,15 @@ function changeRoute(value){
   if(value === 'link3') newRoute = 'RequestsList'
   router.push({name: newRoute})
 }
+
+onMounted(() => {  
+  loading.value = true
+  fetchData().then(() => {
+    if(lessons.value != lessonStore.getLessonsData){
+      lessonStore.setLessons(lessons.value)
+    }
+    loading.value = false
+  })
+})
 
 </script>
