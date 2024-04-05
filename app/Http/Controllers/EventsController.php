@@ -105,7 +105,7 @@ class EventsController extends Controller
                 404
             );
         } catch (Exception $e){
-            return $this->generalError($e);
+            return $this->generalError();
         }
     }
 
