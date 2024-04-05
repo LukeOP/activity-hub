@@ -5,6 +5,7 @@ import AddTemplateJob from './AddTemplateJob.vue'
 import CreateTemplate from './CreateTemplate.vue'
 import DeleteEvent from './DeleteEvent.vue'
 import DeleteEventTemplate from './DeleteEventTemplate.vue'
+import EditEvent from './EditEvent.vue'
 
 const eventModals = {
   AddEventJob,
@@ -12,6 +13,7 @@ const eventModals = {
   DeleteTemplateJob,
   AddTemplateJob,
   CreateTemplate,
+  EditEvent,
   DeleteEvent,
   DeleteEventTemplate,
 }

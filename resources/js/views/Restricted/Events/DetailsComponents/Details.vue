@@ -1,21 +1,21 @@
 <template>
   <div class="row">
-    <p>{{ event.attributes.description }}</p>
+    <p>{{ eventStore.getEvent.attributes.description }}</p>
     <div class="col col-12 col-md-3">
       <h3>Location:</h3>
-      <span>{{ event.attributes.location }}</span>
+      <span>{{ eventStore.getEvent.attributes.location }}</span>
     </div>
     <div class="col col-12 col-md-3">
       <h3>Date:</h3>
-      <span>{{ formatDate(event.attributes.date) }}</span>
+      <span>{{ formatDate(eventStore.getEvent.attributes.date) }}</span>
     </div>
     <div class="col col-12 col-md-3">
       <h3>Time:</h3>
-      <span>{{ moment(event.attributes.time, 'HH:mm:ss').format('h:mma') }}</span>
+      <span>{{ moment(eventStore.getEvent.attributes.time, 'HH:mm:ss').format('h:mma') }}</span>
     </div>
-    <div class="col col-12 col-md-3">
-      <h3></h3>
-      <span></span>
+    <div class="col col-12">
+      <h3>Notes:</h3>
+      <span>{{ eventStore.getEvent.attributes.notes }}</span>
     </div>
     
   </div>
@@ -23,8 +23,9 @@
 
 <script setup>
 import moment from 'moment';
+import { useEventStore } from '../../../../stores/events';
 
-const props = defineProps({event:Object})
+const eventStore = useEventStore()
 
 function formatDate(date){
   return moment(date).format('MMM Do, YYYY')

@@ -51,6 +51,11 @@ export const useEventStore = defineStore('events', {
     setEventData(eventData){
       this.eventData = eventData
     },
+    updateEventRecord(record){
+      this.events = this.events.filter(e => e.id != record.id)
+      this.events = [record, ...this.events]
+      this.singleEvent = record
+    },
     addEvent(eventObject){
       this.events = [...this.events, eventObject]
     },
