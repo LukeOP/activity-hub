@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Resources\EventsResource;
 use App\Models\Event;
 use App\Models\User;
+use App\Traits\HttpResponses;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class EventsController extends Controller
 {
+    use HttpResponses;
     /**
      * Display a listing of the resource.
      */
@@ -79,9 +83,30 @@ class EventsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Event $event)
+    public function update(String $id, Request $request)
     {
-        //
+        try {
+            $event = Event::findOrFail($id);
+    
+            $event->fill($request->all());
+            $event->save();
+            // return new EventsResource(Event::where('id', $event['id'])->first());
+    
+            return $this->success(
+                new EventsResource(Event::where('id', $event['id'])->first()),
+                'Event Updated Successfully',
+                'Event details have been updated.'
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->error(
+                $e,
+                null,
+                'Error in updating event details',
+                404
+            );
+        } catch (Exception $e){
+            return $this->generalError($e);
+        }
     }
 
     /**

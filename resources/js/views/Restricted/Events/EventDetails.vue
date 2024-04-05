@@ -1,7 +1,7 @@
 <template>
   <div>
-    <HeaderLine :heading="currentEvent.attributes.name + ' - Event Details'" :school="currentEvent.school.name"/>
-    <Details :event="currentEvent" />
+    <HeaderLine :heading="eventStore.getEvent.attributes.name + ' - Event Details'" :school="eventStore.getEvent.school.name"/>
+    <Details :event="eventStore.getEvent" />
     <JobsTable />
   </div>
 </template>
@@ -21,15 +21,18 @@ const actions = useActionsStore()
 const user = useUserStore()
 
 // Initiate Variables
-const currentEvent = ref(eventStore.getEvent)
+const currentEvent = eventStore.getEvent
 
 // Set side actions available on this page
 const actionArray = []
-if(user.hasPermission('EVENTS_C', currentEvent.value.school.id)){
-  actionArray.push({ header: 'Add Event Job', to: { name: 'EventDetails' }, modal: 'AddEventJob', icon: 'fa-solid fa-plus'})
+if(user.hasPermission('EVENTS_C', currentEvent.school.id)){
+  actionArray.push({ header: 'Add Event Job', to: { name: 'EventDetails' }, modal: 'AddEventJob', additional: true, icon: 'fa-solid fa-plus'})
 }
-if(user.hasPermission('EVENTS_D', currentEvent.value.school.id)){
-  actionArray.push({ header: 'Delete Event', to: { name: 'EventDetails' }, modal: 'DeleteEvent', red: true, icon: 'fa-solid fa-trash'})
+if(user.hasPermission('EVENTS_E', currentEvent.school.id)){
+  actionArray.push({ header: 'Edit Event', to: { name: 'EventDetails' }, modal: 'EditEvent', additional: true, icon: 'fa-solid fa-pen'})
+}
+if(user.hasPermission('EVENTS_D', currentEvent.school.id)){
+  actionArray.push({ header: 'Delete Event', to: { name: 'EventDetails' }, modal: 'DeleteEvent', additional: true, red: true, icon: 'fa-solid fa-trash'})
 }
 actions.setItems(actionArray)
 
