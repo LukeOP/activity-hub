@@ -32,6 +32,7 @@ import { useFilterStore } from '/resources/js/stores/filter';
 import { useUserStore } from '/resources/js/stores/user';
 import { useActionsStore } from '/resources/js/stores/actions';
 import LoadingSpinner from '../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import useSorter from '../../../composables/useSorter';
 
 const key = ref(0)
 
@@ -44,6 +45,7 @@ const actions  = useActionsStore()
 // Initiate Composables
 const { windowSize } = useWindowSize()
 const router = useRouter()
+const sorter = useSorter()
 // const loading = ref(false)
 
 const jobs = ref({jobs: ''})
@@ -70,17 +72,6 @@ if(user.hasPermissionAny('EVENTS_TEMP_V')){
 
 // Fetch Event data and add to store
 const { data: allEvents, loading, fetchData: fetchEvents } = useApi('events')
-
-function getEvents(){
-  if(eventStore.getEvents.length < 1){
-    fetchEvents()
-    .then(()=>{
-      eventStore.setEvents(allEvents.value)
-      key.value++
-    })
-  }
-}
-getEvents()
 
 // Initiate search variable
 const search = ref('')
@@ -121,8 +112,15 @@ function routeChange(value) {
   router.push(route)
 }
 
-onMounted(()=>{
-  eventStore.fetchEvents()
+onMounted(()=>{  
+  loading.value = true
+  fetchEvents().then(() => {
+    if(allEvents.value != eventStore.getEvents){
+      sorter.sort(allEvents.value, 'attributes.date')
+      eventStore.setEvents(allEvents.value)
+    }
+    loading.value = false
+  })
 })
 
 </script>
