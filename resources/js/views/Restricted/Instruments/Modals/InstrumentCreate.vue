@@ -47,6 +47,7 @@ import { useUserStore } from '/resources/js/stores/user';
 import HeaderLine from '../../../../components/Layouts/MainLayout/Elements/HeaderLine.vue';
 import { useRouter } from 'vue-router';
 import { useFilterStore } from '/resources/js/stores/filter';
+import AvatarName from '../../../../components/Layouts/MainLayout/Elements/Avatars/AvatarName.vue';
 
 const modal = useModalStore()
 const user = useUserStore()

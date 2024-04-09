@@ -6,6 +6,12 @@ import CreateTemplate from './CreateTemplate.vue'
 import DeleteEvent from './DeleteEvent.vue'
 import DeleteEventTemplate from './DeleteEventTemplate.vue'
 import EditEvent from './EditEvent.vue'
+import LinkEventStaff from './LinkEventStaff.vue'
+import EventJobAssign from './EventJobAssign.vue'
+import EventJobEdit from './EventJobEdit.vue'
+import EventJobDelete from './EventJobDelete.vue'
+import EventArchive from './EventArchive.vue'
+import EventRestore from './EventRestore.vue'
 
 const eventModals = {
   AddEventJob,
@@ -16,6 +22,12 @@ const eventModals = {
   EditEvent,
   DeleteEvent,
   DeleteEventTemplate,
+  LinkEventStaff,
+  EventJobAssign,
+  EventJobEdit,
+  EventJobDelete,
+  EventArchive,
+  EventRestore,
 }
 
 export default eventModals;

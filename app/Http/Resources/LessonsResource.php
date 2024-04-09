@@ -42,6 +42,7 @@ class LessonsResource extends JsonResource
                 'first_name' => $this->user->first_name,
                 'last_name' => $this->user->last_name,
                 'full_name' => $this->user->first_name . " " . $this->user->last_name,
+                'image' => $this->user->image,
             ],
             'timestamps' => [
                 'created_at' => $this->created_at,

@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import axiosClient from '/resources/js/axios';
+import useApi from '../../../../composables/useApi';
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue';
 import { useEventStore } from '/resources/js/stores/events';
 import { useModalStore } from '/resources/js/stores/modal';
@@ -17,8 +17,9 @@ const eventStore = useEventStore()
 const modal = useModalStore()
 
 function deleteJob(){
-  axiosClient.delete('event-school-jobs/' + eventStore.getSingleJob.id).then(res => {
-    eventStore.setEventJobs(eventStore.getEventJobs.filter(j => j.id != eventStore.getSingleJob.id))
+  const {fetchData} = useApi('event-school-jobs/' + eventStore.getSingleJob.id, null, 'DELETE', true)
+  fetchData().then(() => {
+    eventStore.removeTemplateJob(eventStore.getSingleJob)
     modal.close()
   })
 }

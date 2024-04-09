@@ -8,8 +8,10 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EventJobController;
+use App\Http\Controllers\EventJobUsersController;
 use App\Http\Controllers\EventSchoolJobController;
 use App\Http\Controllers\EventsController;
+use App\Http\Controllers\EventUsersController;
 use App\Http\Controllers\FormsController;
 use App\Http\Controllers\HiresController;
 use App\Http\Controllers\ImageController;
@@ -77,6 +79,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // EVENTS
     Route::resource('events', EventsController::class);
+    Route::get('events-archived', [EventsController::class, 'getArchivedEvents']);
 
     // jobs
     Route::resource('event-jobs', EventJobController::class);
@@ -91,6 +94,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('event-school-jobs/template/{template_id}', [EventSchoolJobController::class, 'getTemplateJobs']);
     Route::delete('event-school-jobs/template/{template_id}', [EventSchoolJobController::class, 'deleteEventTemplate']);
     Route::patch('event-school-jobs/template/edit/{template_id}', [EventSchoolJobController::class, 'updateSchoolEventJobTemplate']);
+    // Event Users
+    Route::resource('event-users', EventUsersController::class);
+    Route::resource('event-job-users', EventJobUsersController::class);
 
     // INSTRUMENTS
     Route::resource('instruments', InstrumentsController::class);

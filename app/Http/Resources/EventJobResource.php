@@ -20,6 +20,7 @@ class EventJobResource extends JsonResource
             'description' => $this->description,
             'due_date' => $this->due_date,
             'status' => $this->status,
+            'users' => EventJobUsersResource::collection($this->users),
             'timestamps' => [
                 'created' => $this->created_at,
                 'updated' => $this->updated_at,

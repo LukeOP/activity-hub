@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\EventsResource;
 use App\Models\Event;
+use App\Models\EventUser;
 use App\Models\User;
 use App\Traits\HttpResponses;
 use Exception;
@@ -19,7 +20,7 @@ class EventsController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
+    {        
         // Get User's List of associated-schools and create an array of school ids
         $user = User::where('id', Auth::user()->id)->first();
         $userSchools = $user->schools;
@@ -34,20 +35,63 @@ class EventsController extends Controller
             $eventsAtSchool = [];
 
             if ($hasPermission || in_array($school->id, $userAdmin)) {
-                $eventsAtSchool = EventsResource::collection(Event::where('school_id', $school->id)->where('archived', false)->get());
+                $eventsAtSchool = EventsResource::collection(
+                    Event::where('school_id', $school->id)
+                         ->where('archived', false)
+                         ->get());
             } 
             else {
-                $eventsAtSchool = EventsResource::collection(Event::where('user_id', $user->id)->get());
+                $eventsAtSchool = EventsResource::collection(
+                    Event::whereHas('users', function($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })->get());
             }
             if($eventsAtSchool != []){
                 $eventsCollection = $eventsCollection->concat($eventsAtSchool);
             }
         }
 
-
-
         // return compiled list of events the user has access to
         return $eventsCollection;
+    }
+
+    public function getArchivedEvents()
+    {   
+        // Get User's List of associated-schools and create an array of school ids
+        $user = User::where('id', Auth::user()->id)->first();
+        $userSchools = $user->schools;
+        $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
+        $eventsCollection = new Collection();
+
+        // For each user-associated school check if they have permission to view all events 
+        // If they do or they are an administrator - get all events for that school
+        // Else just get the events assigned to the tutor
+        foreach ($userSchools as $school) {
+            $hasPermission = $user->hasPermissionForSchool($school->id, 'EVENTS_V');
+            $eventsAtSchool = [];
+
+            if ($hasPermission || in_array($school->id, $userAdmin)) {
+                $eventsAtSchool = EventsResource::collection(
+                    Event::where('school_id', $school->id)
+                         ->where('archived', true)
+                         ->get());
+            } 
+            else {
+                $eventsAtSchool = EventsResource::collection(
+                    Event::whereHas('users', function($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })->get());
+            }
+            if($eventsAtSchool != []){
+                $eventsCollection = $eventsCollection->concat($eventsAtSchool);
+            }
+        }
+
+        // return compiled list of events the user has access to
+        return $this->success(
+            $eventsCollection,
+            'Archived Events'
+        );
     }
 
     /**

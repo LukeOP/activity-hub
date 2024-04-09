@@ -8,7 +8,7 @@ export default {
   computed: {
     pageTitle() {
       // compute the title based on some state in your component
-      return `${import.meta.env.VITE_TITLE} Activity Hub | ${this.$route.meta.title}`;
+      return `${import.meta.env.VITE_TITLE} ${this.$route.meta.title} | Activity Hub`;
     }
   },
   watch: {

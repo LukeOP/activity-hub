@@ -15,7 +15,7 @@
       </div>
       <div class="col col-12 col-md-6">
         <br>
-      <button type="submit" aria-label="submit" class="form-control btn btn-primary mt-2">Add Job
+      <button type="submit" aria-label="submit" class="form-control btn btn-primary">Add Job
         <LoadingSpinner :isLoading="submitting" />
       </button>
       </div>
@@ -28,13 +28,11 @@
 import { useEventStore } from '/resources/js/stores/events';
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue';
 import { ref } from 'vue';
-import axiosClient from '/resources/js/axios';
-import { useToastStore } from '/resources/js/stores/toast';
 import { useModalStore } from '/resources/js/stores/modal';
 import LoadingSpinner from '../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import useApi from '../../../../composables/useApi';
 
 const eventStore = useEventStore()
-const toast = useToastStore()
 const modal = useModalStore()
 const currentEvent = eventStore.getEvent
 const submitting = ref(false)
@@ -47,17 +45,12 @@ const formData = ref({
 
 function addJob(){
   submitting.value = true
-  axiosClient.post('event-jobs', formData.value).then((res)=>{
-    addJobToDom(res.data)
-    toast.open('success', 'Event Job Added', 'Event Job added to Event')
+  const {data, fetchData} = useApi('event-jobs', formData.value, 'POST', true)
+  fetchData().then(()=>{
+    eventStore.addEventJob(data.value.data)
     submitting.value = false
     modal.close()
   })
-}
-
-function addJobToDom(newJob){
-  let currentJobs = eventStore.getEventJobs
-  eventStore.setEventJobs([...currentJobs, newJob])
 }
 
 </script>

@@ -1,14 +1,22 @@
 export default function useSorter() {
   function sort(value, propertyName, sortOrder = 'asc') {
     value.sort((a, b) => {
-      const propertyA = getProperty(a, propertyName).toUpperCase();
-      const propertyB = getProperty(b, propertyName).toUpperCase();
+      const propertyA = getProperty(a, propertyName);
+      const propertyB = getProperty(b, propertyName);
 
       let result = 0;
-      if (propertyA < propertyB) {
-        result = -1;
-      } else if (propertyA > propertyB) {
-        result = 1;
+      if (typeof propertyA === 'number' && typeof propertyB === 'number') {
+        result = propertyA - propertyB;
+      } else {
+        // Convert to uppercase if the property is not a number
+        const stringPropertyA = String(propertyA).toUpperCase();
+        const stringPropertyB = String(propertyB).toUpperCase();
+
+        if (stringPropertyA < stringPropertyB) {
+          result = -1;
+        } else if (stringPropertyA > stringPropertyB) {
+          result = 1;
+        }
       }
 
       // Apply descending order if sortOrder is 'desc'

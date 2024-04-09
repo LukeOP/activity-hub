@@ -2,7 +2,7 @@
   <div>
     <HeaderLine heading="Edit Template Job" />
 
-    <form @submit.prevent="addJob" class="row">
+    <form @submit.prevent="editJob" class="row">
       <div class="col col-12 mb-3">
         <label>Job Description:
           <input type="text" class="form-control" v-model="formData.description" required>
@@ -31,16 +31,13 @@
 import { useEventStore } from '/resources/js/stores/events';
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue';
 import { ref } from 'vue';
-import axiosClient from '/resources/js/axios';
-import { useToastStore } from '/resources/js/stores/toast';
 import { useModalStore } from '/resources/js/stores/modal';
 import { priorities } from '/resources/js/composables/usePriorities'
 import LoadingSpinner from '../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import useApi from '../../../../composables/useApi';
 
 const eventStore = useEventStore()
-const toast = useToastStore()
 const modal = useModalStore()
-const currentTemplate = eventStore.getEventData
 const currentJob = eventStore.getSingleJob
 
 const submitting = ref(false)
@@ -51,19 +48,13 @@ const formData = ref({
   priority: currentJob.priority
 })
 
-function addJob(){
+function editJob(){
   submitting.value = true
-  axiosClient.patch('event-school-jobs/' + formData.value.job_id, formData.value).then((res)=>{
-    updateDom(res.data)
-    toast.open('success', 'Job Added', 'Job added to Template')
-    submitting.value = false
+  const { data, fetchData } = useApi('event-school-jobs/' + formData.value.job_id, formData.value, 'PATCH', true)
+  fetchData().then(()=>{
+    eventStore.updateTemplateJob(data.value.data)
     modal.close()
   })
-}
-
-function updateDom(newJob){
-  let currentJobs = eventStore.getEventJobs.filter(j => j.id != newJob.id)
-  eventStore.setEventJobs([...currentJobs, newJob])
 }
 
 </script>

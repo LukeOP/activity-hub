@@ -13,18 +13,27 @@ import axiosClient from '/resources/js/axios';
   import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue';
   import { useEventStore } from '/resources/js/stores/events';
   import { useModalStore } from '/resources/js/stores/modal';
+import useApi from '../../../../composables/useApi';
   
   const eventStore = useEventStore()
   const modal = useModalStore()
   const router = useRouter()
   
   function deleteTemplate(){
-    axiosClient.delete('event-school-jobs/template/' + eventStore.getEventData.id).then(res => {
+    const {fetchData} = useApi('event-school-jobs/template/' + eventStore.getEventData.id, null, 'DELETE', true)
+    fetchData().then(()=>{
       modal.close()
       router.push({
         name: 'TemplateList'
       })
     })
+
+    // axiosClient.delete('event-school-jobs/template/' + eventStore.getEventData.id).then(res => {
+    //   modal.close()
+    //   router.push({
+    //     name: 'TemplateList'
+    //   })
+    // })
   }
   
   </script>

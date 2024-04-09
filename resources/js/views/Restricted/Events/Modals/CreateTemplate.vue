@@ -25,6 +25,7 @@ import { useRouter } from 'vue-router';
 import { useEventStore } from '/resources/js/stores/events';
 import { useModalStore } from '/resources/js/stores/modal';
 import LoadingSpinner from '../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import useApi from '../../../../composables/useApi';
 
 const schoolStore = useSchoolStore()
 const eventStore = useEventStore()
@@ -43,14 +44,24 @@ const disabled = computed(()=>{
 
 function createTemplate(){
   submitting.value = true
-  axiosClient.post('event-school-jobs/templates', formData.value).then((res)=>{
-    eventStore.setEventData(res.data)
-    submitting.value = false
+  const {data, fetchData} = useApi('event-school-jobs/templates', formData.value, 'POST', true)
+  fetchData().then(()=>{
+    eventStore.setEventData(data.value.data)
     modal.close()
     router.push({
       name: 'EventTemplateDetails'
     })
   })
+
+
+  // axiosClient.post('event-school-jobs/templates', formData.value).then((res)=>{
+  //   eventStore.setEventData(res.data)
+  //   submitting.value = false
+  //   modal.close()
+  //   router.push({
+  //     name: 'EventTemplateDetails'
+  //   })
+  // })
 }
 
 </script>

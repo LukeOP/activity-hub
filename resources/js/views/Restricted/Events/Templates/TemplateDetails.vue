@@ -1,5 +1,5 @@
 <template>
-  <div v-if="jobs">
+  <div>
     <HeaderLine heading="Template Details" :school="currentTemplate.school.name" />
     <form class="row" @submit.prevent="saveChanges">
       <div class="col col-12 col-md-6">
@@ -24,16 +24,15 @@
 
     <section id="template-jobs">
       <h2>Template Event Jobs
-        <!-- <span class="float-end btn btn-secondary" @click="addJob()">Add Job</span> -->
-        <span id="refresh" @click="refreshJobs()">Refresh</span>
       </h2>
       
-      <div v-for="job in eventStore.getEventJobs" :key="job" class="job-item">
+      <div v-for="job in sortedJobs" :key="job" class="job-item">
         {{ job.description }}
         <span style="cursor: pointer" id="delete" @click="deleteJob(job)">Delete</span>
         <span style="cursor: pointer" id="edit" @click="editJob(job)">Edit</span>
         <span id="priority">{{ getPriority(job.priority) }}</span>
       </div>
+      <div v-if="sortedJobs.length < 1">No jobs have been created for this template yet.</div>
     </section>
     <!-- <pre v-if="jobs != []">{{ jobs }}</pre> -->
   </div>
@@ -42,39 +41,33 @@
 <script setup>
 import { useEventStore } from '/resources/js/stores/events';
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue';
-import { ref, watch } from 'vue';
-import useApi from '/resources/js/composables/useApi';
+import { computed, ref } from 'vue';
 import { useModalStore } from '/resources/js/stores/modal';
-import axiosClient from '/resources/js/axios';
-import { useToastStore } from '/resources/js/stores/toast';
 import { priorities } from '/resources/js/composables/usePriorities'
 import { useActionsStore } from '/resources/js/stores/actions';
 import { useUserStore } from '/resources/js/stores/user';
 import LoadingSpinner from '../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import useSorter from '../../../../composables/useSorter';
+import useApi from '../../../../composables/useApi';
 
 const eventStore = useEventStore()
 const modal = useModalStore()
-const toast = useToastStore()
 const actions = useActionsStore()
 const user = useUserStore()
+const sorter = useSorter()
 const currentTemplate = ref(eventStore.getEventData)
 const submitting = ref(false)
 
-const {data: jobs, fetchData: fetchJobs} = useApi('event-school-jobs/template/' + currentTemplate.value.id)
-fetchJobs().then(()=>{
-  eventStore.setEventJobs(jobs.value)
+const sortedJobs = computed(() => {
+  let sortedJobList = eventStore.getEventData.jobs
+  sorter.sort(sortedJobList, 'priority')
+  return sortedJobList
 })
-
-function refreshJobs(){
-  fetchJobs().then(()=>{
-    eventStore.setEventJobs(jobs.value)
-  })
-}
 
 function saveChanges(){
   submitting.value = true
-  axiosClient.patch('/event-school-jobs/template/edit/' + eventStore.getEventData.id, currentTemplate.value).then((res)=>{
-    toast.open(...res.data)
+  const {fetchData} = useApi('/event-school-jobs/template/edit/' + eventStore.getEventData.id, currentTemplate.value, 'PATCH', true)
+  fetchData().then(()=>{
     submitting.value = false
   })
 }
@@ -95,10 +88,6 @@ function deleteJob(job){
 function editJob(job){
   eventStore.setSingleJob(job)
   modal.open('EditTemplateJob')
-}
-
-function addJob(){
-  modal.open('AddTemplateJob')
 }
 
 // Set side actions available on this page

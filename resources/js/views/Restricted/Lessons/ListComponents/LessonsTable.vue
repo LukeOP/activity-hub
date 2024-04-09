@@ -23,11 +23,12 @@
       <tbody>
         <tr v-for="lesson in lessons" :key="lesson.id" @click="handleLessonClick(lesson)" :class="lesson.attributes.status">
           <td style="display: flex; justify-content: space-between;"><span>{{lesson.student.full_name}}</span><span v-if="lesson.student.tutor_group">({{ lesson.student.tutor_group }})</span></td>
-          <!-- <td>{{lesson.student.year_level || '-'}}</td> -->
           <td>{{lesson.attributes.instrument}}</td>
           <td>{{lesson.attributes.day || '-'}}</td>
           <td>{{formatTime(lesson.attributes.start) || '-'}}</td>
-          <td>{{lesson.tutor.full_name}}</td>
+          <td>
+            <AvatarName :user="{attributes: lesson.tutor}" />
+          </td>
           <!-- <td><span :class="lesson.attributes.funding_type">{{lesson.attributes.funding_type || '-'}}</span></td> -->
           <td><span class="status btn" :class="lesson.attributes.status + '-td'">{{lesson.attributes.status}}</span></td>
           <td v-if="user.attributes.schools.length > 1">{{lesson.school.name}}</td>
@@ -51,6 +52,7 @@ import moment from 'moment'
 import { useUserStore } from '../../../../stores/user'
 import { useLessonsStore } from '../../../../stores/lessons'
 import useSorter from '../../../../composables/useSorter'
+import AvatarName from '../../../../components/Layouts/MainLayout/Elements/Avatars/AvatarName.vue'
 
 const props = defineProps({lessons: Array})
 

@@ -31,14 +31,12 @@
 import { useEventStore } from '/resources/js/stores/events';
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue';
 import { ref } from 'vue';
-import axiosClient from '/resources/js/axios';
-import { useToastStore } from '/resources/js/stores/toast';
 import { useModalStore } from '/resources/js/stores/modal';
 import { priorities } from '/resources/js/composables/usePriorities'
 import LoadingSpinner from '../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import useApi from '../../../../composables/useApi';
 
 const eventStore = useEventStore()
-const toast = useToastStore()
 const modal = useModalStore()
 const currentTemplate = eventStore.getEventData
 
@@ -52,18 +50,11 @@ const formData = ref({
 
 function addJob(){
   submitting.value = true
-  // console.log(formData.value);
-  axiosClient.post('event-school-jobs', formData.value).then((res)=>{
-    addJobToDom(res.data)
-    toast.open('success', 'Job Added', 'Job added to Template')
-    submitting.value = false
+  const {data, fetchData} = useApi('event-school-jobs', formData.value, 'POST', true)
+  fetchData().then(()=>{
+    eventStore.addTemplateJob(data.value.data)
     modal.close()
   })
-}
-
-function addJobToDom(newJob){
-  let currentJobs = eventStore.getEventJobs
-  eventStore.setEventJobs([...currentJobs, newJob])
 }
 
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="row">
-    <HeaderLine heading="Events" 
-      :link1="jobs.link1" @link1="routeChange"
+    <HeaderLine heading="Archived Events" 
+      link1="Current Events" @link1="routeChange"
       :link2="jobs.link2" @link2="routeChange"
     />
 
@@ -51,13 +51,6 @@ const sorter = useSorter()
 
 const jobs = ref({jobs: ''})
 
-// Set side actions available on this page
-const actionArray = []
-if(user.hasPermissionAny('EVENTS_C')){
-  actionArray.push({ header: 'Create Event', to: { name: 'EventCreate' }, icon: 'fa-solid fa-plus'})
-}
-actions.setItems(actionArray)
-
 
 // Get appropriate component based on window size
 const currentComponent = computed(() => {
@@ -68,11 +61,10 @@ const currentComponent = computed(() => {
 if(user.hasPermissionAny('EVENTS_TEMP_V')){
   jobs.value.link2 = 'Event Templates'
 }
-jobs.value.link1 = 'Archived Events'
 
 
 // Fetch Event data and add to store
-const { data: allEvents, loading, fetchData: fetchEvents } = useApi('events')
+const { data, loading, fetchData: fetchEvents } = useApi('events-archived')
 
 // Initiate search variable
 const search = ref('')
@@ -94,7 +86,7 @@ const filteredEvents = computed(() => {
   // Selects the filtered array if populated, otherwise uses the events array
   const array = filter.getReturned.length > 0 
     ? filter.getReturned 
-    : eventStore.getEvents
+    : eventStore.getArchivedEvents
 
   // Applies any search terms to the array
   const filtered = searchTerm.length > 0 
@@ -109,7 +101,7 @@ const filteredEvents = computed(() => {
 // Handle route change
 function routeChange(value) {
   let route = {}
-  if(value == 'link1') route = {name: 'ArchivedEventsList'}
+  if(value == 'link1') route = {name: 'EventsList'}
   if(value == 'link2') route = {name: 'TemplateList'}
   router.push(route)
 }
@@ -117,10 +109,9 @@ function routeChange(value) {
 onMounted(()=>{  
   loading.value = true
   fetchEvents().then(() => {
-    if(allEvents.value != eventStore.getEvents){
-      sorter.sort(allEvents.value, 'attributes.date')
-      eventStore.setEvents(allEvents.value)
-    }
+    let allEvents = [...eventStore.getEvents, ...data.value.data]
+    sorter.sort(allEvents, 'attributes.date')
+    eventStore.setEvents(allEvents)
     loading.value = false
   })
 })

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Resources\EventUsersResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,7 +24,8 @@ class Event extends Model
         'notes',
         'location',
         'date',
-        'time'
+        'time',
+        'archived'
     ];
 
     protected static function boot()
@@ -49,5 +51,13 @@ class Event extends Model
             return $term->description;
         }
         return $term;
+    }
+
+    public function users(){
+        return $this->hasMany(EventUser::class, 'event_id');
+    }
+
+    public function jobs(){
+        return $this->hasMany(EventJob::class, 'event_id');
     }
 }

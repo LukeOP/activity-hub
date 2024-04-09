@@ -107,6 +107,14 @@ export const useUserStore = defineStore('user', {
     }
   },
   getters: {
+    getUser(){
+      return {
+        attributes: this.attributes,
+        permissions: this.permissions,
+        token: this.token,
+        timezone: this.timezone
+      }
+    },
     getToken(){
       return this.token
     },

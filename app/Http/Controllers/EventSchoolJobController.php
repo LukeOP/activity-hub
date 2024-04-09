@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\EventJobResource;
 use App\Http\Resources\EventTemplateResource;
 use App\Models\Event;
 use App\Models\EventJob;
 use App\Models\EventSchoolJob;
 use App\Models\EventSchoolJobTemplate;
-use DateTime;
+use App\Traits\HttpResponses;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class EventSchoolJobController extends Controller
 {
+    use HttpResponses;
     /**
      * Display a listing of the resource.
      */
@@ -34,12 +36,27 @@ class EventSchoolJobController extends Controller
 
     public function updateSchoolEventJobTemplate(Request $request, string $template_id)
     {
-        $job = EventSchoolJobTemplate::findOrFail($template_id);
+        try {
+            $job = EventSchoolJobTemplate::findOrFail($template_id);
+    
+            $job->fill($request->all());
+            $job->save();
 
-        $job->fill($request->all());
-        $job->save();
-
-        return ['success', 'Template updated', 'Details updated on template.'];
+            return $this->success(
+                $job,
+                'Template Updated',
+                'Template details have been successfully updated.'
+            );
+        } catch (ModelNotFoundException $e){
+            return $this->error(
+                $e,
+                'Error in Updating Template.',
+                'The template was not updated as the model cannot be found.',
+                404
+            );
+        } catch (Exception){
+            return $this->generalError();
+        }
     }
 
     public function getTemplateJobs(string $template_id)
@@ -73,12 +90,21 @@ class EventSchoolJobController extends Controller
 
     public function createEventTemplate(Request $request)
     {
-        $template = EventSchoolJobTemplate::create([
-            'school_id' => $request->school_id,
-            'heading' => $request->heading,
-        ]);
-
-        return new EventTemplateResource($template);
+        try {
+            $template = EventSchoolJobTemplate::create([
+                'school_id' => $request->school_id,
+                'heading' => $request->heading,
+            ]);
+    
+            return $this->success(
+                new EventTemplateResource($template),
+                'Event Template Created',
+                'A new template has been created.',
+                201
+            );
+        } catch (Exception) {
+            return $this->generalError();
+        }
     }
 
     /**
@@ -86,13 +112,22 @@ class EventSchoolJobController extends Controller
      */
     public function store(Request $request)
     {
-        $job = EventSchoolJob::create([
-            'template_id' => $request->template_id,
-            'description' => $request->description,
-            'priority' => $request->priority,
-        ]);
-
-        return $job;
+        try {
+            $job = EventSchoolJob::create([
+                'template_id' => $request->template_id,
+                'description' => $request->description,
+                'priority' => $request->priority,
+            ]);
+    
+            return $this->success(
+                $job,
+                'Template Job Created',
+                'A new job has been added to your template.',
+                201
+            );
+        } catch (Exception){
+            $this->generalError();
+        }
     }
 
     /**
@@ -108,12 +143,27 @@ class EventSchoolJobController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $job = EventSchoolJob::findOrFail($id);
-
-        $job->fill($request->all());
-        $job->save();
-
-        return $job;
+        try {
+            $job = EventSchoolJob::findOrFail($id);
+            $job->fill($request->all());
+            $job->save();
+    
+            return $this->success(
+                $job,
+                'Template Job Updated',
+                'The template job has been successfully updated.',
+                201
+            );
+        } catch (ModelNotFoundException $e){
+            $this->error(
+                $e,
+                'Error Updating Job',
+                'There was an error locating the job model requested',
+                404
+            );
+        } catch (Exception){
+            $this->generalError();
+        }
     }
 
     /**
@@ -121,18 +171,47 @@ class EventSchoolJobController extends Controller
      */
     public function destroy(string $id)
     {
-        $itemDeleted = EventSchoolJob::where('id', $id)->first()->delete();
-        if ($itemDeleted) return 'Item Deleted';
-        else return 'Error deleting item';
+        try {
+            $itemDeleted = EventSchoolJob::where('id', $id)->first()->delete();
+            if ($itemDeleted) {
+                return $this->success(
+                    null,
+                    'Job Deleted',
+                    'The template job has been deleted.'
+                );
+            } else {
+                return $this->error(
+                    null,
+                    'Error Deleting Job',
+                    'The selected job has not been deleted.',
+                    500
+                );
+            }
+        } catch (Exception $e){
+            return $this->generalError();
+        }
     }
 
     public function deleteEventTemplate(string $template_id)
     {
-        $itemDeleted = EventSchoolJobTemplate::where('id', $template_id)->first()->delete();
-        if ($itemDeleted) {
-            return 'Item Deleted';
-        } else {
-            return 'Error deleting item';
+        try {
+            $itemDeleted = EventSchoolJobTemplate::where('id', $template_id)->first()->delete();
+            if ($itemDeleted) {
+                return $this->success(
+                    null,
+                    'Event Template Deleted',
+                    'The template has been deleted.'
+                );
+            } else {
+                return $this->error(
+                    null,
+                    'Error Deleting Event Template',
+                    'The selected template has not been deleted.',
+                    500
+                );
+            }
+        } catch (Exception $e){
+            return $this->generalError();
         }
     }
 

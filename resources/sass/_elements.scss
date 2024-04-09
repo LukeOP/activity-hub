@@ -41,7 +41,7 @@
 table {
   table-layout: fixed;
   width: 100%;
-  overflow: hidden;
+  border-bottom: 2px solid $ah-primary;
   thead {
     background-color: $ah-primary;
     color: white;

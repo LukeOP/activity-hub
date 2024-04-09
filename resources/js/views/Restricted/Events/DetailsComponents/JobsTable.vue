@@ -1,63 +1,46 @@
 <template>
   <div>
-    <section id="table-header-section">
-    <table>
-      <thead>
-        <tr>
-          <th>Description:</th>
-          <th style="width: 150px;">Date:</th>
-          <th style="width: 60px;">Status:</th>
-          <th style="width: 60px;" v-if="deleteJobs" >Delete:</th>
-        </tr>
-      </thead>
-    </table>
-  </section>
-
-  <section id="table-body-section" style="overflow-y:auto" v-if="eventStore.getEventJobs.length > 0">
-    <div class="countdown-section" v-for="jobs in jobSections" :key="jobs">
-      <span class="countdown-headings">{{ countdownText(jobs) }}</span>
-      <table>
-        <tbody>
-          <tr v-for="job in jobsInSection(jobs)" :key="job" @click="toggleStatus(job)">
-            <td>{{ job.description }}</td>
-            <td style="width: 150px;">{{ moment(job.due_date).format('DD-MM-YYYY') }}</td>
-            <td style="width: 60px;">
-              <div style="width: 40px;">
-                <StatusIconSVG :status="getStatus(job)" />
-              </div>
-            </td>
-            <td v-if="deleteJobs" style="width: 40px;"><i class="fa fa-trash"></i></td>
+    <table style="width: 100%;">
+        <thead>
+          <tr>
+            <th>Description:</th>
+            <th style="width: 150px;">Assigned:</th>
+            <th style="width: 150px;">Due Date:</th>
+            <th style="width: 60px;">Status:</th>
+            <th style="width: 60px;"></th>
           </tr>
+        </thead>
+    
+        <tbody v-if="eventStore.getEvent.jobs.length > 0">
+          <!-- Iterate over each section of jobs -->
+          <template v-for="(jobs, index) in jobSections" :key="jobs">
+            <!-- Table row for the section heading -->
+            <tr class="countdown-section">
+              <td colspan="5" class="countdown-headings">{{ countdownText(jobs) }}</td>
+            </tr>
+            <!-- Table rows for each job in the section -->
+            <JobRow v-for="job in jobsInSection(jobs)" :key="job.id" :job="job" />
+            <tr v-if="index < jobSections.length - 1" class="line">
+              <td colspan="5"><hr style="margin: 0;"></td>
+            </tr>
+          </template>
         </tbody>
-      </table>
-    </div>
-  </section>
+    </table>
+    <div style="margin-bottom: 7rem;"></div>
   </div>
 </template>
 
 <script setup>
 import moment from 'moment';
-import StatusIconSVG from '/resources/js/components/Layouts/MainLayout/Elements/SVG/StatusIconSVG.vue';
 import useApi from '/resources/js/composables/useApi';
 import { useEventStore } from '/resources/js/stores/events';
 import { computed, ref } from 'vue';
-import axiosClient from '/resources/js/axios';
+import JobRow from './JobRow.vue'
+import useSorter from '../../../../composables/useSorter';
 
 const eventStore = useEventStore()
+const sorter = useSorter()
 const currentEvent = eventStore.getEvent
-const deleteJobs = ref(false)
-
-const {data: jobs, fetchData: fetchJobs} = useApi(`/event-jobs-list/${currentEvent.id}`)
-fetchJobs().then(()=>{
-  eventStore.setEventJobs(jobs.value)
-})
-
-function getStatus(job){
-  let status = 'pending'
-  let today = moment().format('YYYY-MM-DD')
-  job.due_date <= today ? status = 'incomplete' : status = 'pending'
-  return job.status == '0' ? status : 'complete'
-}
 
 // calculate the number of weeks before an event job
 function jobTimeBeforeEvent(job_date){
@@ -68,12 +51,14 @@ function jobTimeBeforeEvent(job_date){
 
 // Create array of weeks before jobs are due
 const jobSections = computed(()=>{
-  return Array.from(new Set(eventStore.getEventJobs.map(j => jobTimeBeforeEvent(j.due_date))))
+  let sortedJobs = eventStore.getEvent.jobs
+  sorter.sort(sortedJobs, 'due_date')
+  return Array.from(new Set(sortedJobs.map(j => jobTimeBeforeEvent(j.due_date))))
 })
 
 // Filter job list based on number of weeks remaining
 function jobsInSection(section_num){
-  return eventStore.getEventJobs.filter(j => jobTimeBeforeEvent(j.due_date) == section_num)
+  return currentEvent.jobs.filter(j => jobTimeBeforeEvent(j.due_date) == section_num)
 }
 
 function countdownText(jobs){
@@ -89,29 +74,31 @@ function countdownText(jobs){
     }
 }
 
-// Handle job click to change status
-function toggleStatus(job){
-  let status = job.status == 0 ? 1 : 0
-  axiosClient.patch(`event-jobs/${job.id}`, {status: status}).then((res)=>{
-    job.status == 0 ? job.status = 1 : job.status = 0
-  })
-}
-
 
 </script>
 
 <style lang="scss" scoped>
 .countdown-section {
-  margin-top: 1rem;
+  display: contents;
 }
 .countdown-headings {
-  font-weight: bold;
-  font-size: 1rem;
   padding-left: 10px;
-  margin-top: 3rem;
+  font-size: 1rem;
+  // text-decoration: underline;
 }
 tr {
   border: none;
+  &:hover {
+    cursor: default;
+  }
+}
+.line{
+  &:hover {
+    background-color: transparent;
+  }
+}
+.jobRow {
+  margin-bottom: 3rem;
 }
 
 </style>

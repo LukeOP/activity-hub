@@ -4,25 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class EventJob extends Model
+class EventUser extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
     public $incrementing = false;
     protected $keyType = 'string';
-
-    protected $table = 'events_jobs';
-    protected $fillable = [
-        'event_id',
-        'description',
-        'due_date',
-        'status'
-    ];
-
 
     protected static function boot()
     {
@@ -33,7 +22,13 @@ class EventJob extends Model
         });
     }
 
-    public function users(){
-        return $this->hasMany(EventJobUser::class, 'event_job_id');
+    protected $fillable = [
+        'event_id',
+        'user_id',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class)->select(['id', 'first_name', 'last_name', 'image']);
     }
 }

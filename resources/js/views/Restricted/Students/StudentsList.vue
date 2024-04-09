@@ -26,6 +26,7 @@ import HeaderLine from '../../../components/Layouts/MainLayout/Elements/HeaderLi
 import { useUserStore } from '/resources/js/stores/user';
 import { useActionsStore } from '/resources/js/stores/actions';
 import LoadingSpinner from '/resources/js/components/Layouts/MainLayout/Elements/LoadingSpinner.vue'
+import AvatarName from '../../../components/Layouts/MainLayout/Elements/Avatars/AvatarName.vue';
 
 // Initiate Stores
 const studentStore = useStudentStore()

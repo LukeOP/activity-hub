@@ -9,13 +9,9 @@
           <th @click="sortData('attributes.date')">Date:</th>
           <th @click="sortData('attributes.date')">Term:</th>
           <th @click="sortData('school.name')" v-if="user.getSchools.length > 1">School:</th>
+          <th style="width: 45px;"></th>
         </tr>
       </thead>
-    </table>
-  </section>
-
-  <section id="table-body-section" style="overflow-y:auto">
-    <table>
       <tbody>
         <tr v-for="event in events" :key="event.id" @click="handleClick(event)">
           <td>{{ event.attributes.name }}</td>
@@ -23,6 +19,10 @@
           <td>{{formatDate(event.attributes.date)}}</td>
           <td>{{event.attributes.term}}</td>
           <td v-if="user.getSchools.length > 1">{{event.school.name}}</td>
+          <td style="width: 45px;">
+            <i v-if="jobsOverdue(event)" class="fa-solid fa-triangle-exclamation fa-2x" :class="{userAlert: userJobsOverdue(event)}"></i>
+            <!-- <div>Overdue Jobs</div> -->
+          </td>
         </tr>
       </tbody>
     </table>
@@ -51,7 +51,7 @@ import moment from 'moment';
 
 
   function handleClick(event){
-    eventStore.setEvent(event)
+    eventStore.setEvent(event.id)
     router.push({
       name: 'EventDetails'
     })
@@ -78,11 +78,26 @@ import moment from 'moment';
     } return '-'
   }
 
+  function jobsOverdue(event) {
+    return event.jobs.some(j => (j.due_date < moment().format('YYYY-MM-DD') && j.status == 0))
+  }
+  function userJobsOverdue(event){
+    if(user.hasPermission('EVENTS_E', event.school.id)) return true
+    let overdueJobs = event.jobs.filter(j => (j.due_date < moment().format('YYYY-MM-DD') && j.status == 0))
+    return overdueJobs.some(j => j.users.some(u => u.attributes.id == user.attributes.id))
+  }
+
 </script>
 
 <style lang="scss" scoped>
 #table-body-section {
   max-height: calc(100vh - 300px);
+}
+.fa-triangle-exclamation {
+  color: $ah-primary;
+}
+.userAlert{
+  color: rgb(222, 14, 14);
 }
 
 </style>

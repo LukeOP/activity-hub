@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import useApi from "../../../composables/useApi";
 import { useSchoolStore } from "../../../stores/schools";
 import { useUserStore } from "../../../stores/user";
@@ -52,19 +52,7 @@ const selectedSchool = ref({})
 const key = ref(0)
 const key2 = ref(0)
 
-// Fetch Schools Data based on Logged in User's school associations. Set selectedSchool to first school on list
-// const { data: schools, fetchData: fetchSchools } = useApi('schools')
-// if(Object.keys(schoolStore.getSchool).length > 0){
-//   selectedSchool.value = schoolStore.getSchool
-//   defineActions()
-// } else {
-//   fetchSchools().then(()=>{
-//     schoolStore.setSchools(schools.value)
-//     selectedSchool.value = schools.value[0]
-//     staffStore.fetchStaff(selectedSchool.value.id)
-//     defineActions()
-//   })
-// }
+
 onMounted(()=>{
   selectedSchool.value = schoolStore.getSchool
   defineActions()

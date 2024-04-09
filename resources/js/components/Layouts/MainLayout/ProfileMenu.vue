@@ -1,9 +1,7 @@
 <template>
-  <div :class="{background: showDropDown || loggingOut}" @click.self="showDropDown = false">
+  <div class="profile-container" :class="{background: showDropDown || loggingOut}" @click.self="showDropDown = false">
     <div v-if="!mobileFormat" id="profile-container" @click="showDropDown = !showDropDown">
-      <div id="user-img" @click.self="showDropDown = true">
-        <span id="icon-text">{{initials}}</span>
-      </div>
+      <Avatar v-if="user.attributes.first_name != ''" :user="user.getUser" :hover="true" style="right: 30px; top: 10px; position: absolute;" />
 
       <div id="profile-drop-down" v-if="showDropDown">
         <div id="triangle"></div>
@@ -17,10 +15,11 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useUserStore } from '../../../stores/user'
 import { useRouter } from 'vue-router'
 import { useWindowSize } from '../../../composables/useWindowSize'
+import Avatar from './Elements/Avatars/Avatar.vue'
 
 const router = useRouter()
 const user = useUserStore()
@@ -28,14 +27,6 @@ const showDropDown = ref(false)
 const loggingOut = ref(false)
 const { mobileFormat } = useWindowSize()
 
-const initials = computed(()=>{
-  if(user.attributes.first_name) return getFirstLetter(user.attributes.first_name) + getFirstLetter(user.attributes.last_name)
-  return ''
-})
-
-function getFirstLetter(string){
-  return string[0]
-}
 
 function handleProfile(){
   router.push({
@@ -130,4 +121,5 @@ function handleLogout(){
     text-decoration: underline;
   }
 }
+
 </style>

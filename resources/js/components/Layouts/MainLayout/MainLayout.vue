@@ -45,7 +45,7 @@ const getTransitionName = computed(() => {
     } else if (fromSectionDepth.value > toSectionDepth.value) {
       return 'backwardFade';
     } else {
-      return '';
+      return 'fade';
     }
   }
   else return 'fade'

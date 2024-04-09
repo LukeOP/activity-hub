@@ -32,4 +32,9 @@ class EventSchoolJobTemplate extends Model
     {
         return $this->belongsTo(School::class);
     }
+
+    public function jobs()
+    {
+        return $this->hasMany(EventSchoolJob::class, 'template_id');
+    }
 }

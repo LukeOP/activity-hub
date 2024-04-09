@@ -20,6 +20,7 @@ class EventTemplateResource extends JsonResource
             'description' => $this->description,
             'notes' => $this->notes,
             'school' => new SchoolsResource($this->school),
+            'jobs' => $this->jobs,
             'timestamps' => [
                 'created' => $this->created_at,
                 'updated' => $this->updated_at,

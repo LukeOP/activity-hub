@@ -1,5 +1,6 @@
 import { useEventStore } from '/resources/js/stores/events'
 import EventsList from './EventsList.vue'
+import ArchivedEventsList from './ArchivedEventsList.vue'
 import EventDetails from './EventDetails.vue'
 import EventCreate from './EventCreate.vue'
 import TemplateList from './Templates/TemplateList.vue'
@@ -11,7 +12,12 @@ import { usePermissions } from '../../../composables/usePermissions'
 const eventsRoutes = [
   {path: 'events', name: 'Events', meta: { title: 'Events', breadcrumb: 'Events'}, redirect: 'EventsList',
     children: [
-      { path: '', name: 'EventsList', component: EventsList, meta: { title: 'Events', section: "Events", depth: 1},      
+      { path: '', name: 'EventsList', component: EventsList, meta: { title: 'Events', section: "Events", depth: 1},
+        beforeEnter: () => {
+          const { checkPermissions } = usePermissions()
+          checkPermissions(['EVENTS_R', 'EVENTS_V'])
+        }},
+      { path: 'archived', name: 'ArchivedEventsList', component: ArchivedEventsList, meta: { title: 'Archived Events', section: "Events", depth: 1},
         beforeEnter: () => {
           const { checkPermissions } = usePermissions()
           checkPermissions(['EVENTS_R', 'EVENTS_V'])

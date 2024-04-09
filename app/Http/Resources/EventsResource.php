@@ -23,9 +23,12 @@ class EventsResource extends JsonResource
                 'location' => $this->location,
                 'date' => $this->date,
                 'time' => $this->time,
-                'term' => $this->school_term()
+                'term' => $this->school_term(),
+                'archived' => $this->archived
             ],
             'school' => new SchoolsResource($this->school),
+            'users' => EventUsersResource::collection($this->users),
+            'jobs' => EventJobResource::collection($this->jobs),
             'timestamps' => [
                 'created' => $this->created_at,
                 'updated' => $this->updated_at,

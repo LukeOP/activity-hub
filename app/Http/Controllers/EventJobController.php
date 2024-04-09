@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEventJobRequest;
 use App\Http\Resources\EventJobResource;
 use App\Models\EventJob;
+use App\Traits\HttpResponses;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class EventJobController extends Controller
 {
+    use HttpResponses;
     /**
      * Display a listing of the resource.
      */
@@ -21,24 +26,26 @@ class EventJobController extends Controller
      */
     public function getJobsForEvent(string $event_id)
     {
-        return EventJob::where('event_id', $event_id)->orderBy('due_date')->get();
+        return EventJobResource::collection(EventJob::where('event_id', $event_id)->orderBy('due_date')->get());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreEventJobRequest $request)
     {
-        $validatedData = $request->validate([
-            'event_id' => 'required',
-            'description' => 'required',
-            'due_date' => 'required'
-        ]);
-
-        $job = EventJob::create($validatedData);
-        $newJob = EventJob::where('id', $job->id)->first();
-
-        return new EventJobResource($newJob);
+        try {
+            $job = EventJob::create($request->all());
+            $newJob = EventJob::where('id', $job->id)->first();
+    
+            return $this->success(
+                new EventJobResource($newJob),
+                'Job Created Successfully',
+                'your new job has been added to the event.'
+            );
+        } catch (Exception $e){
+            return $this->generalError();
+        }
     }
 
     /**
@@ -54,19 +61,53 @@ class EventJobController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $job = EventJob::findOrFail($id);
-
-        $job->fill($request->all());
-        $job->save();
-
-        return ['success', 'EventJob updated'];
+        try {
+            $job = EventJob::findOrFail($id);
+    
+            $job->fill($request->all());
+            $job->save();
+    
+            return $this->success(
+                new EventJobResource($job),
+                'Job Updated',
+                'The event job has been successfully updated.',
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->error(
+                $e,
+                'Error Updating Event Job.',
+                'The event job model could not be found.',
+                404
+            );
+        } catch (Exception $e) {
+            return $this->generalError();
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(EventJob $eventJob)
+    public function destroy(string $id)
     {
-        //
+        try {
+            $event_job = EventJob::findOrFail($id);
+            $event_job->delete();
+
+            return $this->success(
+                null,
+                'Event Job Deleted',
+                'The event job has been successfully deleted.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->error(
+                $e,
+                'Error Removing Event Job.',
+                'The event job could not be deleted as the record was not found.',
+                404
+            );
+        } catch (Exception $e) {
+            return $this->generalError();
+        }
     }
 }
