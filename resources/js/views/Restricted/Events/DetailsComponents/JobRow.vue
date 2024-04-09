@@ -11,8 +11,8 @@
         </div>
       </td>
       <td style="width: 40px; cursor: pointer;" @mouseover="dropdownOptions = true" @mouseleave="dropdownOptions = false" >
-        <i v-if="user.hasPermission('EVENTS_E', eventStore.getEvent.school.id) && !eventStore.getEvent.attributes.archived" class="fa-solid fa-ellipsis-vertical"></i>
-        <div v-if="dropdownOptions && user.hasPermission('EVENTS_E', eventStore.getEvent.school.id) && !eventStore.getEvent.attributes.archived" class="dropdown-options">
+        <i v-if="user.hasPermission('EVENTS_E', eventStore.getEvent.school.id) && eventStore.getEvent.attributes.archived != 0" class="fa-solid fa-ellipsis-vertical"></i>
+        <div v-if="dropdownOptions && user.hasPermission('EVENTS_E', eventStore.getEvent.school.id) && eventStore.getEvent.attributes.archived != 0" class="dropdown-options">
             <span @click="openModal('EventJobAssign')">Assign</span>
             <span @click="openModal('EventJobEdit')">Edit</span>
             <span @click="openModal('EventJobDelete')">Delete</span>
@@ -48,7 +48,7 @@ function getStatus(job){
 
 // Handle job click to change status
 function toggleStatus(job){
-  if(!eventStore.getEvent.attributes.archived){
+  if(eventStore.getEvent.attributes.archived == 0){
     if(user.hasPermission('EVENTS_E', eventStore.getEvent.school.id) || props.job.users.some(u => u.attributes.id == user.attributes.id)){
         let status = job.status == 0 ? 1 : 0
         const { data, fetchData } = useApi(`event-jobs/${job.id}`, {status: status}, 'PATCH')

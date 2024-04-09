@@ -1,7 +1,7 @@
 <template>
   <div>
     <HeaderLine :heading="eventStore.getEvent.attributes.name + ' - Event Details'" :school="eventStore.getEvent.school.name"/>
-    <Archived v-if="eventStore.getEvent.attributes.archived" />
+    <Archived v-if="eventStore.getEvent.attributes.archived != 0" />
     <Details :event="eventStore.getEvent" />
     <JobsTable />
   </div>
@@ -26,11 +26,11 @@ const currentEvent = eventStore.getEvent
 
 // Set side actions available on this page
 const actionArray = []
-if(user.hasPermission('EVENTS_C', currentEvent.school.id) && !eventStore.getEvent.attributes.archived){
+if(user.hasPermission('EVENTS_C', currentEvent.school.id) && eventStore.getEvent.attributes.archived == 0){
   actionArray.push({ header: 'Add Event Job', to: { name: 'EventDetails' }, modal: 'AddEventJob', additional: true, icon: 'fa-solid fa-plus'})
 }
 if(user.hasPermission('EVENTS_E', currentEvent.school.id)){
-  if(!eventStore.getEvent.attributes.archived){
+  if(eventStore.getEvent.attributes.archived == 0){
     actionArray.push({ header: 'Edit Event', to: { name: 'EventDetails' }, modal: 'EditEvent', additional: true, icon: 'fa-solid fa-pen'})
     actionArray.push({ header: 'Link Event Staff', to: { name: 'EventDetails' }, modal: 'LinkEventStaff', additional: true, icon: 'fa-solid fa-user-plus'})
     actionArray.push({ header: 'Archive Event', to: { name: 'EventDetails' }, modal: 'EventArchive', additional: true, icon: 'fa-solid fa-file-arrow-down'})

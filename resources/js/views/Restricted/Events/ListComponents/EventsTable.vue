@@ -72,7 +72,7 @@ import moment from 'moment';
   }
 
   function formatDate(date){
-    let formattedDate = moment(date).format('MMMM Do, YYYY');
+    let formattedDate = moment(date).format('MMM Do, YYYY');
     if(formattedDate != 'Invalid date'){
       return formattedDate
     } return '-'
