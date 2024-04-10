@@ -15,20 +15,20 @@
     <div v-if="selectedDate <= moment() && dayLessons.length > 0" id="scheduled-lessons">Scheduled Lessons: {{ dayLessons.length }}</div>
     <div id="lesson-stats" v-if="selectedDate <= moment() && dayLessons.length > 0">
       <div class="stat-item">
-        <span><StatusIconSVG status="present" /></span>
+        <span class="svg"><StatusIconSVG status="present" /></span>
         <span class="item-text">Present: {{ getMarkedLessons('present') }}</span>
       </div>
       <div class="stat-item">
-        <span><StatusIconSVG status="late" /></span>
+        <span class="svg"><StatusIconSVG status="late" /></span>
         <span class="item-text">Late: {{ getMarkedLessons('late') }}</span></div>
       <div class="stat-item">
-        <span><StatusIconSVG status="absent" /></span>
+        <span class="svg"><StatusIconSVG status="absent" /></span>
         <span class="item-text">Absent: {{ getMarkedLessons('absent') }}</span></div>
       <div class="stat-item" v-if="getMarkedLessons('custom') > 0">
-        <span><StatusIconSVG status="custom" /></span>
+        <span class="svg"><StatusIconSVG status="custom" /></span>
         <span class="item-text">Custom: {{ getMarkedLessons('custom') }}</span></div>
       <div class="stat-item">
-        <span><StatusIconSVG status="pending" /></span>
+        <span class="svg"><StatusIconSVG status="pending" /></span>
         <span class="item-text">Unmarked: {{ getUnmarkedLessons() }}</span></div>
     </div>
     <div v-else-if="selectedDate > moment() && dayLessons.length > 0">
@@ -145,6 +145,9 @@ function changeRoute(){
     margin: 10px;
     width: calc(25% - 20px);
     height: 50px;
+    .svg {
+      max-width: 40px;
+    }
     .item-text {
       align-self: center;
       padding-left: 20px;
