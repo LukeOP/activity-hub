@@ -1,5 +1,8 @@
 <template>
   <div id="top-bar">
+    <div id="logo-img" @click="router.push({name: 'Dashboard'})">
+      <ActivityHubIconSVG />
+    </div>
     <span id="item-group">
       <div v-for="item in menuItems" :key="item" class="item" :style="item.styles">
         <span class="menu-btn" @click="showSideBar(item)">
@@ -13,17 +16,19 @@
 
 <script setup>
 import { computed, ref, watch, watchEffect } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useWindowSize } from "../../../composables/useWindowSize";
 import { useFilterStore } from "../../../stores/filter";
 import { useMenuStore } from "../../../stores/menu";
 import { useActionsStore } from "../../../stores/actions";
 import { icons } from '@/images/icons/icons'
+import ActivityHubIconSVG from "./Elements/SVG/ActivityHubIconSVG.vue";
 
 const menu = useMenuStore()
 const filter = useFilterStore()
 const actions = useActionsStore()
 const route = useRoute()
+const router = useRouter()
 const { windowSize } = useWindowSize()
 
 const menuItems = ref([]);
@@ -79,11 +84,14 @@ function showSideBar(item){
 
 <style lang="scss" scoped>
 #top-bar {
+  // background-color: purple;
   position: absolute;
   left: 250px;
   height: 38px;
   width: calc(100vw - 250px);
-  // background-color: pink;
+  #logo-img {
+    display: none;
+  }
 }
 .menu-btn{
   display: flex; 
@@ -105,22 +113,24 @@ function showSideBar(item){
   height: 25px;
   width: 25px;
 }
-
-
 /* action toggle rotate */
 .rotate {
   transform: rotate(-180deg);
 }
+
+
 /* Styles for mobile */
 @media (max-width: 768px) {
   #top-bar {
     display: flex;
-    left: auto;
-    right: 0;
-    width: fit-content;
-    height: 38px;
-    top: 10px;
-    flex-direction: row-reverse;
+    left: 0;
+    width: 100%;
+    justify-content: space-between;
+    padding: 10px;
+    #logo-img {
+      display: block;
+      height: 40px;
+    }
   }
   .menu-btn {
     padding: 0;

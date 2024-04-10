@@ -151,8 +151,22 @@ function changeRoute(){
     }
   }
 }
-
-@media (max-width: 768px){
+@media (max-width: 1400px){
+  #date-banner {
+    flex-direction: column;
+  }
+  #scheduled-lessons{
+    text-align: center;
+    margin-top: 0.25rem;
+  }
+  #lesson-stats {
+    .stat-item {
+      width: calc(50% - 4px);
+      margin: 0 0 0.5rem 0;
+    }
+  }
+}
+@media (max-width: 992px){
   #date-banner {
     display: flex;
     flex-direction: column;

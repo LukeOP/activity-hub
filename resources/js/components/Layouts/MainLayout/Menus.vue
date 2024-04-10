@@ -1,7 +1,7 @@
 <template>
-  <div id="logo-img">
+  <!-- <div id="logo-img" @click="router.push({name: 'Dashboard'})">
     <ActivityHubIconSVG />
-  </div>
+  </div> -->
   <div class="menus">
     <top-bar />
     <profile-menu />
@@ -19,6 +19,9 @@ import ProfileMenu from './ProfileMenu.vue'
 import TopBar from './TopBar.vue'
 import { ref } from 'vue'
 import ActivityHubIconSVG from './Elements/SVG/ActivityHubIconSVG.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 
 const currentState = ref('')
