@@ -12,7 +12,7 @@
         <DateScroller @click.stop="" @selectedDate="changeDate" />
       </div>
     </div>
-    <div v-if="selectedDate <= moment() && dayLessons.length > 0" style="padding: 0 10px;">Scheduled Lessons: {{ dayLessons.length }}</div>
+    <div v-if="selectedDate <= moment() && dayLessons.length > 0" id="scheduled-lessons">Scheduled Lessons: {{ dayLessons.length }}</div>
     <div id="lesson-stats" v-if="selectedDate <= moment() && dayLessons.length > 0">
       <div class="stat-item">
         <span><StatusIconSVG status="present" /></span>
@@ -128,6 +128,9 @@ function changeRoute(){
     }
   }
 }
+#scheduled-lessons{
+  padding: 0 10px;
+}
 #lesson-stats {
   margin-top: 1rem;
   display: flex;
@@ -148,20 +151,61 @@ function changeRoute(){
     }
   }
 }
-
-@media (max-width: 768px){
-  table {
-    width: 100%;
-    #category {
-      display: none;
+@media (max-width: 1400px){
+  #date-banner {
+    flex-direction: column;
+  }
+  #scheduled-lessons{
+    text-align: center;
+    margin-top: 0.25rem;
+  }
+  #lesson-stats {
+    .stat-item {
+      width: calc(50% - 4px);
+      margin: 0 0 0.5rem 0;
     }
-    #state {
-      width: 30px;
+  }
+}
+@media (max-width: 992px){
+  #date-banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 5px;
+    // border-bottom: 3px solid $ah-primary;
+    #date {
+      font-size: 1.5rem;
     }
-    tr {
-      border-bottom:1px dashed $ah-grey ;
-      td {
-        padding: 0px 0;
+    #btn-container {
+      button {
+        border-radius: 0.375rem;
+        min-width: 37px;
+      }
+    }
+  }
+  #scheduled-lessons{
+    text-align: center;
+    margin-top: 0.25rem;
+  }
+  #lesson-stats {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .stat-item {
+      display: flex;
+      border: 1px solid $ah-grey;
+      color: $ah-primary;
+      padding: 5px 1rem;
+      border-radius: 0.25rem;
+      width: 100%;
+      height: 50px;
+      margin: 0 0 0.5rem 0;
+      .item-text {
+        align-self: center;
+        padding-left: 20px;
       }
     }
   }
