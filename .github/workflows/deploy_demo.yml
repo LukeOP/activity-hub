@@ -10,8 +10,8 @@ jobs:
     - uses: actions/setup-node@master
     - name: Installing project dependencies
       run: npm install
-    - name: Copy .env
-      run: php -r "copy('.env.demo', '.env');"
+    # - name: Copy .env
+    #   run: php -r "copy('.env.demo', '.env');"
     - name: Building the project
       run: npm run production
     - name: Install Dependencies
