@@ -1,0 +1,107 @@
+<template>
+    <section id="planner-table">
+      <TableHeader>
+        <tr>
+          <th style="width: 80px;"></th>
+          <th @click="sortLessons('attributes.start')">Lesson Time:</th>
+          <th @click="sortLessons('student.last_name')">Student:</th>
+          <th @click="sortLessons('attributes.instrument')">Instrument:</th>
+          <th @click="sortLessons('school.room')">Room:</th>
+          <th @click="sortLessons('tutor.last_name')">Tutor:</th>
+          <th style="width: 50px;"></th>
+        </tr>
+      </TableHeader>
+      <TableBody>
+        <PlannerTableRow v-if="dayLessons.length > 0" :dayLessons="dayLessons" :date="selectedDate" :key="refresh"/>
+        <div v-else class="text-center" style="height: 50px; padding: 13px;">No lessons on this day</div>
+      </TableBody>
+      <div class="col-12 col-md-6 totals">
+        <span>Total: {{getNum('total')}}</span>
+        <span>Present: {{getMarkedLessons('present')}}</span>
+        <span>Late: {{getMarkedLessons('late')}}</span>
+        <span>Absent: {{getMarkedLessons('absent')}}</span>
+        <span>Unmarked: {{getUnmarkedLessons()}}</span>
+        <span>Overdue: {{getMarkedLessons('incomplete')}}</span>
+      </div>
+    </section>
+  </template>
+  
+  <script setup>
+  import moment from 'moment';
+  import { useLessonsStore } from '../../../../../stores/lessons';
+  import { useAppStore } from '../../../../../stores/appStore';
+  import { computed, ref, watch } from 'vue';
+  import useSorter from '../../../../../composables/useSorter';
+  import { useWindowSize } from '../../../../../composables/useWindowSize';
+  import TableHeader from '../../../../../components/Layouts/MainLayout/Elements/TableHeader.vue';
+  import TableBody from '../../../../../components/Layouts/MainLayout/Elements/TableBody.vue';
+  import PlannerTableRow from '../ListComponents/PlannerTableRow.vue'
+  
+  const lessonStore = useLessonsStore()
+  const appStore = useAppStore()
+  const sorter = useSorter()
+  const selectedDate = ref(moment(appStore.getItems.date))
+  const mobileFormat = useWindowSize().mobileFormat
+  const refresh = ref(0)
+  
+  const dayLessons = computed(() => {
+    const selectedDateString = moment(selectedDate.value).format('YYYY-MM-DD');
+    return lessonStore.getLessonsData.filter(l => 
+      l.attributes.status === 'Active' &&
+      l.attributes.day === moment(selectedDate.value).format('dddd') &&
+      l.attributes.startDate <= selectedDateString &&
+      (!l.attributes.endDate || l.attributes.endDate >= selectedDateString)
+    );
+  });
+  
+  sorter.sort(dayLessons.value, 'attributes.start')
+  
+  function sortLessons(sortValue){
+    sorter.sort(dayLessons.value, sortValue)
+    refresh.value++
+  }
+  
+  function updateDate(newDate){
+    selectedDate.value = newDate
+    sorter.sort(dayLessons.value, 'attributes.start')
+  }
+  
+  function getNum(type){
+    if(type != 'total'){
+      console.log(dayLessons.value.filter(l => l.attendance.filter(a => a.attendance === type)).length);
+      return dayLessons.value.filter(l => l.attendance.filter(a => a.attendance === type)).length
+    }
+    return dayLessons.value.length
+  }
+  function getMarkedLessons(type) {
+    return dayLessons.value.filter(lesson =>
+      lesson.attendance.some(a => a.attendance === type)
+    ).length;
+  }
+  function getUnmarkedLessons(){
+    return dayLessons.value.filter(lesson =>
+      !lesson.attendance.some(a => ['present', 'late', 'absent', 'custom'].includes(a.attendance))
+    ).length;
+  }
+  
+  watch(() => dayLessons.value, () => {
+    sorter.sort(dayLessons.value, 'attributes.start')
+  })
+  
+  </script>
+  
+  <style lang="scss" scoped>
+  #date-banner{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    #date {
+      font-size: 1.5rem;
+    }
+  }
+  th {
+    cursor:pointer;
+  }
+  
+  
+  </style>

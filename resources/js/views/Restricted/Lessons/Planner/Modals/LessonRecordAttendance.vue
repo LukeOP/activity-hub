@@ -10,7 +10,7 @@
                     <input type="time" class="form-control" v-model="attendanceForm.time" required>
                 </label>
             </div>
-            <div style="display: flex; justify-content: space-evenly;">
+            <div style="display: flex; justify-content: space-evenly;" id="attendance-buttons">
                 <button type="submit" class="btn btn-outline-red" @click.prevent="addRecord('absent')" :disabled="loading">Absent</button>
                 <button type="submit" class="btn btn-outline-secondary" @click.prevent="addRecord('late')" :disabled="loading">Late</button>
                 <button type="submit" class="btn btn-primary" @click.prevent="addRecord('present')" :disabled="loading">Present</button>
@@ -70,6 +70,24 @@ import { useAppStore } from '../../../../../stores/appStore';
 }
 button {
     width: 150px;
+}
+
+@media (max-width: 768px) {
+    .attributes {
+        label {
+            margin: 0;
+        }
+    }
+    #attendance-buttons {
+        flex-direction: column-reverse;
+        button {
+            margin-bottom: 1rem;
+            width: 100%;
+            &:first-of-type {
+                margin-bottom: 0;
+            }
+        }
+    }
 }
 
 </style>

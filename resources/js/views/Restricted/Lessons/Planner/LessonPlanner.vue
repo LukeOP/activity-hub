@@ -1,36 +1,21 @@
 <template>
-  <div>   
-    <HeaderLine heading="Lesson Planner" />
-    <div id="date-banner" style="padding: 0 10px;">
-      <div id="date" v-if="!mobileFormat">{{ moment(selectedDate).format('dddd - MMMM Do, YYYY') }}</div>
-      <div id="date" v-else>{{ moment(selectedDate).format('ddd - MMM Do') }}</div>
-        <DateScroller @selectedDate="updateDate"/>
-    </div>
-    <!-- <pre>{{ dayLessons }}</pre> -->
-    <TableHeader>
-      <tr>
-        <th style="width: 80px;"></th>
-        <th @click="sortLessons('attributes.start')">Lesson Time:</th>
-        <th @click="sortLessons('student.last_name')">Student:</th>
-        <th @click="sortLessons('attributes.instrument')">Instrument:</th>
-        <th @click="sortLessons('school.room')">Room:</th>
-        <th @click="sortLessons('tutor.last_name')">Tutor:</th>
-        <th style="width: 50px;"></th>
-      </tr>
-    </TableHeader>
-    <TableBody>
-      <PlannerTableRow v-if="dayLessons.length > 0" :dayLessons="dayLessons" :date="selectedDate" :key="refresh"/>
-      <div v-else class="text-center" style="height: 50px; padding: 13px;">No lessons on this day</div>
-    </TableBody>
-    <div class="col-12 col-md-6 totals">
-      <span>Total: {{getNum('total')}}</span>
-      <span>Present: {{getMarkedLessons('present')}}</span>
-      <span>Late: {{getMarkedLessons('late')}}</span>
-      <span>Absent: {{getMarkedLessons('absent')}}</span>
-      <span>Unmarked: {{getUnmarkedLessons()}}</span>
-      <span>Overdue: {{getMarkedLessons('incomplete')}}</span>
-    </div>
-  </div>      
+  <div>
+    <section id="planner-page">   
+      <HeaderLine heading="Lesson Planner" />
+      <div id="date-banner" style="padding: 0 10px;">
+        <div id="date" v-if="!mobileFormat">{{ moment(selectedDate).format('dddd - MMMM Do, YYYY') }}</div>
+        <div id="date" v-else>{{ moment(selectedDate).format('ddd - MMM Do') }}</div>
+          <DateScroller @selectedDate="updateDate"/>
+      </div>
+    </section>      
+    <!-- <PlannerTable /> -->
+    <!-- Table component -->
+    <section v-if="dayLessons">
+      <component :is="currentComponent" :lessons="dayLessons" :date="selectedDate" />
+    </section>
+    <!-- <LoadingSpinner :isLoading="filteredLessons.length < 1 && loading" :loadingText="true" color="primary" /> -->
+
+  </div>
 </template>
 
 <script setup>
@@ -42,9 +27,8 @@ import { computed, ref, watch } from 'vue';
 import useSorter from '../../../../composables/useSorter';
 import DateScroller from '../../../../components/Layouts/MainLayout/Elements/DateScroller.vue';
 import { useWindowSize } from '../../../../composables/useWindowSize';
-import TableHeader from '../../../../components/Layouts/MainLayout/Elements/TableHeader.vue';
-import TableBody from '../../../../components/Layouts/MainLayout/Elements/TableBody.vue';
-import PlannerTableRow from './ListComponents/PlannerTableRow.vue'
+import PlannerTable from './ListComponents/PlannerTable.vue'
+import PlannerTableMobile from './ListComponents/PlannerTableMobile.vue';
 
 const lessonStore = useLessonsStore()
 const appStore = useAppStore()
@@ -52,6 +36,13 @@ const sorter = useSorter()
 const selectedDate = ref(moment(appStore.getItems.date))
 const mobileFormat = useWindowSize().mobileFormat
 const refresh = ref(0)
+const { windowSize } = useWindowSize()
+
+
+// Get appropriate component based on window size
+const currentComponent = computed(() => {
+  return windowSize.value.width > 1030 ? PlannerTable : PlannerTableMobile
+})
 
 const dayLessons = computed(() => {
   const selectedDateString = moment(selectedDate.value).format('YYYY-MM-DD');
