@@ -87,7 +87,7 @@ function showSideBar(item){
   // background-color: purple;
   position: absolute;
   left: 250px;
-  height: 38px;
+  height: 50px;
   width: calc(100vw - 250px);
   #logo-img {
     display: none;
@@ -127,9 +127,13 @@ function showSideBar(item){
     width: 100%;
     justify-content: space-between;
     padding: 10px;
+    background-color: white;
     #logo-img {
       display: block;
+      position: relative;
       height: 40px;
+      left: 0px;
+      width: 45px;
     }
   }
   .menu-btn {
