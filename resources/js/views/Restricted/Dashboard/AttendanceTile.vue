@@ -14,6 +14,7 @@ import UserElementHeader from '../../../components/Layouts/MainLayout/Elements/U
 <style lang="scss" scoped>
 .user-element {
   min-height: 215px;
+  height: calc(100% - 32px);
 }
 
 

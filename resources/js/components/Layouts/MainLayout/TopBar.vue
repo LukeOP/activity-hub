@@ -127,7 +127,7 @@ function showSideBar(item){
     width: 100%;
     justify-content: space-between;
     padding: 10px;
-    background-color: white;
+    background-color: #FCFCFC;
     #logo-img {
       display: block;
       position: relative;
