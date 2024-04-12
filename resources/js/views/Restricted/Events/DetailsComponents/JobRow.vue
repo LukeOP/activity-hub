@@ -6,9 +6,7 @@
       </td>
       <td style="width: 150px;">{{ moment(job.due_date).format('DD-MM-YYYY') }}</td>
       <td style="width: 60px;">
-        <div style="width: 40px; cursor: pointer;" @click="toggleStatus(job)">
-          <StatusIconSVG :status="getStatus(job)" />
-        </div>
+        <JobStatus :job="job" />
       </td>
       <td style="width: 40px; cursor: pointer;" @mouseover="dropdownOptions = true" @mouseleave="dropdownOptions = false" >
         <i v-if="user.hasPermission('EVENTS_E', eventStore.getEvent.school.id) && eventStore.getEvent.attributes.archived == 0" class="fa-solid fa-ellipsis-vertical"></i>
@@ -23,45 +21,19 @@
 
 <script setup>
 import moment from 'moment';
-import StatusIconSVG from '../../../../components/Layouts/MainLayout/Elements/SVG/StatusIconSVG.vue';
 import AvatarStack from '../../../../components/Layouts/MainLayout/Elements/Avatars/AvatarStack.vue';
-import useApi from '../../../../composables/useApi';
 import { computed, ref } from 'vue';
 import { useModalStore } from '../../../../stores/modal';
 import { useEventStore } from '../../../../stores/events';
 import { useUserStore } from '../../../../stores/user';
-import { useToastStore } from '../../../../stores/toast';
+import JobStatus from './JobStatus.vue';
 
 const props = defineProps({job:Object})
 const dropdownOptions = ref(false)
 const modal = useModalStore()
 const eventStore = useEventStore()
 const user = useUserStore()
-const toast = useToastStore()
 
-function getStatus(job){
-  let status = 'pending'
-  let today = moment().format('YYYY-MM-DD')
-  job.due_date <= today ? status = 'incomplete' : status = 'pending'
-  return job.status == '0' ? status : 'complete'
-}
-
-// Handle job click to change status
-function toggleStatus(job){
-  if(eventStore.getEvent.attributes.archived == 0){
-    if(user.hasPermission('EVENTS_E', eventStore.getEvent.school.id) || props.job.users.some(u => u.attributes.id == user.attributes.id)){
-        let status = job.status == 0 ? 1 : 0
-        const { data, fetchData } = useApi(`event-jobs/${job.id}`, {status: status}, 'PATCH')
-        fetchData().then(()=>{
-            eventStore.updateEventJobRecord(data.value.data)
-        })
-    } else {
-        toast.open('info', 'Unable To Edit Job Status.', 'You do not have permission to edit this status.')
-    }
-  } else {
-      toast.open('info', 'Unable To Edit Job Status.', 'Edits are not available for archived events.')
-  }
-}
 
 function openModal(type){
     eventStore.setSingleJob(props.job)
