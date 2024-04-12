@@ -1,5 +1,5 @@
 <template>
-<div class="container" :class="{buffer: route.meta.breadcrumb == 'Dashboard'}">
+<div class="container" :class="{buffer: route.meta.breadcrumb == 'Dashboard'}" v-if="!mobileFormat">
   <div class="breadcrumbs mt-1" v-if="!mobileFormat && route.meta.breadcrumb != 'Dashboard'">
     <span v-for="(breadcrumb, index) in breadcrumbs" :key="index">
       <span v-if="index !== breadcrumbs.length -1"> / </span>
