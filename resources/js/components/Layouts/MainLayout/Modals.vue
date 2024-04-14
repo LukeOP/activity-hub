@@ -8,7 +8,7 @@
 
 <script setup>
 import { computed } from "vue";
-import Modal from "./Elements/Modal.vue";
+import Modal from "./Elements/ComposableElements/Modal.vue";
 import { useModalStore } from '../../../stores/modal'
 
 import modalComponents from '../../../composables/modalComponents'

@@ -1,12 +1,11 @@
 <template>
     <h2>Try Out Activity Hub with a<br /> Demo Account</h2>
     <form @submit.prevent="handleLogin">
-      <button class="btn btn-primary my-3 form-control" @click="loginUser" :disabled="loading">Login Demo User
-        <LoadingSpinner :isLoading="loading" class="float-end" />
-      </button>
+      <ButtonLoading buttonClass="btn-primary w-100 my-3" :centerText="true" @btnClick="loginUser" :loading="loading">Login Demo User</ButtonLoading>
+
       <p class="ah-link" @click="routeChange({name: 'Register'})">Ready to signup?</p>
       <div v-if="error" class="error">{{error}}</div>
-      <div v-if="verification" id="verification" class="btn btn-primary form-control" @click="sendVerificationEmail">Send Verification Email</div>
+      <ButtonLoading v-if="verification" buttonClass="btn-primary w-100 my-3" :centerText="true" @btnClick="sendVerificationEmail" :loading="loading">Send Verification Email</ButtonLoading>
     </form>
 
 </template>
@@ -16,7 +15,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../../../stores/user'
 import axiosClient from '/resources/js/axios';
-import LoadingSpinner from '../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import ButtonLoading from '../../../components/Layouts/MainLayout/Elements/Buttons/ButtonLoading.vue';
 
 const user = useUserStore()
 const router = useRouter()
@@ -72,8 +71,11 @@ function loginUser(){
 }
 
 function sendVerificationEmail(){
+  loading.value = true
+  verification.value = true
   axiosClient.post('user-email-verify', {email: verification_email.value} ).then(res => {
     verification.value = false
+    loading.value = false
     error.value = 'Please check your email shortly for a verification link.'
   })
 }

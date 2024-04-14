@@ -6,10 +6,9 @@
   <input type="password" class="form-control my-2" v-model="formData.password" placeholder="new password" required>
   <input type="password" class="form-control my-2" v-model="formData.password_confirmation" placeholder="confirm password" required>
   <p v-show="passwordTooShort">Password must be at least 8 characters.</p>
-  <button :disabled="!passwordsMatch || processing" class="btn btn-primary my-3 form-control">Reset Password
-    <LoadingSpinner :isLoading="loading" class="float-end" /></button>
+  <ButtonLoading buttonClass="btn-primary w-100 my-3" :disabled="!passwordsMatch" :loading="processing" inputmode="submit">Reset Password</ButtonLoading>
   </form>
-  <div v-if="error" class="error">{{error}}</div>
+  <div v-if="errorMessage" class="error">{{errorMessage}}</div>
   <div v-if="message" class="message">{{message}}</div>
 </template>
 
@@ -17,12 +16,13 @@
 import axiosClient from '/resources/js/axios';
 import { ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import LoadingSpinner from '../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import ButtonLoading from '../../../components/Layouts/MainLayout/Elements/Buttons/ButtonLoading.vue';
+import useApi from '../../../composables/useApi';
 
 const route = useRoute()
 const router = useRouter()
 
-const error = ref('')
+const errorMessage = ref('')
 const message = ref('')
 const processing = ref(false)
 const formData = ref({
@@ -40,16 +40,17 @@ const passwordTooShort = computed(() => {
 })
 
 function resetPassword(){
-    processing.value = true
-    axiosClient.post('user-reset-password', formData.value).then(res => {
-        processing.value = false
-        if(res.data == 'success') {
-            message.value = 'Password reset! redirecting you to the Login page.'
-            setTimeout(()=> {
-                router.push({ name: 'Login'})
-            }, 2000)
-        } else error.value = 'There was an error in setting your new password.'
-    })
+  processing.value = true
+  const {error, fetchData} = useApi('user-reset-password', formData.value, 'POST')
+  fetchData().then(()=>{
+    if(!error){
+      message.value = 'Password reset! redirecting you to the Login page.'
+      setTimeout(()=> {
+          router.push({ name: 'Login'})
+      }, 2000)
+    } else errorMessage.value = error.value.response.data.message
+    processing.value = false
+  })
 }
 
 </script>

@@ -33,7 +33,7 @@
 <script>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import ModalTemplate from '../../../../../components/Layouts/MainLayout/Elements/Modal.vue'
+import ModalTemplate from '../../../../../components/Layouts/MainLayout/Elements/ComposableElements/Modal.vue'
 import moment from 'moment'
 import { useCalendarStore } from '../../../../../stores/calendar'
 import { useModalStore } from '../../../../../stores/modal'

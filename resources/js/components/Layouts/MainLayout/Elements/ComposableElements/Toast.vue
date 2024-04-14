@@ -22,7 +22,7 @@
 <script setup>
 import { icons } from '@/images/icons/icons'
 import { useToastStore } from '/resources/js/stores/toast';
-import ToastIconSVG from './SVG/ToastIconSVG.vue';
+import ToastIconSVG from '../SVG/ToastIconSVG.vue';
 
 const toast = useToastStore()
 
