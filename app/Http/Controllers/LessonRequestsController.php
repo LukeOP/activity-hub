@@ -6,10 +6,13 @@ use App\Http\Resources\LessonRequestFormResource;
 use App\Http\Resources\LessonRequestResource;
 use App\Models\LessonRequest;
 use App\Models\LessonRequestForm;
+use App\Traits\HttpResponses;
+use Exception;
 use Illuminate\Http\Request;
 
 class LessonRequestsController extends Controller
 {
+    use HttpResponses;
     /**
      * Display a listing of the resource.
      */
@@ -41,24 +44,32 @@ class LessonRequestsController extends Controller
      */
     public function createFromPublicForm(Request $request)
     {
-        $lessonRequest = LessonRequest::create([
-            'student_name' => $request->student_name,
-            'student_email' => $request->student_email,
-            'student_phone' => $request->student_phone,
-            'student_age' => $request->student_age,
-            'student_year' => $request->student_year,
-            'parent_name' => $request->parent_name,
-            'parent_email' => $request->parent_email,
-            'parent_phone' => $request->parent_phone,
-            'requested_instrument' => $request->instrument,
-            'experience' => $request->experience,
-            'requested_tutor' => $request->tutor,
-            'funding_type' => $request->funding_type,
-            'school_id' => $request->school_id,
-            'form_description' => $request->form_description
-        ]);
+        try {
+            $lessonRequest = LessonRequest::create([
+                'student_name' => $request->student_name,
+                'student_email' => $request->student_email,
+                'student_phone' => $request->student_phone,
+                'student_age' => $request->student_age,
+                'student_year' => $request->student_year,
+                'parent_name' => $request->parent_name,
+                'parent_email' => $request->parent_email,
+                'parent_phone' => $request->parent_phone,
+                'requested_instrument' => $request->instrument,
+                'experience' => $request->experience,
+                'requested_tutor' => $request->tutor,
+                'funding_type' => $request->funding_type,
+                'school_id' => $request->school_id,
+                'form_id' => $request->form_id
+            ]);
 
-        return new LessonRequestResource($lessonRequest);
+            return $this->success(
+                new LessonRequestResource($lessonRequest),
+                'Request Submitted',
+                'Your lesson request has been submitted.'
+            );
+        } catch (Exception $e) {
+            return $this->error($e);
+        }
     }
 
     /**
@@ -79,7 +90,7 @@ class LessonRequestsController extends Controller
             'experience' => $request->experience,
             'requested_tutor' => $request->requested_tutor,
             'funding_type' => $request->funding_type,
-            'school_id' => $request->school_id
+            'school_id' => $request->school_id,
         ]);
 
         return new LessonRequestResource($lessonRequest);
