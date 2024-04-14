@@ -1,16 +1,14 @@
 <template>
     <h2>Log In To Your Account</h2>
     <form @submit.prevent="handleLogin">
-      <input type="email" class="form-control my-2" v-model="login.email" placeholder="email">
-      <input type="password" class="form-control" v-model="login.password" placeholder="password">
-      <button class="btn btn-primary my-3 form-control" @click="handleLogin" :disabled="loading">Continue
-        <LoadingSpinner :isLoading="loading" class="float-end" />
-      </button>
+      <input type="email" class="form-control my-2" v-model="login.email" placeholder="email" required>
+      <input type="password" class="form-control" v-model="login.password" placeholder="password" required>
+      <ButtonLoading buttonClass="btn-primary w-100 my-3" inputmode="submit" :loading="loading">Continue</ButtonLoading>
 
       <p class="ah-link" @click="routeChange({name: 'RecoverAccount'})">Forgot your password?</p>
       <p class="ah-link" @click="routeChange({name: 'Register'})">Not yet registered?</p>
       <div v-if="error" class="error">{{error}}</div>
-      <div v-if="verification" id="verification" class="btn btn-primary form-control" @click="sendVerificationEmail">Send Verification Email</div>
+      <ButtonLoading v-if="verification" buttonClass="btn-primary w-100 my-3" @btnClick="sendVerificationEmail" :loading="loading">Send Verification Email</ButtonLoading>
     </form>
 
 </template>
@@ -21,6 +19,7 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '../../../stores/user'
 import axiosClient from '/resources/js/axios';
 import LoadingSpinner from '../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import ButtonLoading from '../../../components/Layouts/MainLayout/Elements/Buttons/ButtonLoading.vue';
 
 const user = useUserStore()
 const router = useRouter()
@@ -70,7 +69,9 @@ function routeChange(route){
 }
 
 function sendVerificationEmail(){
+  loading.value = true
   axiosClient.post('user-email-verify', {email: verification_email.value} ).then(res => {
+    loading.value = false
     verification.value = false
     error.value = 'Please check your email shortly for a verification link.'
   })

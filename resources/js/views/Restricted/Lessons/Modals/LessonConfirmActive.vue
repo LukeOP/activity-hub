@@ -14,7 +14,7 @@
 <script>
 import { useRouter } from 'vue-router'
 import axiosClient from '../../../../axios'
-import ModalTemplateVue from '../../../../components/Layouts/MainLayout/Elements/Modal.vue'
+import ModalTemplateVue from '../../../../components/Layouts/MainLayout/Elements/ComposableElements/Modal.vue'
 import { useLessonsStore } from '/resources/js/stores/lessons'
 import { useModalStore } from '/resources/js/stores/modal'
 import { useToastStore } from '/resources/js/stores/toast'

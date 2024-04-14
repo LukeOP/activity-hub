@@ -25,7 +25,7 @@ export default function useApi(url, requestData = null, method = 'GET', toastRes
       if(toastResponse) sendToast(response, 200)
     } catch (e) {
       error.value = e;
-      console.error(e.response ? e.response.data.message : e.message); // Log error message
+      // console.error(e.response ? e.response.data.message : e.message); // Log error message
       if (e.response) {
         const statusCode = e.response.status;
         // Pass status code to toast function if needed

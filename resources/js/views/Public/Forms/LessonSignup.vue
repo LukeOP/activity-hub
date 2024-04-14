@@ -80,10 +80,7 @@
 
         <section>
           <p>{{ form.content.footer_content }}</p>
-          <button type="submit" class="btn btn-primary float-end" :disabled="submittingForm">
-            Send Request
-            <LoadingSpinner class="float-end ps-2" :isLoading="submittingForm" />
-          </button>
+          <ButtonLoading inputmode="submit" buttonClass="btn-primary float-end" :loading="submittingForm">Send Request</ButtonLoading>
         </section>
 
       </form>
@@ -112,6 +109,7 @@ import { useRoute } from 'vue-router';
 import moment from 'moment';
 import axiosClient from '/resources/js/axios';
 import LoadingSpinner from '../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import ButtonLoading from '../../../components/Layouts/MainLayout/Elements/Buttons/ButtonLoading.vue';
 
 const route = useRoute()
 
@@ -131,7 +129,8 @@ const formData = ref({
   instrument: '',
   tutor: '',
   funding_type: '',
-  experience: ''
+  experience: '',
+  form_id: route.params.id
 })
 
 function resetForm(){
@@ -148,7 +147,8 @@ function resetForm(){
     tutor: '',
     funding_type: '',
     experience: '',
-    school_id: form.value.school.id
+    school_id: form.value.school.id,
+    form_id: route.params.id
   }
   submitted.value = false
 }
@@ -163,49 +163,24 @@ fetchFormData().then(()=>{
   })
 })
 
-
-// Function to filter subjects and remove duplicates
-const getUniqueSubjects = (item) => {
-  const uniqueTitles = new Set();
-
-  return item
-    .filter((subject) => {
-      // Check if the title is already in the Set, if not, add it and return true
-      if (!uniqueTitles.has(subject.subject)) {
-        uniqueTitles.add(subject.subject);
-        return true;
-      }
-      return false;
-    })
-    .map((subject) => subject.subject);
-};
-
-// Create a new array of unique subjects
-const SubjectsArray = computed(() => {
-  return form.available_instruments
-})
-
 const tutorArray = computed(() => {
     let staff = staffList.value.filter(s => s.subject === formData.value.instrument)
-    console.log(staff);
     if(staff.length > 1) return [{tutor: {full_name: 'No Preference', id: 0}}, ...staff]
     return staff
 })
 
 function submitForm(){
   submittingForm.value = true
-  
-  console.log(formData.value);
-  axiosClient.post('lesson-request-form/create-public-request', {...formData.value, form_description: form.value.attributes.description }).then(res => {
-    axiosClient.post('email-lesson-request-received/' + form.value.content.heading).then(res => {
-      if(res.data.response === "success"){
-        submitted.value = true
-        submittingForm.value = false
-      } else {
-        console.log(res.data.response.message);
-      }
-    })
+  const {data:requestData, error: requestError, fetchData: sendRequest} = useApi('lesson-request-form/create-public-request', formData.value, 'POST')
+  sendRequest().then(()=>{
+    if(!requestError.value){
+      submitted.value = true
+      console.log(requestData.value);
+      const {fetchData: sendEmail} = useApi('email-lesson-request-received/' + form.value.id, requestData.value.data, 'POST')
+      sendEmail()
+    } else console.error(requestError.value);
   })
+  submittingForm.value = false
 }
 
 </script>

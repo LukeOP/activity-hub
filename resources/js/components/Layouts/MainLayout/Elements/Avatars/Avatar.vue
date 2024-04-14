@@ -21,7 +21,8 @@ const initials = computed(()=>{
 })
 
 function getFirstLetter(string){
-  return string[0]
+  if(string) return string[0]
+  return ''
 }
 
 function getAvatarSrc(image) {

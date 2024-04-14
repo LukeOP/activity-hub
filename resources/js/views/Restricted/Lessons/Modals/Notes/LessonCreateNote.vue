@@ -14,7 +14,7 @@ import moment from 'moment'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import ModalTemplate from '../../../../../components/Layouts/MainLayout/Elements/Modal.vue'
+import ModalTemplate from '../../../../../components/Layouts/MainLayout/Elements/ComposableElements/Modal.vue'
 import { useLessonsStore } from '../../../../../stores/lessons'
 import { useUserStore } from '../../../../../stores/user'
 import { useModalStore } from '../../../../../stores/modal'
