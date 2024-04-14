@@ -58,7 +58,7 @@ Route::post('user-email-verify-check', [AuthController::class, 'checkEmailVerifi
 Route::post('convertLessonData', [DataProcessingController::class, 'convertLessonData']);
 
 // Emails
-Route::post('email-lesson-request-received/{form_title}', [EmailController::class, 'newLessonRequestReceived']);
+Route::post('email-lesson-request-received/{form_id}', [EmailController::class, 'newLessonRequestReceived']);
 
 
 
@@ -162,6 +162,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // EMAILS
     Route::post('email-test', [EmailController::class, 'test']);
     Route::post('user-linked-to-school', [EmailController::class, 'UserLinkedToSchool']);
+    Route::post('email-lesson-assigned-tutor', [EmailController::class, 'newLessonAssignedTutor']);
+    Route::post('email-lesson-assigned-student-caregiver', [EmailController::class, 'newLessonAssignedStudentAndCaregiver']);
 
     // FORMS
     Route::get('forms/hires/templates/{school_id}', [FormsController::class, 'getHireAgreementTemplatesBySchool']);
