@@ -4,13 +4,13 @@
   <div id="dashboard-tiles">
     <div class="tile-row">
       <div class="mobile-full match-height" style="flex: 66%;" v-if="checkPermission('LESSONS')"><LessonTile /></div>
-      <div class="mobile-full match-height" style="flex: 34%;" v-if="user.hasPermissionAny('ATTENDANCE_V')"><AttendanceTile /></div>
+      <!-- <div class="mobile-full match-height" style="flex: 34%;" v-if="user.hasPermissionAny('ATTENDANCE_V')"><AttendanceTile /></div> -->
     </div>
     <div class="tile-row">
     </div>
     <div class="tile-row">
       <div class="mobile-full match-height" style="flex: 50%;" v-if="checkPermission('EVENTS')"><EventTile /></div>
-      <div class="mobile-full match-height" style="flex: 50%;" v-if="checkPermission('ROOMS')"><RoomsTile /></div>
+      <!-- <div class="mobile-full match-height" style="flex: 50%;" v-if="checkPermission('ROOMS')"><RoomsTile /></div> -->
     </div>
   </div>
 </div>

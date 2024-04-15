@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{$lesson['attributes']['instrument']}} Lesson Assigned To Tutor</title>
+    <style>
+        .lesson-info h4 {
+            display: inline-block;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .lesson-info span {
+            display: inline-block;
+            font-weight: normal;
+        }
+    </style>
 </head>
 <body style="font-family: 'Arial', sans-serif; background-color: #f4f4f4; color: #333;">
 
@@ -22,9 +34,20 @@
             <p>They will be in contact with you to arrange further lesson details.</p>
             <br>
             <h3>Reviewed Lesson:</h3>
-            <h4>Student:</h4><p>{{ $lesson['student']['full_name']}}</p>
-            <h4>Instrument:</h4><p>{{ $lesson['attributes']['instrument']}}</p>
-            <h4>Tutor:</h4><p>{{ $lesson['tutor']['full_name']}}</p>
+            <div class="lesson-info">
+                <h4>Student:</h4><span>{{ $lesson['student']['full_name']}}</span>
+            </div>
+            <div class="lesson-info">
+                <h4>Instrument:</h4><span>{{ $lesson['attributes']['instrument']}}</span>
+            </div>
+            <div class="lesson-info">
+                <h4>Tutor:</h4><span>{{ $lesson['tutor']['full_name']}}</span>
+            </div>
+            @if($lesson['attributes']['funding_type'])
+                <div class="lesson-info">
+                    <h4>Funding:</h4><span>{{ $lesson['attributes']['funding_type']}}</span>
+                </div>
+            @endif
             <br>
             <p>If you have any questions, please direct them to {{$lesson['school']['name']}}.</p>
             <p>Kind regards,

@@ -3,7 +3,6 @@
     <nav class="menu" :class="{ 'menu-visible': navVisible }">
       
       <div id="sideBar">
-        <!-- <img id="logo-img" style="background-color: #3B6580; max-width: 250px; margin: 0 auto; padding: 25px;" src="/images/logos/EventFlow/EventFlow-Logo-Alt1.png" alt="Activity Hub Logo"> -->
         <img id="logo-img" src="/images/ActivityHub_Logo_Main.png" alt="Activity Hub Logo">
 
 
@@ -16,10 +15,10 @@
 
         <div id="settings">
           <div v-if="navVisible">
-            <span id="user-img" @click="handleProfile">
-              <p>Profile</p>
+            <span id="user-img" style="display: flex; align-items: center; justify-content: space-between; padding-left: 20px;" @click="handleProfile">
+              <Avatar :user="user" />
+              <i @click="handleLogout" id="logout" v-html="icons.logout" class="me-2 fill-white icon"></i>
             </span>
-            <p @click="handleLogout"><i id="logout" v-html="icons.logout" class="me-2 fill-white icon"></i>Logout</p>
           </div>
           
         </div>
@@ -39,6 +38,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useFilterStore } from '../../../stores/filter'
 import { icons } from '@/images/icons/icons'
 import { usePermissions } from '../../../composables/usePermissions'
+import Avatar from './Elements/Avatars/Avatar.vue'
 
 const props = defineProps({state: String})
 const emit = defineEmits(['setState'])
@@ -60,13 +60,13 @@ function getUserImage(){
 getUserImage()
 
 function handleProfile(){
+  menu.navActive = false
   router.push({
     name: 'Profile',
     params: {
       id: user.attributes.id
     }
   })
-  navVisible.value = false
 }
 
 const navItems = ref([
@@ -89,18 +89,9 @@ function setNavItems(){
         navItems.value.push(option)
       }
     }
-    // if(hasPermission(option.permission) || hasPermission(option.additional_permission)){
-    //   if(!navItems.value.find(i => i.header === option.header)){
-    //     navItems.value.push(option)
-    //   }
-    // }
   });
 }
 
-function hasPermission(value){
-  if(user.permissions.find(p => p.type === 'Administrator')) return true
-  return user.permissions.find(p => p.type === value)
-}
 setNavItems()
 watch(() => user.permissions, () => {
 setNavItems()
@@ -141,11 +132,6 @@ function handleLogout(){
   })
 }
 
-function handleSchools(){
-  user.attributes.schools.forEach(school => {
-    // console.log(school.name)
-  });
-}
 
 </script>
 
@@ -168,7 +154,7 @@ function handleSchools(){
   background-color: $ah-primary-dark;
   // background-color: $ah-primary-background;
   // background-color: #FCFCFC;
-  box-shadow: 0 10px 10px $ah-grey;
+  // box-shadow: 0 10px 10px $ah-grey;
 
   img {
     width: 100%;
@@ -233,10 +219,11 @@ function handleSchools(){
   #settings {
   height: 150px;
   background-color: $ah-primary;
-  // background-color: $ah-primary-background;
+  // background-color: $ah-primary-dark;
   padding-top: 10px;
 
     #user-img {
+      background-color: $ah-primary;
       display: block;
       height: fit-content;
       width: 100%;

@@ -74,17 +74,14 @@ const filteredStudents = computed(() => {
   return filtered;
 });
 
-onMounted(() => {  
+onMounted(() => {
   loading.value = true
-  setTimeout(() => {
-    
-    fetchStudents().then(()=>{
-      if(allStudents.value != studentStore.getStudents){
-        studentStore.setStudents(allStudents.value)
-      }
-      loading.value = false
-    })
-  }, 3000);
+  fetchStudents().then(()=>{
+    if(allStudents.value.data != studentStore.getStudents){
+      studentStore.setStudents(allStudents.value.data)
+    }
+    loading.value = false
+  })
 })
 
 </script>

@@ -6,6 +6,8 @@ use App\Http\Resources\StudentsResource;
 use App\Models\Student;
 use App\Models\User;
 use App\Traits\HttpResponses;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -19,12 +21,20 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        $user = User::where('id', Auth::user()->id)->first();
-        $schoolIds = $user->schools->pluck('id')->toArray();
-
-        return StudentsResource::collection(
-            Student::whereIn('school_id', $schoolIds)->where('enrolled_status', true)->orderBy('last_name')->get()
-        );
+        try {
+            $user = User::where('id', Auth::user()->id)->first();
+            $schoolIds = $user->schools->pluck('id')->toArray();
+    
+            $students = StudentsResource::collection(
+                Student::whereIn('school_id', $schoolIds)->where('enrolled_status', true)->orderBy('last_name')->get()
+            );
+            return $this->success($students, 'Students Found');
+                
+        } catch (ModelNotFoundException $e){
+            return $this->error($e, 'Error: User Not Found', null, 404);
+        } catch (Exception){
+            return $this->generalError();
+        }
     }
 
 
@@ -33,12 +43,13 @@ class StudentsController extends Controller
      */
     public function getStudentsInSchool($schoolId)
     {
-        $students = Student::where('school_id', $schoolId)->where('enrolled_status', true)->orderBy('last_name')->get();
-        // $students = Student::whereHas('school', function ($query) use ($schoolId) {
-        //     $query->where('schools_id', $schoolId)->where('enrolled_status', true)->orderBy('last_name');
-        // })->get();
-
-        return StudentsResource::collection($students);
+        try {
+            $students = Student::where('school_id', $schoolId)->where('enrolled_status', true)->orderBy('last_name')->get();
+    
+            return $this->success(StudentsResource::collection($students), 'Students Found');
+        } catch (Exception){
+            return $this->generalError();
+        }
     }
 
     /**

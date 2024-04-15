@@ -21,10 +21,20 @@
             <p>A new lesson has been assigned to you at {{$lesson['school']['name']}}.</p>
             <br>
             <h3>Lesson Details:</h3>
-            <h4>Student:</h4><p>{{ $lesson['student']['full_name']}}</p>
-            <h4>Instrument:</h4><p>{{ $lesson['attributes']['instrument']}}</p>
+            <div class="lesson-info">
+                <h4>Student:</h4><span>{{ $lesson['student']['full_name']}}</span>
+            </div>
+            <div class="lesson-info">
+                <h4>Instrument:</h4><span>{{ $lesson['attributes']['instrument']}}</span>
+            </div>
+            @if($lesson['attributes']['funding_type'])
+                <div class="lesson-info">
+                    <h4>Funding:</h4><span>{{ $lesson['attributes']['funding_type']}}</span>
+                </div>
+            @endif
             <br>
-            <p><a href="https://activityhub.co.nz/user-login">Log in</a> to finish setting up this lesson</p>
+            <p><a href="https://activityhub.co.nz/user-login">Log in</a> to finish setting up this lesson. 
+            Or contact {{$lesson['school']['name']}} if you have any questions.</p>
             <p>Kind regards,
             <br>
             The Activity Hub Team.

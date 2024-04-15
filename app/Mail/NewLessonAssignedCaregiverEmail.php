@@ -16,7 +16,7 @@ class NewLessonAssignedCaregiverEmail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(Public Array $lesson)
+    public function __construct(Public Array $lesson, Public string $parent)
     {
         //
     }

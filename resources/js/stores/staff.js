@@ -32,14 +32,11 @@ export const useStaffStore = defineStore('staff', {
   actions: {
     async fetchStaff(school_id) {
       this.loading = true;
-      const { data: staff, error, fetchData } = useApi('school-users/' + school_id);
+      const { data: staff, fetchData } = useApi('school-users/' + school_id);
       try {
         await fetchData();
-        if (error.value) {
-          throw new Error(error.value)
-        }
         // Update store state with fetched data
-        this.setStaffList(staff.value)
+        this.setStaffList(staff.value.data)
       } catch (error) {
         console.error('Error fetching data: ', error);
       } finally {

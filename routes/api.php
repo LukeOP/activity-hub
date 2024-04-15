@@ -163,7 +163,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('email-test', [EmailController::class, 'test']);
     Route::post('user-linked-to-school', [EmailController::class, 'UserLinkedToSchool']);
     Route::post('email-lesson-assigned-tutor', [EmailController::class, 'newLessonAssignedTutor']);
-    Route::post('email-lesson-assigned-student-caregiver', [EmailController::class, 'newLessonAssignedStudentAndCaregiver']);
+    Route::post('email-lesson-assigned-student', [EmailController::class, 'newLessonAssignedStudent']);
+    Route::post('email-lesson-assigned-caregiver/{parent}', [EmailController::class, 'newLessonAssignedCaregiver']);
 
     // FORMS
     Route::get('forms/hires/templates/{school_id}', [FormsController::class, 'getHireAgreementTemplatesBySchool']);

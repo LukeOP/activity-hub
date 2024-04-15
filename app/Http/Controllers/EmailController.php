@@ -82,7 +82,7 @@ class EmailController extends Controller
     }
     
     public function newLessonRequestAdministrator($lessonRequestForm){
-        // TODO send email to the school administrator
+        // send email to the school administrator
         try {            
             // Fetch admin users of the school
             $admin_users_of_school = User::whereHas('userPermissions', function($query) use ($lessonRequestForm) {
@@ -106,7 +106,7 @@ class EmailController extends Controller
     }
     
     public function newLessonRequestConfirmationCaregiver($request){
-        // TODO send email to user who sent request to confirm it has been received
+        // send email to user who sent request to confirm it has been received
         try {
             if(isset($request['parent']['email'])){
                 Mail::to($request['parent']['email'])->send(new NewLessonRequestSubmittedEmail($request));
@@ -124,52 +124,43 @@ class EmailController extends Controller
     }    
     
 
+    // EMAIL TUTOR REGARDING NEWLY ASSIGNED LESSON
     public function newLessonAssignedTutor(Request $request){
         try {
             $lesson = $request->all();
             $tutor = User::findOrFail($lesson['tutor']['id']);
             Mail::to($tutor->email)->send(new NewLessonAssignedTutorEmail($lesson));
             return $this->success(null, 'success', 'Tutor email sent successfully');
-        } catch (ModelNotFoundException $e){
+        } 
+        catch (ModelNotFoundException $e){
             return $this->error( $e, 'Tutor Not Found', 'There was an error in locating the associated tutor model.', 404);
-        } catch (\Throwable $th) {
+        } 
+        catch (\Throwable $th) {
+            return $this->error(null, 'error', 'Error in sending tutor notification email: ' . $th->getMessage());
+        }
+    }   
+    
+    // EMAIL STUDENT REGARDING NEWLY ASSIGNED LESSON
+    public function newLessonAssignedStudent(Request $request){
+        try {
+            $lesson = $request->all();
+            Mail::to($lesson['student']['contacts']['student']['email'])->send(new NewLessonAssignedStudentEmail($lesson));
+            return $this->success(null, 'success', 'Caregiver email sent successfully');
+        } 
+        catch (\Throwable $th) {
+            return $this->error(null, 'error', 'Error in sending tutor notification email: ' . $th->getMessage());
+        }
+    } 
+    // EMAIL CAREGIVER(S) REGARDING NEWLY ASSIGNED LESSON
+    public function newLessonAssignedCaregiver(Request $request, string $parent){
+        try {
+            $lesson = $request->all();
+            Mail::to($lesson['student']['contacts'][$parent]['email'])->send(new NewLessonAssignedCaregiverEmail($lesson, $parent));
+            return $this->success(null, 'success', 'Caregiver email sent successfully');
+        } 
+        catch (\Throwable $th) {
             return $this->error(null, 'error', 'Error in sending tutor notification email: ' . $th->getMessage());
         }
     }
 
-public function newLessonAssignedStudentAndCaregiver(Request $request){
-    // Initialize an array to keep track of any email sending failures
-    $emailFailures = [];
-    $lesson = $request->all();
-
-    try {
-        // Send email to student
-        Mail::to($lesson['student']['contacts']['student']['email'])->send(new NewLessonAssignedStudentEmail($lesson));
-
-    } catch (\Exception $e) {
-        // Log the error and add it to the failures array
-        Log::error('Error sending email to student: ' . $e->getMessage());
-        $emailFailures[] = 'Student email failed to send.';
-    }
-
-    try {
-        // Send email to caregiver
-        Mail::to($lesson['student']['contacts']['pc']['email'])->send(new NewLessonAssignedCaregiverEmail($lesson));
-
-    } catch (\Exception $e) {
-        // Log the error and add it to the failures array
-        Log::error('Error sending email to caregiver: ' . $e->getMessage());
-        $emailFailures[] = 'Caregiver email failed to send.';
-    }
-
-    // If there were no email sending failures, return success
-    if (empty($emailFailures)) {
-        return $this->success(null, 'success', 'Both emails sent successfully.');
-    } else {
-        // If there were email sending failures, return error with details
-        return $this->error(null, 'error', 'Error in sending emails: ' . implode(' ', $emailFailures));
-    }
-}
-
-    
 }

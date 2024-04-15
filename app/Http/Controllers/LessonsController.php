@@ -63,16 +63,25 @@ class LessonsController extends Controller
      */
     public function store(Request $request)
     {
-
-        $lesson = Lesson::create([
-            'user_id' => $request->tutor,
-            'student_id' => $request->student,
-            'instrument' => $request->instrument,
-            'experience' => $request->experience,
-            'funding_type' => $request->funding_type
-        ]);
-
-        return new LessonsResource($lesson);
+        try {
+            $lesson = Lesson::create([
+                'user_id' => $request->user_id,
+                'student_id' => $request->student_id,
+                'instrument' => $request->instrument,
+                'experience' => $request->experience,
+                'funding_type' => $request->funding_type
+            ]);
+            
+            return $this->success(
+                new LessonsResource(Lesson::find($lesson->id)),
+                'Lesson Assigned',
+                'The lesson has been assigned to a tutor.'
+            );
+        // } catch (Exception) {
+        //     return $this->generalError();
+        } catch (Exception $e){
+            return $this->error($e);
+        }
     }
 
     /**

@@ -6,6 +6,8 @@ use App\Http\Resources\StaffResource;
 use App\Http\Resources\UserPermissionsResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Traits\HttpResponses;
+use Exception;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +17,7 @@ use Illuminate\Support\Str;
 
 class UsersController extends Controller
 {
+    use HttpResponses;
     /**
      * Display a listing of the resource.
      */
@@ -33,20 +36,23 @@ class UsersController extends Controller
      */
     public function getUsersInSchool($schoolId)
     {
-        $users = User::whereHas('schools', function ($query) use ($schoolId) {
-            $query->where('schools.id', $schoolId);
-        })->get();
+        try {
+            $users = User::whereHas('schools', function ($query) use ($schoolId) {
+                $query->where('schools.id', $schoolId);
+            })->get();
+    
+            $userArray = [];
+            foreach ($users as $user) {
+                $user->permissions = $user->permissionsForSchool($schoolId);
+                $user->subjects = $user->getSubjectsForSchool($schoolId);
+                $user->position = $user->getPositionAtSchool($schoolId);
+                array_push($userArray, $user);
+            }
 
-        $userArray = [];
-        foreach ($users as $user) {
-            $user->permissions = $user->permissionsForSchool($schoolId);
-            $user->subjects = $user->getSubjectsForSchool($schoolId);
-            $user->position = $user->getPositionAtSchool($schoolId);
-            array_push($userArray, $user);
+            return $this->success(StaffResource::collection($userArray)->resolve(), 'Staff List');
+        } catch (Exception){
+            return $this->generalError();
         }
-
-
-        return StaffResource::collection($userArray)->resolve();
     }
 
     public function getUserOfToken($localToken)
