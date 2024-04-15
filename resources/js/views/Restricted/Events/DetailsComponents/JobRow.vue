@@ -1,19 +1,19 @@
 <template>
-    <tr style="position: relative;" :class="{overdue: isOverdue}">
+    <tr style="position: relative;" :class="{overdue: isOverdue}" @click="editJob()">
       <td>{{ job.description }} {{ isOverdue ? '[OVERDUE]' : '' }}</td>
       <td style="width: 150px;">
         <AvatarStack :users="job.users" style="color: black;" />
       </td>
       <td style="width: 150px;">{{ moment(job.due_date).format('DD-MM-YYYY') }}</td>
-      <td style="width: 60px;">
+      <td style="width: 60px;" @click.stop="">
         <JobStatus :job="job" />
       </td>
       <td style="width: 40px; cursor: pointer;" @mouseover="dropdownOptions = true" @mouseleave="dropdownOptions = false" >
         <i v-if="user.hasPermission('EVENTS_E', eventStore.getEvent.school.id) && eventStore.getEvent.attributes.archived == 0" class="fa-solid fa-ellipsis-vertical"></i>
         <div v-if="dropdownOptions && user.hasPermission('EVENTS_E', eventStore.getEvent.school.id) && eventStore.getEvent.attributes.archived == 0" class="dropdown-options">
-            <span @click="openModal('EventJobAssign')">Assign</span>
-            <span @click="openModal('EventJobEdit')">Edit</span>
-            <span @click="openModal('EventJobDelete')">Delete</span>
+            <span @click.stop="openModal('EventJobAssign')">Assign</span>
+            <span @click.stop="openModal('EventJobEdit')">Edit</span>
+            <span @click.stop="openModal('EventJobDelete')">Delete</span>
         </div>
     </td>
     </tr>
@@ -44,6 +44,12 @@ const isOverdue = computed(() => {
     let today = moment().format('YYYY-MM-DD')
     return (props.job.due_date < today && props.job.status == 0)
 })
+
+function editJob(){
+  if(user.hasPermission('EVENTS_E', eventStore.getEvent.school.id) && eventStore.getEvent.attributes.archived == 0){
+    openModal('EventJobOptions')
+  }
+}
 
 </script>
 
