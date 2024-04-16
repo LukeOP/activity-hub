@@ -6,11 +6,16 @@ use App\Http\Resources\UserSchoolInvitationsResource;
 use App\Mail\SchoolInviteEmail;
 use App\Models\School;
 use App\Models\UserSchoolInvitation;
+use App\Traits\HttpResponses;
+use ArgumentCountError;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class UserSchoolInvitationsController extends Controller
 {
+    use HttpResponses;
     /**
      * Display a listing of the resource.
      */
@@ -71,12 +76,23 @@ class UserSchoolInvitationsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        $invitation = UserSchoolInvitation::where('id', $id)->first();
-        return $invitation->delete() ? [
-            'message' => 'successfully deleted',
-            'permission' => new UserSchoolInvitationsResource($invitation)
-        ] : 'deletion failed';
+        try {
+            $invitation = UserSchoolInvitation::where('id', $id)->first();
+            $school = $invitation->school_id;
+            $invitation->delete();
+            
+            return $this->success(
+                UserSchoolInvitationsResource::collection(UserSchoolInvitation::where('school_id', $school)->get()), 
+                'Invitation Deleted', null, 
+                200);
+        } 
+        catch (ModelNotFoundException $e){
+            return $this->error($e, 'Error: Invitation Not found', 'Failed to delete the school invitation model.', 404);
+        } 
+        catch (Exception $e){
+            return $this->generalError($e);
+        }
     }
 }

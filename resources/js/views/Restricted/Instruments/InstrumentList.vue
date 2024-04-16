@@ -26,7 +26,7 @@ import InstrumentsTable from './ListComponents/InstrumentsTable.vue'
 import InstrumentsTableMobile from './ListComponents/InstrumentsTableMobile.vue';
 
 import { useInstrumentStore } from '/resources/js/stores/instruments';
-import { computed, onUpdated, ref, watch } from 'vue';
+import { computed, onUpdated, onMounted, ref, watch } from 'vue';
 import { useUserStore } from '/resources/js/stores/user';
 import router from '/resources/js/router/router';
 import { useActionsStore } from '/resources/js/stores/actions';
@@ -130,6 +130,15 @@ function routeChange(value) {
 onUpdated(()=>{ 
   setActions()
   setFilter()
+})
+
+onMounted(()=>{  
+  fetchInstruments().then(()=>{
+    if(allInstruments.value != instrumentStore.getInstruments){
+      sorter.sort(allInstruments.value, 'attributes.name')
+      instrumentStore.setInstruments(allInstruments.value)
+    }
+  })
 })
 </script>
 

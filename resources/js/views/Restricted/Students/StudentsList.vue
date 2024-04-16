@@ -75,12 +75,10 @@ const filteredStudents = computed(() => {
 });
 
 onMounted(() => {
-  loading.value = true
   fetchStudents().then(()=>{
     if(allStudents.value.data != studentStore.getStudents){
       studentStore.setStudents(allStudents.value.data)
     }
-    loading.value = false
   })
 })
 

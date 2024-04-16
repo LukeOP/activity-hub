@@ -12,6 +12,7 @@
            <th>Email:</th>
            <th>Invitation Sent:</th>
            <th>Join Code:</th>
+           <th style="width: 40px;"></th>
          </tr>
        </thead>
       </table>

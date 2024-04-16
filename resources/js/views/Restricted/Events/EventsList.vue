@@ -115,13 +115,11 @@ function routeChange(value) {
 }
 
 onMounted(()=>{  
-  loading.value = true
   fetchEvents().then(() => {
     if(allEvents.value != eventStore.getEvents){
       sorter.sort(allEvents.value, 'attributes.date')
       eventStore.setEvents(allEvents.value)
     }
-    loading.value = false
   })
 })
 

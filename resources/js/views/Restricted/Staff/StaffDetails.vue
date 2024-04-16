@@ -86,9 +86,9 @@ function setActions(){
   if(user.hasPermission('Administrator', currentSchool.id) && staffStore.singleStaff.permissions.some(p => p.type === 'Administrator')&& user.attributes.id != staff.id){
     actionsArray.push({ header: 'Demote Administrator', to: { name: 'StaffDetails' }, modal: 'DemoteAdmin', icon: 'fa-solid fa-user-slash', additional: true, red: true})
   }
-  if(user.hasPermission('STAFF_D', currentSchool.id) && user.attributes.id != staff.id){
-    actionsArray.push({ header: 'Unlink From School', to: { name: 'StaffDetails' }, modal: 'DeleteLesson', icon: 'fa-solid fa-link-slash', additional: true, red: true})
-  }
+  // if(user.hasPermission('STAFF_D', currentSchool.id) && user.attributes.id != staff.id){
+  //   actionsArray.push({ header: 'Unlink From School', to: { name: 'StaffDetails' }, modal: 'UnlinkUser', icon: 'fa-solid fa-link-slash', additional: true, red: true})
+  // }
   actions.setItems(actionsArray)
 }
 setActions()

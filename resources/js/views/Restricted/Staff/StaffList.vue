@@ -52,13 +52,7 @@ const selectedSchool = ref({})
 const key = ref(0)
 const key2 = ref(0)
 
-
-onMounted(()=>{
-  selectedSchool.value = schoolStore.getSchool
-  defineActions()
-})
-
-// Watch for a change in selected school an update components
+// Watch for a change in selected school and update components
 watch(() => selectedSchool.value, (newValue) => {
   schoolStore.setSchool(newValue)
   staffStore.fetchStaff(newValue.id)
@@ -67,10 +61,16 @@ watch(() => selectedSchool.value, (newValue) => {
   key2.value++
 })
 
-// Watch for a change in selected school an update components
+// Watch for a change in staffStore and update components
 watch(() => staffStore.value, () => {
   key2.value++
 }, {deep: true})
+
+onMounted(()=>{
+  selectedSchool.value = schoolStore.getSchool
+  staffStore.fetchStaff(selectedSchool.value.id)
+  defineActions()
+})
 </script>
 
 <style lang="scss" scoped>

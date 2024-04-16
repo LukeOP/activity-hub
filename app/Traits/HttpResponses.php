@@ -21,12 +21,12 @@ trait HttpResponses {
         ], $code);
     }
 
-    protected function generalError()
+    protected function generalError($data = null)
     {
         return response()->json([
             'status' => 'Error has occurred...',
             'message' => 'An unknown error has occured...',
-            'data' => null
+            'data' => $data
         ], 500);
     }
 
