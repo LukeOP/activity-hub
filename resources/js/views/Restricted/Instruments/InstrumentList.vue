@@ -9,10 +9,10 @@
     </div>
 
     <!-- Table component -->
-    <section v-if="filteredInstruments && !loading">
+    <section v-if="filteredInstruments">
       <component :is="currentComponent" :instruments="filteredInstruments" :key="key" />
     </section>
-    <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
+    <LoadingSpinner :isLoading="filteredInstruments.length < 1 && loading" :loadingText="true" color="primary" />
 
   </div>
 </template>
