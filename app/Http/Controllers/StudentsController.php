@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\User;
 use App\Traits\HttpResponses;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,20 +22,58 @@ class StudentsController extends Controller
      */
     public function index()
     {
+
         try {
+            // Get User's List of associated-schools and create an array of school ids
             $user = User::where('id', Auth::user()->id)->first();
-            $schoolIds = $user->schools->pluck('id')->toArray();
+            $userSchools = $user->schools;
+            $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
+            $studentCollection = new Collection();
     
-            $students = StudentsResource::collection(
-                Student::whereIn('school_id', $schoolIds)->where('enrolled_status', true)->orderBy('last_name')->get()
-            );
-            return $this->success($students, 'Students Found');
-                
-        } catch (ModelNotFoundException $e){
-            return $this->error($e, 'Error: User Not Found', null, 404);
-        } catch (Exception){
-            return $this->generalError();
+            // For each user-associated school check if they have permission to view all lessons 
+            // If they do or they are an administrator - get all student lessons for that school
+            // Else just get the lessons assigned to the tutor
+            foreach ($userSchools as $school) {
+                $hasPermission = $user->hasPermissionForSchool($school->id, 'STUDENTS_V');
+    
+                if ($hasPermission || in_array($school->id, $userAdmin)) {
+                    $studentsAtSchool = StudentsResource::collection(
+                        Student::where('school_id', $school->id)
+                               ->where('enrolled_status', true)
+                               ->orderBy('last_name')
+                               ->get());
+                } else {
+                    $studentsAtSchool = StudentsResource::collection(
+                        Student::whereHas('lessons', function ($query) use ($user) {
+                            $query->where('user_id', $user->id);})
+                                  ->where('enrolled_status', true)
+                                  ->orderBy('last_name')
+                                  ->get());
+                }
+                $studentCollection = $studentCollection->concat($studentsAtSchool);
+            }
+            // return compiled list of lessons the user has access to
+            return $this->success($studentCollection, 'Students Found');
         }
+        catch (Exception $e){
+            return $this->generalError($e);
+        }
+
+
+        // try {
+        //     $user = User::where('id', Auth::user()->id)->first();
+        //     $schoolIds = $user->schools->pluck('id')->toArray();
+    
+        //     $students = StudentsResource::collection(
+        //         Student::whereIn('school_id', $schoolIds)->where('enrolled_status', true)->orderBy('last_name')->get()
+        //     );
+        //     return $this->success($students, 'Students Found');
+                
+        // } catch (ModelNotFoundException $e){
+        //     return $this->error($e, 'Error: User Not Found', null, 404);
+        // } catch (Exception){
+        //     return $this->generalError();
+        // }
     }
 
 
