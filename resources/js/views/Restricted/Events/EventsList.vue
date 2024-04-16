@@ -11,7 +11,7 @@
     </div>
 
     <!-- Table Component -->
-    <section v-if="filteredEvents.length">
+    <section v-if="filteredEvents">
       <component :is="currentComponent" :events="filteredEvents" :key="key" />
     </section>
     <LoadingSpinner :isLoading="filteredEvents.length < 1 && loading" :loadingText="true" color="primary" />
