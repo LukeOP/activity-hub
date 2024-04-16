@@ -5,8 +5,7 @@
             <p>Keep track of your documentation by uploading it here.<br>
                 You can then download it anytime it is needed.</p>
             <input class="form-control" type="file" ref="fileInput" @change="handleFileChange"  id="fileInput"/>
-            <button class="btn btn-primary form-control mt-2" @click="uploadFile" :disabled="uploading">Upload Hire Agreement
-            <LoadingSpinner :isLoading="uploading" /></button>
+            <ButtonLoading buttonClass="btn-primary w-100 mt-2" @btnClick="uploadFile" :loading="uploading" :disabled="file == null">Upload Hire Agreement</ButtonLoading>
         </div>
     </div>
   </template>
@@ -19,6 +18,7 @@ import { useToastStore } from '/resources/js/stores/toast';
 import { useModalStore } from '/resources/js/stores/modal';
 import { useHireStore } from '/resources/js/stores/hires';
 import LoadingSpinner from '../../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import ButtonLoading from '../../../../../components/Layouts/MainLayout/Elements/Buttons/ButtonLoading.vue';
 
 const hireStore = useHireStore()
 const toast = useToastStore()

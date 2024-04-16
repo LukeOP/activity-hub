@@ -46,8 +46,8 @@ const router = useRouter()
 
 
 // Fetch Lesson Data
-const { data: events, loading, fetchData: fetchLessons } = useApi('events')
-fetchLessons().then(()=> {
+const { data: events, loading, fetchData: fetchEvents } = useApi('events')
+fetchEvents().then(()=> {
   if(events.value != null) sorter.sort(events.value, 'id', 'desc')
   eventStore.setEvents(events.value)
 })

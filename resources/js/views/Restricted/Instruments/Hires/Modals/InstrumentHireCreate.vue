@@ -58,6 +58,7 @@ import axiosClient from '/resources/js/axios';
 import moment from 'moment';
 import { useModalStore } from '/resources/js/stores/modal';
 import LoadingSpinner from '../../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import useApi from '../../../../../composables/useApi';
 
 // Initiate Stores
 const user = useUserStore()
@@ -75,10 +76,10 @@ const schools = ref(user.permissions.filter(p => (p.type === 'Administrator' || 
 const instruments = ref(instrumentStore.getInstruments.filter(i => i.attributes.state.id === 1))
 
 // set student list to existing list if available, otherwise fetch new students list and store in studentStore.
-const students = ref(studentStore.getStudents)
-if (students.value.length == 0) {
-  axiosClient.get('students').then(res => {
-    studentStore.setStudents(res.data)
+if (studentStore.getStudents.length < 1) {
+  const { data, fetchData} = useApi('students')
+  fetchData().then(() => {
+    studentStore.setStudents(data.value.data)
   })
 }
 
@@ -103,10 +104,11 @@ const schoolInstruments = computed(() => {
 
 function createHire(){
   submitting.value = true
-  axiosClient.post(`hires`, formData.value).then(res =>{
-    hireStore.addHire(res.data)
-    instrumentStore.instruments.find(i => i.id === formData.value.instrument).attributes.state = {description: 'Hired Out', id: 2}
-    submitting.value = false
+  const {data, fetchData} = useApi('hires', formData.value, 'POST', true)
+  fetchData().then(()=>{
+    hireStore.addHire(data.value.data)
+      instrumentStore.instruments.find(i => i.id === formData.value.instrument).attributes.state = {description: 'Hired Out', id: 4}
+      submitting.value = false
   })
   modal.close()
 }

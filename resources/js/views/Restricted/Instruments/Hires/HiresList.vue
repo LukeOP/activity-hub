@@ -9,10 +9,10 @@
     </div>
 
     <!-- Table component -->
-    <section v-if="filteredHires || hireStore.isLoading">
+    <section v-if="filteredHires">
       <component :is="currentComponent" :hires="filteredHires" :key="key" />
     </section>
-    <LoadingSpinner :isLoading="hireStore.isLoading" :loadingText="true" color="primary" />
+    <LoadingSpinner :isLoading="filteredHires.length < 1 && loading" :loadingText="true" color="primary" />
 
   </div>
 </template>
@@ -32,6 +32,7 @@ import { useUserStore } from '/resources/js/stores/user';
 import { useActionsStore } from '/resources/js/stores/actions';
 import { useFilterStore } from '/resources/js/stores/filter';
 import LoadingSpinner from '../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import useSorter from '../../../../composables/useSorter';
 
 const key = ref(0)
 
@@ -45,6 +46,7 @@ const filter = useFilterStore()
 // Initiate Composables
 const { windowSize } = useWindowSize()
 const router = useRouter()
+const sorter = useSorter()
 
 // Get appropriate component based on window size
 const currentComponent = computed(() => {
@@ -106,8 +108,16 @@ function routeChange(value){
   router.push({name: value})
 }
 
+const {data: hires, loading, fetchData} = useApi('hires')
+
 onMounted(() => {
   setActions()
+  fetchData().then(()=>{
+    if(hires.value != hireStore.getHires){
+      sorter.sort(hires.value, 'instrument.name')
+      hireStore.setHires(hires.value)
+    }
+  })
 })
 
 </script>

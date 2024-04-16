@@ -32,6 +32,7 @@ import router from '/resources/js/router/router';
 import { useActionsStore } from '/resources/js/stores/actions';
 import { useFilterStore } from '/resources/js/stores/filter';
 import LoadingSpinner from '../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
+import useSorter from '../../../composables/useSorter';
 
 const key = ref(0)
 const links = ref({link1: ''})
@@ -42,6 +43,7 @@ const instrumentStore = useInstrumentStore()
 const user = useUserStore()
 const actions = useActionsStore()
 const filter = useFilterStore()
+const sorter = useSorter()
 
 // Initiate Composables
 const { windowSize } = useWindowSize()

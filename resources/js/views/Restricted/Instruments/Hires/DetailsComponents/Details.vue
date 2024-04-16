@@ -16,19 +16,8 @@
       </div>
       <h3>Notes: <span class="value">{{ hire.attributes.notes }}</span></h3>
     </section>
-
-    <section>
-      <h2>Hire Agreement</h2>
-      <h3 class="w-100">Agreement Uploaded: <span :class="{warning: hire.attributes.upload_id === null}" class="value">{{ formatForm(hire.attributes.upload_id) }}</span></h3>
-      <div v-if="!hire.attributes.upload_id" class="btn btn-primary" @click="uploadAgreement" >Upload Hire Agreement</div>
-
-      <a v-if="hire.attributes.upload_id" :href="URLString" target="_blank" class="btn btn-primary">Download Agreement</a><br>
-
-      <span v-if="hire.attributes.upload_id" class="ah-link" style="width: fit-content; margin-right: 2rem;" @click="uploadAgreement" >Replace Agreement File</span>
-      <span v-if="hire.attributes.upload_id" class="ah-link" style="width: fit-content;" @click="deleteAgreement" >Delete Agreement File</span>
-    </section>
+    <DetailsHireAgreement :hire="hire" />
       
-      <!-- <DownloadDocument v-if="hire.attributes.agreement" :id="hire.attributes.agreement" label="Download Agreement" :key="refresh" /> -->
   </div>
 </template>
 
@@ -36,35 +25,20 @@
 import moment from 'moment';
 import { useStudentStore } from '/resources/js/stores/students';
 import { useRouter } from 'vue-router';
-import { useModalStore } from '/resources/js/stores/modal';
-import DownloadDocument from '/resources/js/components/Layouts/MainLayout/Elements/DownloadDocument.vue';
-import { ref, watch, onMounted, computed } from 'vue';
+import { ref, watch } from 'vue';
 import { useHireStore } from '/resources/js/stores/hires';
-import LoadingSpinner from '../../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
-import useApi from '../../../../../composables/useApi';
-import axiosClient from '../../../../../axios';
+import DetailsHireAgreement from './DetailsHireAgreement.vue';
 
 // const props = defineProps({hire: Object})
 const hireStore = useHireStore()
 const hire = ref(hireStore.getHire)
 const router = useRouter()
 const studentStore = useStudentStore()
-const modal = useModalStore()
 const refresh = ref(0)
 
-const URLString = computed(() => {
-  // let url = ''
-  // if(import.meta.env.VITE_ENV === 'production') url = 'https://activityhub.co.nz/'
-  // else url = 'http://localhost:8000/'
-  return import.meta.env.VITE_URL + '/download?document=' + hire.value.attributes.upload_id
-})
 
 function formatDate(date){
   return moment(date).format('DD-MM-YYYY')
-}
-
-function formatForm(value){
-  return value === null ? 'No' : 'Yes'
 }
 
 function viewInstrument(){
@@ -77,14 +51,6 @@ function viewStudent(){
   router.push({
     name: "StudentDetails"
   })
-}
-
-function uploadAgreement(){
-  modal.open('UploadHireAgreement')
-}
-
-function deleteAgreement(){
-  modal.open('DeleteHireAgreement')
 }
 
 watch(() => hireStore.getHire, (newValue) => {

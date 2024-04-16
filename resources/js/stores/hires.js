@@ -53,9 +53,6 @@ export const useHireStore = defineStore('hires', {
       return this.currentHire
     },
     getHires(){
-      if(this.hires.length < 1) {
-        this.fetchHires()
-      }
       return this.hires
     },
     getFilteredHires(){

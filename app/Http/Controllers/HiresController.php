@@ -6,18 +6,23 @@ use App\Http\Resources\HireResource;
 use App\Http\Resources\HiresResource;
 use App\Models\Hire;
 use App\Models\Instrument;
+use App\Models\User;
+use App\Traits\HttpResponses;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class HiresController extends Controller
 {
+    use HttpResponses;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $user = Auth::user();
+        $user = User::where('id', Auth::user()->id)->first();
         $userSchools = $user->schools;
         $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
         $hireCollection = new Collection();
@@ -72,18 +77,28 @@ class HiresController extends Controller
      */
     public function store(Request $request)
     {
-        $hire = Hire::create([
-            'instrument_id' => $request->instrument,
-            'student_id' => $request->student,
-            'start_date' => $request->start,
-            'return_date' => $request->end,
-            'notes' => $request->notes,
-        ]);
-
-        Instrument::where('id', $request->instrument)->first()->update(['state_id' => 2]);
-
-
-        return new HiresResource($hire);
+        try {
+            $hire = Hire::create([
+                'instrument_id' => $request->instrument,
+                'student_id' => $request->student,
+                'start_date' => $request->start,
+                'return_date' => $request->end,
+                'notes' => $request->notes,
+            ]);
+    
+            Instrument::where('id', $request->instrument)->first()->update(['state_id' => 4]);
+            return $this->success(
+                new HiresResource($hire),
+                'Instrument Hire Created',
+                'The instrument has been successfully hired out'
+            );
+        }
+        catch (ModelNotFoundException $e){
+            return $this->error($e, 'Error During Hire Creation', 'The instrument record could not be found', 404);
+        } 
+        catch (Exception $e){
+            return $this->generalError($e);
+        }
     }
 
     /**

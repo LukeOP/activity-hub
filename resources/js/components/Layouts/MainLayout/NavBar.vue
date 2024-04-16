@@ -154,7 +154,7 @@ function handleLogout(){
   background-color: $ah-primary-dark;
   // background-color: $ah-primary-background;
   // background-color: #FCFCFC;
-  // box-shadow: 0 10px 10px $ah-grey;
+  box-shadow: 0 10px 10px $ah-grey;
 
   img {
     width: 100%;
@@ -342,6 +342,9 @@ function handleLogout(){
 
 /* Styles for mobile */
 @media (max-width: 768px) {
+  #sideBar {
+    box-shadow: none;
+  }
   .menu {
     left: -260px;
     transition: transform 0.3s ease-out;
