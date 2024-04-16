@@ -50,7 +50,7 @@ export const useUserStore = defineStore('user', {
     setStores(){
       const schoolStore = useSchoolStore()
       schoolStore.setSchools(this.attributes.schools)
-      schoolStore.setSchool(this.attributes.schools[0])
+      schoolStore.setSchool(this.attributes.schools[0].id)
     },
     setPermissions(permissions){
       this.permissions = permissions

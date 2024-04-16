@@ -24,7 +24,7 @@ const schoolStore = useSchoolStore()
 const router = useRouter()
 
 function viewSchool(school){
-    schoolStore.setSchool(school)
+    schoolStore.setSchool(school.id)
     router.push({
         name: 'SchoolDetails'
     })

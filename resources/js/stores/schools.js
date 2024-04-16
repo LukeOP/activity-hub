@@ -3,7 +3,7 @@ import useApi from '/resources/js/composables/useApi';
 
 function getState(){
     return {
-      currentSchool: {},
+      currentSchool: '',
       schools: [],
       loading: false
     }
@@ -29,11 +29,8 @@ export const useSchoolStore = defineStore('schools', {
         this.loading = false;
       }
     },
-    setSchool(schoolObject){
-      this.currentSchool = schoolObject
-    },
-    setSchoolFromId(school_id){
-      this.currentSchool = this.schools.find(s => s.id == school_id)
+    setSchool(school_id){
+      this.currentSchool = school_id
     },
     setSchools(schoolsArray){
       this.schools = schoolsArray
@@ -50,7 +47,7 @@ export const useSchoolStore = defineStore('schools', {
   },
   getters: {
     getSchool(){
-      return this.currentSchool
+      return this.schools.find(s => s.id == this.currentSchool) ? this.schools.find(s => s.id == this.currentSchool) : ''
     },
     getSchools(){
       return this.schools
@@ -58,7 +55,7 @@ export const useSchoolStore = defineStore('schools', {
     getFunding(){
       var fundingTypeSet = new Set();
     
-      this.currentSchool.data.funding.forEach(function(funding){
+      this.getSchool.data.funding.forEach(function(funding){
         fundingTypeSet.add(funding.value)
       })
     

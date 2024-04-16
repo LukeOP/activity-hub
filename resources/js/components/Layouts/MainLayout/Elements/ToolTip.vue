@@ -1,9 +1,10 @@
 <template>
     <div style="text-align:center; display: inline-block;">
     
-    <div class="tool-tip"><slot />
-      <span class="tool-tip-text">{{ tip }}</span>
-    </div>
+      <div :class="{toolTip: tip}">
+        <slot></slot>
+        <span class="tool-tip-text">{{ tip }}</span>
+      </div>
     
     </div>
 </template>
@@ -14,29 +15,29 @@ const props = defineProps({tip:String})
 </script>
   
 <style>
-  .tool-tip {
+  .toolTip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black;
+    border-bottom: 1px dotted #3B6580;
     cursor:help;
   }
   
-  .tool-tip .tool-tip-text {
+  .toolTip .tool-tip-text {
     visibility: hidden;
-    width: 120px;
-    background-color: black;
+    width: 200px;
+    background-color: #3B6580;
     color: #fff;
     text-align: center;
     border-radius: 6px;
-    padding: 5px 0;
+    padding: 5px;
     position: absolute;
     z-index: 1;
     top: 150%;
     left: 50%;
-    margin-left: -60px;
+    transform: translateX(-50%);
   }
   
-  .tool-tip .tool-tip-text::after {
+  .toolTip .tool-tip-text::after {
     content: "";
     position: absolute;
     bottom: 100%;
@@ -44,10 +45,10 @@ const props = defineProps({tip:String})
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: transparent transparent black transparent;
+    border-color: transparent transparent #3B6580 transparent;
   }
   
-  .tool-tip:hover .tool-tip-text {
+  .toolTip:hover .tool-tip-text {
     visibility: visible;
   }
   </style>

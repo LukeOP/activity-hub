@@ -7,6 +7,7 @@
           <th @click="sortData('first_name')" >First Name:</th>
           <th @click="sortData('last_name')" >Last Name:</th>
           <th @click="sortData('email')"  >Email:</th>
+          <th @click="sortData('email')"  >Position:</th>
           <th>Administrator:</th>
         </tr>
       </thead>
@@ -16,6 +17,7 @@
           <td>{{member.first_name}}</td>
           <td>{{member.last_name}}</td>
           <td>{{member.email}}</td>
+          <td>{{member.position.title}}</td>
           <td>{{isAdmin(member)}}</td>
         </tr>
       </tbody>
@@ -40,7 +42,7 @@ const sorter = useSorter()
 const router = useRouter()
 
 function isAdmin(member){
-  return member.permissions.find(m => m.type === 'Administrator') ? 'Yes' : ''
+  return member.permissions.find(p => p.type === 'Administrator') ? 'Yes' : ''
 }
 
 function sortData(field){

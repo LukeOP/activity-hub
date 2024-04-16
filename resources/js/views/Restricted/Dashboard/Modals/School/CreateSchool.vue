@@ -76,7 +76,7 @@ async function handleJoin(school){
     }
 
     if(error === 0){
-        schoolStore.setSchool(school)
+        schoolStore.setSchool(school.id)
         user.resetUserWithToken()
         modal.open('NewSchoolSuccess')
     }

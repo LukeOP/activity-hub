@@ -138,7 +138,7 @@ const schoolStore = useSchoolStore()
           });
       }
       if(error === 0){
-        schoolStore.setSchool(result.value.school)
+        schoolStore.setSchool(result.value.school.id)
         modal.open('InviteCodeSuccessOnBoarding')
       }
     }

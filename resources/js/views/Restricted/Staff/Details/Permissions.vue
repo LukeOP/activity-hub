@@ -20,7 +20,9 @@
                 <tr v-for="permissionRow in staffStore.permissionsArray" :key="permissionRow">
                     <td>{{ permissionRow.access }}</td>
                     <td v-for="action in permissionRow.actions" :key="action">
-                        <PermissionSingle :action="action" />
+                        <ToolTip :tip="getTip(permissionRow, action)">
+                            <PermissionSingle :action="action" />
+                        </ToolTip>
                     </td>
                 </tr>
             </tbody>
@@ -39,11 +41,12 @@ import { useUserStore } from '../../../../stores/user';
 import { useWindowSize } from "/resources/js/composables/useWindowSize";
 import { computed } from 'vue';
 import PermissionSingle from './PermissionSingle.vue';
+import ToolTip from '../../../../components/Layouts/MainLayout/Elements/ToolTip.vue';
 
 const staffStore = useStaffStore()
 const user = useUserStore()
 const schoolStore = useSchoolStore()
-const school = schoolStore.currentSchool
+const school = schoolStore.getSchool
 
 const {windowSize} = useWindowSize()
 
@@ -56,6 +59,11 @@ const mobileDevice = computed(() => {
 function isAdmin() {
   return `fa-1x ${staffStore.getStaff.permissions.some(p => p.type === 'Administrator') ? "fa-solid fa-circle-check" : "fa-regular fa-circle-xmark"}`;
 }
+
+function getTip(access, permission){
+    return permission.endsWith("R") ? access.toolTip : ''
+}
+
 </script>
 
 <style lang="scss" scoped>

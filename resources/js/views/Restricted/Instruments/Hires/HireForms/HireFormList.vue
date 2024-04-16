@@ -125,7 +125,7 @@ function viewEventTemplateDetails(template){
 }
 
 function createTemplate(){
-  schoolStore.setSchool(schools.value.filter(s => s.id == formData.value.school)[0])
+  schoolStore.setSchool(schools.value.filter(s => s.id == formData.value.school)[0].id)
   modal.open('CreateHireAgreementTemplate')
 }
 

@@ -1,23 +1,23 @@
 <template>
   <div>
-    <HeaderLine heading="Staff" :school="selectedSchool.name" />
-    <div v-if="schoolStore.getSchools" class="tab-header mb-3">
-      <div v-if="schoolStore.getSchools.length > 1">
-        <span class="school-tile unselectable" 
-        :class="{active: selectedSchool.id === school.id}" 
-        v-for="school in schoolStore.getSchools" :key="school.id" 
-        @click="selectedSchool = school; key++">{{school.name}}</span>
+    <HeaderLine heading="Staff" :school="schoolStore.getSchool.name" />
+    <div v-if="permittedSchools" class="tab-header mb-3">
+      <div v-if="permittedSchools.length > 1">
+        <span v-for="school in permittedSchools" :key="school" class="school-tile unselectable" 
+          :class="{active: schoolStore.getSchool.id === school.school_id}" 
+          @click="schoolStore.setSchool(school.school_id)">{{school.name}}
+        </span>
       </div>
     </div>
-
-    <ComponentController :key="key" />
-    <InvitationController :key="key2" v-if="!mobileFormat && user.hasPermission('STAFF_C', selectedSchool.id)" />
+    
+    <ComponentController />
+    <InvitationController v-if="!mobileFormat && user.hasPermission('STAFF_C', schoolStore.getSchool.id)" />
     
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch, } from "vue";
 import useApi from "../../../composables/useApi";
 import { useSchoolStore } from "../../../stores/schools";
 import { useUserStore } from "../../../stores/user";
@@ -36,39 +36,26 @@ const staffStore = useStaffStore()
 
 const { mobileFormat } = useWindowSize()
 
+const permittedSchools = computed(()=>{
+  return user.permissions.filter(p => (p.type == 'STAFF_V' || p.type == 'Administrator'))
+})
+
 // Set side actions available on this page
 function defineActions(){
   const actionArray = []
-  if(user.hasPermission('STAFF_C', selectedSchool.value.id)){
+  if(user.hasPermission('STAFF_C', schoolStore.getSchool.id)){
     actionArray.push({ header: 'Link New Staff', to: { name: 'StaffList' }, icon: 'fa-solid fa-square-plus', modal: 'NewStaff'})
   }
   actions.setItems(actionArray)
 }
 
-// Assign selected school
-const selectedSchool = ref({})
-
-// Key to update components
-const key = ref(0)
-const key2 = ref(0)
-
-// Watch for a change in selected school and update components
-watch(() => selectedSchool.value, (newValue) => {
-  schoolStore.setSchool(newValue)
-  staffStore.fetchStaff(newValue.id)
+watch(()=>schoolStore.getSchool, () => {
+  staffStore.fetchStaff(schoolStore.getSchool.id)
   defineActions()
-  key.value++
-  key2.value++
 })
 
-// Watch for a change in staffStore and update components
-watch(() => staffStore.value, () => {
-  key2.value++
-}, {deep: true})
-
 onMounted(()=>{
-  selectedSchool.value = schoolStore.getSchool
-  staffStore.fetchStaff(selectedSchool.value.id)
+  staffStore.fetchStaff(schoolStore.getSchool.id)
   defineActions()
 })
 </script>

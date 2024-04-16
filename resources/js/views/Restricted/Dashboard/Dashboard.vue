@@ -32,7 +32,7 @@ const actions = useActionsStore()
 const hasSchools = ref(false)
 const ready = ref(false)
 const schoolStore = useSchoolStore()
-if(schoolStore.getSchool == {}) schoolStore.setSchool(user.getSchools[0])
+if(schoolStore.getSchool == {}) schoolStore.setSchool(user.getSchools[0].id)
 
 const actionArray = []
 

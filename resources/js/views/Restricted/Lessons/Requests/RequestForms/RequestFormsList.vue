@@ -94,7 +94,7 @@ function setSchools(){
 
 // Fetch school forms when school is selected
 watch(() => formData.value.school, (newValue) => {
-  schoolStore.setSchoolFromId(newValue)
+  schoolStore.setSchool(newValue)
   staffStore.fetchStaff(newValue)
   const {data: forms, fetchData: fetchSchoolForms} = useApi('school-lesson-request-forms/' + newValue)
   fetchSchoolForms().then(()=>{

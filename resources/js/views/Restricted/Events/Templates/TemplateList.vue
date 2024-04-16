@@ -123,7 +123,7 @@ function setSchools(){
 
 // Fetch school templates when school is selected
 watch(() => formData.value.school, (newValue) => {
-  schoolStore.setSchool(...schools.value.filter(s => s.id == newValue))
+  schoolStore.setSchool(...schools.value.filter(s => s.id == newValue).id)
   if(formData.value.school != ''){
     loading.value = true
     const {data, fetchData} = useApi('event-school-jobs/templates/' + newValue)

@@ -1,8 +1,8 @@
 <template>
-  <i v-if="action != ''" :style="{ cursor: 'pointer' }" 
-      :class="getPermissionIconClass"
-      @click="togglePermission" 
-  ></i>
+    <i v-if="action != ''" :style="{ cursor: 'pointer' }" 
+        :class="getPermissionIconClass"
+        @click="togglePermission" 
+    ></i>
 </template>
 
 <script setup>
@@ -17,7 +17,7 @@ const props = defineProps({action: String})
 const staffStore = useStaffStore()
 const user = useUserStore()
 const schoolStore = useSchoolStore()
-const school = schoolStore.currentSchool
+const school = schoolStore.getSchool
 
 const staff = staffStore.getStaff;
 
@@ -49,7 +49,7 @@ function togglePermission() {
     staffStore.removePermission(permissionObject.id)
   } else {
     // The permission object doesn't exist and needs to be added
-    staffStore.setPermission(staff.id, schoolStore.currentSchool.id, props.action);
+    staffStore.setPermission(staff.id, schoolStore.getSchool.id, props.action);
   }
 }
 
