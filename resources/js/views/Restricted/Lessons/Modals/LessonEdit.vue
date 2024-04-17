@@ -25,7 +25,9 @@
           <label style="display: flex;">
             <input type="checkbox" v-model="lessonData.term_link">
             <span class="custom-checkbox me-2"></span>
-            <span style="background-color: white;"> Link to school terms</span>
+            <ToolTip tip="Lesson attendance is only required during school terms.">
+              <span style="background-color: white;"> Link to school terms</span>
+            </ToolTip>
           </label>
         </div>
       </div>
@@ -80,6 +82,7 @@ import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/Hea
 import LoadingSpinner from '../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue'
 import { useSchoolStore } from '../../../../stores/schools'
 import useApi from '../../../../composables/useApi'
+import ToolTip from '../../../../components/Layouts/MainLayout/Elements/ToolTip.vue'
 
 const user = useUserStore()
 const schoolStore = useSchoolStore()

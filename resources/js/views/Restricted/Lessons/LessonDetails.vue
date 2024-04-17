@@ -5,10 +5,6 @@
     <Details :lesson="lesson" />
     <ContactDetails :student="lesson.student" />
     <Notes :lesson="lesson" />
-
-    <!-- <div class="modal-route">
-        <router-view></router-view>
-    </div> -->
       
   </div>
 </template>
@@ -47,6 +43,9 @@ import { useUserStore } from '@/stores/user';
     }
     if(lesson.value.attributes.status != 'Active' && lessonDetailsSet()){
       actionsArray.unshift({ header: 'Set Lesson as Active', to: { name: 'LessonDetails' }, modal: "LessonConfirmActive", icon: 'fa-solid fa-circle-check', additional: true, green: true})
+    }
+    if(lesson.value.attributes.status != 'Active'){
+      actionsArray.push({ header: 'Send To Waiting List', to: { name: 'LessonDetails' }, modal: "LessonConfirmWaiting", icon: 'fa-solid fa-hourglass-start', additional: true})
     }
     actions.setItems(actionsArray)
   }

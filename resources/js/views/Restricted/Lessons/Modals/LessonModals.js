@@ -6,6 +6,7 @@ import LessonNoteDeleteConfirm from './Notes/LessonNoteDeleteConfirm.vue'
 import EditLesson from './LessonEdit.vue'
 import DeleteLesson from './LessonDelete.vue'
 import LessonConfirmActive from './LessonConfirmActive.vue'
+import LessonConfirmWaiting from './LessonConfirmWaiting.vue'
 import EditAttendance from './Attendance/EditAttendance.vue'
 
 import requestModals from "../Requests/Modals/requestModals";
@@ -23,6 +24,7 @@ const lessonModals = {
   EditLesson,
   DeleteLesson,
   LessonConfirmActive,
+  LessonConfirmWaiting,
   EditAttendance,
 }
 

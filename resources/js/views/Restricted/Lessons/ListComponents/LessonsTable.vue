@@ -4,13 +4,13 @@
     <table>
       <thead>
         <tr>
+          <th @click="sortData('attributes.funding_type')"style="width: 45px; text-align: center; padding: 5px 10px;">:::</th>
           <th @click="sortData('student.last_name')">Student:</th>
           <!-- <th @click="sortData('student.year_level')">Year:</th> -->
-          <th @click="sortData('attributes.instrument')">Instrument:</th>
-          <th @click="sortData('attributes.day')">Lesson Day:</th>
-          <th @click="sortData('attributes.start')">Time:</th>
+          <th @click="sortData('attributes.instrument')" style="width: 150px;">Instrument:</th>
+          <th @click="sortData('attributes.day')" style="width: 150px;">Lesson Day:</th>
+          <th @click="sortData('attributes.start')" style="width: 100px;">Time:</th>
           <th @click="sortData('tutor.last_name')">Tutor:</th>
-          <!-- <th @click="sortData('attributes.funding_type')">Funding:</th> -->
           <th @click="sortData('attributes.status')">Status:</th>
           <th @click="sortData('school.name')" v-if="user.attributes.schools.length > 1">School:</th>
         </tr>
@@ -22,15 +22,15 @@
     <table>
       <tbody>
         <tr v-for="lesson in lessons" :key="lesson.id" @click="handleLessonClick(lesson)" :class="lesson.attributes.status">
-          <td style="display: flex; justify-content: space-between;"><span>{{lesson.student.full_name}}</span><span v-if="lesson.student.tutor_group">({{ lesson.student.tutor_group }})</span></td>
-          <td>{{lesson.attributes.instrument}}</td>
-          <td>{{lesson.attributes.day || '-'}}</td>
-          <td>{{formatTime(lesson.attributes.start) || '-'}}</td>
+          <td style="width: 45px;"><span class="funding-icon">{{getLessonFunding(lesson.attributes.funding_type)}}</span></td>
+          <td style="padding-right: 10px;"><span>{{lesson.student.full_name}}</span><span v-if="lesson.student.tutor_group" style="float: inline-end;">({{ lesson.student.tutor_group }})</span></td>
+          <td style="width: 150px;">{{lesson.attributes.instrument}}</td>
+          <td style="width: 150px;">{{lesson.attributes.day || '-'}}</td>
+          <td style="width: 100px;">{{formatTime(lesson.attributes.start) || '-'}}</td>
           <td>
             <AvatarName :user="{attributes: lesson.tutor}" />
           </td>
-          <!-- <td><span :class="lesson.attributes.funding_type">{{lesson.attributes.funding_type || '-'}}</span></td> -->
-          <td><span class="status btn" :class="lesson.attributes.status + '-td'">{{lesson.attributes.status}}</span></td>
+          <td><span class="status" :class="lesson.attributes.status + '-td'">{{lesson.attributes.status}}</span></td>
           <td v-if="user.attributes.schools.length > 1">{{lesson.school.name}}</td>
         </tr>
       </tbody>
@@ -53,6 +53,8 @@ import { useUserStore } from '../../../../stores/user'
 import { useLessonsStore } from '../../../../stores/lessons'
 import useSorter from '../../../../composables/useSorter'
 import AvatarName from '../../../../components/Layouts/MainLayout/Elements/Avatars/AvatarName.vue'
+import useAbbreviator from '../../../../composables/useAbbreviator'
+import { ref } from 'vue';
 
 const props = defineProps({lessons: Array})
 
@@ -60,6 +62,9 @@ const router = useRouter()
 const sorter = useSorter()
 const lessonStore = useLessonsStore()
 const user = useUserStore()
+const { abbreviate } = useAbbreviator()
+
+const abbreviatedFundingArray = ref([])
 
 function handleLessonClick(lesson){
   lessonStore.setLesson(lesson)
@@ -81,14 +86,36 @@ function getNum(type){
 function sortData(field){
   sorter.sort(props.lessons, field)
 }
+
+function getLessonFunding(funding){
+  let abbreviatedValue = abbreviate(funding)
+  return abbreviatedValue
+}
+
 </script>
 
 <style lang="scss" scoped>
 #table-body-section {
   max-height: calc(100vh - 300px);
 }
+.funding-icon {
+  display: flex;
+  width: 25px;
+  height: 25px;
+  background-color: $ah-primary;
+  color: white;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+}
+th {
+  cursor: pointer;
+}
 @media (min-width: 768px){
   .status {
+    display: inline-block;
+    text-align: center;
+    border-radius: 0.365rem;
     width: 150px;
     padding: 5px;
     border: 1px solid black;
@@ -102,6 +129,11 @@ function sortData(field){
     color: $ah-purple;
     background-color: lighten($ah-purple-light, 64%);
     border-color: $ah-purple;
+  }
+  .Waiting-td {
+    color: $ah-grey-dark;
+    background-color: $ah-grey-background;
+    border-color: $ah-grey-dark;
   }
 }
 

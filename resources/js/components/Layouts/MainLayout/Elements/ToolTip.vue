@@ -25,13 +25,13 @@ const props = defineProps({tip:String})
   .toolTip .tool-tip-text {
     visibility: hidden;
     width: 200px;
-    background-color: #3B6580;
+    background-color: #6c6c6c;
     color: #fff;
     text-align: center;
     border-radius: 6px;
     padding: 5px;
     position: absolute;
-    z-index: 1;
+    z-index: 10;
     top: 150%;
     left: 50%;
     transform: translateX(-50%);
@@ -45,7 +45,7 @@ const props = defineProps({tip:String})
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: transparent transparent #3B6580 transparent;
+    border-color: transparent transparent #6c6c6c transparent;
   }
   
   .toolTip:hover .tool-tip-text {

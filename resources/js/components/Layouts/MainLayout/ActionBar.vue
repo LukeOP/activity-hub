@@ -112,6 +112,9 @@ function modalCheck(item){
         width: 20px;
       }
     }
+    &:last-of-type {
+      border-bottom: 15px solid $ah-secondary;
+    }
   }
   .additional {
     background: $ah-secondary;
