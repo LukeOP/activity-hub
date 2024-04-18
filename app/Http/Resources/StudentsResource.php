@@ -14,6 +14,25 @@ class StudentsResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $contacts = $this->contacts ? new StudentContactsResource($this->contacts) : [
+            'id' => null,
+            'student' => [
+                'mobile' => null,
+                'email' => null,
+            ],
+            'pc' => [
+                'name' => null,
+                'relationship' => null,
+                'mobile' => null,
+                'email' => null,
+            ],
+            'sc' => [
+                'name' => null,
+                'relationship' => null,
+                'mobile' => null,
+                'email' => null,
+            ]
+        ];
         return [
             'id' => (string)$this->id,
             'first_name' => $this->first_name,
@@ -25,7 +44,7 @@ class StudentsResource extends JsonResource
             'date_of_birth' => $this->date_of_birth,
             'identifier' => $this->identifier,
             'enrolled_status' => $this->enrolled_status,
-            'contacts' => new StudentContactsResource($this->contacts),
+            'contacts' => $contacts,
             'school' => [
                 'id' => $this->school->id,
                 'name' => $this->school->name,

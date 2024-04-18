@@ -64,7 +64,7 @@ function sortData(field){
 }
 
 function handleRowClick(member){
-  studentStore.setStudent(member)
+  studentStore.setStudent(member.id)
   router.push({ name: 'StudentDetails'})
 }
 

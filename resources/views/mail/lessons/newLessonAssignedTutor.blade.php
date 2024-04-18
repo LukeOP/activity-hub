@@ -33,8 +33,8 @@
                 </div>
             @endif
             <br>
-            <p><a href="https://activityhub.co.nz/user-login">Log in</a> to finish setting up this lesson. 
-            Or contact {{$lesson['school']['name']}} if you have any questions.</p>
+            <p><a href="https://activityhub.co.nz/user-login">Log in</a> to finish setting up this lesson 
+            or contact {{$lesson['school']['name']}} if you have any questions.</p>
             <p>Kind regards,
             <br>
             The Activity Hub Team.

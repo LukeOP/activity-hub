@@ -21,6 +21,7 @@
       <p style="margin: auto;" class="text-grey-dark">No hire data</p>
     </span>
   </div>
+  <hr />
 </template>
 
 <script setup>
@@ -59,7 +60,6 @@ h2 {
 }
 .section {
   padding: 10px 10px 2rem;
-  border-bottom: 1px dashed $ah-primary;
 }
 .active {
   color: $ah-primary-dark;

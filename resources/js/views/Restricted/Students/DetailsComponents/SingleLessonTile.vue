@@ -1,11 +1,18 @@
 <template>
-    <div class="lesson-card" :class="{deleted: lesson.attributes.deleted_at != null}" @click="goToLesson">
-      <div class="row">
-        <div class="col col-6">
-          <div id="instrument-name">{{ lesson.attributes.instrument }}</div>
-          <div>Tutor: {{ lesson.tutor.full_name }}</div>
+    <div class="lesson-card" :class="{deleted: lesson.attributes.deleted_at != null, pending:lesson.attributes.status == 'Pending'}" @click="goToLesson">
+      <!-- <div class="row"> -->
+        <!-- <div class="col col-6"> -->
+        <div>
+          <div style="display: flex; justify-content: space-between;">
+            <div id="instrument-name">{{ lesson.attributes.instrument }}</div>
+            <div>{{ lesson.attributes.status }}</div>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <div>Tutor: {{ lesson.tutor.full_name }}</div>
+            <div v-if="lesson.attributes.startDate">Started: {{ formatDate(lesson.attributes.startDate) }}</div>
+          </div>
         </div>
-        <div class="col col-6 text-end">
+        <!-- <div class="col col-6 text-end">
           <span v-if="lesson.attributes.deleted_at === null">
             <div>{{ lesson.attributes.day }} {{ lesson.attributes.start }}</div>
           </span>
@@ -13,8 +20,8 @@
             <div>Started: {{ formatDate(lesson.attributes.startDate) }}</div>
             <div>Ended: {{ formatDate(lesson.attributes.deleted_at) }}</div>
           </span>
-        </div>
-      </div>
+        </div> -->
+      <!-- </div> -->
   </div>
 </template>
 
@@ -32,7 +39,7 @@ function formatDate(date){
 }
 
 function goToLesson(){
-  lessonStore.setLesson(props.lesson)
+  lessonStore.setLesson(props.lesson.id)
   router.push({
     name: 'LessonDetails'
   })
@@ -66,6 +73,10 @@ function goToLesson(){
     box-shadow: 5px 5px 10px $ah-primary-background;
     border-color: $ah-grey-light;
   }
+}
+.pending {
+  background-color: #FCF9FE;
+  border-left-color: $ah-purple;
 }
 
 </style>

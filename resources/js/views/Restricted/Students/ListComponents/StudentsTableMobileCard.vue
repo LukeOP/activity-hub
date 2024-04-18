@@ -15,7 +15,6 @@
 </template>
 
 <script setup>
-import moment from "moment"
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import useAbbreviator from '/resources/js/composables/useAbbreviator'
@@ -29,7 +28,7 @@ const studentStore = useStudentStore()
 const active = ref(false)
 
 function StudentDetails(){
-  studentStore.setStudent(props.student)
+  studentStore.setStudent(props.student.id)
   router.push({
     name: 'StudentDetails'
   })

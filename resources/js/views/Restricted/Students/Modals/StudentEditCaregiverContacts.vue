@@ -48,6 +48,7 @@ import axiosClient from '/resources/js/axios';
 import { useStudentStore } from '/resources/js/stores/students';
 import { useToastStore } from '/resources/js/stores/toast';
 import { useModalStore } from '/resources/js/stores/modal';
+import useApi from '../../../../composables/useApi';
 
 const studentStore = useStudentStore()
 const toast = useToastStore()
@@ -83,9 +84,10 @@ populateFormData()
 
 function updateStudentContactDetails(){
   // if(caregiverEmailOrPhoneProvided()){
-    axiosClient.patch('student-contacts/' + formData.value.student_id, formData.value).then((res)=>{
-      studentStore.setStudent(res.data.student)
-      toast.open('success', 'Student updated', `Contact details for ${res.data.student.first_name} have been updated.`)
+    const {data, fetchData} = useApi('student-contacts/' + formData.value.student_id, formData.value, 'PATCH', true)
+    fetchData().then(()=>{
+      studentStore.updateStudent(data.value.data)
+      // toast.open('success', 'Student updated', `Contact details for ${res.data.student.first_name} have been updated.`)
       modal.close()
     })
   // } else {

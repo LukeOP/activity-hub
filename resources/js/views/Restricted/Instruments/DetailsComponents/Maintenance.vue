@@ -1,6 +1,7 @@
 <template>
   <section>
     <h3>Maintenance</h3>
+    <hr />
   </section>
 </template>
 
@@ -11,6 +12,5 @@
 <style lang="scss" scoped>
 section {
   padding: 10px 10px 2rem;
-  border-bottom: 1px dashed $ah-primary;
 }
 </style>

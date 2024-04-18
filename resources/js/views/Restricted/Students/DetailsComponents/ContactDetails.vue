@@ -52,7 +52,7 @@
         <div class="btn btn-outline-primary" @click="modal.open('StudentEditCaregiverContacts')">Add Caregiver Contact Details</div>
       </span>
     </div>
-    <div id="secondary-caregiver" class="col col-12 col-sm-6 col-md-3">
+    <div id="secondary-caregiver" class="col col-12 col-sm-6 col-md-3" v-if="student.contacts.sc.email">
       <h2>Secondary Caregiver:</h2>
       <span v-if="student.contacts">
         <span v-if="student.contacts.sc.name">
@@ -74,6 +74,7 @@
       </span>
     </div>
   </div>
+  <hr />
 </template>
 
 <script setup>
@@ -99,7 +100,6 @@ h3 {
 }
 .section {
   padding: 10px;
-  border-bottom: 1px dashed $ah-primary;
 }
 #student, #primary-caregiver, #secondary-caregiver {
   border-left: 4px solid;

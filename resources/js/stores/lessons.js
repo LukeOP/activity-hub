@@ -59,8 +59,8 @@ export const useLessonsStore = defineStore('lessons', {
     setAttendance(attendance_id){
       this.singleAttendance = attendance_id
     },
-    setRequest(requestObject){
-      this.singleRequest = requestObject
+    setRequest(request_id){
+      this.singleRequest = request_id
     },
     setRequests(requestArray){
       this.lessonRequests = requestArray
@@ -133,7 +133,7 @@ export const useLessonsStore = defineStore('lessons', {
 
     // REQUESTS
     getRequest(){
-      return this.singleRequest
+      return this.lessonRequests.find(r => r.id == this.singleRequest)
     },
     getRequests(){
       return this.lessonRequests

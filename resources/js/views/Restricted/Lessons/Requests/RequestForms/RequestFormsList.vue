@@ -17,8 +17,8 @@
         <h2>Existing Forms:</h2>
         <LoadingSpinner :isLoading="schoolStore.loading" color="primary" />
         <div id="form-container" v-if="!schoolStore.loading">
-          <div v-for="form in formData.forms" :key="form">
-            <div class="form" @click="viewFormDetails(form)">
+          <div v-for="form in formData.forms" :key="form" class="form">
+            <div @click="viewFormDetails(form)">
               <span>{{ form.attributes.description }}</span>
               <span class="float-end">{{ moment(form.timestamp.created).format('DD-MM-YYYY') }}</span>
             </div>
@@ -76,11 +76,6 @@ function setActions() {
 }
 setActions()
 
-// Fetch user schools or set default school if only one exists for user
-// const {data: schools, loading, fetchData: fetchSchools} = useApi('schools')
-// fetchSchools().then(()=>{
-//   setSchools()
-// })
 
 function setSchools(){
   schoolStore.getSchools.forEach(school => {
@@ -130,20 +125,23 @@ onMounted(async ()=>{
 h2 {
   font-size: 1.5rem;
 }
-.form {
-  padding: 5px 10px;
-  &:nth-of-type(odd){
-    background-color: $ah-primary-background;
-    border-radius: 0.375rem;
+#form-container {
+  border: 1px solid $ah-grey-lightest;
+  .form {
+    padding: 5px 10px;
+    &:nth-of-type(odd){
+      background-color: $ah-primary-background;
+      //border-radius: 0.375rem;
+    }
+    &:hover {
+      background-color: $ah-primary-light;
+      color: white;
+      cursor: pointer;
+    }
   }
-  &:hover {
-    background-color: $ah-primary-light;
-    color: white;
-    cursor: pointer;
+  #no-form {
+    padding: 10px;
   }
-}
-#no-form {
-  padding: 10px;
 }
 .create {
   width: 100%;

@@ -1,7 +1,8 @@
 <template>
     <div style="text-align:center; display: inline-block;">
     
-      <div :class="{toolTip: tip}">
+      <div :class="{toolTip: tip, borderLine: line}" >
+        <i v-if="icon" class="fa-solid fa-circle-info"></i>
         <slot></slot>
         <span class="tool-tip-text">{{ tip }}</span>
       </div>
@@ -10,7 +11,7 @@
 </template>
 
 <script setup>
-const props = defineProps({tip:String})
+const props = defineProps({tip:String, line: Boolean, icon: Boolean})
 
 </script>
   
@@ -18,8 +19,10 @@ const props = defineProps({tip:String})
   .toolTip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted #3B6580;
     cursor:help;
+  }
+  .borderLine {
+    border-bottom: 1px dotted #3B6580;
   }
   
   .toolTip .tool-tip-text {
@@ -50,6 +53,9 @@ const props = defineProps({tip:String})
   
   .toolTip:hover .tool-tip-text {
     visibility: visible;
+  }
+  .fa-circle-info {
+    color: #3B6580;
   }
   </style>
   

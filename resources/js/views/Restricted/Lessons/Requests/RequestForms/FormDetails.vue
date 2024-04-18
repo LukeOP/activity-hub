@@ -140,15 +140,13 @@
 
         <div class="checkbox-option" style="display: block;">
           <div class="description text-primary">Instruments to display on the form:</div>
+          <ToolTip tip="Available instruments are defined by staff teaching subjects set in their staff profile." :icon="true"></ToolTip>
           <div class="optionSelection mb-3">
             <div class="option" 
               v-for="instrument in staffStore.getSubjects" :key="instrument" 
               :class="{selected: isSelectedInstrument(instrument)}" 
               @click="instrumentClick(instrument)">{{ instrument }}</div>
           </div>
-          <!-- <pre>
-            {{ selectedInstruments }}
-          </pre> -->
         </div>
 
         <div class="checkbox-option">
@@ -158,12 +156,13 @@
         </div>
 
         <div class="checkbox-option">
-          <input type="checkbox" checked  v-model="formData.funding_type_cb">
+          <input type="checkbox"  v-model="formData.funding_type_cb" :disabled="!schoolStore.getFunding">
           <span class="description">Funding Type:</span>
-          <input type="text" class="form-control" v-model="formData.funding_type" :disabled="!formData.funding_type_cb">
+          <input type="text" class="form-control" v-model="formData.funding_type" :disabled="!formData.funding_type_cb || !schoolStore.getFunding">
         </div>
         <div class="checkbox-option" style="display: block;">
           <div class="description text-primary">Funding Types to display on the form:</div>
+          <ToolTip tip="Available funding types can be set in the school setup options." :icon="true"></ToolTip>
           <div class="optionSelection mb-3">
             <div class="option" 
               v-for="fundingOption in schoolStore.getFunding" :key="fundingOption" 
@@ -209,6 +208,7 @@ import { useActionsStore } from '../../../../../stores/actions';
 import { useUserStore } from '../../../../../stores/user';
 import { useStaffStore } from '../../../../../stores/staff';
 import { useSchoolStore } from '../../../../../stores/schools';
+import ToolTip from '../../../../../components/Layouts/MainLayout/Elements/ToolTip.vue';
 
 
 // Initiate Stores

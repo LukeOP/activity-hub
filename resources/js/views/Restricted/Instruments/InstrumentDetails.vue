@@ -4,7 +4,7 @@
     <HeaderLine :heading="instrument.attributes.name + ' Details'" :school="instrument.school.name" />
     <Details :instrument="instrument" />
     <Hires :instrument="instrument" />
-    <Maintenance :instrument="instrument" />
+    <!-- <Maintenance :instrument="instrument" /> -->
   </div>
 </template>
 

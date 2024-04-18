@@ -59,7 +59,7 @@ export default {
     const user = useUserStore()
 
     function handleLessonClick(lesson){
-      lessonStore.setRequest(lesson)
+      lessonStore.setRequest(lesson.id)
       router.push({
         name: 'LessonRequestReview'
       })

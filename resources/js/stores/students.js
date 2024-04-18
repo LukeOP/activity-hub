@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 function getState(){
     return {
-      currentStudent: {},
+      currentStudent: '',
       students: [],
       filteredStudents: []
     }
@@ -11,8 +11,8 @@ function getState(){
 export const useStudentStore = defineStore('students', {
   state: () => (getState()),
   actions: {
-    setStudent(studentObject){
-      this.currentStudent = studentObject
+    setStudent(student_id){
+      this.currentStudent = student_id
     },
     setStudents(studentArray){
       this.students = studentArray
@@ -27,17 +27,16 @@ export const useStudentStore = defineStore('students', {
       const index = this.students.findIndex(s => s.id === studentObject.id)
       if (index !== -1){
         this.students.splice(index, 1, studentObject)
-        this.currentStudent = studentObject
       }
     },
     reset(){
-      this.currentStudent = {}
+      this.currentStudent = ''
       this.students = []
     }
   },
   getters: {
     getStudent(){
-      return this.currentStudent
+      return this.students.find(s => s.id == this.currentStudent)
     },
     getStudents(){
       return this.students

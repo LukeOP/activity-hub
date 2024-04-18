@@ -55,11 +55,13 @@ export const useSchoolStore = defineStore('schools', {
     getFunding(){
       var fundingTypeSet = new Set();
     
-      this.getSchool.data.funding.forEach(function(funding){
-        fundingTypeSet.add(funding.value)
-      })
+      if(this.getSchool.data.funding.length > 0){
+        this.getSchool.data.funding.forEach(function(funding){
+          fundingTypeSet.add(funding.value)
+        })
+        return Array.from(fundingTypeSet)
+      } else return null;
     
-      return Array.from(fundingTypeSet)
     }
   }
 })

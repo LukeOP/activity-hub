@@ -8,6 +8,7 @@
     </section>
 
     <div v-else class="text-center" id="UI-note">-- No hires yet --</div>
+    <hr />
   </section>
 </template>
 
@@ -53,8 +54,8 @@ function viewHire(hire){
 
 <style lang="scss" scoped>
 #main-section {
-  padding: 10px 10px 2rem;
-  border-bottom: 1px dashed $ah-primary;
+  padding: 10px 10px 1rem;
+  // border-bottom: 1px dashed $ah-primary;
 }
 #UI-note {
   color: $ah-primary;

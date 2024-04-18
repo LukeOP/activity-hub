@@ -28,7 +28,7 @@ function formatDate(date){
 <style lang="scss" scoped>
 section {
   padding: 10px 10px 2rem;
-  border-bottom: 1px dashed $ah-primary;
+  // border-bottom: 1px dashed $ah-primary;
 }
 h2 {
   color: $ah-primary-dark;
