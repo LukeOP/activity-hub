@@ -38,7 +38,7 @@ export default {
     }
 
     function viewStudent(){
-      studentStore.setStudent(props.lesson.student)
+      studentStore.setStudent(props.lesson.student.id)
       router.push({ name: 'StudentDetails'})
     }
 
