@@ -30,7 +30,7 @@ import { useModalStore } from '../../../../../stores/modal';
 
     function lessonClick(){
         appStore.setItems({date: props.date})
-        lessonStore.setLesson(props.lesson)
+        lessonStore.setLesson(props.lesson.id)
         modal.open('LessonPlannerClick')
     }
 

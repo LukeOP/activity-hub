@@ -30,7 +30,7 @@ const user = useUserStore()
 const router = useRouter()
 
 const lesson = lessonStore.getLessonData
-lessonStore.setAttendanceArray(lesson.attendance)
+// lessonStore.setAttendanceArray(lesson.attendance)
 
 // Set User Permissions in Header
 const link1 = computed(()=>{

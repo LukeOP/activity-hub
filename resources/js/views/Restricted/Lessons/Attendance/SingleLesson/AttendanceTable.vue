@@ -19,7 +19,7 @@
           <th>Attendance:</th>
           <th class="hide">Recorded By:</th>
           <!-- <th class="hide">Last Modified:</th> -->
-          <th style="width: 30px;"></th>
+          <th style="width: 80px;"></th>
         </tr>
       </thead>
     </table>
@@ -36,8 +36,12 @@
             <div class="attendance" :class="record.attendance">{{capitalizeFirstLetter(record.attendance)}}</div>
           </td>
           <td class="hide">{{lesson.tutor.first_name}} {{lesson.tutor.last_name}}</td>
-          <!-- <td class="hide">{{formatModified(record.updated_at)}}</td> -->
-          <td style="width: 30px;"><i class="fa-solid fa-edit edit" @click="editAttendance(record)"></i></td>
+          <td style="width: 80px;">
+            <div style="display: flex; justify-content: space-between; padding-right: 10px;">
+              <i class="fa-solid fa-edit icon" @click="editRecord(record, 'EditAttendance')"></i>
+              <i class="fa-regular fa-note-sticky icon" :class="{'fa-solid': hasNotes(record)}" @click="editRecord(record, 'LessonNotes')"></i>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -54,6 +58,7 @@ import { useModalStore } from '/resources/js/stores/modal'
 import { useLessonsStore } from '/resources/js/stores/lessons'
 import useSorter from '/resources/js/composables/useSorter'
 import { computed, ref } from 'vue'
+import { useAppStore } from '../../../../../stores/appStore'
 export default {
   props: {
     lesson: Object
@@ -62,6 +67,7 @@ export default {
     const lessonStore = useLessonsStore()
     const sorter = useSorter()
     const lesson = lessonStore.getLessonData
+    const appStore = useAppStore()
 
     const attendanceRecords = lessonStore.getAttendanceArray
     const modal = useModalStore()
@@ -95,9 +101,18 @@ export default {
       return moment(date).format('dddd')
     }
 
-    function editAttendance(record){
-      lessonStore.setAttendance(record)
-      modal.open('EditAttendance')
+    function editRecord(record, modalLink){
+      lessonStore.setAttendance(record.id)
+      appStore.setItems({date: record.date})
+      modal.open(modalLink)
+    }
+
+    function hasNotes(record){
+      let attendance = lessonStore.getLessonNotesAndAttendance.find(n => n.attendance_id == record.id)
+      if(attendance){
+        // console.log(Object.values(attendance.comments).every(c => c === null || c === ''));
+        return true
+      } else return false
     }
 
     return {
@@ -111,8 +126,9 @@ export default {
       capitalizeFirstLetter,
       getDay,
       formatModified,
-      editAttendance,
+      editRecord,
       formatDate,
+      hasNotes,
     }
   }
 
@@ -159,9 +175,13 @@ export default {
 .incomplete {
   background-color: $ah-grey;
 }
-.edit:hover {
+.icon {
+  font-size: 1.75rem;
   color: $ah-primary;
-  cursor: pointer;
+  &:hover {
+    color: $ah-secondary;
+    cursor: pointer;
+  }
 }
 tr:hover {
   cursor: default;

@@ -45,7 +45,7 @@ function formatTime(date){
 
 function lessonClick(lesson){
   appStore.setItems({date: props.date})
-  lessonStore.setLesson(lesson)
+  lessonStore.setLesson(lesson.id)
   modal.open('LessonPlannerClick')
 }
 

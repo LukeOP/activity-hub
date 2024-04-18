@@ -26,6 +26,7 @@ const props = defineProps({
   heading: String,
   stats: Boolean
 })
+
  
 const lessonStore = useLessonsStore()
 
@@ -34,7 +35,7 @@ function getHeading(){
   return "Attendance"
 }
 const usingProps = computed(()=>{
-  return Object.keys(props.lesson).length > 0
+  return Object.keys(props.lesson.attendance.filter(a => a.attendance != 'pending')).length > 0
 })
 
 const present = computed(() => {
@@ -56,12 +57,10 @@ const custom = computed(() => {
 
 const total = computed(()=> {
   return present.value + late.value + absent.value + custom.value
-  // if(lessonStore.getLessonData.id == props.lesson.id) return lessonStore.getLessonData.attendance.length
-  // return props.lesson.attendance.length
 })
 
 function getPercentage(value) {
-  return Math.round(value / props.lesson.attendance.length * 100) || 0
+  return Math.round(value / props.lesson.attendance.filter(a => a.attendance != 'pending').length * 100) || 0
 }
 
 </script>

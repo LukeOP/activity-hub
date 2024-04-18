@@ -36,26 +36,33 @@ class LessonNotesController extends Controller
     public function store(StoreLessonNoteRequest $request)
     {
         try {
-            $attendanceRecord = $request->attendance_id
-                ? LessonAttendance::findOrFail($request->attendance_id)
-                : $this->createLessonAttendance([
+            // Check for existing LessonAttendance record for this date and lesson_id
+            $attendanceRecord = LessonAttendance::where('lesson_id', $request->lesson_id)->where('date', $request->date)->first();
+            
+            // If no record exists, create one with the attendance value 'pending'
+            if(!$attendanceRecord){
+                $attendanceRecord = $this->createLessonAttendance([
                     'lesson_id' => $request->lesson_id,
                     'attendance' => 'pending',
                     'date' => $request->date,
                     'time' => $request->time,
                     'tutor_id' => $request->tutor_id
                 ]);
+            }
     
+            // If an attendance record now exists create or update notes for that lesson attendance.
             if ($attendanceRecord !== null) {
-                LessonNotes::create([
+                LessonNotes::updateOrCreate(
+                    ['attendance_id' => $attendanceRecord->id],
+                    [
                     'lesson_id' => $request->lesson_id,
                     'user_id' => $request->user_id,
-                    'attendance_id' => $attendanceRecord->id,
                     'planning_comment' => $request->planning_comment,
                     'progress_comment' => $request->progress_comment,
                     'next_steps_comment' => $request->next_steps_comment,
                     'general_comment' => $request->general_comment,
-                ]);
+                    ]
+                );
     
                 return $this->success(
                     new LessonsResource(Lesson::findOrFail($request->lesson_id)),

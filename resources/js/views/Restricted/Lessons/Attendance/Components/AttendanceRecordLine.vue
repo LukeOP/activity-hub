@@ -73,12 +73,12 @@ import moment from "moment";
   })
 
   const latestAttendance = computed(()=>{
-    let sortedAttendance = props.lesson.attendance.sort((a, b) => new Date(b.date) - new Date(a.date))
+    let sortedAttendance = props.lesson.attendance.filter(a => a.attendance != 'pending').sort((a, b) => new Date(b.date) - new Date(a.date))
     return sortedAttendance[0]
   })
   
   function getPercentage(value) {
-    return Math.round(value / props.lesson.attendance.length * 100) || 0
+    return Math.round(value / props.lesson.attendance.filter(a => a.attendance != 'pending').length * 100) || 0
   }
 
   function formatDate(date){

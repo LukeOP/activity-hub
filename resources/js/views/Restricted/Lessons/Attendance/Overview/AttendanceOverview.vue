@@ -3,11 +3,12 @@
   <HeaderLine heading="Attendance Overview" link1="Lesson List" @link1="routeChange('LessonsList')" link2="Attendance Review" @link2="routeChange('LessonAttendanceReview')" />
   <div id="menuBar">
     <div id="subject-group">
-      <div v-for="subject in subjectArray" :key="subject" 
-        :class="{active: selectedSubject === subject}"
-        class="menuItem"
-        @click="selectedSubject = subject">
-        {{ subject }}
+      <div v-for="subject in subjectArray" :key="subject">
+        <span v-if="filteredLessons(subject).length > 0" class="menuItem"
+          :class="{active: selectedSubject === subject}"
+          @click="selectedSubject = subject">
+          {{ subject }}
+        </span>
       </div>
     </div>
     <div id="options-group" style="display: flex;">
@@ -54,8 +55,6 @@ const lessonStore = useLessonsStore()
 const schoolStore = useSchoolStore()
 const sorter = useSorter()
 const subjectArray = ref(Array.from(new Set(lessonStore.getLessonsData.map(l => l.attributes.instrument ))))
-// sorter.sort(subjectArray.value, 'instrument')
-// console.log(subjectArray.value);
 const selectedSubject = ref(subjectArray.value[0])
 const selectedTutor = ref(0)
 const selectedFunding = ref(`All Funding Options`)
@@ -127,18 +126,16 @@ function filteredLessons(type){
   if(selectedFunding.value != `All Funding Options`){
     filtLessons = filtLessons.filter(l => l.attributes.funding_type == selectedFunding.value)
   }
+  filtLessons = filtLessons.filter(l => l.attendance.some(a => a.attendance != 'pending'))
   sorter.sort(filtLessons, 'student.last_name')
   return filtLessons
 }
 
 function handleClick(lesson){
-  const { data: lessonData, loading, fetchData} = useApi('lessons/' + lesson.id)
-  fetchData().then(()=>{
-    lessonStore.setLesson(lessonData.value)
+    lessonStore.setLesson(lesson.id)
     router.push({
       name: 'LessonAttendanceSingle'
     })
-  })
 }
 
 function routeChange(route){
@@ -182,9 +179,9 @@ function routeChange(route){
       min-width: 100px;
       background-color: transparent;
       border: 1px solid $ah-grey;
-      border-radius: 0.5rem;
+      border-radius: 20px;
       // margin-right: 1rem;
-      padding: 5px 10px;
+      padding: 10px 20px;
       &:hover {
         cursor: pointer;
         border-color: $ah-primary;

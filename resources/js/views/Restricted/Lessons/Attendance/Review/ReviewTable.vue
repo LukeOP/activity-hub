@@ -59,13 +59,7 @@ function capitalizeFirstLetter(string){
 }
 
 function editAttendance(record){
-    lessonStore.setAttendance({
-      attendance: record.attendance,
-      date: record.date,
-      time: record.time,
-      lesson_id: record.lesson_id,
-      id: record.id
-    })
+    lessonStore.setAttendance(record.attendance.id)
     modal.open('EditAttendance')
   }
 

@@ -1,21 +1,27 @@
 <template>
     <div id="notes-section">
-        <div id="current-notes">
+        <div id="current-notes">            
             <h2>Lesson Notes - {{ currentLesson.student.full_name }} ({{ currentLesson.attributes.instrument }})</h2>
-            <p>{{ formatDate(appStore.getItems.date) }}</p>
-            <label>Planning Notes:
+            <p>{{ formatDate(appStore.getItems.date) }}<span v-if="previousLessonNotes" class="float-end text-primary" style="cursor: pointer;" @click="previous = !previous">{{previous ? 'Hide Previous Notes' : 'Show Previous Notes'}}</span></p>
+            <div v-if="previous" class="mb-2" style="border: 1px solid #E2EBF2; border-left: 6px solid grey; padding: 10px; border-radius: 0.375rem;">
+                <p><strong>Planning:</strong> {{ previousLessonNotes.comments.planning }}</p>
+                <p><strong>Progress:</strong> {{ previousLessonNotes.comments.progress }}</p>
+                <p><strong>Next Steps:</strong> {{ previousLessonNotes.comments.next_steps }}</p>
+                <p style="text-align: end; margin: 0;">{{ formatDate(previousLessonNotes.attendance.date) }} - <i>{{ previousLessonNotes.attendance.attendance }}</i></p>
+            </div>
+            <label>Planning Comment:
                 <textarea rows="3" class="form-control" placeholder="Introduce cool new technique..." v-model="formData.planning_comment"></textarea>
             </label>
             <label>Progress Comment:
                 <textarea rows="3" class="form-control" placeholder="Today we worked on..." v-model="formData.progress_comment"></textarea>
             </label>
-            <label>Next Steps
+            <label>Next Steps:
                 <textarea rows="3" class="form-control" placeholder="Next time focus on..." v-model="formData.next_steps_comment"></textarea>
             </label>
             <button class="btn btn-primary" @click="submitNotes()" :disabled="!notesEntered">{{ formData.attendance_id != null ? 'Edit Notes' : 'Submit Notes' }}</button>
-            <hr />
+            <!-- <hr /> -->
         </div>
-        <div id="previous-notes">
+        <!-- <div id="previous-notes">
             <h3 style="width:100%">Previous Lesson Notes:</h3>
             <div v-if="previousLessonNotes">
                 <div>{{ formatDate(previousLessonNotes.attendance.date) }} - <i>{{ previousLessonNotes.attendance.attendance }}</i></div>
@@ -30,7 +36,7 @@
                 <span>No previous lesson notes have been recorded.</span>
             </div>
             <button class="btn btn-outline-primary">View All Notes</button>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -53,6 +59,7 @@ import { useModalStore } from '../../../../../stores/modal';
     const appStore = useAppStore()
     const sorter = useSorter()
     const selectedDate = moment(appStore.getItems.date).format('YYYY-MM-DD')
+    const previous = ref(false)
 
     const formData = ref({
         lesson_id: lessonStore.getLessonData.id,
@@ -67,11 +74,13 @@ import { useModalStore } from '../../../../../stores/modal';
     })
 
     const previousLessonNotes = computed(() => {
-        let previous = lessonStore.getLessonNotesAndAttendance.filter(l => l.attendance.date < selectedDate)
-        sorter.sort(previous, 'attendance.date', 'desc')
-        if(previous.length > 0){
-            return previous[0]
-        } else {
+        try {
+            let previous = lessonStore.getLessonNotesAndAttendance.filter(l => l.attendance.date < selectedDate)
+            sorter.sort(previous, 'attendance.date', 'desc')
+            if(previous.length > 0){
+                return previous[0]
+            }
+        } catch (error){
             return null
         }
     })
@@ -83,18 +92,21 @@ import { useModalStore } from '../../../../../stores/modal';
     })
 
     function getCurrentLessonNotes() {
-        let currentNotes = lessonStore.getLessonNotesAndAttendance.find(l => l.attendance.date == selectedDate)
-        if(currentNotes) {
-            formData.value.attendance_id = currentNotes.attendance.id,
-            formData.value.planning_comment = currentNotes.comments.planning,
-            formData.value.progress_comment = currentNotes.comments.progress,
-            formData.value.next_steps_comment = currentNotes.comments.next_steps
+        try {
+            let currentNotes = lessonStore.getLessonNotesAndAttendance.find(l => l.attendance.date == selectedDate)
+            if(currentNotes) {
+                formData.value.attendance_id = currentNotes.attendance.id,
+                formData.value.planning_comment = currentNotes.comments.planning,
+                formData.value.progress_comment = currentNotes.comments.progress,
+                formData.value.next_steps_comment = currentNotes.comments.next_steps
+            }
         }
+        catch (error){}
     }
     getCurrentLessonNotes()
 
     function submitNotes(){
-        const { data, fetchData } = useApi('lesson-notes', formData.value, 'POST')
+        const { data, fetchData } = useApi('lesson-notes', formData.value, 'POST', true)
         fetchData().then(()=>{
             lessonStore.updateLessonRecord(data.value.data)
             modal.close()
@@ -149,6 +161,13 @@ textarea {
 #notes-section {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
+}
+.previous-btn {
+    color: $ah-primary;
+    float: inline-end;
+}
+.previous-comment {
+    border-right-color: $ah-grey;
 }
 
 </style>

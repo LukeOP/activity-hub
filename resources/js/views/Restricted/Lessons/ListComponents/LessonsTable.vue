@@ -22,7 +22,7 @@
     <table>
       <tbody>
         <tr v-for="lesson in lessons" :key="lesson.id" @click="handleLessonClick(lesson)" :class="lesson.attributes.status">
-          <td style="width: 45px;"><span class="funding-icon">{{getLessonFunding(lesson.attributes.funding_type)}}</span></td>
+          <td style="width: 45px;"><span class="funding-icon" v-if="lesson.attributes.funding_type">{{getLessonFunding(lesson.attributes.funding_type)}}</span></td>
           <td style="padding-right: 10px;"><span>{{lesson.student.full_name}}</span><span v-if="lesson.student.tutor_group" style="float: inline-end;">({{ lesson.student.tutor_group }})</span></td>
           <td style="width: 150px;">{{lesson.attributes.instrument}}</td>
           <td style="width: 150px;">{{lesson.attributes.day || '-'}}</td>
@@ -67,7 +67,7 @@ const { abbreviate } = useAbbreviator()
 const abbreviatedFundingArray = ref([])
 
 function handleLessonClick(lesson){
-  lessonStore.setLesson(lesson)
+  lessonStore.setLesson(lesson.id)
   router.push({ name: 'LessonDetails'})
 }
 
@@ -88,7 +88,7 @@ function sortData(field){
 }
 
 function getLessonFunding(funding){
-  let abbreviatedValue = abbreviate(funding)
+  let abbreviatedValue = funding ? abbreviate(funding) : null
   return abbreviatedValue
 }
 

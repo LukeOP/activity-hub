@@ -3,11 +3,10 @@ import useApi from '/resources/js/composables/useApi';
 
 function getState(){
     return {
-      singleLesson: {},
+      singleLesson: '',
       lessons: [],
       filteredLessons: [],
-      selectedLessons: [],
-      singleAttendance: {},
+      singleAttendance: '',
       attendanceArray: [],
       singleRequest: {},
       lessonRequests: [],
@@ -41,8 +40,8 @@ export const useLessonsStore = defineStore('lessons', {
         this.fetchLessons()
       }
     },
-    setLesson(lessonObject){
-      this.singleLesson = lessonObject
+    setLesson(lesson_id){
+      this.singleLesson = lesson_id
     },
     setLessons(lessonsArray){
       this.lessons = lessonsArray
@@ -50,19 +49,15 @@ export const useLessonsStore = defineStore('lessons', {
     setFilteredLessons(lessonsArray){
       this.filteredLessons = lessonsArray
     },
-    setSelectedLessons(lessonsArray){
-      this.selectedLessons = lessonsArray
-    },
     updateLessonRecord(record){
       this.lessons = this.lessons.filter(l => l.id != record.id)
       this.lessons = [record, ...this.lessons]
-      this.singleLesson = record
     },
     setAttendanceArray(attendanceArray){
       this.attendanceArray = attendanceArray
     },
-    setAttendance(attendanceObject){
-      this.singleAttendance = attendanceObject
+    setAttendance(attendance_id){
+      this.singleAttendance = attendance_id
     },
     setRequest(requestObject){
       this.singleRequest = requestObject
@@ -77,62 +72,57 @@ export const useLessonsStore = defineStore('lessons', {
       this.formPreview = formData
     },
     addAttendanceRecord(record){
-      this.singleLesson.attendance = [record, ...this.singleLesson.attendance]
+      this.getLessonData.attendance = [record, ...this.getLessonData.attendance]
     },
     addAttendanceRecordByIndex(record, index){
       // console.log(record, index)
-      this.singleLesson.attendance = this.singleLesson.attendance.splice(index, 0, record)
+      this.getLessonData.attendance = this.getLessonData.attendance.splice(index, 0, record)
     },
     updateAttendanceRecord(record){
-      // console.log('store: ', record)
-      // let index = this.singleAttendance.attendance.findIndex(a => (a.id === record.id))
-      this.singleLesson.attendance = this.singleLesson.attendance.filter(a => a.id != record.id)
+      this.getLessonData.attendance = this.getLessonData.attendance.filter(a => a.id != record.id)
       this.addAttendanceRecord(record)
     },
     updateLessonRecord(record){
       const index = this.lessons.findIndex(l => l.id === record.id)
       if( index != -1){
         this.lessons.splice(index, 1, record)
-        this.singleLesson = record
       }
     },
     addNote(note){
-      this.singleLesson.notes = [note, ...this.singleLesson.notes]
+      this.getLessonData.notes = [note, ...this.getLessonData.notes]
     },
     updateNotes(notes){
-      this.singleLesson.notes = notes
+      this.getLessonData.notes = notes
     },
     deleteNote(note){
-      let notes = this.singleLesson.notes.filter(n => n.id != note.id)
+      let notes = this.getLessonData.notes.filter(n => n.id != note.id)
       this.updateNotes(notes)
     },
   },
   getters: {
     getLessonData(){
-      return this.singleLesson
+      return this.lessons.find(l => l.id == this.singleLesson) ? this.lessons.find(l => l.id == this.singleLesson) : ''
     },
     getLessonsData(){
       return this.lessons
     },
-    getSelectedLessons(){
-      return this.selectedLessons
-    },
+
+    // ATTENDANCE
     getAttendanceArray(){
-      return this.attendanceArray
+      return this.getLessonData.attendance
     },
     getAttendance(){
-      return this.singleAttendance
+      return this.getAttendanceArray.find(a => a.id == this.singleAttendance)
     },
-    getLessonAttendance(){
-      return this.singleLesson.attendance
-    },
+
+    // NOTES
     getLessonNotes(){
-      return this.singleLesson.notes
+      return this.getLessonData.notes
     },
     getLessonNotesAndAttendance(){
       const lessonNotes = this.getLessonNotes.filter(n => n.attendance_id != null)
       const combinedArray = lessonNotes.map(note => {
-        const matchingAttendance = this.getLessonAttendance.find(attendance => attendance.id === note.attendance_id);
+        const matchingAttendance = this.getAttendanceArray.find(attendance => attendance.id === note.attendance_id);
         return {
           ...note,
           attendance: matchingAttendance
@@ -140,6 +130,8 @@ export const useLessonsStore = defineStore('lessons', {
       })
       return combinedArray
     },
+
+    // REQUESTS
     getRequest(){
       return this.singleRequest
     },

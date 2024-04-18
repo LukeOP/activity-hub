@@ -12,7 +12,7 @@
         </tr>
       </TableHeader>
       <TableBody>
-        <PlannerTableRow v-if="dayLessons.length > 0" :dayLessons="dayLessons" :date="selectedDate" :key="refresh"/>
+        <PlannerTableRow v-if="dayLessons.length > 0" :dayLessons="lessons" :date="date" :key="refresh"/>
         <div v-else class="text-center" style="height: 50px; padding: 13px;">No lessons on this day</div>
       </TableBody>
       <div class="col-12 col-md-6 totals">
@@ -36,12 +36,13 @@
   import TableHeader from '../../../../../components/Layouts/MainLayout/Elements/TableHeader.vue';
   import TableBody from '../../../../../components/Layouts/MainLayout/Elements/TableBody.vue';
   import PlannerTableRow from '../ListComponents/PlannerTableRow.vue'
+
+  const props = defineProps({lessons: Array, date: Object})
   
   const lessonStore = useLessonsStore()
   const appStore = useAppStore()
   const sorter = useSorter()
   const selectedDate = ref(moment(appStore.getItems.date))
-  const mobileFormat = useWindowSize().mobileFormat
   const refresh = ref(0)
   
   const dayLessons = computed(() => {
@@ -61,31 +62,26 @@
     refresh.value++
   }
   
-  function updateDate(newDate){
-    selectedDate.value = newDate
-    sorter.sort(dayLessons.value, 'attributes.start')
-  }
-  
   function getNum(type){
     if(type != 'total'){
-      console.log(dayLessons.value.filter(l => l.attendance.filter(a => a.attendance === type)).length);
-      return dayLessons.value.filter(l => l.attendance.filter(a => a.attendance === type)).length
+      console.log(props.lessons.filter(l => l.attendance.filter(a => a.attendance === type)).length);
+      return props.lessons.filter(l => l.attendance.filter(a => a.attendance === type)).length
     }
-    return dayLessons.value.length
+    return props.lessons.length
   }
   function getMarkedLessons(type) {
-    return dayLessons.value.filter(lesson =>
+    return props.lessons.filter(lesson =>
       lesson.attendance.some(a => a.attendance === type)
     ).length;
   }
   function getUnmarkedLessons(){
-    return dayLessons.value.filter(lesson =>
+    return props.lessons.filter(lesson =>
       !lesson.attendance.some(a => ['present', 'late', 'absent', 'custom'].includes(a.attendance))
     ).length;
   }
   
-  watch(() => dayLessons.value, () => {
-    sorter.sort(dayLessons.value, 'attributes.start')
+  watch(() => props.lessons, () => {
+    sorter.sort(props.lessons, 'attributes.start')
   })
   
   </script>
