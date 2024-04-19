@@ -18,7 +18,7 @@
 
   <section id="table-body-section" style="overflow-y:auto">
     <table>
-      <tbody>
+      <tbody v-if="requests.length > 0">
         <tr v-for="lesson in requests" :key="lesson.id" @click="handleLessonClick(lesson)" :class="lesson.status">
           <td>{{lesson.student.name}}</td>
           <td>{{lesson.student.year || ''}}</td>

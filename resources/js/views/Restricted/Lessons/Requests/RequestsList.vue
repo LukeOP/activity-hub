@@ -8,10 +8,10 @@
   </section>
 
   <!-- Table component -->
-  <section v-if="lessonStore.getRequests.length && !loading">
+  <section v-if="lessonStore.getRequests.length">
     <component :is="currentComponent" :requests="lessonStore.getRequests" :key="key" />
   </section>
-  <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
+  <LoadingSpinner :isLoading="lessonStore.getRequests.length < 1 && loading" :loadingText="true" color="primary" />
 </div>
 </template>
 
@@ -30,6 +30,7 @@ import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/Hea
 import { useRouter } from 'vue-router'
 import { useUserStore } from '/resources/js/stores/user'
 import LoadingSpinner from '../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue'
+import { useSchoolStore } from '../../../../stores/schools'
 
 const key = ref(0)
 
@@ -38,6 +39,7 @@ const filter = useFilterStore()
 const lessonStore = useLessonsStore()
 const actions = useActionsStore()
 const user = useUserStore()
+const schoolStore = useSchoolStore()
 
 // Initiate Composables
 const { windowSize } = useWindowSize()
@@ -81,8 +83,9 @@ function routeChange(route){
 
 onMounted(()=>{
   fetchData().then(() => {
-    filteredRequests.value = lessons.value
-    lessonStore.setRequests(lessons.value)
+    console.log(lessons.value);
+    filteredRequests.value == lessons.value
+    lessonStore.setRequests(lessons.value.data)
     key.value++
   })
 })

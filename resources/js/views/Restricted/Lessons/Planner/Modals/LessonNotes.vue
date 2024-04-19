@@ -4,9 +4,9 @@
             <h2>Lesson Notes - {{ currentLesson.student.full_name }} ({{ currentLesson.attributes.instrument }})</h2>
             <p>{{ formatDate(appStore.getItems.date) }}<span v-if="previousLessonNotes" class="float-end text-primary" style="cursor: pointer;" @click="previous = !previous">{{previous ? 'Hide Previous Notes' : 'Show Previous Notes'}}</span></p>
             <div v-if="previous" class="mb-2" style="border: 1px solid #E2EBF2; border-left: 6px solid grey; padding: 10px; border-radius: 0.375rem;">
-                <p><strong>Planning:</strong> {{ previousLessonNotes.comments.planning }}</p>
-                <p><strong>Progress:</strong> {{ previousLessonNotes.comments.progress }}</p>
-                <p><strong>Next Steps:</strong> {{ previousLessonNotes.comments.next_steps }}</p>
+                <p v-if="previousLessonNotes.comments.planning"><strong>Planning:</strong> {{ previousLessonNotes.comments.planning }}</p>
+                <p v-if="previousLessonNotes.comments.progress"><strong>Progress:</strong> {{ previousLessonNotes.comments.progress }}</p>
+                <p v-if="previousLessonNotes.comments.next_steps"><strong>Next Steps:</strong> {{ previousLessonNotes.comments.next_steps }}</p>
                 <p style="text-align: end; margin: 0;">{{ formatDate(previousLessonNotes.attendance.date) }} - <i>{{ previousLessonNotes.attendance.attendance }}</i></p>
             </div>
             <label>Planning Comment:

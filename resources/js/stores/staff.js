@@ -11,7 +11,7 @@ function getState(){
       permissionsArray: [
         { access: "Lessons", actions: ["LESSONS_R", "LESSONS_V", "LESSONS_E", "LESSONS_C", "LESSONS_D"], toolTip: "Can access lessons where they are the tutor assigned." },
         { access: "Lesson Requests", actions: ["", "LESSON_REQ_V", "LESSON_REQ_E", "LESSON_REQ_C", "LESSON_REQ_D"] },
-        { access: "Lesson Forms", actions: ["", "", "", "LESSON_FRM_C", "LESSON_FRM_D"] },
+        { access: "Lesson Forms", actions: ["", "", "LESSON_FRM_E", "LESSON_FRM_C", "LESSON_FRM_D"] },
         { access: "Attendance", actions: ["ATTENDANCE_R", "ATTENDANCE_V", "ATTENDANCE_E", "ATTENDANCE_C", "ATTENDANCE_D"], toolTip: "Can access attendance for the lessons where they are the tutor assigned." },
         { access: "Students", actions: ["STUDENTS_R", "STUDENTS_V", "STUDENTS_E", "STUDENTS_C", "STUDENTS_D"], toolTip: "Can access students they are assigned lessons with." },
         { access: "Events", actions: ["EVENTS_R", "EVENTS_V", "EVENTS_E", "EVENTS_C", "EVENTS_D"], toolTip: "Can access events they have been linked to." },

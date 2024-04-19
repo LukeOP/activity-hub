@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ selectedDate }}
+    <!-- {{ selectedDate }} -->
     <section id="planner-page">   
       <HeaderLine heading="Lesson Planner" />
       <div id="date-banner" style="padding: 0 10px;">
