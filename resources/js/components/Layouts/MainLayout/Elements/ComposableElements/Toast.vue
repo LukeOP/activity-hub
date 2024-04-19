@@ -86,5 +86,18 @@ function closeToast(){
     fill: $ah-primary;
   }
 }
-
+@media (max-width: 768px){
+.toast-animation-enter-active,
+.toast-animation-leave-active {
+  transform: translateY(160px);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.52, 0.02, 0.19, 1.02);
+}
+  #toast-container {
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    max-width: 95vw;
+  }
+}
 </style>

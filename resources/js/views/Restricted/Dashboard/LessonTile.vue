@@ -154,7 +154,7 @@ function changeRoute(){
     }
   }
 }
-@media (max-width: 1400px){
+@media (max-width: 992px){
   #date-banner {
     flex-direction: column;
   }
@@ -169,7 +169,7 @@ function changeRoute(){
     }
   }
 }
-@media (max-width: 992px){
+@media (max-width: 768px){
   #date-banner {
     display: flex;
     flex-direction: column;

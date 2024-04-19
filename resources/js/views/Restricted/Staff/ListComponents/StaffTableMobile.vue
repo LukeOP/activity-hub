@@ -12,7 +12,7 @@ const props = defineProps({staff:Array});
 <style lang="scss" scoped>
 .staff {
   &:nth-child(odd){
-    background-color: lighten($ah-primary-background, 6%);
+    background-color: $ah-primary-background;
   }
 }
 </style>

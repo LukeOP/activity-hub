@@ -49,13 +49,16 @@ function newRoute(routeName){
 }
 .image {
     display: flex;
-    padding: 0 20px;
     justify-content: center;
+    min-width: 45px;
+    max-width: 60px;
+    margin-left: 10px;
 }
 .text {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-left: 20px;
     .boldText {
         font-weight: bold;
         font-size: 1.5rem;

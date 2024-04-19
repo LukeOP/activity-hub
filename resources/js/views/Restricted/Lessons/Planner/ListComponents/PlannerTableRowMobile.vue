@@ -36,9 +36,6 @@ import AttendanceIcon from './AttendanceIcon.vue';
         align-items: center;
         justify-content: space-between;
         padding: 10px;
-        .planner-details {
-    
-        }
         .planner-status-icon {
             width: 45px;
         }

@@ -42,7 +42,7 @@ class EventJobUsersController extends Controller
                 201
             );
         } catch (Exception $e) {
-            return $this->generalError();
+            return $this->generalError($e);
         }
     }
 
