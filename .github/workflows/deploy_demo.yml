@@ -5,6 +5,8 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
+    - name: Debugging - List files in root directory
+      run: ls -l
     - name: Select environment file
       run: cp .env.demo .env
     - name: Get the latest code
