@@ -7,15 +7,15 @@ jobs:
     steps:
     - name: checkout repo
       uses: actions/checkout@v2.3.4
-    - name: Copy .env
-      run: php -r "copy('.env.dev', '.env');"
     - name: Get the latest code
       uses: actions/checkout@v2.3.2
+    - name: Copy .env
+      run: php -r "copy('.env.dev', '.env');"
     - uses: actions/setup-node@master
     - name: Installing project dependencies
-      run: npm install
-    - name: Install Dependencies
-      run: composer update --ignore-platform-reqs
+      run: |
+        npm install
+        composer update --ignore-platform-reqs
     - name: Generate key
       run: php artisan key:generate
     - name: Building the project
