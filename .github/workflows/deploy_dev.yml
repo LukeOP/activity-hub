@@ -6,7 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Copy .env
-      run: php -r "copy('.env.dev', '.env');"
+      run: php -r "copy('/.env.dev', '.env');"
+          ls -a;
     # - name: Get the latest code
     #   uses: actions/checkout@v2.3.2
     # - uses: actions/setup-node@master
