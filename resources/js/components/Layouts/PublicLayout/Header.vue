@@ -3,20 +3,19 @@
     <header class="container">
       <div class="logo">
         <ActivityHubIconSVG />
-        <span style="font-family: Nunito; font-size: 2rem; color: white; font-weight: 300; letter-spacing:0.25rem;">Activity Hub</span>
+        <span>Activity Hub</span>
         <!-- <img style="max-width: 200px;" src="/images/ActivityHub_Logo_Main.png" alt=""> -->
           <!-- <span style="font-family: 'Montserrat-Alt1';">Activity Hub</span> -->
         </div>
         <nav>
           <ul>
-            <li><a href="#">Home</a></li>
+            <!-- <li><a href="#">Home</a></li> -->
             <li><a href="#">Features</a></li>
             <li><a href="#">Pricing</a></li>
-            <li><a href="#">About Us</a></li>
-            <li class="auth-buttons">
-              <a href="#" @click="router.push({name: 'Register'})">Sign Up</a>
-              <a href="#" @click="router.push({name: 'Login'})">Log In</a>
-            </li>
+            <li><a href="#">About</a></li>
+            <li><a href="#" @click="router.push({name: 'Register'})">Log In</a></li>
+            <li><a href="#" @click="router.push({name: 'Login'})" class="cta"><span class="me-2">Get started for free</span>
+              <i class="fa-solid fa-arrow-right"></i></a></li>
           </ul>
         </nav>
       </header>
@@ -32,10 +31,6 @@ import ActivityHubIconSVG from '../MainLayout/Elements/SVG/ActivityHubIconSVG.vu
 </script>
 
 <style lang="scss" scoped>
-#main {
-  background-color: rgba(255, 255, 255, 0.483);
-  background-color: $ah-primary;
-}
 
 header {
   display: flex;
@@ -53,7 +48,7 @@ header {
     max-width: 50px;
   }
   span {
-    color: $ah-primary;
+    color: rgb(77, 77, 77);
     font-size: 1.5rem;
     margin-left: 8px; 
   }
@@ -71,28 +66,23 @@ nav li {
 }
 
 nav a {
+  color: rgb(77, 77, 77);
   text-decoration: none;
-  color: white;
-  font-weight: bold;
   &:hover {
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid rgb(77, 77, 77);
   }
 }
 
-.auth-buttons a {
-  background-color: white;
-  color: $ah-primary;
-  // color: #fff;
-  padding: 8px 15px;
-  border-radius: 5px;
-  margin-left: 20px;
-  // border: $ah-primary;
-  border: 2px solid transparent;
+.cta {
+  // background: linear-gradient(to right, #d47a0c, $ah-secondary);
+  background: linear-gradient(to right, $ah-primary-dark, $ah-primary-light);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 40px;
   &:hover {
-    background-color: $ah-primary-dark;
-    color: white;
-    border: 2px solid white;
-    cursor: pointer;
+  // background: linear-gradient(to right, #bf6e0b, $ah-secondary-dark);
+  background: linear-gradient(to right, $ah-primary-dark, $ah-primary);
+  border: none;
   }
 }
 </style>

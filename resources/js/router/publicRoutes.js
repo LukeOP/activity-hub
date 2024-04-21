@@ -29,7 +29,7 @@ const publicRoutes = [
     ]
   },
   { path: '/forms/:id', name: 'LessonSignUp', component: LessonSignUpForm, meta: {title: 'Lesson Signup'}},
-  // { path: '/home', name: 'Home', component: Home, meta: {title: 'Welcome'} },
+  { path: '/home', name: 'Home', component: Home, meta: {title: 'Welcome'} },
   { path: '/not-found', name: 'NotFoundPublic', component: NotFoundPublic, redirect: '/' }
 ];
 

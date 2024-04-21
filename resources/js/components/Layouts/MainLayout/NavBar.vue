@@ -20,7 +20,7 @@
               <i @click="handleLogout" id="logout" v-html="icons.logout" class="me-2 fill-white icon"></i>
             </span>
           </div>
-          
+          <div id="version">V: 1.0 (April, 2024)</div>
         </div>
 
       </div>
@@ -338,6 +338,12 @@ function handleLogout(){
 .subItemContainer {
   background: $ah-primary;
   box-shadow: inset 5px 5px 10px $ah-primary-dark;
+}
+#version {
+  position: fixed;
+  bottom: 0px;
+  padding: 10px;
+  color: $ah-primary-background;
 }
 
 /* Styles for mobile */
