@@ -1,14 +1,14 @@
 import axios from 'axios'
 import { useUserStore } from './stores/user'
 
-let url = ''
-if(import.meta.env.VITE_ENV === 'production') url = 'https://activityhub.co.nz'
-else if(import.meta.env.VITE_ENV === 'demo') url = 'https://demo.activityhub.co.nz'
-else if(import.meta.env.VITE_ENV === 'development') url = 'http://dev.activityhub.co.nz'
-else if(import.meta.env.VITE_ENV === 'local') url = 'http://localhost:8000'
-else url = 'http://localhost:8000'
+let url = 'https://activityhub.co.nz'
+if(import.meta.env.VITE_TITLE === '') url = 'https://activityhub.co.nz'
+else if(import.meta.env.VITE_TITLE === '[demo]') url = 'https://demo.activityhub.co.nz'
+else if(import.meta.env.VITE_ENV === '[development]') url = 'http://dev.activityhub.co.nz'
+// else if(import.meta.env.VITE_ENV === 'local') url = 'http://localhost:8000'
+// else url = 'http://localhost:8000'
 
-console.log('BASE URL: ', url, 'ENV: ', import.meta.env;
+console.log('BASE URL: ', url, 'VITE_TITLE: ', import.meta.env);
 
 const axiosClient = axios.create({
   baseURL: url + '/api',
