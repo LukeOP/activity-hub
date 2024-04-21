@@ -1,12 +1,20 @@
 import axios from 'axios'
 import { useUserStore } from './stores/user'
 
+let url = ''
+if(import.meta.env.VITE_ENV === 'production') url = 'https://activityhub.co.nz'
+else if(import.meta.env.VITE_ENV === 'demo') url = 'https://demo.activityhub.co.nz'
+else if(import.meta.env.VITE_ENV === 'development') url = 'http://dev.activityhub.co.nz'
+else if(import.meta.env.VITE_ENV === 'local') url = 'http://localhost:8000'
+else url = 'http://localhost:8000'
+
+
 const axiosClient = axios.create({
-  baseURL: import.meta.env.VITE_URL + '/api',
+  baseURL: url + '/api',
   headers: {
     'Accept': 'application/vnd.api+json',
     'Content-Type': "application/vnd.api+json",
-    'Access-Control-Allow-Origin': import.meta.env.VITE_URL
+    'Access-Control-Allow-Origin': url
   }
 })
 
