@@ -4,12 +4,11 @@ jobs:
   web-deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: demo
     steps:
     - name: checkout repo
       uses: actions/checkout@v2.3.4
-    # - name: Copy .env
-    #   run: php -r "copy('.env.demo', '.env');"
+    - name: Select environment file
+      run: cp .env.demo .env
     - name: Get the latest code
       uses: actions/checkout@v2.3.2
     - uses: actions/setup-node@master
@@ -20,44 +19,24 @@ jobs:
     - name: Generate key
       run: php artisan key:generate
     - name: Building the project
-      run: npm run build -- --mode demo
+      run: npm run build -- --mode dev
       # run: npm run production
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
+    - name: Update .env with dynamic database credentials
+      run: |
+        sed -i "s/APP_URL=.*/APP_URL=http:\/\/demo.activityhub.co.nz/g" .env
+        sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DEV_DATABASE }}/g" .env
+        sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/g" .env
+        sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/g" .env
+      env:
+        APP_URL: http://demo.activityhub.co.nz
+        DB_DATABASE: ${{ secrets.DB_DEMO_DATABASE }}
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
       with:
-        server: ftp.mgsmusic.co.nz
-        username: activityHubDemoDeploy@activityhub.co.nz
-        password: ActivityHubGitHub
-        
-# name: Deploy Site to Demo
-# on: workflow_dispatch
-# jobs:
-#   web-deploy:
-#     name: Deploy
-#     runs-on: ubuntu-latest
-#     steps:
-#     - name: Debugging - List files in root directory
-#       run: ls -a
-#     - name: Select environment file
-#       run: cp .env.demo .env
-#     - name: Get the latest code
-#       uses: actions/checkout@v2.3.2
-#     - uses: actions/setup-node@master
-#     - name: Installing project dependencies
-#       run: npm install
-#     - name: Building the project
-#       run: npm run production
-#     - name: Install Dependencies
-#       run: composer update --ignore-platform-reqs
-#     - name: Generate key
-#       run: php artisan key:generate
-#     - name: Directory Permissions
-#       run: chmod -R 777 storage bootstrap/cache
-#     - name: 📂 Sync files
-#       uses: SamKirkland/FTP-Deploy-Action@4.0.0
-#       with:
-#         server: ftp.mgsmusic.co.nz
-#         username: activityHubDemoDeploy@activityhub.co.nz
-#         password: ActivityHubGitHub
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_DEMO_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
