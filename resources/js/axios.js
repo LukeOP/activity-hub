@@ -1,21 +1,21 @@
 import axios from 'axios'
 import { useUserStore } from './stores/user'
 
-let url = 'https://activityhub.co.nz'
-if(import.meta.env.VITE_TITLE === '') url = 'https://activityhub.co.nz'
-else if(import.meta.env.VITE_TITLE === '[demo]') url = 'https://demo.activityhub.co.nz'
-else if(import.meta.env.VITE_ENV === '[development]') url = 'http://dev.activityhub.co.nz'
+// let url = 'https://activityhub.co.nz'
+// if(import.meta.env.VITE_TITLE === '') url = 'https://activityhub.co.nz'
+// else if(import.meta.env.VITE_TITLE === '[demo]') url = 'https://demo.activityhub.co.nz'
+// else if(import.meta.env.VITE_ENV === '[development]') url = 'http://dev.activityhub.co.nz'
 // else if(import.meta.env.VITE_ENV === 'local') url = 'http://localhost:8000'
 // else url = 'http://localhost:8000'
 
-console.log('BASE URL: ', url, import.meta.env);
+console.log('VITE URL: ', import.meta.env.VITE_URL);
 
 const axiosClient = axios.create({
-  baseURL: url + '/api',
+  baseURL: import.meta.env.VITE_URL + '/api',
   headers: {
     'Accept': 'application/vnd.api+json',
     'Content-Type': "application/vnd.api+json",
-    'Access-Control-Allow-Origin': url
+    'Access-Control-Allow-Origin': import.meta.env.VITE_URL
   }
 })
 
