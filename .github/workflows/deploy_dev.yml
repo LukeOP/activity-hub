@@ -1,7 +1,5 @@
 name: Deploy Site to Dev
 on: workflow_dispatch
-env:
-  APP_URL: http://dev.activityhub.co.nz
 jobs:
   web-deploy:
     name: Deploy
@@ -39,9 +37,6 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
       with:
-        # server: ftp.mgsmusic.co.nz
-        # username: activityHubDevDeploy@activityhub.co.nz
-        # password: ActivityHubGitHub
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_DEV_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
