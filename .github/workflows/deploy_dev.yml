@@ -23,9 +23,21 @@ jobs:
       # run: npm run production
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
+    - name: Update .env with dynamic database credentials
+      run: |
+        sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DEV_DATABASE }}/g" .env
+        sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/g" .env
+        sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/g" .env
+      env:
+        DB_DATABASE: ${{ secrets.DB_DEV_DATABASE }}
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
       with:
-        server: ftp.mgsmusic.co.nz
-        username: activityHubDevDeploy@activityhub.co.nz
-        password: ActivityHubGitHub
+        # server: ftp.mgsmusic.co.nz
+        # username: activityHubDevDeploy@activityhub.co.nz
+        # password: ActivityHubGitHub
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_DEV_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
