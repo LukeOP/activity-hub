@@ -27,12 +27,12 @@ jobs:
       run: chmod -R 777 storage bootstrap/cache
     - name: Update .env with dynamic database credentials
       run: |
-        sed -i "s/APP_URL=.*/APP_URL=${{ env.APP_URL }}/g" .env
+        sed -i "s/APP_URL=.*/APP_URL=http:\/\/dev.activityhub.co.nz/g" .env
         sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DEV_DATABASE }}/g" .env
         sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/g" .env
         sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/g" .env
       env:
-        APP_URL: ${{ env.APP_URL }}
+        APP_URL: http://dev.activityhub.co.nz
         DB_DATABASE: ${{ secrets.DB_DEV_DATABASE }}
         DB_USERNAME: ${{ secrets.DB_USERNAME }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
