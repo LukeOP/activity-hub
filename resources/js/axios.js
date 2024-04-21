@@ -8,7 +8,7 @@ else if(import.meta.env.VITE_ENV === '[development]') url = 'http://dev.activity
 // else if(import.meta.env.VITE_ENV === 'local') url = 'http://localhost:8000'
 // else url = 'http://localhost:8000'
 
-console.log('BASE URL: ', url, 'VITE_TITLE: ', import.meta.env);
+console.log('BASE URL: ', url, import.meta.env.VITE_TITLE, import.meta.env.VITE_URL);
 
 const axiosClient = axios.create({
   baseURL: url + '/api',
