@@ -1,5 +1,7 @@
 name: Deploy Site to Dev
 on: workflow_dispatch
+env:
+  APP_URL: http://dev.activityhub.co.nz
 jobs:
   web-deploy:
     name: Deploy
@@ -25,12 +27,12 @@ jobs:
       run: chmod -R 777 storage bootstrap/cache
     - name: Update .env with dynamic database credentials
       run: |
-        sed -i "s/APP_URL=.*/APP_URL=${ DEV_URL }/g" .env
+        sed -i "s/APP_URL=.*/APP_URL=$APP_URL/g" .env
         sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DEV_DATABASE }}/g" .env
         sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/g" .env
         sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/g" .env
       env:
-        APP_URL: ${{ DEV_URL }}
+        APP_URL: $APP_URL
         DB_DATABASE: ${{ secrets.DB_DEV_DATABASE }}
         DB_USERNAME: ${{ secrets.DB_USERNAME }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
