@@ -5,24 +5,38 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
+    - name: checkout repo
+      uses: actions/checkout@v2.3.4
     - name: Select environment file
       run: cp .env.production .env
     - name: Get the latest code
       uses: actions/checkout@v2.3.2
     - uses: actions/setup-node@master
     - name: Installing project dependencies
-      run: npm install
-    - name: Building the project
-      run: npm run production
-    - name: Install Dependencies
-      run: composer update --ignore-platform-reqs
+      run: |
+        npm install
+        composer update --ignore-platform-reqs
     - name: Generate key
       run: php artisan key:generate
+    - name: Building the project
+      run: npm run build -- --mode production
+      # run: npm run production
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
+    - name: Update .env with dynamic database credentials
+      run: |
+        sed -i "s/APP_URL=.*/APP_URL=https:\/\/activityhub.co.nz/g" .env
+        sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_PRODUCTION_DATABASE }}/g" .env
+        sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/g" .env
+        sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/g" .env
+      env:
+        APP_URL: https://activityhub.co.nz
+        DB_DATABASE: ${{ secrets.DB_PRODUCTION_DATABASE }}
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
       with:
-        server: ftp.mgsmusic.co.nz
-        username: activityhubDeploy@mgsmusic.co.nz
-        password: ActivityHubGitHub
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_PRODUCTION_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
