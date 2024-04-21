@@ -7,6 +7,8 @@ jobs:
     steps:
     - name: checkout repo
       uses: actions/checkout@v2.3.4
+    - name: Select environment file
+      run: cp .env.dev .env
     - name: Get the latest code
       uses: actions/checkout@v2.3.2
     - uses: actions/setup-node@master
