@@ -21,6 +21,10 @@ export const useFilterStore = defineStore('filter', {
     setReturned(data){
       this.returned = data
     },
+    open(type, data){
+      this.type = type,
+      this.data = data
+    },
     close(){
       const menuStore = useMenuStore()
       menuStore.setFilterActive(false)

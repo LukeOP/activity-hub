@@ -99,19 +99,19 @@ const filteredLessons = computed(() => {
   };
 
   const filtered = searchTerm.length > 0
-    ? lessonStore.getLessonsData.filter(filterFunction)
-    : lessonStore.getLessonsData;
+    ? filter.getReturned.filter(filterFunction)
+    : filter.getReturned;
 
   lessonStore.setFilteredLessons(filtered);
   return filtered;
 });
 
 // Check for update to filtered lessons and display to user
-watch(() => filter.getReturned, (newValue) => {
-  if(newValue.length != 0){
-    filteredLessons.value = newValue
-  }
-})
+// watch(() => filter.getReturned, (newValue) => {
+//   if(newValue.length != 0){
+//     filteredLessons.value = newValue
+//   }
+// })
 
 function changeRoute(value){
   let newRoute = {}
@@ -123,8 +123,10 @@ function changeRoute(value){
 
 onMounted(() => {  
   loading.value = true
+  filter.open('LessonsForm', lessonStore.getLessonsData)
   fetchData().then(() => {
     if(lessons.value != lessonStore.getLessonsData){
+      filter.setData(lessonStore.getLessonsData)
       lessonStore.setLessons(lessons.value)
     }
     loading.value = false
