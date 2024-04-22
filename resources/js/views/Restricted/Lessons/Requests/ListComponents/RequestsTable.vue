@@ -1,5 +1,5 @@
 <template>  
-<div>  
+<div>
   <section id="table-header-section">
     <table>
       <thead>
@@ -28,6 +28,9 @@
           <td>{{formatDate(lesson.timestamps.created)}}</td>
           <td>{{ lesson.attributes.form.description }}</td>
         </tr>
+      </tbody>
+      <tbody v-else>
+        <tr><td colspan="6"style="text-align: center; margin-top: 1rem;">No Pending Lesson Requests</td></tr>
       </tbody>
     </table>
   </section>

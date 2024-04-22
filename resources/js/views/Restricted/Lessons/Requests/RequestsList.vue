@@ -8,7 +8,7 @@
   </section>
 
   <!-- Table component -->
-  <section v-if="lessonStore.getRequests.length">
+  <section v-if="lessonStore.getRequests">
     <component :is="currentComponent" :requests="lessonStore.getRequests" :key="key" />
   </section>
   <LoadingSpinner :isLoading="lessonStore.getRequests.length < 1 && loading" :loadingText="true" color="primary" />
