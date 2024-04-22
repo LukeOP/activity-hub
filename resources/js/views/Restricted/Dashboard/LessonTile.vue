@@ -27,7 +27,7 @@
       <div class="stat-item" v-if="getMarkedLessons('custom') > 0">
         <span class="svg"><StatusIconSVG status="custom" /></span>
         <span class="item-text">Custom: {{ getMarkedLessons('custom') }}</span></div>
-      <div class="stat-item">
+      <div class="stat-item" :class="{overdue: appStore.getItems.date < moment().format('YYYY-MM-DD') && getUnmarkedLessons() > 0}">
         <span class="svg"><StatusIconSVG status="pending" /></span>
         <span class="item-text">Unmarked: {{ getUnmarkedLessons() }}</span></div>
     </div>
@@ -68,26 +68,27 @@ const selectedDate = ref(moment())
 
 function changeDate(newDate){
   selectedDate.value = newDate
+  appStore.setItems({date: moment(newDate).format('YYYY-MM-DD')})
 }
 
 const dayLessons = computed(() => {
-  const selectedDateString = moment(selectedDate.value).format('YYYY-MM-DD');
+  // const selectedDateString = moment(selectedDate.value).format('YYYY-MM-DD');
   return lessonStore.getLessonsData.filter(l => 
     l.attributes.status === 'Active' &&
     l.attributes.day === moment(selectedDate.value).format('dddd') &&
-    l.attributes.startDate <= selectedDateString &&
-    (!l.attributes.endDate || l.attributes.endDate >= selectedDateString)
+    l.attributes.startDate <= appStore.getItems.date &&
+    (!l.attributes.endDate || l.attributes.endDate >= appStore.getItems.date)
   );
 });
 
 function getMarkedLessons(type) {
   return dayLessons.value.filter(lesson =>
     lesson.attendance.some(a => a.attendance === type)
-  ).length;
+  ).filter(l => l.attendance.some(a => a.date == appStore.getItems.date)).length
 }
 function getUnmarkedLessons(){
   return dayLessons.value.filter(lesson =>
-    !lesson.attendance.some(a => ['present', 'late', 'absent', 'custom'].includes(a.attendance))
+    !lesson.attendance.some(a => a.date == appStore.getItems.date)
   ).length;
 }
 
@@ -152,6 +153,13 @@ function changeRoute(){
       align-self: center;
       padding-left: 20px;
     }
+  }
+}
+.overdue {
+  background-color: #fdefef;
+  border-color: $ah-red !important;
+  .item-text {
+    color: $ah-red;
   }
 }
 @media (max-width: 992px){

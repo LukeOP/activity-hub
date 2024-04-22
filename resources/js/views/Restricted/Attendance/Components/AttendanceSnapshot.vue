@@ -19,7 +19,7 @@
 
 <script setup>
 import { computed } from "vue"
-import { useLessonsStore } from "../../../../../stores/lessons"
+import { useLessonsStore } from "../../../../stores/lessons"
 
 const props = defineProps({
   lesson: Object,

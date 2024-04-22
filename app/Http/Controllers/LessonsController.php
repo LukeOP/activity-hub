@@ -30,7 +30,7 @@ class LessonsController extends Controller
         // If they do or they are an administrator - get all student lessons for that school
         // Else just get the lessons assigned to the tutor
         foreach ($userSchools as $school) {
-            $hasPermission = $user->hasPermissionForSchool($school->id, 'LESSONS_V');
+            $hasPermission = ($user->hasPermissionForSchool($school->id, 'LESSONS_V') || $user->hasPermissionForSchool($school->id, 'ATTENDANCE_V'));
 
             if ($hasPermission || in_array($school->id, $userAdmin)) {
                 $lessonsAtSchool = LessonsResource::collection(Lesson::whereHas('student', function ($query) use ($school) {
@@ -117,7 +117,7 @@ class LessonsController extends Controller
                 404
             );
         } catch (Exception $e){
-            return $this->generalError();
+            return $this->generalError($e);
         }
     }
 

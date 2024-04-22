@@ -16,22 +16,27 @@ import { useRouter } from 'vue-router';
 import { useModalStore } from '../../../../../stores/modal';
 import { useLessonsStore } from '../../../../../stores/lessons';
 import { useAppStore } from '../../../../../stores/appStore';
+import { useUserStore } from '../../../../../stores/user';
 
     const router = useRouter()
+    const user = useUserStore()
     const modal = useModalStore()
     const lessonStore = useLessonsStore()
     const appStore = useAppStore()
     const currentDate = moment(appStore.getItems.date).format('YYYY-MM-DD')
     const today = moment().format('YYYY-MM-DD')
-    const actions = [
-        {title: 'View Lesson Details', route: 'LessonDetails', modal: null, icon: 'fa-regular fa-file-lines'},
-        {title: 'Lesson Notes', route: null, modal: 'LessonNotes', icon: 'fa-regular fa-pen-to-square'},
-    ]
-    if(currentDate <= today && !attendanceAlreadyExists()){
+    const actions = []
+    if(user.hasPermission('LESSONS_R', lessonStore.getLessonData.school.id) || user.hasPermission('LESSONS_V', lessonStore.getLessonData.school.id)){
+        actions.push({title: 'View Lesson Details', route: 'LessonDetails', modal: null, icon: 'fa-regular fa-file-lines'})
+    }
+    if(currentDate <= today && !attendanceAlreadyExists() && (lessonStore.getLessonData.tutor.id == user.attributes.id || user.hasPermission('ATTENDANCE_C', lessonStore.getLessonData.school.id))){
         actions.unshift({title: 'Attendance', route: null, modal: 'LessonRecordAttendance', icon: 'fa-solid fa-list-check'})
     }
-    if(currentDate <= today && attendanceAlreadyExists()){
+    if(currentDate <= today && attendanceAlreadyExists() && (lessonStore.getLessonData.tutor.id == user.attributes.id || user.hasPermission('ATTENDANCE_E', lessonStore.getLessonData.school.id))){
         actions.unshift({title: 'Attendance', route: null, modal: 'LessonEditAttendance', icon: 'fa-solid fa-list-check'})
+    }
+    if(lessonStore.getLessonData.tutor.id == user.attributes.id){
+        actions.push({title: 'Lesson Notes', route: null, modal: 'LessonNotes', icon: 'fa-regular fa-pen-to-square'})
     }
 
     function attendanceAlreadyExists() {
@@ -56,7 +61,8 @@ import { useAppStore } from '../../../../../stores/appStore';
 <style lang="scss" scoped>
 .actions {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
+    justify-content: center;
 }
 .action {
     text-align: center;

@@ -13,27 +13,27 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
-import useApi from '../../../../../composables/useApi'
-import { useFilterStore } from '../../../../../stores/filter'
-import { useLessonsStore } from '../../../../../stores/lessons'
+import useApi from '../../../../composables/useApi'
+import { useFilterStore } from '../../../../stores/filter'
+import { useLessonsStore } from '../../../../stores/lessons'
 import ReviewTable from './ReviewTable.vue'
 import { useWindowSize } from '/resources/js/composables/useWindowSize'
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
 import { useRouter } from 'vue-router'
 import ReviewTableMobile from './ReviewTableMobile.vue'
-import LoadingSpinner from '../../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue'
+import LoadingSpinner from '../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue'
 
 const { windowSize } = useWindowSize()
 const router = useRouter()
 const key = ref(0)
 const lessonStore = useLessonsStore()
+const filter = useFilterStore()
 
 // Get appropriate component based on window size
 const currentComponent = computed(() => {
   return windowSize.value.width > 1030 ? ReviewTable : ReviewTableMobile
 })
 
-const filter = useFilterStore()
 const { data: attendanceRecords, loading, fetchData } = useApi('lesson-attendance')
 fetchData().then(()=>{
   lessonStore.setAttendanceArray(attendanceRecords.value)

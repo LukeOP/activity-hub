@@ -30,7 +30,7 @@
   
   <script setup>
   import { computed } from "vue"
-  import { useLessonsStore } from "../../../../../stores/lessons"
+  import { useLessonsStore } from "../../../../stores/lessons"
 import moment from "moment";
   
   const props = defineProps({

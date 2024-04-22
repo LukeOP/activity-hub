@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <section>
     <div id="lesson-details" class="section row" >
       <h2 class="heading2">Lesson Details:</h2>
       <div class="col col-12 col-sm-6 col-md-3">
@@ -49,14 +49,14 @@
       </div>
       <button class="btn btn-green w-100" style="border-radius: 0 0 0.375rem 0.375rem;" @click="markActive()" :disabled="isSetupPending">Mark as Active</button>
     </div>
-
-  </span>
+    <hr />
+  </section>
 
 </template>
 
 <script setup>
 import moment from 'moment'
-import AttendanceSnapshot from '../Attendance/Components/AttendanceSnapshot.vue'
+import AttendanceSnapshot from '../../Attendance/Components/AttendanceSnapshot.vue'
 import { useRouter } from 'vue-router';
 import StatusIconSVG from '/resources/js/components/Layouts/MainLayout/Elements/SVG/StatusIconSVG.vue';
 import { useModalStore } from '/resources/js/stores/modal';
@@ -65,9 +65,11 @@ import { computed, ref } from 'vue';
 import { useLessonsStore } from '/resources/js/stores/lessons';
 import { useToastStore } from '/resources/js/stores/toast';
 import { icons } from '@/images/icons/icons'
+import { useUserStore } from '../../../../stores/user';
 
 const modal = useModalStore()
 const toast = useToastStore()
+const user = useUserStore()
 const lessonStore = useLessonsStore()
 const router = useRouter()
 const closedChecklist = ref(false)
@@ -91,7 +93,9 @@ function convertDate(date) {
     return moment(date).format('LL') != 'Invalid date' ? moment(date).format('LL') : ' ';
 }
 function handleAttendanceClick(){
-  router.push({name: 'LessonAttendanceSingle'})
+  if(user.hasPermission('ATTENDANCE_R', lessonStore.getLessonData.school.id) || user.hasPermission('ATTENDANCE_V', lessonStore.getLessonData.school.id)){
+    router.push({name: 'LessonAttendanceSingle'})
+  }
 }
 
 function markActive(){
@@ -105,7 +109,6 @@ function closeChecklist(){
 <style lang="scss" scoped>
 .section {
   padding: 10px;
-  border-bottom: 1px dashed $ah-primary;
 }
 .checklist {
   position: fixed;

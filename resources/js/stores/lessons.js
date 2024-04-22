@@ -109,7 +109,7 @@ export const useLessonsStore = defineStore('lessons', {
 
     // ATTENDANCE
     getAttendanceArray(){
-      return this.getLessonData.attendance
+      return this.attendanceArray
     },
     getAttendance(){
       return this.getAttendanceArray.find(a => a.id == this.singleAttendance)

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <section id="table-header-section">
     <table>
       <thead>
         <tr>
+          <th style="width: 45px;"></th>
           <th style="width:10%">Date:</th>
           <th style="width:10%">Time:</th>
           <th style="width:15%">Student:</th>
@@ -13,13 +13,10 @@
           <th style="width:20%">School</th>
         </tr>
       </thead>
-    </table>
-  </section>
 
-  <section id="table-body-section" style="overflow-y:auto" v-if="lessons.length > 0">
-    <table>
-      <tbody>
+      <tbody style="overflow-y:auto" v-if="lessons.length > 0">
         <tr v-for="record in lessons" :key="record" @click="handleClick(record)">
+          <td style="width: 45px;"><span class="funding-icon" v-if="record.funding_type">{{getLessonFunding(record.funding_type)}}</span></td>
           <td style="width:10%">{{record.date}}</td>
           <td style="width:10%">{{ formatTime(record.time) }}</td>
           <td style="width:15%">{{record.student.full_name}}</td>
@@ -29,11 +26,11 @@
           <td style="width:20%">{{record.school.name}}</td>
         </tr>
       </tbody>
+      <tbody v-else>
+        <tr><td id="no-records" colspan="8">No records for this time period</td></tr>
+      </tbody>
     </table>
-  </section>
-  <section v-else>
-    <p id="no-records">No records for this time period</p>
-  </section>
+
   <div class="col-12 col-md-4 totals">
     <span>Total: {{lessons.length}}</span>
   </div>
@@ -43,19 +40,25 @@
 <script setup>
 import { useModalStore } from '/resources/js/stores/modal'
 import { useLessonsStore } from '/resources/js/stores/lessons'
-import useApi from '../../../../../composables/useApi';
+import useApi from '../../../../composables/useApi';
 import { useRouter } from 'vue-router';
-import { useFilterStore } from '../../../../../stores/filter';
+import { useFilterStore } from '../../../../stores/filter';
 import moment from 'moment';
+import useAbbreviator from '../../../../composables/useAbbreviator';
 
 const props = defineProps({lessons:Array})
 const lessonStore = useLessonsStore()
 const modal = useModalStore()
 const router = useRouter()
 const filter = useFilterStore()
+const { abbreviate } = useAbbreviator()
 
 function capitalizeFirstLetter(string){
   return string.charAt(0).toUpperCase() + string.slice(1)
+}
+function getLessonFunding(funding){
+  let abbreviatedValue = funding ? abbreviate(funding) : null
+  return abbreviatedValue
 }
 
 function editAttendance(record){
@@ -69,13 +72,15 @@ function editAttendance(record){
 
 function handleClick(lesson){
   filter.close()
-  const { data: lessonData, loading, fetchData} = useApi('lessons/' + lesson.lesson_id)
-  fetchData().then(()=>{
-    lessonStore.setLesson(lessonData.value)
+  // console.log(lesson);
+  lessonStore.setLesson(lesson.lesson_id)
+  // const { data: lessonData, loading, fetchData} = useApi('lessons/' + lesson.lesson_id)
+  // fetchData().then(()=>{
+  //   lessonStore.setLesson(lessonData.value.id)
     router.push({
       name: 'LessonAttendanceSingle'
     })
-  })
+  // })
 }
 
 </script>
@@ -99,6 +104,16 @@ function handleClick(lesson){
   padding-left: 5px;
   padding-right: 5px;
   color: white;
+}
+.funding-icon {
+  display: flex;
+  width: 25px;
+  height: 25px;
+  background-color: $ah-primary;
+  color: white;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
 }
 .present {
   background-color: $ah-primary;

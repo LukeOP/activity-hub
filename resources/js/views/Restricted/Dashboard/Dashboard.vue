@@ -3,7 +3,7 @@
   <InfoTiles />
   <div id="dashboard-tiles">
     <div class="tile-row">
-      <div class="mobile-full match-height" style="flex: 66%;" v-if="checkPermission('LESSONS')"><LessonTile /></div>
+      <div class="mobile-full match-height" style="flex: 66%;" v-if="checkPermission('LESSONS') || checkPermission('ATTENDANCE')"><LessonTile /></div>
       <!-- <div class="mobile-full match-height" style="flex: 34%;" v-if="user.hasPermissionAny('ATTENDANCE_V')"><AttendanceTile /></div> -->
     </div>
     <div class="tile-row">
@@ -43,7 +43,7 @@ function setActions(){
       actionArray.push({ header: 'New Lesson', to: { name: 'LessonCreate' }, showSubItems: false, icon: 'fa-solid fa-person-chalkboard'})
     }
     if(user.hasPermissionAny('ATTENDANCE_R') || user.hasPermissionAny('ATTENDANCE_V')){
-      actionArray.push({ header: 'Lesson Attendance', to: { name: 'LessonAttendanceOverview' }, showSubItems: false, icon: 'fa-solid fa-user-check'})
+      actionArray.push({ header: 'Lesson Attendance', to: { name: 'LessonAttendanceReview' }, showSubItems: false, icon: 'fa-solid fa-user-check'})
     }
     hasSchools.value = true
   }

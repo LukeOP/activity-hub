@@ -12,7 +12,7 @@
         </tr>
       </TableHeader>
       <TableBody>
-        <PlannerTableRow v-if="dayLessons.length > 0" :dayLessons="lessons" :date="date" :key="refresh"/>
+        <PlannerTableRow v-if="lessons.length > 0" :dayLessons="lessons" :date="date" :key="refresh"/>
         <div v-else class="text-center" style="height: 50px; padding: 13px;">No lessons on this day</div>
       </TableBody>
       <div class="col-12 col-md-6 totals">

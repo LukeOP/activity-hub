@@ -83,7 +83,6 @@ function routeChange(route){
 
 onMounted(()=>{
   fetchData().then(() => {
-    console.log(lessons.value);
     filteredRequests.value == lessons.value
     lessonStore.setRequests(lessons.value.data)
     key.value++

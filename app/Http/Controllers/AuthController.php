@@ -20,25 +20,29 @@ class AuthController extends Controller
 
     public function login(LoginUserRequest $request)
     {
-        $request->validated($request->all());
-
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return $this->error('', null, 'Your password or email address was incorrect, please try again', 401);
+        try {
+            $request->validated($request->all());
+    
+            if (!Auth::attempt($request->only('email', 'password'))) {
+                return $this->error('', null, 'Your password or email address was incorrect, please try again', 401);
+            }
+    
+            $user = User::where('email', $request->email)->first();
+            
+            if($user->email_verified_at == null) {
+                return $this->error('', null, 'Your email has not yet been verified. Please click the link in the email sent on registration. Or request a new email.', 403);
+            }
+            
+            $user->schools = $user->userSchools();
+            $user->permissions = UserPermissionsResource::collection($user->userPermissions);
+    
+            return $this->success([
+                'user' => $user,
+                'token' => $user->createToken('API Token of ' . $user->first_name . ' ' . $user->last_name)->plainTextToken
+            ]);
+        } catch (\Throwable $e){
+            return $this->generalError($e);
         }
-
-        $user = User::where('email', $request->email)->first();
-        
-        if($user->email_verified_at == null) {
-            return $this->error('', null, 'Your email has not yet been verified. Please click the link in the email sent on registration. Or request a new email.', 403);
-        }
-        
-        $user->schools = $user->userSchools();
-        $user->permissions = UserPermissionsResource::collection($user->userPermissions);
-
-        return $this->success([
-            'user' => $user,
-            'token' => $user->createToken('API Token of ' . $user->first_name . ' ' . $user->last_name)->plainTextToken
-        ]);
     }
 
     public function register(StoreUserRequest $request)

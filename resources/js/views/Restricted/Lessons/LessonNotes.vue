@@ -13,10 +13,10 @@
         </div>
         <div style="display: flex;">
           <span id="comment-section">
-            <div class="comment" v-if="comment.comments.planning">Planning: "{{comment.comments.planning}}"</div>
-            <div class="comment" v-if="comment.comments.progress">Progress: "{{comment.comments.progress}}"</div>
-            <div class="comment" v-if="comment.comments.next_steps">Next Steps: "{{comment.comments.next_steps}}"</div>
-            <div class="comment" v-if="comment.comments.general">General: "{{comment.comments.general}}"</div>
+            <div class="comment" v-if="comment.comments.planning"><strong>Planning:</strong> "{{comment.comments.planning}}"</div>
+            <div class="comment" v-if="comment.comments.progress"><strong>Progress:</strong> "{{comment.comments.progress}}"</div>
+            <div class="comment" v-if="comment.comments.next_steps"><strong>Next Steps:</strong> "{{comment.comments.next_steps}}"</div>
+            <div class="comment" v-if="comment.comments.general"><strong>General:</strong> "{{comment.comments.general}}"</div>
           </span>
         </div>
         <hr />
@@ -46,7 +46,7 @@ const currentLesson = lessonStore.getLessonData
 const modal = useModalStore()
 const router = useRouter()
 
-const subHeading = `${currentLesson.student.full_name} ${currentLesson.attributes.instrument} Lessons`
+const subHeading = `${currentLesson.student.full_name}'s ${currentLesson.attributes.instrument} Lessons`
   
 const allNotes = computed(()=>{
   return lessonStore.getLessonNotes

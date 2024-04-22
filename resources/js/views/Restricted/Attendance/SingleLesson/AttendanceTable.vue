@@ -14,6 +14,7 @@
       <thead>
         <tr>
           <th>Day:</th>
+          <th>Student:</th>
           <th>Date:</th>
           <th>Time:</th>
           <th>Attendance:</th>
@@ -30,6 +31,7 @@
       <tbody>
         <tr v-for="record in filteredAttendanceRecords" :key="record">
           <td>{{getDay(record.date)}}</td>
+          <td>{{record.student.full_name}}</td>
           <td>{{formatDate(record.date)}}</td>
           <td>{{formatTime(record.time)}}</td>
           <td style="display:flex; justify-content: center; align-items: center;">
@@ -39,7 +41,7 @@
           <td style="width: 80px;">
             <div style="display: flex; justify-content: space-between; padding-right: 10px;">
               <i class="fa-solid fa-edit icon" @click="editRecord(record, 'EditAttendance')"></i>
-              <i class="fa-regular fa-note-sticky icon" :class="{'fa-solid': hasNotes(record)}" @click="editRecord(record, 'LessonNotes')"></i>
+              <i v-if="permitted(record)" class="fa-regular fa-note-sticky icon" :class="{'fa-solid': hasNotes(record)}" @click="editRecord(record, 'LessonNotes')"></i>
             </div>
           </td>
         </tr>
@@ -58,7 +60,8 @@ import { useModalStore } from '/resources/js/stores/modal'
 import { useLessonsStore } from '/resources/js/stores/lessons'
 import useSorter from '/resources/js/composables/useSorter'
 import { computed, ref } from 'vue'
-import { useAppStore } from '../../../../../stores/appStore'
+import { useAppStore } from '../../../../stores/appStore'
+import { useUserStore } from '../../../../stores/user'
 export default {
   props: {
     lesson: Object
@@ -66,19 +69,19 @@ export default {
   setup(props){
     const lessonStore = useLessonsStore()
     const sorter = useSorter()
-    const lesson = lessonStore.getLessonData
     const appStore = useAppStore()
+    const user = useUserStore()
 
     const attendanceRecords = lessonStore.getAttendanceArray
     const modal = useModalStore()
 
     const filteredAttendanceRecords = computed(()=>{
-      let records = lessonStore.getAttendanceArray.filter(r => (r.date >= fromDate.value && r.date <= toDate.value ))
+      let records = lessonStore.getAttendanceArray.filter(r => (r.date >= fromDate.value && r.date <= toDate.value && r.lesson_id == lessonStore.getLessonData.id ))
       sorter.sort(records, 'date', 'desc');
       return records
     })
 
-    const fromDate = ref(lesson.attributes.startDate)
+    const fromDate = ref(props.lesson.attributes.startDate)
     const toDate = ref(moment().format('YYYY-MM-DD'))
     const today = ref(moment().format('YYYY-MM-DD'))
 
@@ -107,6 +110,12 @@ export default {
       modal.open(modalLink)
     }
 
+    function permitted(record){
+      if(record.tutor.id == user.attributes.id){
+        return true
+      } return false
+    }
+
     function hasNotes(record){
       let attendance = lessonStore.getLessonNotesAndAttendance.find(n => n.attendance_id == record.id)
       if(attendance){
@@ -116,7 +125,6 @@ export default {
     }
 
     return {
-      lesson,
       fromDate,
       toDate,
       today,
@@ -129,6 +137,7 @@ export default {
       editRecord,
       formatDate,
       hasNotes,
+      permitted
     }
   }
 

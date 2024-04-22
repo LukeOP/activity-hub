@@ -108,7 +108,9 @@ const filteredLessons = computed(() => {
 
 // Check for update to filtered lessons and display to user
 watch(() => filter.getReturned, (newValue) => {
-  filteredLessons.value = newValue
+  if(newValue.length != 0){
+    filteredLessons.value = newValue
+  }
 })
 
 function changeRoute(value){

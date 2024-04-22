@@ -8,7 +8,7 @@
 
         <div id="nav">
           <router-link v-for="item in navItems" :key="item" :to="item.to" class="link" @click="menu.navActive = false" :class="{ active: isActive(item) }">
-            <span v-html="item.icon" class="icon fill-white"></span><span>{{item.header}}</span>
+            <span v-html="item.icon" class="icon fill-white"></span>{{item.header}}
           </router-link>
           
         </div>
@@ -75,11 +75,12 @@ const navItems = ref([
 
 const navOptions = [
   { header: 'Lessons', to: { name: 'LessonsList' }, icon: icons.chalkboard, permission: 'LESSONS_V', additional_permission: 'LESSONS_R'},
-  { header: 'Events', to: { name: 'EventsList' }, icon: icons.ticket, permission: 'EVENTS_V', additional_permission: 'LESSONS_R'},
+  { header: 'Attendance', to: { name: 'LessonAttendanceReview' }, icon: icons.attendance, permission: 'ATTENDANCE_V', additional_permission: 'ATTENDANCE_R'},
+  { header: 'Events', to: { name: 'EventsList' }, icon: icons.ticket, permission: 'EVENTS_V', additional_permission: 'EVENTS_R'},
   { header: 'Instruments', to: { name: 'InstrumentList' }, icon: icons.guitar, permission: 'INSTRUMENTS_V'},
   // { header: 'Hires', to: { name: 'HiresList' }, icon: icons.xmark, permission: 'HIRES_V'},
   // { header: 'Rooms', to: { name: 'StudentsTable' }, icon: 'fa-solid fa-book', permission: 'ROOMS_V'},
-  { header: 'Students', to: { name: 'StudentsList' }, icon: icons.children, permission: 'STUDENTS_V'},
+  { header: 'Students', to: { name: 'StudentsList' }, icon: icons.children, permission: 'STUDENTS_V', additional_permission: 'STUDENTS_R'},
   { header: 'Staff', to: { name: 'StaffList' }, icon: icons.userGroup, permission: 'STAFF_V'},
 ]
 function setNavItems(){
@@ -107,10 +108,6 @@ watch(() => props.state, (newValue, oldValue) => {
 );
 watch(() => route.path, () => {
   resetNav()
-  if(route.path.includes('lessons')){
-    let item = navItems.value.filter(i => i.header === 'Lessons')
-    item[0].showSubItems = true
-  }
 })
 
 function resetNav(){
@@ -168,9 +165,9 @@ function handleLogout(){
     flex-shrink: 0;
     flex-basis: 100px;
     .link {
-      display: block;
+      display: flex;
+      align-items: center;
       color: lighten($ah-primary, 55%);
-      // color: $ah-primary-light;
       width: 100%;
       text-decoration: none;
       padding: 10px 8px;
@@ -183,7 +180,6 @@ function handleLogout(){
       }
 
       .linkText {
-        padding-left: 20px;
       }
     }
     .subLink {
@@ -200,16 +196,10 @@ function handleLogout(){
     }
     .active {
       background-color: $ah-primary;
-      // background-color: $ah-primary-background;
       border-left: 8px solid $ah-primary-light;
       color: lighten($ah-primary, 55%);
-      // color: $ah-primary-light;
       font-weight: bold;
       padding: 10px 0px;
-      .linkText {
-        font-weight: bold;
-        padding: 12px;
-      }
     }
     .activeSub {
       font-weight: bold;
@@ -219,7 +209,6 @@ function handleLogout(){
   #settings {
   height: 150px;
   background-color: $ah-primary;
-  // background-color: $ah-primary-dark;
   padding-top: 10px;
 
     #user-img {

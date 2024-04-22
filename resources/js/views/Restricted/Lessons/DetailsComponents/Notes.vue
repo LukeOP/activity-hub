@@ -1,5 +1,5 @@
 <template>
-  <div id="lesson-notes" class="section row">
+  <div id="lesson-notes" class="section row" v-if="lesson.tutor.id == user.attributes.id">
     <h2 style="width:fit-content; flex-grow:1">Lesson Notes:</h2>
     <div class="btn btn-secondary add-btn float-end" @click="handleAddNote" style="margin-right:20px"><i class="add-icon" v-html="icons.add"></i></div>
     <h3>Recent Notes:</h3>
@@ -31,11 +31,13 @@
 import moment from 'moment';
 import { useModalStore } from '../../../../stores/modal';
 import { icons } from '@/images/icons/icons'
+import { useUserStore } from '../../../../stores/user';
 
 const props = defineProps({
   lesson: Object})
 
   const modal = useModalStore()
+  const user = useUserStore()
 
 function convertDate(date){
   return moment(date).format('LL')

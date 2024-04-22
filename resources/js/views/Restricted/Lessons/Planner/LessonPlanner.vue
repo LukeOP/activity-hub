@@ -64,6 +64,7 @@ function sortLessons(sortValue){
 
 function updateDate(newDate){
   selectedDate.value = newDate
+  appStore.setItems({date: moment(newDate).format('YYYY-MM-DD')})
   sorter.sort(dayLessons.value, 'attributes.start')
 }
 

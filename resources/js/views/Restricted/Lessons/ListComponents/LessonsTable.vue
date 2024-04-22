@@ -7,12 +7,12 @@
           <th @click="sortData('attributes.funding_type')"style="width: 45px; text-align: center; padding: 5px 10px;">:::</th>
           <th @click="sortData('student.last_name')">Student:</th>
           <!-- <th @click="sortData('student.year_level')">Year:</th> -->
-          <th @click="sortData('attributes.instrument')" style="width: 150px;">Instrument:</th>
-          <th @click="sortData('attributes.day')" style="width: 150px;">Lesson Day:</th>
-          <th @click="sortData('attributes.start')" style="width: 100px;">Time:</th>
+          <th @click="sortData('attributes.instrument')">Instrument:</th>
+          <th @click="sortData('attributes.day')">Lesson Day:</th>
+          <th @click="sortData('attributes.start')">Time:</th>
           <th @click="sortData('tutor.last_name')">Tutor:</th>
           <th @click="sortData('attributes.status')">Status:</th>
-          <th @click="sortData('school.name')" v-if="user.attributes.schools.length > 1">School:</th>
+          <th @click="sortData('school.name')" v-if="user?.attributes?.schools?.length > 1">School:</th>
         </tr>
       </thead>
     </table>
@@ -24,9 +24,9 @@
         <tr v-for="lesson in lessons" :key="lesson.id" @click="handleLessonClick(lesson)" :class="lesson.attributes.status">
           <td style="width: 45px;"><span class="funding-icon" v-if="lesson.attributes.funding_type">{{getLessonFunding(lesson.attributes.funding_type)}}</span></td>
           <td style="padding-right: 10px;"><span>{{lesson.student.full_name}}</span><span v-if="lesson.student.tutor_group" style="float: inline-end;">({{ lesson.student.tutor_group }})</span></td>
-          <td style="width: 150px;">{{lesson.attributes.instrument}}</td>
-          <td style="width: 150px;">{{lesson.attributes.day || '-'}}</td>
-          <td style="width: 100px;">{{formatTime(lesson.attributes.start) || '-'}}</td>
+          <td>{{lesson.attributes.instrument}}</td>
+          <td>{{lesson.attributes.day || '-'}}</td>
+          <td>{{formatTime(lesson.attributes.start) || '-'}}</td>
           <td>
             <AvatarName :user="{attributes: lesson.tutor}" />
           </td>

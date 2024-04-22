@@ -8,6 +8,7 @@ import staffRoutes from '../views/Restricted/Staff/StaffRoutes';
 import studentsRoutes from '../views/Restricted/Students/StudentsRoutes';
 import instrumentRoutes from '../views/Restricted/Instruments/InstrumentRoutes';
 import settingsRoutes from '/resources/js/views/Restricted/Settings/settingsRoutes';
+import attendanceRoutes from '../views/Restricted/Attendance/AttendanceRoutes';
 import { useFilterStore } from '/resources/js/stores/filter';
 
 const authRoutes = [
@@ -28,6 +29,7 @@ const authRoutes = [
       ...studentsRoutes,
       ...instrumentRoutes,
       ...settingsRoutes,
+      ...attendanceRoutes,
       { path: 'not-found', name: 'NotFoundRestricted', component: NotFoundRestricted, redirect: { name: 'Dashboard'} }
     ], 
     props: true,

@@ -1,27 +1,31 @@
 <template>
 <div>
-  <HeaderLine heading="Attendance Overview" link1="Lesson List" @link1="routeChange('LessonsList')" link2="Attendance Review" @link2="routeChange('LessonAttendanceReview')" />
+  <HeaderLine heading="Attendance Overview" 
+  :link1="link1" @link1="routeChange('LessonsList')" 
+  link2="Attendance Review" @link2="routeChange('LessonAttendanceReview')" />
   <div id="menuBar">
     <div id="subject-group">
-      <div v-for="subject in subjectArray" :key="subject">
+      <span class="menuItem" :class="{active: selectedSubject === 'all'}"
+          @click="selectedSubject = 'all'">All</span>
+      <template v-for="subject in subjectArray" :key="subject">
         <span v-if="filteredLessons(subject).length > 0" class="menuItem"
           :class="{active: selectedSubject === subject}"
           @click="selectedSubject = subject">
           {{ subject }}
         </span>
-      </div>
+      </template>
     </div>
     <div id="options-group" style="display: flex;">
-      <div id="funding" v-if="fundingArray.length">
+      <!-- <div id="funding" v-if="fundingArray.length">
         <select class="form-control" v-model="selectedFunding">
           <option v-for="funding in fundingArray" :key="funding" :value="funding">{{ funding }}</option>
         </select>
-      </div>
-      <div id="tutors" v-if="tutorArray.length">
+      </div> -->
+      <!-- <div id="tutors" v-if="tutorArray.length">
         <select class="form-control" v-model="selectedTutor">
           <option v-for="tutor in tutorArray" :key="tutor.id" :value="tutor.id">{{ tutor.full_name }}</option>
         </select>
-      </div>
+      </div> -->
     </div>
     </div>
   <div class="row mb-2 mt-4 lesson-group">
@@ -39,18 +43,20 @@
 <script setup>
 // Imports
 import { computed, ref } from 'vue'
-import useApi from '../../../../../composables/useApi'
+import useApi from '../../../../composables/useApi'
 import { useRouter } from 'vue-router'
-import useSorter from '../../../../../composables/useSorter'
-import { useLessonsStore } from '../../../../../stores/lessons'
+import useSorter from '../../../../composables/useSorter'
+import { useLessonsStore } from '../../../../stores/lessons'
 
 // Components
-import AttendanceRecordLine from './../Components/AttendanceRecordLine.vue'
+import AttendanceRecordLine from '../Components/AttendanceRecordLine.vue'
 import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/HeaderLine.vue'
-import { useSchoolStore } from '../../../../../stores/schools'
+import { useSchoolStore } from '../../../../stores/schools'
+import { useUserStore } from '../../../../stores/user'
 
 // Variables
 const router = useRouter()
+const user = useUserStore()
 const lessonStore = useLessonsStore()
 const schoolStore = useSchoolStore()
 const sorter = useSorter()
@@ -58,6 +64,11 @@ const subjectArray = ref(Array.from(new Set(lessonStore.getLessonsData.map(l => 
 const selectedSubject = ref(subjectArray.value[0])
 const selectedTutor = ref(0)
 const selectedFunding = ref(`All Funding Options`)
+
+const link1 = ref('')
+if(user.hasPermissionAny('LESSONS_R')){
+  link1.value = 'Lesson List'
+}
 
 const tutorArray = computed(() => {
   // Create a Map to store unique tutors
@@ -119,13 +130,13 @@ const fundingArray = computed(() => {
 
 // Filters displayed lessons based on instrument and tutor selection.
 function filteredLessons(type){
-  let filtLessons = lessonStore.getLessonsData.filter(l => l.attributes.instrument == type && l.attendance.length > 0)
-  if(selectedTutor.value != 0){
-    filtLessons = filtLessons.filter(l => l.tutor.id == selectedTutor.value)
-  }
-  if(selectedFunding.value != `All Funding Options`){
-    filtLessons = filtLessons.filter(l => l.attributes.funding_type == selectedFunding.value)
-  }
+  let filtLessons = lessonStore.getLessonsData.filter(l => (l.attributes.instrument == type || type == 'all') && l.attendance.length > 0)
+  // if(selectedTutor.value != 0){
+  //   filtLessons = filtLessons.filter(l => l.tutor.id == selectedTutor.value)
+  // }
+  // if(selectedFunding.value != `All Funding Options`){
+  //   filtLessons = filtLessons.filter(l => l.attributes.funding_type == selectedFunding.value)
+  // }
   filtLessons = filtLessons.filter(l => l.attendance.some(a => a.attendance != 'pending'))
   sorter.sort(filtLessons, 'student.last_name')
   return filtLessons

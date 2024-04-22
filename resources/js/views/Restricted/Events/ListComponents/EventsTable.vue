@@ -12,7 +12,7 @@
           <th style="width: 45px;"></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody v-if="events.length > 0">
         <tr v-for="event in events" :key="event.id" @click="handleClick(event)">
           <td>{{ event.attributes.name }}</td>
           <td>{{ event.attributes.description }}</td>

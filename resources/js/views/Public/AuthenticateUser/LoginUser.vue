@@ -46,7 +46,8 @@ function handleLogin(){
       name: 'Dashboard'
     })
   }).catch(err => {
-    error.value = setError(err.response)
+    console.log(err);
+    // error.value = setError(err.response)
     loading.value = false
   })
 }

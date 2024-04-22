@@ -12,12 +12,15 @@ import SingleTile from './SingleTile.vue';
 import { ref } from 'vue';
 import { useUserStore } from '/resources/js/stores/user';
 import moment from 'moment';
+import { useLessonsStore } from '../../../../stores/lessons';
 
 const tileArray = ref([])
 const user = useUserStore()
+const lessonStore = useLessonsStore()
 
 const { data: lessons, fetchData: fetchLessons } = useApi('lessons')
 fetchLessons().then(()=> {
+    lessonStore.setLessons(lessons.value)
     let active = lessons.value.filter(l => l.attributes.status == 'Active')
     let info = {boldText: `${active.length}`, subText: 'Active Lessons', icon: 'users', color: 'green', link: 'LessonsList'}
     tileArray.value.push(info)
