@@ -42,7 +42,7 @@ const links = ref({link1: ''})
 const instrumentStore = useInstrumentStore()
 const user = useUserStore()
 const actions = useActionsStore()
-const filter = useFilterStore()
+const filterStore = useFilterStore()
 const sorter = useSorter()
 
 // Initiate Composables
@@ -82,13 +82,6 @@ function setActions(){
 }
 setActions()
 
-// Set filter options
-function setFilter(){
-  filter.setData(instrumentStore.getInstruments)
-  filter.setType('InstrumentsForm')
-}
-setFilter()
-
 
 // Watch for changes in instrument data and update list
 watch(() => instrumentStore.getInstruments, (newValue) => {
@@ -109,14 +102,14 @@ const filteredInstruments = computed(() => {
   );
 
   // Selects the filtered array if populated, otherwise uses the instruments array
-  const array = filter.getReturned.length > 0 
-    ? filter.getReturned 
-    : instrumentStore.getInstruments
+  // const array = filter.getReturned.length > 0 
+  //   ? filter.getReturned 
+  //   : instrumentStore.getInstruments
 
   // Applies any search terms to the array
   const filtered = searchTerm.length > 0 
-    ? array.filter(filterFunction) 
-    : array;
+    ? filterStore.getReturned.filter(filterFunction) 
+    : filterStore.getReturned;
   
   instrumentStore.setFilteredInstruments(filtered);
   return filtered;
@@ -131,12 +124,15 @@ function routeChange(value) {
 
 onUpdated(()=>{ 
   setActions()
-  setFilter()
 })
 
 onMounted(()=>{  
+  if(instrumentStore.getInstruments.length > 0){
+    filterStore.setType('InstrumentsForm')
+  }
   fetchInstruments().then(()=>{
     if(allInstruments.value != instrumentStore.getInstruments){
+      filterStore.setType('InstrumentsForm')
       sorter.sort(allInstruments.value, 'attributes.name')
       instrumentStore.setInstruments(allInstruments.value)
     }

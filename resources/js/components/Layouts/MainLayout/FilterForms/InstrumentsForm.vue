@@ -29,12 +29,14 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useFilterStore } from '../../../../stores/filter'
 import { useUserStore } from '/resources/js/stores/user';
+import { useInstrumentStore } from '../../../../stores/instruments';
 
 const filter = useFilterStore()
-const originalData = ref(filter.data)
+const instrumentStore = useInstrumentStore()
+const instruments = instrumentStore.getInstruments
 const user = useUserStore()
 const filtering = ref({
   type: '',
@@ -47,17 +49,17 @@ const filtering = ref({
 
 // Instrument Types
 const instrumentTypeArray = computed(()=>{
-  return Array.from(new Set(originalData.value.map(d => d.attributes.type)))
+  return Array.from(new Set(instruments.map(d => d.attributes.type)))
 })
 
 // Instrument Families
 const instrumentFamilyArray = computed(()=>{
-  return Array.from(new Set(originalData.value.map(d => d.attributes.family)))
+  return Array.from(new Set(instruments.map(d => d.attributes.family)))
 })
 
 // Get Status'
 const statusArray = computed(()=>{
-  return originalData.value.reduce((result, data) => {
+  return instruments.reduce((result, data) => {
     const status = { id: data.attributes.state.id, description: `${data.attributes.state.description}` };
     const existingStatus = result.find(t => t.id === status.id);
 
@@ -71,7 +73,7 @@ const statusArray = computed(()=>{
 
 // Get Schools
 const schoolArray = computed(()=>{
-  return originalData.value.reduce((result, data) => {
+  return instruments.reduce((result, data) => {
     const school = { id: data.school.id, name: `${data.school.name}` };
     const existingschool = result.find(t => t.id === school.id);
 
@@ -85,7 +87,8 @@ const schoolArray = computed(()=>{
 
 // Return filtered data to component by updating state
 function returnFiltered(){
-  let filteredData = originalData.value
+  console.log('filtering');
+  let filteredData = instruments
   if(filtering.value.type != '') filteredData = filteredData.filter(d => d.attributes.type == filtering.value.type)
   if(filtering.value.family != '') filteredData = filteredData.filter(d => d.attributes.family == filtering.value.family)
   if(filtering.value.status != '') filteredData = filteredData.filter(d => d.attributes.state.id == filtering.value.status)
@@ -103,6 +106,10 @@ function clearFilter(){
   }
   returnFiltered()
 }
+
+onMounted(()=>{
+  clearFilter()
+})
 </script>
 
 <style lang="scss" scoped>
