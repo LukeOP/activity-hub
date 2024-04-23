@@ -23,7 +23,7 @@
         </div>
         <div class="col col-12 col-md-6" style="display: flex; align-items: center;">
           <label style="display: flex;">
-            <input type="checkbox" v-model="lessonData.term_link">
+            <input type="checkbox" v-model="lessonData.term_link" :disabled="!user.hasPermission('LESSONS_E', currentLesson.school.id)">
             <span class="custom-checkbox me-2"></span>
             <ToolTip tip="Lesson attendance is only required during school terms.">
               <span style="background-color: white;"> Link to school terms</span>
@@ -198,6 +198,12 @@ input[type='checkbox']:checked + .custom-checkbox::after {
     display: block;
     text-align: center;
     line-height: 20px;
+}
+
+/* Show the checkmark when checkbox is checked */
+input[type='checkbox']:disabled + .custom-checkbox {
+    background-color: $ah-grey;
+    cursor: not-allowed;
 }
 
 </style>

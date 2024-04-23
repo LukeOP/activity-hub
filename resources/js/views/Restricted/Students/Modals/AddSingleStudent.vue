@@ -32,7 +32,8 @@
           <input type="text" class="form-control" v-model="formData.identifier">
         </label>
       </span>
-      <input type="submit" class="btn btn-primary float-end" value="Add Student">
+      <!-- <input type="submit" class="btn btn-primary float-end" value="Add Student"> -->
+      <ButtonLoading button-class="btn-primary" style="float: inline-end;" inputmode="submit">Add Student</ButtonLoading>
     </form>
   </div>
 </template>
@@ -45,6 +46,7 @@ import { useStudentStore } from '/resources/js/stores/students';
 import axiosClient from '/resources/js/axios';
 import { useModalStore } from '/resources/js/stores/modal';
 import { useToastStore } from '/resources/js/stores/toast';
+import ButtonLoading from '../../../../components/Layouts/MainLayout/Elements/Buttons/ButtonLoading.vue';
 
 const user = useUserStore()
 const studentStore = useStudentStore()
