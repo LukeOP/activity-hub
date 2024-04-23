@@ -87,7 +87,6 @@ const schoolArray = computed(()=>{
 
 // Return filtered data to component by updating state
 function returnFiltered(){
-  console.log('filtering');
   let filteredData = instruments
   if(filtering.value.type != '') filteredData = filteredData.filter(d => d.attributes.type == filtering.value.type)
   if(filtering.value.family != '') filteredData = filteredData.filter(d => d.attributes.family == filtering.value.family)

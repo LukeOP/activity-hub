@@ -2,8 +2,12 @@
   <div>
     <HeaderLine heading="Lesson Signup Form Details" link1="Forms List" link2="Preview Form" @link1="returnToFormList" @link2="previewForm" />
     <!-- <pre>{{ formData }}</pre> -->
-    <button class="btn btn-secondary float-end top-btn" @click="saveUpdates" :disabled="saving">Save Form</button>
-    <button class="btn btn-primary float-end top-btn" @click="copyURL">Copy Form URL</button>
+    <ButtonLoading button-class="btn-secondary float-end top-btn" :loading="saving" @btn-click="saveUpdates" >Save Form</ButtonLoading>
+    <ButtonLoading button-class="btn-primary float-end top-btn" style="display: flex; align-items: center;" :loading="saving" @btn-click="copyURL" >
+      Copy Form URL<i class="fa-regular fa-clipboard ms-2"></i></ButtonLoading>
+
+    <!-- <button class="btn btn-secondary float-end top-btn" @click="saveUpdates" :disabled="saving">Save Form</button> -->
+    <!-- <button class="btn btn-primary float-end top-btn" @click="copyURL">Copy Form URL</button> -->
     <form @submit.prevent="">
       <section id="main-details">
         <h2>Form Setup:</h2>
@@ -87,11 +91,11 @@
           <input type="text" class="form-control" v-model="formData.student_phone" :disabled="!formData.student_phone_cb">
         </div>
 
-        <div class="checkbox-option">
+        <!-- <div class="checkbox-option">
           <input type="checkbox" v-model="formData.student_age_cb">
           <div class="description">Student Age Field:</div>
           <input type="text" class="form-control" v-model="formData.student_age" :disabled="!formData.student_age_cb">
-        </div>
+        </div> -->
 
         <div class="checkbox-option">
           <input type="checkbox" v-model="formData.student_year_cb">
@@ -209,6 +213,7 @@ import { useUserStore } from '../../../../../stores/user';
 import { useStaffStore } from '../../../../../stores/staff';
 import { useSchoolStore } from '../../../../../stores/schools';
 import ToolTip from '../../../../../components/Layouts/MainLayout/Elements/ToolTip.vue';
+import ButtonLoading from '../../../../../components/Layouts/MainLayout/Elements/Buttons/ButtonLoading.vue';
 
 
 // Initiate Stores
@@ -390,6 +395,18 @@ section {
   // &:first-of-type {
   //   border: none;
   // }
+}
+#url-section {
+  border: 1px solid $ah-grey;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  #url-link{
+    padding: 5px;
+  }
+  .btn-primary {
+    margin: 0;
+  }
 }
 .checkbox-option {
     display: flex;

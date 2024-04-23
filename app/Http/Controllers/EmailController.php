@@ -107,9 +107,10 @@ class EmailController extends Controller
     
     public function newLessonRequestConfirmationCaregiver($request){
         // send email to user who sent request to confirm it has been received
+        $lessonRequest = $request->all();
         try {
             if(isset($request['parent']['email'])){
-                Mail::to($request['parent']['email'])->send(new NewLessonRequestSubmittedEmail($request));
+                Mail::to($request['parent']['email'])->send(new NewLessonRequestSubmittedEmail($lessonRequest));
             }
             return [
                 'status' => 'success',

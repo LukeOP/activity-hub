@@ -169,17 +169,16 @@ const tutorArray = computed(() => {
     return staff
 })
 
-function submitForm(){
+async function submitForm(){
   submittingForm.value = true
-  const {data:requestData, error: requestError, fetchData: sendRequest} = useApi('lesson-request-form/create-public-request', formData.value, 'POST')
-  sendRequest().then(()=>{
+  const {data:requestData, error: requestError, fetchData} = useApi('lesson-request-form/create-public-request', formData.value, 'POST')
+  await fetchData().then(()=>{
     if(!requestError.value){
       submitted.value = true
       console.log(requestData.value);
-      const {fetchData: sendEmail} = useApi('email-lesson-request-received/' + form.value.id, requestData.value.data, 'POST')
-      sendEmail()
     } else console.error(requestError.value);
   })
+  await useApi('email-lesson-request-received/' + form.value.id, requestData.value.data, 'POST').fetchData()
   submittingForm.value = false
 }
 
