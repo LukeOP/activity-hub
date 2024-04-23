@@ -14,7 +14,7 @@
         <Modals />
       
         <Toast />
-        <img style="height: 20px; width: 20px; position: fixed; bottom: 10px; right: 10px;" v-if="appStore.getLoading" src="/Images/loading.gif" alt="">
+        <img style="height: 20px; width: 20px; position: fixed; bottom: 10px; right: 10px;" v-if="appStore.getLoading" src="/images/loading.gif" alt="">
 
 
       </div>
