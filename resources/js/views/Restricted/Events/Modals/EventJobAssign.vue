@@ -84,7 +84,7 @@ const hasEditingPermissions = computed(() => {
   function unassignStaff(staff){
     const {fetchData} = useApi('event-job-users/' + staff.id, null, 'DELETE', true)
     fetchData().then(() => {
-      eventStore.removeEventJobUser(staff)
+      eventStore.removeEventJobUser(staff.id)
     })
   }
 

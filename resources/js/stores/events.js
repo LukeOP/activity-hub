@@ -5,11 +5,11 @@ import useSorter from "../composables/useSorter";
 
 function getState(){
     return {
-      singleEvent: {},
+      singleEvent: '',
       events: [],
       filteredEvents: [],
       eventJobs: [],
-      singleJob: {},
+      singleJob: '',
       eventData: {},
       loading: false
     }
@@ -85,9 +85,9 @@ export const useEventStore = defineStore('events', {
     removeEventJob(record){
       this.getEvent.jobs = this.eventJobs.filter(j => j.id != record.id)
     },
-    removeEventJobUser(record){
-      let job = this.eventJobs.find(j => j.users.some(ju => ju.id == record.id))
-      this.singleJob.users = job.users.filter(u => u.id != record.id)
+    removeEventJobUser(user_job_id){
+      let EventJob = this.events.find(e => e.id == this.getEvent.id).jobs.find(j => j.id == this.singleJob)
+      EventJob.users = EventJob.users.filter(u => u.id != user_job_id)
     },
     // Template Jobs
     addTemplateJob(record){
@@ -126,10 +126,10 @@ export const useEventStore = defineStore('events', {
       return this.filteredEvents
     },
     getEventJobs(){
-      return this.eventJobs
+      return this.getEvent.jobs
     },
     getSingleJob(){
-      return this.singleJob
+      return this.getEventJobs.find(j => j.id == this.singleJob)
     },
     getEventData(){
       return this.eventData

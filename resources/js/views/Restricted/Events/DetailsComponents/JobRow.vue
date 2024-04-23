@@ -36,7 +36,7 @@ const user = useUserStore()
 
 
 function openModal(type){
-    eventStore.setSingleJob(props.job)
+    eventStore.setSingleJob(props.job.id)
     modal.open(type)
 }
 
