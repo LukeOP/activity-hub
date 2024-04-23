@@ -27,7 +27,7 @@
   }
   
   .shimmer {
-    animation: shimmerEffect 1s infinite linear;
+    animation: shimmerEffect 2s infinite linear;
     background-image: linear-gradient(to right, #eee 0%, #f5f5f5 40%, #eee 100%);
     background-size: 200% auto;
   }
