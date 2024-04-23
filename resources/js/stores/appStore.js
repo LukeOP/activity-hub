@@ -2,7 +2,8 @@ import { defineStore } from "pinia";
 
 function getState(){
     return {
-      items: []
+      items: [],
+      loading: false
     }
 }
 
@@ -14,11 +15,18 @@ export const useAppStore = defineStore('appStore', {
     },
     resetItems(){
       this.items = []
+      this.loading = false
     },
-    },
+    setLoading(value){
+      this.loading = value
+    }
+  },
   getters: {
     getItems(){
       return this.items
     },
+    getLoading(){
+      return this.loading
+    }
   }
 })

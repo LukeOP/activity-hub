@@ -3,21 +3,16 @@
 </template>
 
 <script setup>
-import moment from 'moment';
 import EventJobStatusIconsSVG from '../../../../components/Layouts/MainLayout/Elements/SVG/EventJobStatusIconsSVG.vue';
 import { useEventStore } from '../../../../stores/events';
 import { useUserStore } from '../../../../stores/user';
 import useApi from '../../../../composables/useApi';
-import { computed } from 'vue';
+import { useToastStore } from '../../../../stores/toast';
 
 const props = defineProps({job: Object})
 const eventStore = useEventStore()
 const user = useUserStore()
-
-const getStatus = computed(() => {
-  let status = 0
-  return props.job.status == '0' ? status : 'complete'
-})
+const toast = useToastStore()
 
 // Handle job click to change status
 function toggleStatus(){
@@ -32,7 +27,7 @@ function toggleStatus(){
         })
     } else {
       props.job.status = original_status
-      toast.open('info', 'Unable To Edit Job Status.', 'You do not have permission to edit this status.')
+      toast.open('info', 'Unable To Edit Job Status.', 'You do not have required permissions to edit this job status.')
     }
   } else {
     props.job.status = original_status

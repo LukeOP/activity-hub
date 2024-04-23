@@ -1,15 +1,18 @@
 import { ref } from 'vue';
 import axiosClient from '../axios'
 import { useToastStore } from '../stores/toast';
+import { useAppStore } from '../stores/appStore';
 
 export default function useApi(url, requestData = null, method = 'GET', toastResponse = false ) {
   const data = ref(null);
   const error = ref(null);
   const loading = ref(false);
   const toast = useToastStore()
+  const appStore = useAppStore()
 
   const fetchData = async () => {
     loading.value = true;
+    appStore.setLoading(true)
     try {
       let response
       if (method === 'GET'){
@@ -33,6 +36,7 @@ export default function useApi(url, requestData = null, method = 'GET', toastRes
       }
     } finally {
       loading.value = false;
+      appStore.setLoading(false)
     }
   };
 

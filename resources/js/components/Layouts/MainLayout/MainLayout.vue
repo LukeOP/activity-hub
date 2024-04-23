@@ -14,6 +14,8 @@
         <Modals />
       
         <Toast />
+        <img style="height: 20px; width: 20px; position: fixed; bottom: 10px; right: 10px;" v-if="appStore.getLoading" src="/Images/loading.gif" alt="">
+
 
       </div>
     </div>
@@ -27,8 +29,10 @@ import BreadCrumbs from './BreadCrumbs.vue'
 import { useRoute, useRouter } from 'vue-router';
 import { computed, ref } from 'vue';
 import Toast from './Elements/ComposableElements/Toast.vue';
+import { useAppStore } from '../../../stores/appStore';
 
 const router = useRouter()
+const appStore = useAppStore()
 
 // Store route depths for each section
 const fromSectionDepth = ref() 

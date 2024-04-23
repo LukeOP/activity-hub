@@ -84,6 +84,7 @@ function countdownText(jobs){
 .countdown-headings {
   padding-left: 10px;
   font-size: 1rem;
+  font-weight: bold;
   // text-decoration: underline;
 }
 tr {

@@ -78,12 +78,13 @@ import useApi from '../../../../composables/useApi';
 
 const linkedStaff = computed(() => {
   let linkedStaffList = []
-  staffStore.getStaffList.forEach(staff => {
-    if(eventStore.getEvent.users.some(u => u.user_id == staff.id)) {
-      linkedStaffList.push({attributes: {id: staff.id, first_name: staff.first_name, last_name: staff.last_name, image: staff.image, 
-        linked_id: eventStore.getEvent.users.find(u => u.user_id == staff.id).event_user_id}})
+
+  eventStore.getLinkedStaff.forEach(staff => {
+    if(eventStore.getEvent.users.some(u => u.id == staff.attributes.id)){
+      linkedStaffList.push({attributes: {id: staff.attributes.id, first_name: staff.attributes.first_name, last_name: staff.attributes.last_name, image: staff.attributes.image, 
+        linked_id: eventStore.getEvent.users.find(u => u.id == staff.attributes.id).event_user_id}})
     }
-  });
+  })
   sorter.sort(linkedStaffList, 'attributes.last_name')
   return linkedStaffList
 })
