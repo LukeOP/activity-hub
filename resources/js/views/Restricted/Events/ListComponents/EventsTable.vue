@@ -25,6 +25,7 @@
           </td>
         </tr>
       </tbody>
+      <tbody v-else><tr><td colspan="5">No Events</td></tr></tbody>
     </table>
   </section>
 

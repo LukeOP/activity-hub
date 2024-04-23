@@ -1,5 +1,5 @@
 <template>
-  <LoadingSkeleton v-if="loading" class="user-element">
+  <LoadingSkeleton v-if="eventStore.getEvents.length == 0 && loading" class="user-element">
     <UserElementHeader heading="Upcoming Events" />
     <LoadingSpinner :isLoading="true" :loadingText="true" color="primary" />
   </LoadingSkeleton>
@@ -8,8 +8,8 @@
     <!-- {{ events }} -->
 
   <section>
-    <div id="upcoming-events" v-if="events.length > 0">
-      <div class="event-item" v-for="event in events.slice(0, 5)" :key="event.id" @click="viewEvent(event)">
+    <div id="upcoming-events" v-if="eventStore.getEvents.length > 0">
+      <div class="event-item" v-for="event in eventStore.getEvents.slice(0, 5)" :key="event.id" @click="viewEvent(event)">
         <div class="event-details">
           <div class="event-name">{{ event.attributes.name }}</div>
           <div class="event-date">{{ event.attributes.date }}</div>
