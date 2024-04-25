@@ -12,6 +12,7 @@
 </template>
 
 <script setup>
+import useApi from "../../../../../composables/useApi";
 import { useModalStore } from "../../../../../stores/modal";
 import { useSchoolStore } from "../../../../../stores/schools";
 import { useStaffStore } from "../../../../../stores/staff";
@@ -24,7 +25,11 @@ const modal = useModalStore()
 const toast = useToastStore()
 
 function setAdministrator(){
-  staffStore.setPermission(staff.id, schoolStore.currentSchool.id, 'Administrator')
+  // const { data, fetchData } = useApi('user-permissions', {user_id: staff.getStaff.id, school_id: schoolStore.getSchool.id, permission_type: 'Administrator'})
+  // fetchData().then(()=>{
+
+  // })
+  staffStore.setPermission(staff.id, schoolStore.getSchool.id, 'Administrator')
   toast.open('success', 'Administrator Created', `${staff.first_name} has been made an Administrator`)
   cancel()
 }

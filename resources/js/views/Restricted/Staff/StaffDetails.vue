@@ -80,10 +80,10 @@ function handlePositionEdit(position){
 
 function setActions(){
   const actionsArray = []
-  if(user.hasPermission('Administrator', currentSchool.id) && !staffStore.singleStaff.permissions.some(p => p.type === 'Administrator') && user.attributes.id != staff.id){
+  if(user.hasPermission('Administrator', currentSchool.id) && !staffStore.getStaff.permissions.some(p => p.type === 'Administrator') && user.attributes.id != staff.id){
     actionsArray.push({ header: 'Promote to Administrator', to: { name: 'StaffDetails' }, modal: 'PromoteToAdmin', icon: 'fa-solid fa-star', additional: true, green: true})
   }
-  if(user.hasPermission('Administrator', currentSchool.id) && staffStore.singleStaff.permissions.some(p => p.type === 'Administrator')&& user.attributes.id != staff.id){
+  if(user.hasPermission('Administrator', currentSchool.id) && staffStore.getStaff.permissions.some(p => p.type === 'Administrator')&& user.attributes.id != staff.id){
     actionsArray.push({ header: 'Demote Administrator', to: { name: 'StaffDetails' }, modal: 'DemoteAdmin', icon: 'fa-solid fa-user-slash', additional: true, red: true})
   }
   // if(user.hasPermission('STAFF_D', currentSchool.id) && user.attributes.id != staff.id){
