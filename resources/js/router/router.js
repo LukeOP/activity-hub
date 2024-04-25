@@ -6,6 +6,7 @@ import authRoutes from "./authRoutes";
 
 import Test from '../views/Public/Test.vue'
 import { useFilterStore } from "../stores/filter";
+import { useMenuStore } from "../stores/menu";
 
 const routes = [
   {
@@ -38,6 +39,8 @@ router.beforeEach((to, from, next) => {
   if(sessionStorage.getItem('AHT') && user.attributes.id === 0){
     user.resetUserWithToken()
   }
+  const menuStore = useMenuStore()
+  menuStore.resetMenu()
   const filter = useFilterStore()
   filter.reset()
   if(to.meta.requiresAuth && !user.token){
