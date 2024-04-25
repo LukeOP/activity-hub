@@ -99,10 +99,10 @@ import LoadingSpinner from '../../../components/Layouts/MainLayout/Elements/Load
       const { data: tutors, fetchData: fetchTutors } = useApi('school-users/' + school)
 
       Promise.all([fetchStudents(), fetchTutors()]).then(() => {
-        data.value.students = students
-        data.value.tutors = tutors
+        data.value.students = students.value.data
+        data.value.tutors = tutors.value.data
 
-        sorter.sort(students.value, 'last_name')
+        sorter.sort(data.value.students, 'last_name')
 
         loading.value = false
       })
@@ -115,7 +115,8 @@ import LoadingSpinner from '../../../components/Layouts/MainLayout/Elements/Load
 
   function handleSubmit(){
     submitting.value = true
-    axiosClient.post('lessons', {student: formData.value.student, instrument: formData.value.instrument, tutor: formData.value.tutor.id}).then(()=>{
+    const {fetchData} = useApi('lessons', {student_id: formData.value.student, instrument: formData.value.instrument, user_id: formData.value.tutor.id}, 'POST', true)
+    fetchData().then(()=>{
       submitting.value = false
       router.push({
         name: 'LessonsList'
