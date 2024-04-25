@@ -72,15 +72,10 @@ function editAttendance(record){
 
 function handleClick(lesson){
   filter.close()
-  // console.log(lesson);
   lessonStore.setLesson(lesson.lesson_id)
-  // const { data: lessonData, loading, fetchData} = useApi('lessons/' + lesson.lesson_id)
-  // fetchData().then(()=>{
-  //   lessonStore.setLesson(lessonData.value.id)
-    router.push({
-      name: 'LessonAttendanceSingle'
-    })
-  // })
+  router.push({
+    name: 'LessonAttendanceSingle'
+  })
 }
 
 </script>

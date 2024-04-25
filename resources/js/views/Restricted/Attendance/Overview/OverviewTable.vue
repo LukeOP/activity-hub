@@ -4,7 +4,7 @@
             <div id="subject-group">
             <span class="menuItem" :class="{active: selectedSubject === 'all'}" @click="setSelectedSubject('all')">All</span>
             <template v-for="subject in subjectArray" :key="subject">
-                <span v-if="attendance.length > 0" class="menuItem"
+                <span class="menuItem"
                 :class="{active: selectedSubject === subject}"
                 @click="setSelectedSubject(subject)">
                 {{ subject }}
@@ -24,11 +24,14 @@
             </div> -->
             </div>
         </div>
-        <div class="row mb-2 mt-4 lesson-group">
+        <div v-if="attendance.length > 0" class="mb-2 mt-4 lesson-group">
             <div v-for="lesson in attendance" :key="lesson">
             <AttendanceRecordLine class="snapShot" :lesson="lesson" :heading="lesson.student.full_name" :stats="true" @click="handleClick(lesson)"/>
             <hr />
             </div>
+        </div>
+        <div v-else class="no-records">
+          No attendance records to display.
         </div>
     </div>
 </template>
@@ -110,5 +113,9 @@ function handleClick(lesson){
     min-width: 300px;
     justify-content: end;
   }
+}
+.no-records{
+  text-align: center;
+  padding: 25px;
 }
 </style>

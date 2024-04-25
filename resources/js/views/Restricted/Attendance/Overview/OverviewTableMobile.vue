@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <div id="menuBar">
       <label style="width: 100%;">
         <select class="form-control" v-model="selectSubject">
@@ -8,12 +9,17 @@
         </select>
       </label>
     </div>
-    <div class="mb-2 mt-4 lesson-group">
+
+    <div v-if="attendance.length > 0" class="mb-2 mt-4 lesson-group">
         <div v-for="lesson in attendance" :key="lesson">
           <AttendanceRecordLineMobile class="snapShot" :lesson="lesson" :heading="lesson.student.full_name" :stats="true" @click="handleClick(lesson)"/>
           <hr />
         </div>
     </div>
+
+    <div v-else class="no-records">
+          No attendance records to display.
+        </div>
   </div>
 </template>
 
@@ -97,5 +103,9 @@ function handleClick(lesson){
     min-width: 300px;
     justify-content: end;
   }
+}
+.no-records{
+  text-align: center;
+  padding: 25px;
 }
 </style>
