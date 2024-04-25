@@ -20,7 +20,7 @@
               <i @click="handleLogout" id="logout" v-html="icons.logout" class="me-2 fill-white icon"></i>
             </span>
           </div>
-          <div id="version">V: 1.0 (April, 2024)</div>
+          <div id="version">V: 1.0.1</div>
         </div>
 
       </div>
@@ -164,6 +164,7 @@ function handleLogout(){
     flex-grow: 1;
     flex-shrink: 0;
     flex-basis: 100px;
+    overflow-y: auto;
     .link {
       display: flex;
       align-items: center;
@@ -329,7 +330,7 @@ function handleLogout(){
   box-shadow: inset 5px 5px 10px $ah-primary-dark;
 }
 #version {
-  position: fixed;
+  position: absolute;
   bottom: 0px;
   padding: 10px;
   color: $ah-primary-background;
