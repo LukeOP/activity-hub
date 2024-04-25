@@ -22,6 +22,7 @@ class LessonAttendanceResource extends JsonResource
             'instrument' => $this->lesson->instrument,
             'attendance' => $this->attendance,
             'funding_type' => $this->lesson->funding_type,
+            'recorded_by' => $this->user,
             'student' => [
                 'id' => $this->lesson->student->id,
                 'first_name' => $this->lesson->student->first_name,

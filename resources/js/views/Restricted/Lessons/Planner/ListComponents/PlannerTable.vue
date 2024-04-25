@@ -1,20 +1,23 @@
 <template>
     <section id="planner-table">
-      <TableHeader>
-        <tr>
-          <th style="width: 80px;"></th>
-          <th @click="sortLessons('attributes.start')">Lesson Time:</th>
-          <th @click="sortLessons('student.last_name')">Student:</th>
-          <th @click="sortLessons('attributes.instrument')">Instrument:</th>
-          <th @click="sortLessons('school.room')">Room:</th>
-          <th @click="sortLessons('tutor.last_name')">Tutor:</th>
-          <th style="width: 50px;"></th>
-        </tr>
-      </TableHeader>
-      <TableBody>
-        <PlannerTableRow v-if="lessons.length > 0" :dayLessons="lessons" :date="date" :key="refresh"/>
-        <div v-else class="text-center" style="height: 50px; padding: 13px;">No lessons on this day</div>
-      </TableBody>
+      <table>
+        <thead class="table-head">
+          <tr>
+            <th style="width: 80px;"></th>
+            <th @click="sortLessons('attributes.start')">Lesson Time:</th>
+            <th @click="sortLessons('student.last_name')">Student:</th>
+            <th @click="sortLessons('attributes.instrument')">Instrument:</th>
+            <th @click="sortLessons('school.room')">Room:</th>
+            <th @click="sortLessons('tutor.last_name')">Tutor:</th>
+            <th style="width: 50px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <PlannerTableRow v-if="lessons.length > 0" :dayLessons="lessons" :date="date" :key="refresh"/>
+          <tr v-else><td class="text-center" style="height: 50px; padding: 13px;" colspan="7">No lessons on this day</td></tr>
+        </tbody>
+      </table>
+
       <div class="col-12 col-md-6 totals">
         <span>Total: {{getNum('total')}}</span>
         <span>Present: {{getMarkedLessons('present')}}</span>
@@ -87,6 +90,9 @@
   </script>
   
   <style lang="scss" scoped>
+  .table-head {
+    height: 35px;
+  }
   #date-banner{
     display: flex;
     justify-content: space-between;

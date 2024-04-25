@@ -11,7 +11,6 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
 
 import Header from './DetailsComponents/Header.vue';
 import Details from './DetailsComponents/Details.vue';
@@ -24,10 +23,8 @@ import { useUserStore } from '@/stores/user';
 
   const lessonStore = useLessonsStore()
   const actions = useActionsStore()
-  const route = useRoute()
   const lesson = ref(lessonStore.getLessonData)
   const lessonNotesActive = ref(false)
-  const lessonNewNotesActive = ref(false)
   const user = useUserStore()
 
 

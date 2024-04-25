@@ -130,5 +130,8 @@ function handleClick(lesson){
 .incomplete {
   background-color: $ah-grey;
 }
+.cancelled {
+  background-color: $ah-darkGrey;
+}
 
 </style>

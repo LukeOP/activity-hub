@@ -11,6 +11,7 @@
                 </label>
             </div>
             <div style="display: flex; justify-content: space-evenly;" id="attendance-buttons">
+                <button type="submit" class="btn" :class="attendance.attendance === 'cancelled' ? 'btn-darkGrey' : 'btn-outline-darkGrey'" @click.prevent="addRecord('cancelled')" :disabled="loading">No Lesson</button>
                 <button type="submit" class="btn" :class="attendance.attendance === 'absent' ? 'btn-red' : 'btn-outline-red'" @click.prevent="addRecord('absent')" :disabled="loading">Absent</button>
                 <button type="submit" class="btn" :class="attendance.attendance === 'late' ? 'btn-secondary' : 'btn-outline-secondary'" @click.prevent="addRecord('late')" :disabled="loading">Late</button>
                 <button type="submit" class="btn" :class="attendance.attendance === 'present' ? 'btn-primary' : 'btn-outline-primary'" @click.prevent="addRecord('present')" :disabled="loading">Present</button>
@@ -68,7 +69,7 @@ import { useAppStore } from '../../../../../stores/appStore';
     }
 }
 button {
-    width: 150px;
+    width: 130px;
 }
 
 @media (max-width: 768px) {

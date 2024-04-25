@@ -16,7 +16,14 @@ const attendanceRoutes = [
   }
   ]},
   { path: 'review', name: 'LessonAttendanceReview', component: LessonAttendanceReview, meta: { title: 'Attendance Review', breadcrumb: ' / Attendance Review', section: "Attendance", depth: 3} },
-  { path: 'attendance', name: 'LessonAttendanceSingle', component: LessonAttendanceSingle, meta: { title: 'Lesson Attendance', breadcrumb: ' / Attendance', section: "Attendance", depth: 3} },
+  { path: 'attendance', name: 'LessonAttendanceSingle', component: LessonAttendanceSingle, meta: { title: 'Lesson Attendance', breadcrumb: ' / Attendance', section: "Attendance", depth: 3},
+  beforeEnter: [
+    () => checkLessonObject('LessonsList'),
+    () => {
+    const { checkPermissions } = usePermissions()
+    checkPermissions(['ATTENDANCE_R', 'ATTENDANCE_V'])
+  }
+  ]},
 ] 
 
 function checkPermission(permission, redirect){

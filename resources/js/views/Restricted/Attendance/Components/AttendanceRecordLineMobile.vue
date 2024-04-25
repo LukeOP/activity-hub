@@ -1,31 +1,34 @@
 <template>
-    <div id="attendanceRecordLine" style="display: flex; justify-content: space-between;">
-        <h4 style="margin: auto; width: fit-content; min-width: 200px;">{{getHeading()}}</h4>
-        <div style="flex-grow: 1; display: flex; flex-wrap: wrap; height: 50px; align-content: center;">
-            <div class="progress mx-5" style="height: 10px; width: 100%;">
-                <div class="progress-bar bg-primary" role="progressbar" :style="'width: '+ getPercentage(present) + '%;'" :aria-valuenow="present" aria-valuemin="0" aria-valuemax="100"></div>
-                <div class="progress-bar bg-secondary-dark" role="progressbar" :style="'width: '+ getPercentage(late) + '%;'" :aria-valuenow="late" aria-valuemin="0" aria-valuemax="100"></div>
-                <div class="progress-bar bg-red" role="progressbar" :style="'width: '+ getPercentage(absent) + '%;'" :aria-valuenow="absent" aria-valuemin="0" aria-valuemax="100"></div>
-                <div class="progress-bar bg-green" role="progressbar" :style="'width: '+ getPercentage(custom) + '%;'" :aria-valuenow="custom" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <p v-if="stats" class="mx-5" style="display:flex; justify-content:space-between; margin: 0; width: 100%;">
-                <div id="stats">
-                    <span style="font-weight:500">Lessons: {{total}}</span>
-                    <span class="text-primary" >Present: {{present}}</span>
-                    <span class="text-secondary-dark" >Late: {{late}}</span>
-                    <span class="text-red" >Absent: {{absent}}</span>
-                    <span class="text-green" >Custom: {{custom}}</span>
-                </div>
-                <div>{{ lesson.tutor.full_name }}</div>
-            </p>
+  <section id="attendance-record-line">
+    <header>
+      <div class="header">
+        <div>
+          <h4>{{getHeading()}}</h4>
+          <h5>{{ lesson.attributes.instrument }} ( {{ lesson.tutor.full_name }} )</h5>
         </div>
-        <div id="recent-stats">
-          <p class="text-primary" style="margin: 0;">Latest Entry:</p >
-          {{ formatDate(latestAttendance.date) }}
-          <span>| {{ latestAttendance.attendance }}</span>
+        <div id="total">{{ total }}</div>
+      </div>
+    </header>
+    
+    <div class="progress-container">
+      <div class="progress bar-container">
+        <div class="progress-bar bg-primary" role="progressbar" :style="'width: '+ getPercentage(present) + '%;'" :aria-valuenow="present" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-secondary-dark" role="progressbar" :style="'width: '+ getPercentage(late) + '%;'" :aria-valuenow="late" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-red" role="progressbar" :style="'width: '+ getPercentage(absent) + '%;'" :aria-valuenow="absent" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-green" role="progressbar" :style="'width: '+ getPercentage(custom) + '%;'" :aria-valuenow="custom" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
-        <span id="total" style="margin: auto; min-width: 35px;">{{ total }}</span>
-    </div>
+        <div class="stats" v-if="stats">
+          <span class="text-primary" >Present: {{present}}</span>
+          <span class="text-secondary-dark" >Late: {{late}}</span>
+          <span class="text-red" >Absent: {{absent}}</span>
+          <span class="text-green" >Custom: {{custom}}</span>
+        </div>
+      </div>
+
+      <div class="recent-stats">
+        <span class="text-primary" style="margin: 0;">Latest Entry: {{ formatDate(latestAttendance.date) }} | {{ latestAttendance.attendance }}</span>
+      </div>
+    </section>
   </template>
   
   <script setup>
@@ -68,8 +71,6 @@ import moment from "moment";
   
   const total = computed(()=> {
     return present.value + late.value + absent.value + custom.value
-    // if(lessonStore.getLessonData.id == props.lesson.id) return lessonStore.getLessonData.attendance.length
-    // return props.lesson.attendance.length
   })
 
   const latestAttendance = computed(()=>{
@@ -88,8 +89,15 @@ import moment from "moment";
   </script>
   
   <style lang="scss" scoped>
-  #attendanceRecordLine {
+  #attendance-record-line {
     max-width: 100%;
+    header .header {
+      display: flex; 
+      justify-content: space-between;
+    }
+  }
+  .bar-container {
+    height: 10px;
   }
   #total {
     color: white;
@@ -105,13 +113,13 @@ import moment from "moment";
       background-color: $ah-primary-dark;
     }
   }
-  #stats {
+  .stats {
     span {
         margin-right: 1rem;
     }
   }
-  #recent-stats {
-    width: 200px;
+  .recent-stats {
+    width: 100%;
   }
 
   </style>

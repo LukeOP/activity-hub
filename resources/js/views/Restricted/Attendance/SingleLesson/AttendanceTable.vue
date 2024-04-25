@@ -4,7 +4,7 @@
     <h3 style="height: fit-content; margin: auto 0;">Attendance Entries</h3>
     <div id="date-range">
       <span>Showing attendance between </span>
-      <input type="date" class="form-control" v-model="fromDate" :min="lesson.attributes.startDate">
+      <input type="date" class="form-control" v-model="fromDate" :min="lessonStore.getLessonData.attributes.startDate">
       <span> and </span>
       <input type="date" class="form-control" v-model="toDate" :max="today">
     </div>
@@ -37,7 +37,7 @@
           <td style="display:flex; justify-content: center; align-items: center;">
             <div class="attendance" :class="record.attendance">{{capitalizeFirstLetter(record.attendance)}}</div>
           </td>
-          <td class="hide">{{lesson.tutor.first_name}} {{lesson.tutor.last_name}}</td>
+          <td class="hide">{{ record.recorded_by.first_name }} {{ record.recorded_by.last_name }}</td>
           <td style="width: 80px;">
             <div style="display: flex; justify-content: space-between; padding-right: 10px;">
               <i class="fa-solid fa-edit icon" @click="editRecord(record, 'EditAttendance')"></i>
@@ -54,7 +54,7 @@
 </div>
 </template>
 
-<script>
+<script setup>
 import moment from 'moment'
 import { useModalStore } from '/resources/js/stores/modal'
 import { useLessonsStore } from '/resources/js/stores/lessons'
@@ -62,86 +62,63 @@ import useSorter from '/resources/js/composables/useSorter'
 import { computed, ref } from 'vue'
 import { useAppStore } from '../../../../stores/appStore'
 import { useUserStore } from '../../../../stores/user'
-export default {
-  props: {
-    lesson: Object
-  },
-  setup(props){
-    const lessonStore = useLessonsStore()
-    const sorter = useSorter()
-    const appStore = useAppStore()
-    const user = useUserStore()
 
-    const attendanceRecords = lessonStore.getAttendanceArray
-    const modal = useModalStore()
+  const lessonStore = useLessonsStore()
+  const sorter = useSorter()
+  const appStore = useAppStore()
+  const user = useUserStore()
 
-    const filteredAttendanceRecords = computed(()=>{
-      let records = lessonStore.getAttendanceArray.filter(r => (r.date >= fromDate.value && r.date <= toDate.value && r.lesson_id == lessonStore.getLessonData.id ))
-      sorter.sort(records, 'date', 'desc');
-      return records
-    })
+  const attendanceRecords = lessonStore.getAttendanceArray
+  const modal = useModalStore()
 
-    const fromDate = ref(props.lesson.attributes.startDate)
-    const toDate = ref(moment().format('YYYY-MM-DD'))
-    const today = ref(moment().format('YYYY-MM-DD'))
+  const filteredAttendanceRecords = computed(()=>{
+    let records = lessonStore.getAttendanceArray.filter(r => (r.date >= fromDate.value && r.date <= toDate.value && r.lesson_id == lessonStore.getLessonData.id ))
+    sorter.sort(records, 'date', 'desc');
+    return records
+  })
 
-    function formatDate(date){
-      return moment(date).format('Do MMM, YYYY')
-    }
-    function formatModified(dateTime){
-      return moment(dateTime).format('Do MMM, YYYY hh:mma')
-    }
-    function formatTime(time){
-      let formatTime = moment(time, 'HH:mm:ss').format('h:mm A')
-      return formatTime != 'Invalid date' ? formatTime : '-'
-    }
+  const fromDate = ref(lessonStore.getLessonData.attributes.startDate)
+  const toDate = ref(moment().format('YYYY-MM-DD'))
+  const today = ref(moment().format('YYYY-MM-DD'))
 
-    function capitalizeFirstLetter(string){
-      return string.charAt(0).toUpperCase() + string.slice(1)
-    }
-
-    function getDay(date){
-      return moment(date).format('dddd')
-    }
-
-    function editRecord(record, modalLink){
-      lessonStore.setAttendance(record.id)
-      appStore.setItems({date: record.date})
-      modal.open(modalLink)
-    }
-
-    function permitted(record){
-      if(record.tutor.id == user.attributes.id){
-        return true
-      } return false
-    }
-
-    function hasNotes(record){
-      let attendance = lessonStore.getLessonNotesAndAttendance.find(n => n.attendance_id == record.id)
-      if(attendance){
-        // console.log(Object.values(attendance.comments).every(c => c === null || c === ''));
-        return true
-      } else return false
-    }
-
-    return {
-      fromDate,
-      toDate,
-      today,
-      attendanceRecords,
-      filteredAttendanceRecords,
-      formatTime,
-      capitalizeFirstLetter,
-      getDay,
-      formatModified,
-      editRecord,
-      formatDate,
-      hasNotes,
-      permitted
-    }
+  function formatDate(date){
+    return moment(date).format('Do MMM, YYYY')
+  }
+  function formatModified(dateTime){
+    return moment(dateTime).format('Do MMM, YYYY hh:mma')
+  }
+  function formatTime(time){
+    let formatTime = moment(time, 'HH:mm:ss').format('h:mm A')
+    return formatTime != 'Invalid date' ? formatTime : '-'
   }
 
-}
+  function capitalizeFirstLetter(string){
+    return string.charAt(0).toUpperCase() + string.slice(1)
+  }
+
+  function getDay(date){
+    return moment(date).format('dddd')
+  }
+
+  function editRecord(record, modalLink){
+    lessonStore.setAttendance(record.id)
+    appStore.setItems({date: record.date})
+    modal.open(modalLink)
+  }
+
+  function permitted(record){
+    if(record.tutor.id == user.attributes.id){
+      return true
+    } return false
+  }
+
+  function hasNotes(record){
+    let attendance = lessonStore.getLessonNotesAndAttendance.find(n => n.attendance_id == record.id)
+    if(attendance){
+      // console.log(Object.values(attendance.comments).every(c => c === null || c === ''));
+      return true
+    } else return false
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -176,13 +153,16 @@ export default {
   background-color: $ah-secondary;
 }
 .absent {
-  background-color: $ah-red-light;
+  background-color: $ah-red;
 }
 .custom {
   background-color: $ah-green;
 }
 .incomplete {
-  background-color: $ah-grey;
+  background-color: $ah-grey-dark;
+}
+.cancelled {
+  background-color: $ah-darkGrey;
 }
 .icon {
   font-size: 1.75rem;

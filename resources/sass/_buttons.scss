@@ -255,6 +255,89 @@
   box-shadow: none;
 }
 
+// DarkGrey Button
+.btn.btn-darkGrey {
+  color: #fff;
+  background-color: $ah-darkGrey;
+  border-color: $ah-darkGrey;
+}
+.btn.btn-darkGrey.focus,
+.btn.btn-darkGrey:focus {
+  color: #fff;
+  background-color: $ah-darkGrey-dark;
+  border-color: $ah-darkGrey-dark;
+  outline: none;
+  box-shadow: none;
+}
+.btn.btn-darkGrey:hover {
+  color: #fff;
+  background-color: $ah-darkGrey-dark;
+  border-color: $ah-darkGrey-dark;
+  outline: none;
+  box-shadow: none;
+}
+.btn.btn-darkGrey.active,
+.btn.btn-darkGrey:active {
+  color: #fff;
+  background-color: $ah-darkGrey-dark;
+  border-color: $ah-darkGrey-dark;
+  outline: none;
+}
+.btn.btn-darkGrey.active.focus,
+.btn.btn-darkGrey.active:focus,
+.btn.btn-darkGrey.active:hover,
+.btn.btn-darkGrey:active.focus,
+.btn.btn-darkGrey:active:focus,
+.btn.btn-darkGrey:active:hover {
+  color: #fff;
+  background-color: $ah-darkGrey-dark;
+  border-color: $ah-darkGrey-dark;
+  outline: none;
+  box-shadow: none;
+}
+
+// DarkGrey Outline Button
+.btn-outline-darkGrey {
+  
+  color: $ah-darkGrey;
+  border-color: $ah-darkGrey;
+  background-color: white;
+}
+.btn-outline-darkGrey.focus,
+.btn-outline-darkGrey:focus {
+  
+  color: $ah-darkGrey;
+  border-color: $ah-darkGrey;
+  outline: none;
+  box-shadow: none;
+}
+.btn-outline-darkGrey:hover {
+  background-color: $ah-darkGrey;
+  border-color: white;
+  color: white;
+  outline: none;
+  box-shadow: none;
+}
+.btn-outline-darkGrey.active,
+.btn-outline-darkGrey:active {
+  
+  color: $ah-darkGrey;
+  border-color: $ah-darkGrey;
+  outline: none;
+}
+.btn-outline-darkGrey.active.focus,
+.btn-outline-darkGrey.active:focus,
+.btn-outline-darkGrey.active:hover,
+.btn-outline-darkGrey:active.focus,
+.btn-outline-darkGrey:active:focus,
+.btn-outline-darkGrey:active:hover {
+  
+  color: $ah-darkGrey;
+  border-color: $ah-darkGrey;
+  outline: none;
+  box-shadow: none;
+}
+
 // Green Button
 .btn.btn-green {
   color: #fff;

@@ -28,7 +28,7 @@ export default {
 
     const router = useRouter()
     const studentStore = useStudentStore()
-    studentStore.setStudent(props.lesson.student)
+    studentStore.setStudent(props.lesson.student.id)
     const user = useUserStore()
 
     const heading = `${props.lesson.student.first_name} ${props.lesson.student.last_name}${getSIfNeeded()} ${props.lesson.attributes.instrument} Lessons`

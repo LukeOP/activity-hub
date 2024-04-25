@@ -42,7 +42,7 @@ function formatTime(time){
   return date != 'Invalid date' ? date : ''
 }
 function LessonDetails(){
-  lessonStore.setLesson(props.lesson)
+  lessonStore.setLesson(props.lesson.id)
   router.push({
     name: 'LessonDetails'
   })

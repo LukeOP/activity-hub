@@ -128,12 +128,20 @@ function showSideBar(item){
     justify-content: space-between;
     padding: 10px;
     background-color: #FCFCFC;
+    background-color: transparent;
     #logo-img {
       display: block;
       position: relative;
-      height: 40px;
-      left: 0px;
+      height: 45px;
+      top: 0px;
+      left: 3px;
       width: 45px;
+      padding: 5px;
+      background-color: white;
+      border: 1px solid $ah-grey-light;
+      border: 1px solid white;
+      border-radius: 50%;
+      box-shadow: 0px 0px 10px $ah-grey-light;
     }
   }
   .menu-btn {

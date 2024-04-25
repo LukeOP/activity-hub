@@ -3,7 +3,7 @@
   <HeaderLine heading="Attendance Review" link1="Attendance Overview" @link1="routerChange" />
 
 <!-- Table component -->
-<section v-if="!loading">
+<section v-if="filter.getReturned">
   <component :is="currentComponent" :lessons="filter.getReturned" :key="key" />
 </section>
 <LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
@@ -22,12 +22,14 @@ import HeaderLine from '/resources/js/components/Layouts/MainLayout/Elements/Hea
 import { useRouter } from 'vue-router'
 import ReviewTableMobile from './ReviewTableMobile.vue'
 import LoadingSpinner from '../../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue'
+import useSorter from '../../../../composables/useSorter'
 
 const { windowSize } = useWindowSize()
 const router = useRouter()
 const key = ref(0)
 const lessonStore = useLessonsStore()
 const filter = useFilterStore()
+const sorter = useSorter()
 
 // Get appropriate component based on window size
 const currentComponent = computed(() => {
@@ -36,6 +38,7 @@ const currentComponent = computed(() => {
 
 const { data: attendanceRecords, loading, fetchData } = useApi('lesson-attendance')
 fetchData().then(()=>{
+  sorter.sort(attendanceRecords.value, 'time')
   lessonStore.setAttendanceArray(attendanceRecords.value)
   filter.setType('AttendanceReviewForm')
   filter.setData(lessonStore.getAttendanceArray)

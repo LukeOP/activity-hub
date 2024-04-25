@@ -1,25 +1,21 @@
 <template>
-  <div class="row" :class="{active: active}" @click="active = !active">
-    <div class="col col-6">
+  <section id="single-attendance-review" :class="{active: active}" @click="active = !active">
+    <div class="flex-spread">
       <p>{{ lesson.student.full_name }}</p>
-      <p>{{ lesson.lesson.instrument }}</p>
-      <!-- <p>{{lesson}}</p> -->
+      <p>{{ lesson.instrument }}</p>
     </div>
-    <div class="col col-6">
-      <p>{{formatDate(lesson.date)}}</p>
-      <p>{{lesson.lesson.attendance}}</p>
+    <div class="flex-spread">
+      <p>{{formatDate(lesson.date)}}, {{ formatTime(lesson.time) }}</p>
+      <p class="attendance" :class="lesson.attendance">{{lesson.attendance}}</p>
     </div>
-    <!-- <div class="col col-2">
-      <i class="fa-solid fa-magnifying-glass ms-2" :class="{active: active}"></i>
-    </div> -->
-    <div class="col col-6" v-if="active">
-      <p>Time: {{ formatTime(lesson.lesson.time) }}</p>
-      <p>Tutor: {{ lesson.tutor.full_name }}</p>
+    <div v-if="active" class="flex-spread">
+      <div>
+        <div>Tutor: {{ lesson.tutor.full_name }}</div>
+        <div>School: {{lesson.school.name}}</div>
+      </div>
+      <i class="fa-solid fa-magnifying-glass" @click="LessonDetails"></i>
     </div>
-    <div class="col col-6" v-if="active">
-      <p>School: {{lesson.school.name}}</p>
-    </div>
-  </div>
+  </section>
 </template>
 
 <script setup>
@@ -40,26 +36,50 @@ function formatTime(time){
 function formatDate(date){
   return moment(date).format('DD-MM-YYYY')
 }
+
 function LessonDetails(){
-  lessonStore.setLesson(props.lesson)
+  lessonStore.setLesson(props.lesson.lesson_id)
   router.push({
-    name: 'LessonDetails'
+    name: 'LessonAttendanceSingle'
   })
 }
 
 </script>
 
 <style lang="scss" scoped>
-
+.flex-spread{
+  display: flex; 
+  justify-content: space-between;
+}
+#single-attendance-review {
+  padding: 10px;
+}
+.attendance {
+  padding: 2px 10px;
+  min-width: 100px;
+  text-align: center;
+  color: white;
+}
+.present {
+  background-color: $ah-primary;
+}
+.late {
+  background-color: $ah-secondary-dark;
+}
+.absent {
+  background-color: $ah-red;
+}
+.custom {
+  background-color: $ah-green;
+}
 .fa-magnifying-glass {
   color: $ah-primary;
   padding: 5px;
   border: 1px solid $ah-primary;
   border-radius: 6px;
-  margin-top: 7px;
-}
-.row {
-  padding: 10px;
+  width: fit-content;
+  height: fit-content;
+  margin: auto 10px;
 }
 .active {
   background-color: $ah-primary-light;
@@ -67,6 +87,7 @@ function LessonDetails(){
   border-bottom: 1px solid $ah-grey;
   .fa-magnifying-glass {
     border-color: lighten($ah-primary-light, 50%);
+    color: lighten($ah-primary-light, 50%);
   }
 }
 p {

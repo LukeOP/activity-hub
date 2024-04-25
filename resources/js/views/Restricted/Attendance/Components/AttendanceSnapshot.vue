@@ -35,7 +35,7 @@ function getHeading(){
   return "Attendance"
 }
 const usingProps = computed(()=>{
-  return Object.keys(props.lesson.attendance.filter(a => a.attendance != 'pending')).length > 0
+  return Object.keys(props.lesson.attendance.filter(a => (a.attendance != 'pending' && a.attendance != 'cancelled'))).length > 0
 })
 
 const present = computed(() => {
@@ -60,7 +60,7 @@ const total = computed(()=> {
 })
 
 function getPercentage(value) {
-  return Math.round(value / props.lesson.attendance.filter(a => a.attendance != 'pending').length * 100) || 0
+  return Math.round(value / props.lesson.attendance.filter(a => (a.attendance != 'pending' && a.attendance != 'cancelled')).length * 100) || 0
 }
 
 </script>
@@ -85,5 +85,10 @@ function getPercentage(value) {
 }
 .faded {
   opacity: 0;
+}
+@media (max-width: 768px){
+  #snapshot {
+    max-width: 100%;
+  }
 }
 </style>

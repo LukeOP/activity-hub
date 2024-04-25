@@ -47,7 +47,7 @@ function viewInstrument(){
   })
 }
 function viewStudent(){
-  studentStore.setStudent(props.hire.student)
+  studentStore.setStudent(hire.value.student.id)
   router.push({
     name: "StudentDetails"
   })

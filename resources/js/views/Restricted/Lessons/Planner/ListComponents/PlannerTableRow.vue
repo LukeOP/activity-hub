@@ -8,7 +8,7 @@
         <td>{{ lesson.attributes.instrument }}</td>
         <td>{{ lesson.school.room }}</td>
         <td>{{ lesson.tutor.full_name }}</td>
-        <td class="icons" style="width: 50px;"><StatusIconSVG :status="getLessonAttendance(lesson.attendance)" />
+        <td class="icons" style="width: 50px; height: 50px;"><StatusIconSVG :status="getLessonAttendance(lesson.attendance)" />
         </td>
     </tr>
 </template>

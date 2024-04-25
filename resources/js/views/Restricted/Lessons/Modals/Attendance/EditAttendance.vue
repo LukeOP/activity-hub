@@ -17,7 +17,8 @@
             <option value="present">Present</option>
             <option value="late">Late</option>
             <option value="absent">Absent</option>
-            <option value="custom">Alternative date/time</option>
+            <option value="cancelled">No Lesson</option>
+            <!-- <option value="custom">Alternative date/time</option> -->
           </select>
         </div>
       </div>

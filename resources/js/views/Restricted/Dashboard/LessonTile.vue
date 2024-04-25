@@ -1,9 +1,5 @@
 <template>
-  <LoadingSkeleton v-if="lessonStore.loading" class="user-element">
-    <UserElementHeader heading="Lessons By Date" />
-    <LoadingSpinner :isLoading="true" :loadingText="true" color="primary" />
-  </LoadingSkeleton>
-  <div v-else class="user-element" @click="changeRoute()">
+  <div class="user-element" @click="changeRoute()">
     <UserElementHeader heading="Lessons By Date" />
     <div id="date-banner" style="padding: 0 10px;">
       <div id="date" v-if="!mobileFormat">{{ moment(selectedDate).format('dddd - MMMM Do') }}</div>
@@ -12,8 +8,8 @@
         <DateScroller @click.stop="" @selectedDate="changeDate" />
       </div>
     </div>
-    <div v-if="selectedDate <= moment() && dayLessons.length > 0" id="scheduled-lessons">Scheduled Lessons: {{ dayLessons.length }}</div>
-    <div id="lesson-stats" v-if="selectedDate <= moment() && dayLessons.length > 0">
+    <div v-if="selectedDate <= moment() && !loading" id="scheduled-lessons">Scheduled Lessons: {{ dayLessons.length }}</div>
+    <div id="lesson-stats" v-if="selectedDate <= moment() && !loading">
       <div class="stat-item">
         <span class="svg"><StatusIconSVG status="present" /></span>
         <span class="item-text">Present: {{ getMarkedLessons('present') }}</span>
@@ -41,7 +37,7 @@
 
 <script setup>
 import useApi from '/resources/js/composables/useApi';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import moment from 'moment';
 import { useLessonsStore } from '/resources/js/stores/lessons';
@@ -72,18 +68,17 @@ function changeDate(newDate){
 }
 
 const dayLessons = computed(() => {
-  // const selectedDateString = moment(selectedDate.value).format('YYYY-MM-DD');
   return lessonStore.getLessonsData.filter(l => 
-    l.attributes.status === 'Active' &&
-    l.attributes.day === moment(selectedDate.value).format('dddd') &&
-    l.attributes.startDate <= appStore.getItems.date &&
-    (!l.attributes.endDate || l.attributes.endDate >= appStore.getItems.date)
+    l.attributes.status === 'Active' 
+    && l.attributes.day === moment(selectedDate.value).format('dddd') 
+    && l.attributes.startDate <= appStore.getItems.date 
+    && (!l.attributes.endDate || l.attributes.endDate >= appStore.getItems.date)
   );
 });
 
 function getMarkedLessons(type) {
   return dayLessons.value.filter(lesson =>
-    lesson.attendance.some(a => a.attendance === type)
+    lesson.attendance.some(a => (a.attendance === type && a.date == selectedDate.value))
   ).filter(l => l.attendance.some(a => a.date == appStore.getItems.date)).length
 }
 function getUnmarkedLessons(){
@@ -98,7 +93,15 @@ function changeRoute(){
     name: 'LessonPlanner',
   })
 }
-
+const { data, loading, fetchData } = useApi('lessons')
+onMounted(()=>{
+  appStore.setItems({date: moment().format('YYYY-MM-DD')})
+  fetchData().then(()=>{
+    if(lessonStore.getLessonsData != data.value){
+      lessonStore.setLessons(data.value)
+    }
+  })
+})
 
 </script>
 

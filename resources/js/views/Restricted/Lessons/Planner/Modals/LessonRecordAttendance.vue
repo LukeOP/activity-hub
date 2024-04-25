@@ -11,6 +11,7 @@
                 </label>
             </div>
             <div style="display: flex; justify-content: space-evenly;" id="attendance-buttons">
+                <button type="submit" class="btn btn-outline-darkGrey" @click.prevent="addRecord('cancelled')" :disabled="loading">No Lesson</button>
                 <button type="submit" class="btn btn-outline-red" @click.prevent="addRecord('absent')" :disabled="loading">Absent</button>
                 <button type="submit" class="btn btn-outline-secondary" @click.prevent="addRecord('late')" :disabled="loading">Late</button>
                 <button type="submit" class="btn btn-primary" @click.prevent="addRecord('present')" :disabled="loading">Present</button>
@@ -69,7 +70,7 @@ import { useAppStore } from '../../../../../stores/appStore';
     }
 }
 button {
-    width: 150px;
+    width: 130px;
 }
 
 @media (max-width: 768px) {

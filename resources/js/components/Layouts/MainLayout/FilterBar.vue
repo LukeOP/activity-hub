@@ -88,6 +88,7 @@ import { useMenuStore } from '../../../stores/menu'
     flex-basis: 100px;
     margin: 10px;
     color: #fff;
+    overflow-y: auto;
   }
 }
 

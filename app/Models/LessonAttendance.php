@@ -36,4 +36,9 @@ class LessonAttendance extends Model
     {
         return $this->belongsTo(Lesson::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class)->select(['id', 'first_name', 'last_name', 'image']);
+    }
 }
