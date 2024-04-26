@@ -1,5 +1,10 @@
 <template>
-  <div class="user-element" @click="changeRoute()">
+  <LoadingSkeleton v-if="lessonStore.getLessonsData.length == 0 && loading" class="user-element">
+    <UserElementHeader heading="Upcoming Events" />
+    <LoadingSpinner :isLoading="true" :loadingText="true" color="primary" />
+  </LoadingSkeleton>
+
+  <div v-else class="user-element" @click="changeRoute()">
     <UserElementHeader heading="Lessons By Date" />
     <div id="date-banner" style="padding: 0 10px;">
       <div id="date" v-if="!mobileFormat">{{ moment(selectedDate).format('dddd - MMMM Do') }}</div>
