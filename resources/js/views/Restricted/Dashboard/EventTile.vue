@@ -1,12 +1,12 @@
 <template>
   <LoadingSkeleton v-if="eventStore.getEvents.length == 0 && loading" class="user-element">
-    <UserElementHeader heading="Upcoming Events" />
+    <UserElementHeader heading="Lessons By Date" />
     <LoadingSpinner :isLoading="true" :loadingText="true" color="primary" />
   </LoadingSkeleton>
+
   <div v-else class="user-element">
     <UserElementHeader heading="Upcoming Events" />
     <!-- {{ events }} -->
-
   <section>
     <div id="upcoming-events" v-if="eventStore.getEvents.length > 0">
       <div class="event-item" v-for="event in eventStore.getEvents.slice(0, 5)" :key="event.id" @click="viewEvent(event)">
@@ -71,6 +71,9 @@ function viewEvent(event){
 </script>
 
 <style lang="scss" scoped>
+.user-element {
+  min-height: fit-content;
+}
 tr {
   display: flex;
   border: none;
