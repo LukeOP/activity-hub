@@ -15,10 +15,19 @@
         <div class="skeleton skeleton-text"></div>       
       </div>
     </div>
+    <div style="display: flex; justify-content: center; max-width: 300px; margin: auto;">
+      <StatusIconSVG status="present" style="max-height: 50px;" />
+      <StatusIconSVG status="late" style="max-height: 50px;" />
+      <StatusIconSVG status="absent" style="max-height: 50px;" />
+      <StatusIconSVG status="cancelled" style="max-height: 50px;" />
+      <StatusIconSVG status="pending" style="max-height: 50px;" />
+    </div>
   </div>
 </template>
 
 <script setup>
+import StatusIconSVG from '../../components/Layouts/MainLayout/Elements/SVG/StatusIconSVG.vue';
+
 
 </script>
 

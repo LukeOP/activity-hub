@@ -10,7 +10,10 @@ import EmailVerified from '../views/Public/AuthenticateUser/EmailVerified.vue';
 import LessonSignUpForm from '../views/Public/Forms/LessonSignup.vue'
 
 import AuthLayout from '../components/Layouts/PublicLayout/AuthLayout.vue'
-import axiosClient from '../axios';
+
+import UserGuideLayout from '../components/Layouts/UserGuideLayout/UserGuideLayout.vue';
+import GuideDashboard from '../views/UserGuide/GuideDashboard.vue';
+import GuideLessons from '../views/UserGuide/GuideLessons.vue';
 
 const publicRoutes = [
   {
@@ -28,9 +31,16 @@ const publicRoutes = [
       { path: 'password', name: 'Password', component: SetPassword, meta: {title: 'Reset Password'} },
     ]
   },
+  { path: '/user-guide', name: 'UserGuide', component: UserGuideLayout, redirect: { name: 'GuideDashboard' }, meta: { title: 'User Docs'},
+    children: [
+      { path: 'dashboard', name: 'GuideDashboard', component: GuideDashboard },
+      { path: 'lessons', name: 'GuideLessons', component: GuideLessons },
+    ]
+  },
   { path: '/forms/:id', name: 'LessonSignUp', component: LessonSignUpForm, meta: {title: 'Lesson Signup'}},
   { path: '/home', name: 'Home', component: Home, meta: {title: 'Welcome'} },
   { path: '/not-found', name: 'NotFoundPublic', component: NotFoundPublic, redirect: '/' }
+  
 ];
 
 export default publicRoutes;

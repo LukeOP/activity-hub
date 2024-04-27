@@ -38,7 +38,7 @@ const authRoutes = [
       filter.$reset()
       next()
     }
-  },
+  }
 ];
 
 export default authRoutes;
