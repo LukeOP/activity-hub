@@ -14,6 +14,7 @@ import AuthLayout from '../components/Layouts/PublicLayout/AuthLayout.vue'
 import UserGuideLayout from '../components/Layouts/UserGuideLayout/UserGuideLayout.vue';
 import GuideDashboard from '../views/UserGuide/GuideDashboard.vue';
 import GuideLessons from '../views/UserGuide/GuideLessons.vue';
+import GuideAttendance from '../views/UserGuide/GuideAttendance.vue';
 
 const publicRoutes = [
   {
@@ -35,6 +36,7 @@ const publicRoutes = [
     children: [
       { path: 'dashboard', name: 'GuideDashboard', component: GuideDashboard },
       { path: 'lessons', name: 'GuideLessons', component: GuideLessons },
+      { path: 'attendance', name: 'GuideAttendance', component: GuideAttendance },
     ]
   },
   { path: '/forms/:id', name: 'LessonSignUp', component: LessonSignUpForm, meta: {title: 'Lesson Signup'}},

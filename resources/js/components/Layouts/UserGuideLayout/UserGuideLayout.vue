@@ -3,7 +3,7 @@
         <!-- <section id="header-bar">Header Bar</section> -->
         <section id="menu-bar">
             <menu>
-                <div class="link-group">
+                <!-- <div class="link-group">
                     Common Elements
                     <div class="link-group-links">
                         <router-link :to="{name: 'GuideDashboard'}"><s>Navigation Sidebar</s></router-link>
@@ -11,15 +11,16 @@
                         <router-link :to="{name: 'GuideDashboard'}"><s>Filter Sidebar</s></router-link>
                     </div>
                 </div>
-                <hr>
+                <hr> -->
                 <div class="link-group">
-                    Dashboard
+                    <a href="./dashboard#heading" @click="selectedSection = 'dashboard'">Dashboard</a>
                     <div class="link-group-links">
-                        <a href="./dashboard#summary">Dashboard</a>
+                        <a href="./dashboard#summary">Summary</a>
+                        <a href="./dashboard#summary">Tiles</a>
                     </div>
                 </div>
                 <div class="link-group">
-                    Lesson Management
+                    <a href="./lessons#heading" @click="selectedSection = 'lessons'">Lesson Management</a>
                     <div class="link-group-links">
                         <a href="./lessons#summary">Summary</a>
                         <a href="./lessons#lesson_list">Lessons List</a>
@@ -30,13 +31,16 @@
                         <a href="./lessons#lesson_notes">Notes</a>
                     </div>
                 </div>
-                <div class="link-group"><s>
-                    Attendance
+                <div class="link-group">
+                    <a href="./attendance#heading">Attendance</a>
                     <div class="link-group-links">
-                        <router-link :to="{name: 'GuideLessons'}">Summary</router-link>
-                    </div></s>
+                        <a href="./attendance#summary">Summary</a>
+                        <a href="./attendance#review">Review</a>
+                        <a href="./attendance#individual_records">Individual Records</a>
+                        <a href="./attendance#overview">Overview</a>
+                    </div>
                 </div>
-                <div class="link-group"><s>
+                <!-- <div class="link-group"><s>
                     Events
                     <div class="link-group-links">
                         <router-link :to="{name: 'GuideLessons'}">Summary</router-link>
@@ -65,7 +69,7 @@
                     <div class="link-group-links">
                         <router-link :to="{name: 'GuideLessons'}">Summary</router-link>
                     </div></s>
-                </div>
+                </div> -->
             </menu>
         </section>
         <section id="document-section">
@@ -77,6 +81,9 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
+const selectedSection = ref('dashboard')
 
 </script>
 
@@ -102,6 +109,9 @@
             width: 230px;
             .link-group {
                 font-weight: bold;
+                a {
+                    color: black;
+                }
                 .link-group-links {
                     font-weight: 300;
                     a {

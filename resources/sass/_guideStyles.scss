@@ -50,3 +50,15 @@ figure {
     padding: 10px;
     margin-bottom: 2rem;
 }
+.guide-list {
+    li a {
+        color: $ah-primary;
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+.guide-section {
+    scroll-margin-top: 8rem;
+}

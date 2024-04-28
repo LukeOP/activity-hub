@@ -1,9 +1,9 @@
 <template>
     <div>
-        <header>
+        <header id="heading" class="guide-section">
             <h1 class="guide-h1">Lesson Management</h1>
 
-            <ul>
+            <ul class="guide-list">
                 <li><a href="#summary">Summary</a></li>
                 <li><a href="#lesson_list">Lessons List</a></li>
                 <li><a href="#lesson_details">Lesson Details</a></li>
@@ -14,15 +14,15 @@
             </ul>
         </header>
 
-        <section id="summary">
+        <section id="summary" class="guide-section">
             <h2 class="guide-h2">Summary</h2>
             <p>Lesson Manangement is the heart of Activity Hub. This is where you can view, edit and manage your instrument lessons easily, with attendance options and lesson notes to make this a one-stop-shop for tutors. For administrators it provides easy viewing of when lessons are occuring and how many active lessons are in place on any given day. The ability to add attendance records and funding tags makes this a powerful section.</p>
             <img class="guide-img box-shadow" src="/images/user_guides/lesson_summary.png" alt="Lesson List Example">
-            <figure>An example on the Lessons List table.</figure>
+            <figure>An example of the Lessons List table.</figure>
             <hr>
         </section>
 
-        <section id="lesson_list">
+        <section id="lesson_list" class="guide-section">
             <h2 class="guide-h2">Lessons List</h2>
             <p>The Lessons List screen is easily access by selecting 'Lessons' from the navigation bar. Here you will find details of all assigned lessons including the status of those lessons (Active, Pending, or Waiting). Depending on your permission access level you may be able to see all lessons for your accociated schools or just the lessons assigned to you.</p>
             <p>The example below shows how the Lessons List screen appears to the tutor Ethan Montgomery who only has resticted viewing access to this page.</p>
@@ -32,7 +32,7 @@
             <hr>
         </section>
         
-        <section id="lesson_details">
+        <section id="lesson_details" class="guide-section">
             <h2 class="guide-h2">Lesson Details</h2>
             <p>The Lesson Details page is a quick summary of the lesson information.</p>
             <img src="/images/user_guides/lesson_details_active.png" alt="Lesson Details Page" class="guide-img box-shadow">
@@ -72,7 +72,7 @@
             <hr>
         </section>
 
-        <section id="lesson_edit">
+        <section id="lesson_edit" class="guide-section">
             <h2 class="guide-h2">Editing Lesson Details</h2>
             <p>Lesson details can be edited from the 'Edit Lesson' Actions Sidebar option as shown or for a pending lesson through the 'Complete Lesson Setup' pop up on the page.</p>
             <img src="/images/user_guides/lesson_edit.png" alt="Lesson Edit Details" class="guide-img box-shadow w-50 img-align-top">
@@ -95,7 +95,7 @@
             <hr>
         </section>
 
-        <section id="lesson_edit_video">
+        <section id="lesson_edit_video" class="guide-section">
             <h2 class="guide-h2">Lesson Edit - Video Example</h2>
             <video class="guide-video" controls>
                 <source src="/images/user_guides/lesson_edit_set_active.mp4" type="video/mp4">
@@ -104,7 +104,7 @@
             <hr>
         </section>
 
-        <section id="lesson_planner">
+        <section id="lesson_planner" class="guide-section">
             <h2 class="guide-h2">Lesson Planner</h2>
             <p>The Lesson Planner provides quick access to the lessons on a particular day. From here you can mark attendance, or write planning and progress comments. It is intended that as a tutor is teaching during the day this will be the primary location for their administration. The Lesson Planner can be accessed from the Lessons List, or by selecting the Lessons Tile on the Dashboard.</p>
             <img src="/images/user_guides/lesson_planner_list2.png" alt="Lesson Planner List" class="guide-img box-shadow">
@@ -138,6 +138,11 @@
                     <figure>The Attendance Action showing available attendance options.</figure>
                 </div>
             </div>
+            <video class="guide-video" controls>
+                <source src="/images/user_guides/planner_marking_attendance.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <figure>Video example of adding attendance using the Lesson Planner.</figure>
 
             <h4 class="guide-h4">View Lesson Details</h4>
             <p>This option will take you to the <a href="#lesson_details">Lesson Details</a> screen.</p>
@@ -161,7 +166,7 @@
             <hr>
         </section>
 
-        <section id="lesson_notes">
+        <section id="lesson_notes" class="guide-section">
             <h2 class="guide-h2">Lesson Notes</h2>
             <p>Lesson specific notes can be created in the <a href="#planner_lesson_notes">Lesson Planner</a>; however, if more general notes are required they can be created from the 'View Notes' Lesson Details header option, or from the Actions Sidebar.</p>
             <p>When in the Lesson Notes page, you will see all notes recorded for that lesson, whether it was for a specific lesson or was created as a general note.</p>
