@@ -184,12 +184,12 @@ class LessonAttendanceController extends Controller
                     $existingLessonAttendance->save();
                     array_push($newAttendance, $existingLessonAttendance);
                 } else {
-                    $lessonAttendance = $this->createLessonAttendance([
+                    $lessonAttendance = LessonAttendance::create([
                         'lesson_id' => $lesson->id, 
                         'attendance' => 'incomplete', 
                         'date' => $yesterdayDate, 
                         'time' => $lesson->start, 
-                        'tutor_id' => '82d6c63e-e637-423c-91e4-b9b7c3d01f76'
+                        'user_id' => '82d6c63e-e637-423c-91e4-b9b7c3d01f76'
                     ]);
                     array_push($newAttendance, $lessonAttendance);
                 }
