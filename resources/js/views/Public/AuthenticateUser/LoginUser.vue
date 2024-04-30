@@ -47,7 +47,7 @@ function handleLogin(){
     })
   }).catch(err => {
     console.log(err);
-    // error.value = setError(err.response)
+    error.value = err.response.data.message
     loading.value = false
   })
 }
