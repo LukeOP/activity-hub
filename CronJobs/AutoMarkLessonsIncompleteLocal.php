@@ -7,9 +7,10 @@ $username = 'ActivityHub';
 $password = "AH123";
 $database = 'ActivityHub';
 
+// $port = '3306';
 // $username = 'mgsmusicco_ActivityHub';
 // $password = 'ActivityHub123';
-// $database = 'mgsmusicco_ActivityHub';
+// $database = 'mgsmusicco_ActivityHubDemo';
 
 $conn = new mysqli($host, $username, $password, $database, $port);
 if ($conn->connect_error) {
@@ -17,36 +18,56 @@ if ($conn->connect_error) {
 }
 
 $dt = new DateTime("yesterday", new DateTimeZone('Pacific/Auckland'));
+// $dt = new DateTime("2024-04-08", new DateTimeZone('Pacific/Auckland'));
 
 $yesterdayDate = $dt->format('Y-m-d');
 $yesterdayDay = $dt->format('l');
 
-$stmt = $conn->prepare("
+$stmt1 = $conn->prepare("SET @yesterdayDate = ?");
+$stmt1->bind_param("s", $yesterdayDate);
+$stmt1->execute();
+
+$stmt2 = $conn->prepare("
     SELECT * 
     FROM lessons 
     WHERE status = 'Active' 
-        AND day = ?
+        AND day = DAYNAME(@yesterdayDate)
         AND deleted_at IS NULL 
         AND (
             NOT EXISTS (
                 SELECT * 
                 FROM lesson_attendance 
                 WHERE lesson_attendance.lesson_id = lessons.id 
-                    AND DATE(lesson_attendance.date) = ?
+                    AND DATE(lesson_attendance.date) = @yesterdayDate
             )
             OR EXISTS (
                 SELECT *
                 FROM lesson_attendance
                 WHERE lesson_attendance.lesson_id = lessons.id
-                    AND DATE(lesson_attendance.date) = ?
+                    AND DATE(lesson_attendance.date) = @yesterdayDate
                     AND lesson_attendance.attendance = 'pending'
             )
         )
-    "
-);
-$stmt->bind_param("sss", $yesterdayDay, $yesterdayDate, $yesterdayDate);
-$stmt->execute();
-$result = $stmt->get_result();
+        AND (
+            term_link = 0
+            OR (
+                term_link > 0 
+                AND EXISTS (
+                    SELECT * 
+                    FROM school_terms 
+                    WHERE school_terms.school_id = (
+                        SELECT school_id
+                        FROM students
+                        WHERE students.id = lessons.student_id
+                    )
+                    AND school_terms.start_date <= @yesterdayDate
+                    AND school_terms.end_date >= @yesterdayDate
+                )
+            )
+        )
+");
+$stmt2->execute();
+$result = $stmt2->get_result();
 
 if ($result->num_rows > 0) {
     // Loop through each lesson with unmarked attendance

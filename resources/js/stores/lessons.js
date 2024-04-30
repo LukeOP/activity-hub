@@ -7,7 +7,6 @@ function getState(){
       lessons: [],
       filteredLessons: [],
       singleAttendance: '',
-      attendanceArray: [],
       singleRequest: {},
       lessonRequests: [],
       lessonRequestForm: {},
@@ -52,9 +51,6 @@ export const useLessonsStore = defineStore('lessons', {
     updateLessonRecord(record){
       this.lessons = this.lessons.filter(l => l.id != record.id)
       this.lessons = [record, ...this.lessons]
-    },
-    setAttendanceArray(attendanceArray){
-      this.attendanceArray = attendanceArray
     },
     setAttendance(attendance_id){
       this.singleAttendance = attendance_id
@@ -109,7 +105,40 @@ export const useLessonsStore = defineStore('lessons', {
 
     // ATTENDANCE
     getAttendanceArray(){
-      return this.attendanceArray
+      let array = []
+      this.lessons.forEach(lesson => {
+        lesson.attendance.forEach(a => {
+          array.push(
+            {
+            id: a.id,
+            lesson_id: lesson.id,
+            date: a.date,
+            time: a.time,
+            instrument: lesson.attributes.instrument,
+            attendance: a.attendance,
+            funding_type: lesson.attributes.funding_type,
+            recorded_by: a.user_id,
+            student: {
+              id: lesson.student.id,
+              first_name: lesson.student.first_name,
+              last_name: lesson.student.last_name,
+              full_name: lesson.student.first_name + ' ' + lesson.student.last_name,
+            },
+            tutor: {
+              id: lesson.tutor.id,
+              first_name: lesson.tutor.first_name,
+              last_name: lesson.tutor.last_name,
+              full_name: lesson.tutor.first_name + ' ' + lesson.tutor.last_name,
+            },
+            school: {
+              id: lesson.school.id,
+              name: lesson.school.name
+            }
+          }
+        )
+        })
+      });
+      return array
     },
     getAttendance(){
       return this.getAttendanceArray.find(a => a.id == this.singleAttendance)

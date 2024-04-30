@@ -38,11 +38,14 @@ import axiosClient from '/resources/js/axios';
 import { useModalStore } from '/resources/js/stores/modal';
 import moment from 'moment';
 import { useToastStore } from '/resources/js/stores/toast';
+import { useUserStore } from '../../../../../stores/user';
+import useApi from '../../../../../composables/useApi';
 
 const lessonStore = useLessonsStore()
 const currentAttendance = lessonStore.getAttendance
 const modal = useModalStore()
 const toast = useToastStore()
+const user = useUserStore()
 
 const today = moment().format('YYYY-MM-DD')
 
@@ -54,14 +57,22 @@ const formData = ref({
 })
 
 function updateAttendance(){
-  axiosClient.patch('/lesson-attendance/' + formData.value.id, formData.value).then(res => {
-    let attendance = lessonStore.getAttendanceArray.find(a => a.id === formData.value.id)
-    attendance.attendance = formData.value.attendance
-    attendance.date = formData.value.date
-    attendance.time = formData.value.time
-    toast.open('success', 'Attendance Updated', 'Attendance details have been changed')
+  const {data, fetchData} = useApi('/lesson-attendance/' + formData.value.id, formData.value, 'PATCH', true)
+  fetchData().then(()=>{
+    lessonStore.updateLessonRecord(data.value.data)
     modal.close()
   })
+
+
+  // axiosClient.patch('/lesson-attendance/' + formData.value.id, formData.value).then(res => {
+  //   let attendance = lessonStore.getAttendanceArray.find(a => a.id === formData.value.id)
+  //   attendance.attendance = formData.value.attendance
+  //   attendance.date = formData.value.date
+  //   attendance.time = formData.value.time
+  //   attendance.user_id = user.attributes.id
+  //   toast.open('success', 'Attendance Updated', 'Attendance details have been changed')
+  //   modal.close()
+  // })
 }
 
 

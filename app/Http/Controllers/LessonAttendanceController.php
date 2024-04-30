@@ -9,11 +9,15 @@ use App\Models\LessonAttendance;
 use App\Models\User;
 use App\Traits\HttpResponses;
 use App\Traits\LessonTraits;
+use DateTime;
+use DateTimeZone;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\TryCatch;
 
 class LessonAttendanceController extends Controller
 {
@@ -106,6 +110,8 @@ class LessonAttendanceController extends Controller
             $attendance = LessonAttendance::findOrFail($id);
     
             $attendance->fill($request->all());
+            $user = User::where('id', Auth::user()->id)->first();
+            $attendance->user_id = $user->id;
             $attendance->save();
 
             return $this->success(
@@ -126,6 +132,70 @@ class LessonAttendanceController extends Controller
                 404
             );
         }
+    }
+
+    public function setUnmarkedLessonsIncomplete(){
+        Try {
+            $dt = new DateTime("yesterday", new DateTimeZone('Pacific/Auckland'));
+            // $dt = new DateTime("2024-04-12", new DateTimeZone('Pacific/Auckland'));
+    
+            $yesterdayDate = $dt->format('Y-m-d');
+            $yesterdayDay = $dt->format('l');
+    
+            $unmarkedLessons = Lesson::
+            where('status', 'Active')
+            ->where('day', $yesterdayDay)
+            ->whereNull('deleted_at')
+            ->where(function ($query) use ($yesterdayDate) {
+                $query->whereNotExists(function ($subquery) use ($yesterdayDate) {
+                    $subquery->from('lesson_attendance')
+                        ->whereColumn('lesson_attendance.lesson_id', 'lessons.id')
+                        ->whereDate('lesson_attendance.date', $yesterdayDate);
+                })->orWhereExists(function ($subquery) use ($yesterdayDate) {
+                    $subquery->from('lesson_attendance')
+                        ->whereColumn('lesson_attendance.lesson_id', 'lessons.id')
+                        ->whereDate('lesson_attendance.date', $yesterdayDate)
+                        ->where('lesson_attendance.attendance', 'pending');
+                });
+            })
+            ->where(function ($query) use ($yesterdayDate) {
+                $query->where('term_link', 0)
+                    ->orWhere(function ($query) use ($yesterdayDate) {
+                        $query->where('term_link', '>', 0)
+                            ->whereExists(DB::table('school_terms')
+                                ->select(DB::raw(1))
+                                ->join('students', 'school_terms.school_id', '=', 'students.school_id')
+                                ->whereColumn('students.id', 'lessons.student_id')
+                                ->whereDate('school_terms.start_date', '<=', $yesterdayDate)
+                                ->whereDate('school_terms.end_date', '>=', $yesterdayDate)
+                            );
+                    });
+            })
+            ->get();
+        } catch (Exception $e) {return $this->generalError($e);}
+
+        try {
+            $newAttendance = [];
+            foreach ($unmarkedLessons as $lesson) {
+                $existingLessonAttendance = LessonAttendance::where('lesson_id', $lesson->id)->where('date', $yesterdayDate)->first();
+                if($existingLessonAttendance) {
+                    $existingLessonAttendance->attendance = 'incomplete';
+                    $existingLessonAttendance->user_id = '82d6c63e-e637-423c-91e4-b9b7c3d01f76';
+                    $existingLessonAttendance->save();
+                    array_push($newAttendance, $existingLessonAttendance);
+                } else {
+                    $lessonAttendance = $this->createLessonAttendance([
+                        'lesson_id' => $lesson->id, 
+                        'attendance' => 'incomplete', 
+                        'date' => $yesterdayDate, 
+                        'time' => $lesson->start, 
+                        'tutor_id' => '82d6c63e-e637-423c-91e4-b9b7c3d01f76'
+                    ]);
+                    array_push($newAttendance, $lessonAttendance);
+                }
+            }
+            return $this->success($newAttendance, 'Lessons successfully updated.');
+        } catch (Exception $e) { return $this->generalError($e);}
     }
 
     /**

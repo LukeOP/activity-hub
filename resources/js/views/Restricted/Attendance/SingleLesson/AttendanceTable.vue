@@ -72,7 +72,10 @@ import { useUserStore } from '../../../../stores/user'
   const modal = useModalStore()
 
   const filteredAttendanceRecords = computed(()=>{
-    let records = lessonStore.getAttendanceArray.filter(r => (r.date >= fromDate.value && r.date <= toDate.value && r.lesson_id == lessonStore.getLessonData.id ))
+    let records = lessonStore.getAttendanceArray.filter(
+      r => (r.date >= fromDate.value 
+      && r.date <= toDate.value 
+      && r.lesson_id == lessonStore.getLessonData.id ))
     sorter.sort(records, 'date', 'desc');
     return records
   })
@@ -159,7 +162,9 @@ import { useUserStore } from '../../../../stores/user'
   background-color: $ah-green;
 }
 .incomplete {
-  background-color: $ah-grey-dark;
+  background-color: #fdefef;
+  color: $ah-red;
+  border: 1px solid $ah-red;
 }
 .cancelled {
   background-color: $ah-darkGrey;

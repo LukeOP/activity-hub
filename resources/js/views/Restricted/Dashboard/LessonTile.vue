@@ -91,8 +91,10 @@ function getMarkedLessons(type) {
   } else return 0
 }
 function getUnmarkedLessons(){
+  let attendanceOptions = ['present', 'late', 'absent']
+  let results = dayLessons.value.filter(lesson => lesson.attendance.some(a => a.date == appStore.getItems.date));
   return dayLessons.value.filter(lesson =>
-    !lesson.attendance.some(a => a.date == appStore.getItems.date)
+    (!lesson.attendance.some(a => a.date == appStore.getItems.date) || lesson.attendance.some(a => (a.date == appStore.getItems.date && !attendanceOptions.includes(a.attendance))))
   ).length;
 }
 

@@ -56,6 +56,7 @@ Route::post('user-email-verify', [AuthController::class, 'sendEmailVerificationE
 Route::post('user-email-verify-check', [AuthController::class, 'checkEmailVerificationToken']);
 
 Route::post('convertLessonData', [DataProcessingController::class, 'convertLessonData']);
+Route::post('lessons-mark-incomplete', [LessonAttendanceController::class, 'setUnmarkedLessonsIncomplete']);
 
 // Emails
 Route::post('email-lesson-request-received/{form_id}', [EmailController::class, 'newLessonRequestReceived']);

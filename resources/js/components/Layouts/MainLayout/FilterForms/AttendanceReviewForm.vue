@@ -55,13 +55,13 @@ filter.setReturned([])
 
 const attendanceArray = ref(
   Array.from(new Set(
-    filter.getData.filter(d => d.attendance != 'pending')
+    lessonStore.getAttendanceArray.filter(d => d.attendance != 'pending')
     .map(d => d.attendance))
   )
 )
 
 const tutorArray = computed(()=>{
-  return filter.getData.reduce((result, d) => {
+  return lessonStore.getAttendanceArray.reduce((result, d) => {
     const tutor = { id: d.tutor.id, name: `${d.tutor.first_name} ${d.tutor.last_name}` };
     const existingTutor = result.find(t => t.id === tutor.id);
 
@@ -75,7 +75,7 @@ const tutorArray = computed(()=>{
 
 const fundingArray = computed(() => {
   return Array.from(new Set(
-  filter.getData.map(d => d.funding_type)))
+  lessonStore.getAttendanceArray.map(d => d.funding_type)))
 })
 
 const filtering = ref({
@@ -87,7 +87,7 @@ const filtering = ref({
 })
 
 function returnFiltered(){
-  let filteredAttendance = filter.getData
+  let filteredAttendance = lessonStore.getAttendanceArray
   filteredAttendance = filteredAttendance.filter(att => att.attendance != 'pending')
   filteredAttendance = filteredAttendance.filter(att => att.date >= filtering.value.start_date && att.date <= filtering.value.end_date)
   if(filtering.value.attendance != '') filteredAttendance = filteredAttendance.filter(att => att.attendance == filtering.value.attendance)

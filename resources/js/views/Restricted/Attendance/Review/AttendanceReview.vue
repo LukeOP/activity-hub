@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import useApi from '../../../../composables/useApi'
 import { useFilterStore } from '../../../../stores/filter'
 import { useLessonsStore } from '../../../../stores/lessons'
@@ -36,14 +36,14 @@ const currentComponent = computed(() => {
   return windowSize.value.width > 1030 ? ReviewTable : ReviewTableMobile
 })
 
-const { data: attendanceRecords, loading, fetchData } = useApi('lesson-attendance')
-fetchData().then(()=>{
-  sorter.sort(attendanceRecords.value, 'time')
-  lessonStore.setAttendanceArray(attendanceRecords.value)
-  filter.setType('AttendanceReviewForm')
-  filter.setData(lessonStore.getAttendanceArray)
-  key.value++
-})
+// const { data: attendanceRecords, loading, fetchData } = useApi('lesson-attendance')
+// fetchData().then(()=>{
+//   sorter.sort(attendanceRecords.value, 'time')
+//   lessonStore.setAttendanceArray(attendanceRecords.value)
+//   filter.setType('AttendanceReviewForm')
+//   filter.setData(lessonStore.getAttendanceArray)
+//   key.value++
+// })
 
 
 watch(() => lessonStore.getAttendanceArray, () => {
@@ -55,7 +55,9 @@ function routerChange(){
     name: 'LessonAttendanceOverview'
   })
 }
-
+onMounted(()=>{
+  filter.setType('AttendanceReviewForm')
+})
 
 </script>
 
