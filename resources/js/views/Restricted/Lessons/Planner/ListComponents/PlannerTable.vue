@@ -7,7 +7,7 @@
             <th @click="sortLessons('attributes.start')">Lesson Time:</th>
             <th @click="sortLessons('student.last_name')">Student:</th>
             <th @click="sortLessons('attributes.instrument')">Instrument:</th>
-            <th @click="sortLessons('school.room')">Room:</th>
+            <!-- <th @click="sortLessons('school.room')">Room:</th> -->
             <th @click="sortLessons('tutor.last_name')">Tutor:</th>
             <th style="width: 50px;"></th>
           </tr>

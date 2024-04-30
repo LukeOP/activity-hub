@@ -34,7 +34,7 @@ class LessonsResource extends JsonResource
             'school' => [
                 'id' => $this->student->school->id,
                 'name' => $this->student->school->name,
-                'room' => 'K114'
+                'room' => null
             ],
             'student' => new StudentsResource($this->student),
             'tutor' => [

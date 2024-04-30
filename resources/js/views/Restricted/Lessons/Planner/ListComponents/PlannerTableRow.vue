@@ -6,7 +6,7 @@
         <td>{{ formatTime(lesson.attributes.start) }} - {{ formatTime(lesson.attributes.end) }}</td>
         <td>{{ lesson.student.full_name }}</td>
         <td>{{ lesson.attributes.instrument }}</td>
-        <td>{{ lesson.school.room }}</td>
+        <!-- <td>{{ lesson.school.room }}</td> -->
         <td>{{ lesson.tutor.full_name }}</td>
         <td class="icons" style="width: 50px; height: 50px;"><StatusIconSVG :status="getLessonAttendance(lesson.attendance)" />
         </td>

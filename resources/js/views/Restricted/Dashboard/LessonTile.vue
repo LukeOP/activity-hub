@@ -14,7 +14,7 @@
       </div>
     </div>
     <div v-if="selectedDate <= moment() && dayLessons.length > 0" id="scheduled-lessons">Scheduled Lessons: {{ dayLessons.length }}</div>
-    <div id="lesson-stats" v-if="selectedDate <= moment() && !loading">
+    <div id="lesson-stats" v-if="selectedDate <= moment() && dayLessons.length > 0">
       <div class="stat-item">
         <span class="svg"><StatusIconSVG status="present" /></span>
         <span class="item-text">Present: {{ getMarkedLessons('present') }}</span>
