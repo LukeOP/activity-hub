@@ -3,7 +3,7 @@
     <UserElementHeader heading="Upcoming Events" />
     <LoadingSpinner :isLoading="true" :loadingText="true" color="primary" />
   </LoadingSkeleton>
-
+  
   <div v-else class="user-element" @click="changeRoute()">
     <UserElementHeader heading="Lessons By Date" />
     <div id="date-banner" style="padding: 0 10px;">
@@ -13,7 +13,7 @@
         <DateScroller @click.stop="" @selectedDate="changeDate" />
       </div>
     </div>
-    <div v-if="selectedDate <= moment() && !loading" id="scheduled-lessons">Scheduled Lessons: {{ dayLessons.length }}</div>
+    <div v-if="selectedDate <= moment() && dayLessons.length > 0" id="scheduled-lessons">Scheduled Lessons: {{ dayLessons.length }}</div>
     <div id="lesson-stats" v-if="selectedDate <= moment() && !loading">
       <div class="stat-item">
         <span class="svg"><StatusIconSVG status="present" /></span>
@@ -73,18 +73,22 @@ function changeDate(newDate){
 }
 
 const dayLessons = computed(() => {
-  return lessonStore.getLessonsData.filter(l => 
-    l.attributes.status === 'Active' 
-    && l.attributes.day === moment(selectedDate.value).format('dddd') 
-    && l.attributes.startDate <= appStore.getItems.date 
-    && (!l.attributes.endDate || l.attributes.endDate >= appStore.getItems.date)
-  );
+  if(lessonStore.getLessonsData.length > 0){
+    return lessonStore.getLessonsData.filter(l => 
+      l.attributes.status === 'Active' 
+      && l.attributes.day === moment(selectedDate.value).format('dddd') 
+      && l.attributes.startDate <= appStore.getItems.date 
+      && (!l.attributes.endDate || l.attributes.endDate >= appStore.getItems.date)
+    );
+  } else return []
 });
 
 function getMarkedLessons(type) {
-  return dayLessons.value.filter(lesson =>
-    lesson.attendance.some(a => (a.attendance === type && a.date == selectedDate.value))
-  ).filter(l => l.attendance.some(a => a.date == appStore.getItems.date)).length
+  if (dayLessons.value.length > 0) {
+    return dayLessons.value.filter(lesson =>
+      lesson.attendance.some(a => (a.attendance === type && a.date == appStore.getItems.date))
+    ).filter(l => l.attendance.some(a => a.date == appStore.getItems.date)).length
+  } else return 0
 }
 function getUnmarkedLessons(){
   return dayLessons.value.filter(lesson =>
