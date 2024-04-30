@@ -7,7 +7,7 @@
           <th @click="sortData('first_name')" >First Name:</th>
           <th @click="sortData('last_name')" >Last Name:</th>
           <th @click="sortData('email')"  >Email:</th>
-          <th @click="sortData('email')"  >Position:</th>
+          <th @click="sortData('position.title')"  >Position:</th>
           <th>Administrator:</th>
         </tr>
       </thead>
@@ -46,7 +46,7 @@ function isAdmin(member){
 }
 
 function sortData(field){
-  sorter.sort(staff.value, field)
+  sorter.sort(props.staff, field)
 }
 
 function handleRowClick(staff){
