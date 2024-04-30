@@ -39,7 +39,7 @@ class UsersController extends Controller
         try {
             $users = User::whereHas('schools', function ($query) use ($schoolId) {
                 $query->where('schools.id', $schoolId);
-            })->get();
+            })->orderBy('last_name')->get();
     
             $userArray = [];
             foreach ($users as $user) {
