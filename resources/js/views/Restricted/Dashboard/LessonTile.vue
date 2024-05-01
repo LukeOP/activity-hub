@@ -53,11 +53,13 @@ import LoadingSpinner from '../../../components/Layouts/MainLayout/Elements/Load
 import LoadingSkeleton from '../../../components/Layouts/MainLayout/Elements/LoadingSkeleton.vue';
 import DateScroller from '../../../components/Layouts/MainLayout/Elements/DateScroller.vue';
 import { useWindowSize } from '../../../composables/useWindowSize';
+import { useSchoolStore } from '../../../stores/schools';
 
 
 // Initiate Stores
 const lessonStore = useLessonsStore()
 const appStore = useAppStore()
+const schoolStore = useSchoolStore()
 lessonStore.checkLessonData()
 
 // Initiate Composables
@@ -79,6 +81,9 @@ const dayLessons = computed(() => {
       && l.attributes.day === moment(selectedDate.value).format('dddd') 
       && l.attributes.startDate <= appStore.getItems.date 
       && (!l.attributes.endDate || l.attributes.endDate >= appStore.getItems.date)
+      && (l.attributes.term_link == 0 
+        || (l.attributes.term_link == 1 && schoolStore.getSchool.data.terms.some(t => (
+            appStore.getItems.date >= t.start_date && appStore.getItems.date <= t.end_date))))
     );
   } else return []
 });

@@ -14,7 +14,7 @@
         </thead>
         <tbody>
           <PlannerTableRow v-if="lessons.length > 0" :dayLessons="lessons" :date="date" :key="refresh"/>
-          <tr v-else><td class="text-center" style="height: 50px; padding: 13px;" colspan="7">No lessons on this day</td></tr>
+          <tr v-else><td class="text-center" style="height: 50px; padding: 13px;" colspan="6">No lessons on this day</td></tr>
         </tbody>
       </table>
 
@@ -39,29 +39,34 @@
   import TableHeader from '../../../../../components/Layouts/MainLayout/Elements/TableHeader.vue';
   import TableBody from '../../../../../components/Layouts/MainLayout/Elements/TableBody.vue';
   import PlannerTableRow from '../ListComponents/PlannerTableRow.vue'
+import { useSchoolStore } from '../../../../../stores/schools';
 
   const props = defineProps({lessons: Array, date: Object})
   
   const lessonStore = useLessonsStore()
   const appStore = useAppStore()
+  const schoolStore = useSchoolStore()
   const sorter = useSorter()
   const selectedDate = ref(moment(appStore.getItems.date))
   const refresh = ref(0)
   
-  const dayLessons = computed(() => {
-    const selectedDateString = moment(selectedDate.value).format('YYYY-MM-DD');
-    return lessonStore.getLessonsData.filter(l => 
-      l.attributes.status === 'Active' &&
-      l.attributes.day === moment(selectedDate.value).format('dddd') &&
-      l.attributes.startDate <= selectedDateString &&
-      (!l.attributes.endDate || l.attributes.endDate >= selectedDateString)
-    );
-  });
+  // const dayLessons = computed(() => {
+  //   const selectedDateString = moment(selectedDate.value).format('YYYY-MM-DD');
+  //   return lessonStore.getLessonsData.filter(l => 
+  //     l.attributes.status === 'Active' &&
+  //     l.attributes.day === moment(selectedDate.value).format('dddd') &&
+  //     l.attributes.startDate <= selectedDateString &&
+  //     (!l.attributes.endDate || l.attributes.endDate >= selectedDateString)
+  //     && (l.attributes.term_link == 0 
+  //       || (l.attributes.term_link == 1 && schoolStore.getSchool.data.terms.some(t => (
+  //           appStore.getItems.date >= t.start_date && appStore.getItems.date <= t.end_date))))
+  //   );
+  // });
   
-  sorter.sort(dayLessons.value, 'attributes.start')
+  sorter.sort(props.lessons, 'attributes.start')
   
   function sortLessons(sortValue){
-    sorter.sort(dayLessons.value, sortValue)
+    sorter.sort(props.lessons, sortValue)
     refresh.value++
   }
   

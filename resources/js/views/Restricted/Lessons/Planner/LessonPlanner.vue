@@ -30,8 +30,10 @@ import DateScroller from '../../../../components/Layouts/MainLayout/Elements/Dat
 import { useWindowSize } from '../../../../composables/useWindowSize';
 import PlannerTable from './ListComponents/PlannerTable.vue'
 import PlannerTableMobile from './ListComponents/PlannerTableMobile.vue';
+import { useSchoolStore } from '../../../../stores/schools';
 
 const lessonStore = useLessonsStore()
+const schoolStore = useSchoolStore()
 const appStore = useAppStore()
 const sorter = useSorter()
 const selectedDate = ref(moment(appStore.getItems.date))
@@ -52,6 +54,9 @@ const dayLessons = computed(() => {
     l.attributes.day === moment(selectedDate.value).format('dddd') &&
     l.attributes.startDate <= selectedDateString &&
     (!l.attributes.endDate || l.attributes.endDate >= selectedDateString)
+      && (l.attributes.term_link == 0 
+        || (l.attributes.term_link == 1 && schoolStore.getSchool.data.terms.some(t => (
+            appStore.getItems.date >= t.start_date && appStore.getItems.date <= t.end_date))))
   );
 });
 

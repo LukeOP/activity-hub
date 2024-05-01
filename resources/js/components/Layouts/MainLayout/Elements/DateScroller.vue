@@ -1,8 +1,10 @@
 <template>
     <div id="btn-container">
+        <button class="btn btn-primary me-2" id="btn5" @click="subtractWeek"><<</button>
         <button class="btn btn-primary me-2" id="btn2" @click="subtractDay">&lt;</button>
         <button class="btn btn-primary me-2" id="btn1" @click="getToday">Today</button>
-        <button class="btn btn-primary" id="btn3" @click="addDay">></button>
+        <button class="btn btn-primary me-2" id="btn3" @click="addDay">></button>
+        <button class="btn btn-primary" id="btn5" @click="addWeek">>></button>
     </div>
 </template>
 
@@ -17,11 +19,17 @@ const emit = defineEmits(['selectedDate'])
 function addDay(){
   selectedDate.value = moment(selectedDate.value).add(1, 'days')
 }
+function addWeek(){
+  selectedDate.value = moment(selectedDate.value).add(7, 'days')
+}
 function getToday(){
   selectedDate.value = moment()
 }
 function subtractDay(){
   selectedDate.value = moment(selectedDate.value).subtract(1, 'days')
+}
+function subtractWeek(){
+  selectedDate.value = moment(selectedDate.value).subtract(7, 'days')
 }
 
 watch(() => selectedDate.value, (newValue) => {
