@@ -27,7 +27,7 @@ export const useLessonsStore = defineStore('lessons', {
           throw new Error(error.value)
         }
         // Update store state with fetched data
-        this.setLessons(Lessons.value)
+        this.setLessons(Lessons.value.data)
       } catch (error) {
         console.error('Error fetching data: ', error);
       } finally {

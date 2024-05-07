@@ -125,9 +125,9 @@ onMounted(() => {
   loading.value = true
   filter.open('LessonsForm', lessonStore.getLessonsData)
   fetchData().then(() => {
-    if(lessons.value != lessonStore.getLessonsData){
+    if(lessons.value.data != lessonStore.getLessonsData){
       filter.setData(lessonStore.getLessonsData)
-      lessonStore.setLessons(lessons.value)
+      lessonStore.setLessons(lessons.value.data)
     }
     loading.value = false
   })

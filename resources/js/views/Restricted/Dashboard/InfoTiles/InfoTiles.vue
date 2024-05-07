@@ -20,8 +20,8 @@ const lessonStore = useLessonsStore()
 
 const { data: lessons, fetchData: fetchLessons } = useApi('lessons')
 fetchLessons().then(()=> {
-    lessonStore.setLessons(lessons.value)
-    let active = lessons.value.filter(l => l.attributes.status == 'Active')
+    lessonStore.setLessons(lessons.value.data)
+    let active = lessons.value.data.filter(l => l.attributes.status == 'Active')
     let info = {boldText: `${active.length}`, subText: 'Active Lessons', icon: 'users', color: 'green', link: 'LessonsList'}
     tileArray.value.push(info)
 })

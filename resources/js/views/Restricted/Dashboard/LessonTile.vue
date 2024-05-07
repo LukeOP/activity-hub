@@ -113,8 +113,8 @@ const { data, loading, fetchData } = useApi('lessons')
 onMounted(()=>{
   appStore.setItems({date: moment().format('YYYY-MM-DD')})
   fetchData().then(()=>{
-    if(lessonStore.getLessonsData != data.value){
-      lessonStore.setLessons(data.value)
+    if(lessonStore.getLessonsData != data.value.data){
+      lessonStore.setLessons(data.value.data)
     }
   })
 })

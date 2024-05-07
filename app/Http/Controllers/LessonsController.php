@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreLessonRequest;
 use App\Http\Resources\LessonsResource;
 use App\Models\Lesson;
 use App\Models\User;
@@ -20,26 +21,38 @@ class LessonsController extends Controller
      */
     public function index()
     {
-        // Get User's List of associated-schools and create an array of school ids
-        $user = User::where('id', Auth::user()->id)->first();
-        $userSchools = $user->schools;
-        $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
-        $lessonCollection = new Collection();
-
-        // For each user-associated school check if they have permission to view all lessons 
-        // If they do or they are an administrator - get all student lessons for that school
-        // Else just get the lessons assigned to the tutor
-        foreach ($userSchools as $school) {
-            $hasPermission = ($user->hasPermissionForSchool($school->id, 'LESSONS_V') || $user->hasPermissionForSchool($school->id, 'ATTENDANCE_V'));
-
-            if ($hasPermission || in_array($school->id, $userAdmin)) {
-                $lessonsAtSchool = LessonsResource::collection(Lesson::whereHas('student', function ($query) use ($school) {
-                    $query->where('school_id', $school->id);
-                })->get());
-            } else {
-                $lessonsAtSchool = LessonsResource::collection(Lesson::where('user_id', $user->id)->get());
+        try {
+            // Get User's List of associated-schools and create an array of school ids
+            $user = User::where('id', Auth::user()->id)->first();
+            $userSchools = $user->schools;
+            $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
+            $lessonCollection = new Collection();
+    
+            // For each user-associated school check if they have permission to view all lessons 
+            // If they do or they are an administrator - get all student lessons for that school
+            // Else just get the lessons assigned to the tutor
+            foreach ($userSchools as $school) {
+                $hasPermission = ($user->hasPermissionForSchool($school->id, 'LESSONS_V') || $user->hasPermissionForSchool($school->id, 'ATTENDANCE_V'));
+    
+                if ($hasPermission || in_array($school->id, $userAdmin)) {
+                    $lessonsAtSchool = LessonsResource::collection(Lesson::whereHas('student', function ($query) use ($school) {
+                        $query->where('school_id', $school->id);
+                    })->get());
+                }
+                $lessonCollection = $lessonCollection->concat($lessonsAtSchool);
             }
-            $lessonCollection = $lessonCollection->concat($lessonsAtSchool);
+
+            $associatedLessons = LessonsResource::collection(Lesson::where('user_id', $user->id)->get());
+            $lessonCollection = $lessonCollection->concat($associatedLessons);
+
+            return $this->success(
+                $lessonCollection,
+                'Lessons Retrieved'
+            );
+        } catch (ModelNotFoundException $e){
+            return $this->error($e);
+        } catch (Exception $e){
+            return $this->generalError($e);
         }
 
         // return compiled list of lessons the user has access to
@@ -48,8 +61,12 @@ class LessonsController extends Controller
 
     public function getStudentLessons(string $student_id)
     {
-        $lessons = Lesson::where('student_id', $student_id)->get();
-        return LessonsResource::collection($lessons);
+        try {
+            $lessons = Lesson::where('student_id', $student_id)->get();
+            return $this->success(LessonsResource::collection($lessons), 'Student Lessons Retrieved');
+        } catch (Exception $e){
+            return $this->generalError($e);
+        }
     }
 
     public function getStudentPastLessons($student_id)
@@ -61,7 +78,7 @@ class LessonsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreLessonRequest $request)
     {
         try {
             $lesson = Lesson::create([
@@ -75,7 +92,8 @@ class LessonsController extends Controller
             return $this->success(
                 new LessonsResource(Lesson::find($lesson->id)),
                 'Lesson Assigned',
-                'The lesson has been assigned to a tutor.'
+                'The lesson has been assigned to a tutor.',
+                201
             );
         // } catch (Exception) {
         //     return $this->generalError();
@@ -124,10 +142,16 @@ class LessonsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, $force = false)
     {
-        Lesson::where('id', $id)->first()->delete();
-        return 'Lesson Deleted';
+        try {
+            $lesson = Lesson::findOrFail($id)->delete();
+            return $this->success('Lesson Deleted', null, null, 204);
+        } catch (ModelNotFoundException $e){
+            return $this->error($e, 'Lesson Not Found', null, 404);
+        } catch (Exception $e){
+            return $this->generalError($e);
+        }
     }
 
     private function isNotAuthorized(Lesson $lesson)

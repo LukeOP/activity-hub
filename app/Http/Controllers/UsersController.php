@@ -23,12 +23,12 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $schoolIds = $user->schools->pluck('id')->toArray();
+        // $user = Auth::user();
+        // $schoolIds = $user->schools->pluck('id')->toArray();
 
-        return UserResource::collection(
-            User::whereIn()
-        );
+        // return UserResource::collection(
+        //     User::whereIn()
+        // );
     }
 
     /**
