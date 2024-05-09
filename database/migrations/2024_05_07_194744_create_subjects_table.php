@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('subjects', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('title');
-        });
+        if (! Schema::hasTable('subjects')) {
+            Schema::create('subjects', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('title');
+            });
+        }
     }
 
     /**

@@ -13,14 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tasks', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id')->index('tasks_user_id_foreign');
-            $table->string('name');
-            $table->string('description');
-            $table->string('priority')->default('medium');
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('tasks')) {
+            Schema::create('tasks', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->unsignedBigInteger('user_id')->index('tasks_user_id_foreign');
+                $table->string('name');
+                $table->string('description');
+                $table->string('priority')->default('medium');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

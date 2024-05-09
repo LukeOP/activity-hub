@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('instrument_states', function (Blueprint $table) {
-            $table->bigInteger('id', true);
-            $table->string('description', 30);
-        });
+        if (! Schema::hasTable('instrument_states')) {
+            Schema::create('instrument_states', function (Blueprint $table) {
+                $table->bigInteger('id', true);
+                $table->string('description', 30);
+            });
+        }
     }
 
     /**

@@ -13,19 +13,21 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('calendar_events', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('school_id', 36)->index('school_id');
-            $table->string('user_id', 36)->index('calendar_events_user_id_foreign');
-            $table->string('title')->nullable();
-            $table->date('start')->nullable();
-            $table->date('end')->nullable();
-            $table->boolean('allDay')->nullable();
-            $table->string('className')->nullable();
-            $table->string('reference_type');
-            $table->integer('reference_type_id');
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('calendar_events')) {
+            Schema::create('calendar_events', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('school_id', 36)->index('school_id');
+                $table->string('user_id', 36)->index('calendar_events_user_id_foreign');
+                $table->string('title')->nullable();
+                $table->date('start')->nullable();
+                $table->date('end')->nullable();
+                $table->boolean('allDay')->nullable();
+                $table->string('className')->nullable();
+                $table->string('reference_type');
+                $table->integer('reference_type_id');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

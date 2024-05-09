@@ -12,8 +12,8 @@
           <label>Event Title*
             <input type="text" class="form-control" v-model="formData.title" required>
           </label>
-          <label>Description*
-            <input type="text" class="form-control" v-model="formData.description" required>
+          <label>Description
+            <input type="text" class="form-control" v-model="formData.description">
           </label>
           <label>Notes
             <textarea rows="5" class="form-control" v-model="formData.notes"></textarea>
@@ -27,8 +27,8 @@
           <label>Date*
             <input type="date" class="form-control" v-model="formData.date" required>
           </label>
-          <label>Time*
-            <input type="time" class="form-control" v-model="formData.time" required>
+          <label>Time
+            <input type="time" class="form-control" v-model="formData.time">
           </label>
           <label>Event Job Setup*
             <select class="form-control" v-model="formData.template" required>

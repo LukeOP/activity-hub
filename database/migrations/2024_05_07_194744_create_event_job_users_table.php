@@ -13,13 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('event_job_users', function (Blueprint $table) {
-            $table->string('id', 36)->primary();
-            $table->string('event_job_id', 36)->index('event_job_id');
-            $table->string('user_id', 36)->index('user_id');
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
-        });
+        if (! Schema::hasTable('event_job_users')) {
+            Schema::create('event_job_users', function (Blueprint $table) {
+                $table->string('id', 36)->primary();
+                $table->string('event_job_id', 36)->index('event_job_id');
+                $table->string('user_id', 36)->index('user_id');
+                $table->timestamp('created_at')->useCurrent();
+                $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
+            });
+        }
     }
 
     /**

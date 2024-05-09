@@ -13,18 +13,20 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('schools', function (Blueprint $table) {
-            $table->string('name');
-            $table->string('id', 36)->primary();
-            $table->string('subscription');
-            $table->string('number')->nullable();
-            $table->string('address')->nullable();
-            $table->string('logo', 150)->nullable();
-            $table->string('primary_color', 7)->nullable();
-            $table->string('secondary_color', 7)->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        if (! Schema::hasTable('schools')) {
+            Schema::create('schools', function (Blueprint $table) {
+                $table->string('name');
+                $table->string('id', 36)->primary();
+                $table->string('subscription');
+                $table->string('number')->nullable();
+                $table->string('address')->nullable();
+                $table->string('logo', 150)->nullable();
+                $table->string('primary_color', 7)->nullable();
+                $table->string('secondary_color', 7)->nullable();
+                $table->timestamps();
+                $table->softDeletes();
+            });
+        }
     }
 
     /**

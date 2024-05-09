@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEventRequest;
+use App\Http\Requests\UpdateEventRequest;
 use App\Http\Resources\EventsResource;
 use App\Models\Event;
 use App\Models\EventUser;
@@ -21,99 +23,114 @@ class EventsController extends Controller
      */
     public function index()
     {        
-        // Get User's List of associated-schools and create an array of school ids
-        $user = User::where('id', Auth::user()->id)->first();
-        $userSchools = $user->schools;
-        $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
-        $eventsCollection = new Collection();
+        try {
+            // Get User's List of associated-schools and create an array of school ids
+            $user = User::where('id', Auth::user()->id)->first();
+            $userSchools = $user->schools;
+            $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
+            $eventsCollection = new Collection();
 
-        // For each user-associated school check if they have permission to view all events 
-        // If they do or they are an administrator - get all events for that school
-        // Else just get the events assigned to the tutor
-        foreach ($userSchools as $school) {
-            $hasPermission = $user->hasPermissionForSchool($school->id, 'EVENTS_V');
-            $eventsAtSchool = [];
+            // For each user-associated school check if they have permission to view all events 
+            // If they do or they are an administrator - get all events for that school
+            // Else just get the events assigned to the tutor
+            foreach ($userSchools as $school) {
+                $hasPermission = $user->hasPermissionForSchool($school->id, 'EVENTS_V');
+                $eventsAtSchool = [];
 
-            if ($hasPermission || in_array($school->id, $userAdmin)) {
-                $eventsAtSchool = EventsResource::collection(
-                    Event::where('school_id', $school->id)
-                         ->where('archived', false)
-                         ->get());
-            } 
-            else {
-                $eventsAtSchool = EventsResource::collection(
-                    Event::whereHas('users', function($query) use ($user) {
-                    $query->where('user_id', $user->id);
-                })->get());
-            }
-            if($eventsAtSchool != []){
+                if ($hasPermission || in_array($school->id, $userAdmin)) {
+                    $eventsAtSchool = EventsResource::collection(
+                        Event::where('school_id', $school->id)
+                            ->where('archived', false)
+                            ->get());
+                } 
                 $eventsCollection = $eventsCollection->concat($eventsAtSchool);
             }
-        }
+            $associatedEvents = EventsResource::collection(
+                Event::whereHas('users', function($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->get());
+        
+            $eventsCollection = $eventsCollection->concat($associatedEvents);
 
-        // return compiled list of events the user has access to
-        return $eventsCollection;
+            // return compiled list of events the user has access to
+            return $this->success(
+                $eventsCollection,
+                'Upcoming Events'
+            );
+        } catch (ModelNotFoundException $e){
+            return $this->error($e);
+        } catch (Exception $e){
+            return $this->generalError($e);
+        }
     }
 
     public function getArchivedEvents()
     {   
-        // Get User's List of associated-schools and create an array of school ids
-        $user = User::where('id', Auth::user()->id)->first();
-        $userSchools = $user->schools;
-        $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
-        $eventsCollection = new Collection();
-
-        // For each user-associated school check if they have permission to view all events 
-        // If they do or they are an administrator - get all events for that school
-        // Else just get the events assigned to the tutor
-        foreach ($userSchools as $school) {
-            $hasPermission = $user->hasPermissionForSchool($school->id, 'EVENTS_V');
-            $eventsAtSchool = [];
-
-            if ($hasPermission || in_array($school->id, $userAdmin)) {
-                $eventsAtSchool = EventsResource::collection(
-                    Event::where('school_id', $school->id)
-                         ->where('archived', true)
-                         ->get());
-            } 
-            else {
-                $eventsAtSchool = EventsResource::collection(
-                    Event::whereHas('users', function($query) use ($user) {
-                    $query->where('user_id', $user->id);
-                })->get());
-            }
-            if($eventsAtSchool != []){
+        try {
+            // Get User's List of associated-schools and create an array of school ids
+            $user = User::where('id', Auth::user()->id)->first();
+            $userSchools = $user->schools;
+            $userAdmin = $user->isAdmin->pluck('school_id')->toArray();
+            $eventsCollection = new Collection();
+    
+            // For each user-associated school check if they have permission to view all events 
+            // If they do or they are an administrator - get all events for that school
+            // Else just get the events assigned to the tutor
+            foreach ($userSchools as $school) {
+                $hasPermission = $user->hasPermissionForSchool($school->id, 'EVENTS_V');
+                $eventsAtSchool = [];
+    
+                if ($hasPermission || in_array($school->id, $userAdmin)) {
+                    $eventsAtSchool = EventsResource::collection(
+                        Event::where('school_id', $school->id)
+                             ->where('archived', true)
+                             ->get());
+                } 
                 $eventsCollection = $eventsCollection->concat($eventsAtSchool);
             }
+            $associatedEvents = EventsResource::collection(
+                Event::whereHas('users', function($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->get());
+    
+            $eventsCollection = $eventsCollection->concat($associatedEvents);
+    
+            // return compiled list of events the user has access to
+            return $this->success(
+                $eventsCollection,
+                'Archived Events'
+            );
+        } catch (ModelNotFoundException $e){
+            return $this->error($e);
+        } catch (Exception $e){
+            return $this->generalError($e);
         }
-
-        // return compiled list of events the user has access to
-        return $this->success(
-            $eventsCollection,
-            'Archived Events'
-        );
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreEventRequest $request)
     {
-        $newEvent = Event::create([
-            'name' => $request->title,
-            'school_id' => $request->school,
-            'description' => $request->description,
-            'location' => $request->location,
-            'date' => $request->date,
-            'time' => $request->time,
-        ]);
+        try {
+            $newEvent = Event::create([
+                'name' => $request->name,
+                'school_id' => $request->school_id,
+                'description' => $request->description,
+                'location' => $request->location,
+                'date' => $request->date,
+                'time' => $request->time,
+            ]);
 
-        return response()->json(
-            [
-                'message' => 'Event Added successfully',
-                'event' => new EventsResource(Event::where('id', $newEvent->id)->first())
-            ]
-        );
+            return $this->success(
+                new EventsResource(Event::where('id', $newEvent->id)->first()),
+                'Event Added Successfully',
+                null,
+                201
+            );
+        } catch (Exception $e){
+            return $this->generalError($e);
+        }
     }
 
     /**
@@ -127,28 +144,22 @@ class EventsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(String $id, Request $request)
+    public function update(String $id, UpdateEventRequest $request)
     {
         try {
             $event = Event::findOrFail($id);
     
-            $event->fill($request->all());
+            $event->fill($request->only('name', 'description', 'location', 'date', 'time'));
             $event->save();
-            // return new EventsResource(Event::where('id', $event['id'])->first());
     
             return $this->success(
                 new EventsResource(Event::where('id', $event['id'])->first()),
                 'Event Updated Successfully',
                 'Event details have been updated.'
             );
-        } catch (ModelNotFoundException $e) {
-            return $this->error(
-                $e,
-                null,
-                'Error in updating event details',
-                404
-            );
-        } catch (Exception $e){
+        } catch (ModelNotFoundException) {
+            return $this->modelNotFound();
+        } catch (Exception){
             return $this->generalError();
         }
     }
@@ -158,8 +169,13 @@ class EventsController extends Controller
      */
     public function destroy(string $event_id)
     {
-        $deleted = Event::where('id', $event_id)->first()->delete();
-        if ($deleted) return 'success';
-        else return 'error';
+        try {
+            Event::where('id', $event_id)->first()->delete();
+            return $this->success(null, 'Event Deleted', null, 204);
+        } catch (ModelNotFoundException $e){
+            return $this->modelNotFound();
+        } catch (Exception){
+            return $this->generalError();
+        }
     }
 }

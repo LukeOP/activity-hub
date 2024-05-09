@@ -38,4 +38,13 @@ trait HttpResponses {
             'data' => null
         ], 403);
     }
+
+    protected function modelNotFound()
+    {
+        return response()->json([
+            'status' => 'Model Not Found',
+            'message' => 'Unable to perform action as the model was not found',
+            'data' => null
+        ], 404);
+    }
 }

@@ -85,18 +85,39 @@ test('lesson creation fails with invalid data', function () {
     $response->assertJsonValidationErrors('instrument');
 });
 
+test('lesson creation fails with long data', function () {
+    $response = $this->postJson('/api/lessons', [
+        'user_id' => $this->user->id,
+        'student_id' => $this->student->id,
+        'instrument' => 'test instrument',
+        'experience' => 'No Experience',
+        'funding_type' => 'funded Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam laudantium quam quos suscipit deserunt fugit ex voluptatibus! Fuga porro a rerum exercitationem. Error minus quas deleniti quia adipisci doloribus et dolorem id accusantium magni ut recusandae aliquid dicta excepturi hic voluptate laborum repudiandae, culpa dolore modi corrupti eligendi inventore. Atque?'
+    ]);
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors('funding_type');
+});
+
 test('lesson can be updated', function () {
-    $lesson = Lesson::factory()->forUserAndStudent($this->user, $this->student)->create();
-    $response = $this->patch('api/lessons/' . $lesson['id'], [
-        'funding_type' => 'test type',
+    $newLesson = Lesson::factory()->forUserAndStudent($this->user, $this->student)->create();
+    $response = $this->patch('api/lessons/' . $newLesson['id'], [
+        'start' => '09:00',
+        'end' => '09:30',
+        'day' => 'Saturday',
+        'start_date' => '2024-01-01',
+        'end_date' => '2024-02-01',
+        'funding_type' => 'updated',
+        'term_link' => 2,
+        'status' => 'tested',
         'instrument' => 'test instrument edited',
-        'start_date' => now(),
-        'end_date' => now()->addDays(7),
-        'start' => '09:00:00',
-        'end' => '09:30:00',
-        'day' => 'Tuesday',
     ]);
     $response->assertOk();
+    $lesson = $response['data'];
+    $this->assertSame('09:00:00', $lesson['attributes']['start']);
+    $this->assertSame('09:30:00', $lesson['attributes']['end']);
+    $this->assertSame('Saturday', $lesson['attributes']['day']);
+    $this->assertSame('2024-01-01', $lesson['attributes']['startDate']);
+    $this->assertSame('2024-02-01', $lesson['attributes']['endDate']);
+    $this->assertSame('test instrument', $lesson['attributes']['instrument']);
 
     Lesson::find($lesson['id'])->forceDelete();
 });

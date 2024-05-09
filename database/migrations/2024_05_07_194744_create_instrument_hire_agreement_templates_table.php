@@ -13,17 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('instrument_hire_agreement_templates', function (Blueprint $table) {
-            $table->string('id', 36)->primary();
-            $table->string('school_id', 36)->index('school_id');
-            $table->string('heading', 100);
-            $table->string('description')->nullable();
-            $table->text('notes')->nullable();
-            $table->integer('header_content');
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
-            $table->softDeletes();
-        });
+        if (! Schema::hasTable('instrument_hire_agreement_templates')) {
+            Schema::create('instrument_hire_agreement_templates', function (Blueprint $table) {
+                $table->string('id', 36)->primary();
+                $table->string('school_id', 36)->index('school_id');
+                $table->string('heading', 100);
+                $table->string('description')->nullable();
+                $table->text('notes')->nullable();
+                $table->integer('header_content');
+                $table->timestamp('created_at')->useCurrent();
+                $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
+                $table->softDeletes();
+            });
+        }
     }
 
     /**
