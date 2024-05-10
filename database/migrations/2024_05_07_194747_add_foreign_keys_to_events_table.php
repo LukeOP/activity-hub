@@ -23,16 +23,6 @@ return new class extends Migration
                 $table->foreign(['school_id'], 'events_ibfk_1')->references(['id'])->on('schools');
             });
         }
-
-        // Check if foreign key constraints already exist
-        $hasForeignKey = DB::select("SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'events_ibfk_2' AND table_name = 'events'");
-        
-        // Add foreign key constraints if they do not already exist
-        if (empty($hasForeignKey)) {
-            Schema::table('events', function (Blueprint $table) {
-                $table->foreign(['user_id'], 'events_ibfk_2')->references(['id'])->on('users');
-            });
-        }
     }
 
     /**

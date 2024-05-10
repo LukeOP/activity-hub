@@ -18,7 +18,6 @@ return new class extends Migration
                 $table->string('id', 36)->primary();
                 $table->string('name', 50);
                 $table->string('school_id', 36)->index('school_id');
-                $table->string('user_id', 36)->nullable()->index('user_id');
                 $table->text('description');
                 $table->text('notes')->nullable();
                 $table->string('location', 50);
