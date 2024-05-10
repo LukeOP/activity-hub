@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreLessonRequest;
+use App\Http\Requests\UpdateLessonRequest;
 use App\Http\Resources\LessonsResource;
 use App\Models\Lesson;
 use App\Models\User;
@@ -114,12 +115,12 @@ class LessonsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update($id, Request $request)
+    public function update($id, UpdateLessonRequest $request)
     {
         try {
             $lesson = Lesson::findOrFail($id);
     
-            $lesson->fill($request->all());
+            $lesson->fill($request->only('start', 'end', 'day', 'start_date', 'end_date', 'funding', 'term_link', 'status'));
             $lesson->save();
     
             return $this->success(

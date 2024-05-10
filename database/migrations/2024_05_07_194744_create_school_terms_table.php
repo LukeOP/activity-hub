@@ -13,16 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('school_terms', function (Blueprint $table) {
-            $table->string('id', 36)->primary();
-            $table->string('school_id', 36)->index('school_id');
-            $table->string('year', 4);
-            $table->string('description', 20);
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
-        });
+        if (! Schema::hasTable('school_terms')) {
+            Schema::create('school_terms', function (Blueprint $table) {
+                $table->string('id', 36)->primary();
+                $table->string('school_id', 36)->index('school_id');
+                $table->string('year', 4);
+                $table->string('description', 20);
+                $table->date('start_date');
+                $table->date('end_date');
+                $table->timestamp('created_at')->useCurrent();
+                $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
+            });
+        }
     }
 
     /**

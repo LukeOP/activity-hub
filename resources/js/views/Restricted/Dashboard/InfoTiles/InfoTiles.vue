@@ -38,7 +38,7 @@ if(user.hasPermissionAny('HIRES_V')){
 const { data: events, fetchData: fetchEvents } = useApi('events')
 if(user.hasPermissionAny('EVENTS_V')){
     fetchEvents().then(()=> {
-        let upcomingEvents = events.value.filter(e => e.attributes.date > moment().format('YYYY-MM-DD'))
+        let upcomingEvents = events.value.data.filter(e => e.attributes.date > moment().format('YYYY-MM-DD'))
         let info = {boldText: `${upcomingEvents.length}`, subText: 'Upcoming Events', icon: 'users', color: 'orange', link: 'EventsList'}
         tileArray.value.push(info)
     })

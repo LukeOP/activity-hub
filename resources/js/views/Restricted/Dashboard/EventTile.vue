@@ -48,8 +48,8 @@ const router = useRouter()
 // Fetch Lesson Data
 const { data: events, loading, fetchData: fetchEvents } = useApi('events')
 fetchEvents().then(()=> {
-  if(events.value != null) sorter.sort(events.value, 'id', 'desc')
-  eventStore.setEvents(events.value)
+  if(events.value.data != null) sorter.sort(events.value.data, 'id', 'desc')
+  eventStore.setEvents(events.value.data)
 })
 
 function jobsOverdue(event) {

@@ -13,13 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_schools', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('user_id', 36)->index('user_id');
-            $table->string('school_id', 36)->index('school_id');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        if (! Schema::hasTable('user_schools')) {
+            Schema::create('user_schools', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('user_id', 36)->index('user_id');
+                $table->string('school_id', 36)->index('school_id');
+                $table->timestamps();
+                $table->softDeletes();
+            });
+        }
     }
 
     /**

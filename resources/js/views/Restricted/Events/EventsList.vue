@@ -116,9 +116,9 @@ function routeChange(value) {
 
 onMounted(()=>{  
   fetchEvents().then(() => {
-    if(allEvents.value != eventStore.getEvents){
-      sorter.sort(allEvents.value, 'attributes.date')
-      eventStore.setEvents(allEvents.value)
+    if(allEvents.value.data != eventStore.getEvents){
+      sorter.sort(allEvents.value.data, 'attributes.date')
+      eventStore.setEvents(allEvents.value.data)
     }
   })
 })

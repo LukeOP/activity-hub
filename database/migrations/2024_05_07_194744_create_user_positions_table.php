@@ -13,14 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_positions', function (Blueprint $table) {
-            $table->bigInteger('id', true);
-            $table->string('user_id', 36)->index('user_id');
-            $table->string('school_id', 36)->index('school_id');
-            $table->string('position', 100)->default('Basic User');
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
-        });
+        if (! Schema::hasTable('user_positions')) {
+            Schema::create('user_positions', function (Blueprint $table) {
+                $table->bigInteger('id', true);
+                $table->string('user_id', 36)->index('user_id');
+                $table->string('school_id', 36)->index('school_id');
+                $table->string('position', 100)->default('Basic User');
+                $table->timestamp('created_at')->useCurrent();
+                $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
+            });
+        }
     }
 
     /**

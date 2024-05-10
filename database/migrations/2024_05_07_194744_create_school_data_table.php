@@ -13,14 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('school_data', function (Blueprint $table) {
-            $table->string('id', 36)->primary();
-            $table->string('school_id', 36)->index('school_id');
-            $table->string('type', 50);
-            $table->string('value', 50);
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
-        });
+        if (! Schema::hasTable('school_data')) {
+            Schema::create('school_data', function (Blueprint $table) {
+                $table->string('id', 36)->primary();
+                $table->string('school_id', 36)->index('school_id');
+                $table->string('type', 50);
+                $table->string('value', 50);
+                $table->timestamp('created_at')->useCurrent();
+                $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
+            });
+        }
     }
 
     /**

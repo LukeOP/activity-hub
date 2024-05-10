@@ -13,22 +13,24 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('student_contacts', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('student_id', 36)->index('student_id');
-            $table->string('student_mobile', 20)->nullable();
-            $table->string('student_email', 50)->nullable();
-            $table->string('pc_name', 100)->nullable();
-            $table->string('pc_relationship', 50)->nullable();
-            $table->string('pc_mobile', 20)->nullable();
-            $table->string('pc_email', 50)->nullable();
-            $table->string('sc_name', 100)->nullable();
-            $table->string('sc_relationship', 50)->nullable();
-            $table->string('sc_mobile', 20)->nullable();
-            $table->string('sc_email', 50)->nullable();
-            $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
-            $table->timestamp('created_at')->useCurrent();
-        });
+        if (! Schema::hasTable('student_contacts')) {
+            Schema::create('student_contacts', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('student_id', 36)->index('student_id');
+                $table->string('student_mobile', 20)->nullable();
+                $table->string('student_email', 50)->nullable();
+                $table->string('pc_name', 100)->nullable();
+                $table->string('pc_relationship', 50)->nullable();
+                $table->string('pc_mobile', 20)->nullable();
+                $table->string('pc_email', 50)->nullable();
+                $table->string('sc_name', 100)->nullable();
+                $table->string('sc_relationship', 50)->nullable();
+                $table->string('sc_mobile', 20)->nullable();
+                $table->string('sc_email', 50)->nullable();
+                $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
+                $table->timestamp('created_at')->useCurrent();
+            });
+        }
     }
 
     /**
