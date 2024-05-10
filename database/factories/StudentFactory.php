@@ -20,13 +20,16 @@ class StudentFactory extends Factory
      */
     public function definition(): array
     {
+        $year_level = $this->faker->numberBetween(9, 13);
+        $randomSchool = School::inRandomOrder()->value('id');
+
         return [
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
-            'tutor_group' => 'test',
-            'year_level' => $this->faker->numberBetween(9, 13),
+            'tutor_group' => $year_level . fake()->regexify('[A-Z]{2}'),
+            'year_level' => $year_level,
             'identifier' => bin2hex(random_bytes(4)),
-            'school_id' => School::where('name', 'Pinecrest School')->first()->id,
+            'school_id' => $randomSchool,
         ];
     }
 }

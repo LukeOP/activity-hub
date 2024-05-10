@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         // Check if foreign key constraints already exist
-        $hasForeignKey = DB::select("SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'event_job_users_ibfk_1' AND table_name = 'documents'");
+        $hasForeignKey = DB::select("SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'event_job_users_ibfk_1' AND table_name = 'event_job_users'");
         
         // Add foreign key constraints if they do not already exist
         if (empty($hasForeignKey)) {
