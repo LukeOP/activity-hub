@@ -48,7 +48,7 @@ const router = useRouter()
 // Fetch Lesson Data
 const { data: events, loading, fetchData: fetchEvents } = useApi('events')
 fetchEvents().then(()=> {
-  if(events.value.data != null) sorter.sort(events.value.data, 'id', 'desc')
+  if(events.value.data != null) sorter.sort(events.value.data, 'attributes.date')
   eventStore.setEvents(events.value.data)
 })
 
