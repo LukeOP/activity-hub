@@ -8,6 +8,7 @@
       <div class="col col-12 col-md-6">
         <div><h3>Instrument: <span class="value hover" @click="viewInstrument">{{ hire.instrument.attributes.name }}</span></h3></div>
         <div><h3>Hirer: <span class="value hover" @click="viewStudent">{{ hire.student.full_name }}</span></h3></div>
+        <div><h3>Instrument Fee: <span class="value" @click="viewStudent">{{ hire.instrument.attributes.fee ? '$' + hire.instrument.attributes.fee : '' }}</span></h3></div>
       </div>
       <div class="col col-12 col-md-6">
         <div><h3>Hire commenced: <span class="value">{{ formatDate(hire.attributes.start_date) }}</span></h3></div>

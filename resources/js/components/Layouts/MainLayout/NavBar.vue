@@ -20,7 +20,7 @@
               <i @click="handleLogout" id="logout" v-html="icons.logout" class="me-2 fill-white icon"></i>
             </span>
           </div>
-          <div id="version">V: 1.0.1</div>
+          <div id="version">V: 1.0.2</div>
         </div>
 
       </div>
@@ -178,9 +178,6 @@ function handleLogout(){
         background-color: $ah-primary;
         // background-color: $ah-primary-background;
         color: lighten($ah-primary, 55%);
-      }
-
-      .linkText {
       }
     }
     .subLink {
