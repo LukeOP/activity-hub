@@ -4,9 +4,8 @@
 
 <!-- Table component -->
 <section v-if="filter.getReturned">
-  <component :is="currentComponent" :lessons="filter.getReturned" v-if="!loading" :key="key" />
+  <component :is="currentComponent" :lessons="filter.getReturned" :key="key" />
 </section>
-<LoadingSpinner :isLoading="loading" :loadingText="true" color="primary" />
     
 </div>
 </template>

@@ -25,6 +25,7 @@ import { useWindowSize } from '../../../composables/useWindowSize'
 
 import HeaderLine from '../../../components/Layouts/MainLayout/Elements/HeaderLine.vue'
 import LessonsTable from './ListComponents/LessonsTable.vue'
+import LessonsTableNew from './ListComponents/LessonsTableNew.vue'
 import LessonsTableMobile from './ListComponents/LessonsTableMobile.vue'
 import { useActionsStore } from '../../../stores/actions'
 import { useLessonsStore } from '../../../stores/lessons'
@@ -46,7 +47,7 @@ const loading = ref(false)
 
 // Get appropriate component based on window size
 const currentComponent = computed(() => {
-  return windowSize.value.width > 1030 ? LessonsTable : LessonsTableMobile
+  return windowSize.value.width > 1030 ? LessonsTableNew : LessonsTableMobile
 })
 
 // fetch lessons data from the database and add to store
@@ -93,7 +94,7 @@ const filteredLessons = computed(() => {
       (fundingType && fundingType.toLowerCase().includes(searchTerm)) || 
       l.attributes.status.toLowerCase().includes(searchTerm) ||
       l.school.name.toLowerCase().includes(searchTerm) ||
-      l.school.room.toLowerCase().includes(searchTerm) ||
+      // l.school.room.toLowerCase().includes(searchTerm) ||
       l.tutor.full_name.toLowerCase().includes(searchTerm)
     );
   };
