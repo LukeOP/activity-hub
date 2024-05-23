@@ -19,24 +19,7 @@
                 <textarea rows="3" class="form-control" placeholder="Next time focus on..." v-model="formData.next_steps_comment"></textarea>
             </label>
             <button class="btn btn-primary" @click="submitNotes()" :disabled="!notesEntered">{{ formData.attendance_id != null ? 'Edit Notes' : 'Submit Notes' }}</button>
-            <!-- <hr /> -->
         </div>
-        <!-- <div id="previous-notes">
-            <h3 style="width:100%">Previous Lesson Notes:</h3>
-            <div v-if="previousLessonNotes">
-                <div>{{ formatDate(previousLessonNotes.attendance.date) }} - <i>{{ previousLessonNotes.attendance.attendance }}</i></div>
-                Planning
-                <div id="comment">{{ previousLessonNotes.comments.planning }}</div>
-                Progress
-                <div id="comment">{{ previousLessonNotes.comments.progress }}</div>
-                Next Steps
-                <div id="comment">{{ previousLessonNotes.comments.next_steps }}</div>
-            </div>
-            <div v-else class="mb-3">
-                <span>No previous lesson notes have been recorded.</span>
-            </div>
-            <button class="btn btn-outline-primary">View All Notes</button>
-        </div> -->
     </div>
 </template>
 
