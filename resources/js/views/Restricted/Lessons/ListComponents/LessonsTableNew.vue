@@ -86,8 +86,8 @@ const isMultiSchoolUser = computed(()=>{
 })
 
 const gridTemplateStyle = computed(()=>{
-  const baseTemplate = "minmax(10px, 45px) minmax(210px, 250px) repeat(3, 1fr) minmax(210px, 250px) 1fr"
-  const multiSchoolTemplate = "minmax(10px, 45px) minmax(210px, 250px) repeat(3, 1fr) minmax(210px, 250px) 1fr 1fr"
+  const baseTemplate = "45px minmax(190px, 250px) 1fr minmax(100px, 1fr) minmax(80px, 1fr) minmax(190px, 250px) minmax(150px, 1fr)"
+  const multiSchoolTemplate = "45px minmax(190px, 250px) 1fr minmax(100px, 1fr) minmax(80px, 1fr) minmax(210px, 250px) minmax(150px, 1fr) 1fr"
   return {
     gridTemplateColumns: isMultiSchoolUser.value ? multiSchoolTemplate : baseTemplate
   }
@@ -163,7 +163,8 @@ const gridTemplateStyle = computed(()=>{
     display: inline-block;
     text-align: center;
     border-radius: 0.365rem;
-    width: 150px;
+    min-width: 70px;
+    width: 100%;
     padding: 5px;
     border: 1px solid black;
   }
