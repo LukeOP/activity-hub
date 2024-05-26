@@ -4,7 +4,7 @@
   </div> -->
   <div class="menus">
     <top-bar />
-    <profile-menu />
+    <!-- <profile-menu /> -->
     <nav-bar @setState="stateControl" :state="currentState" />
     <action-bar @setState="stateControl" :state="currentState" />
     <filter-bar @setState="stateControl" :state="currentState" />
@@ -15,8 +15,9 @@
 import NavBar from './NavBar.vue'
 import ActionBar from './ActionBar.vue'
 import FilterBar from './FilterBar.vue'
-import ProfileMenu from './ProfileMenu.vue'
+import ProfileMenu from './TopBarElements/ProfileMenu.vue'
 import TopBar from './TopBar.vue'
+import Notifications from './TopBarElements/Notifications.vue'
 import { ref } from 'vue'
 import ActivityHubIconSVG from './Elements/SVG/ActivityHubIconSVG.vue'
 import { useRouter } from 'vue-router'

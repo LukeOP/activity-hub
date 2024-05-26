@@ -3,14 +3,24 @@
     <div id="logo-img" @click="router.push({name: 'Dashboard'})">
       <ActivityHubIconSVG />
     </div>
-    <span id="item-group">
+
+    <!-- Dynamic menu section -->
+    <div id="item-group">
+      <!-- Individual Menu Item -->
       <div v-for="item in menuItems" :key="item" class="item" :style="item.styles">
         <span class="menu-btn" @click="showSideBar(item)">
+        <!-- Text and Icon -->
           <span v-if="windowSize.width > 768" style="flex: 1; text-align: center;">{{ menu[item.state] ? 'Cancel' : item.text }}</span>
           <i v-html="menu[item.state] ? icons.xmark : item.icon" class="fill-white icon"></i>
         </span>
       </div>
-    </span>
+    </div>
+
+    <div id="profile-section">
+      <div v-if="backgroundSet" class="background-screen" @click="setBackgroundState(false)"></div>
+      <Notifications :backgroundStatus="backgroundSet" @setBackground="setBackgroundState" />
+      <ProfileMenu :backgroundStatus="backgroundSet" @setBackground="setBackgroundState"/>
+    </div>
   </div>
 </template>
 
@@ -23,6 +33,8 @@ import { useMenuStore } from "../../../stores/menu";
 import { useActionsStore } from "../../../stores/actions";
 import { icons } from '@/images/icons/icons'
 import ActivityHubIconSVG from "./Elements/SVG/ActivityHubIconSVG.vue";
+import ProfileMenu from "./TopBarElements/ProfileMenu.vue";
+import Notifications from "./TopBarElements/Notifications.vue";
 
 const menu = useMenuStore()
 const filter = useFilterStore()
@@ -32,11 +44,15 @@ const router = useRouter()
 const { windowSize } = useWindowSize()
 
 const menuItems = ref([]);
+const backgroundSet = ref(false)
 
 const itemMap = {
   nav: { text: 'Navigation', styles: 'background-color: #3B6580; color: white', icon: icons.bars, state: 'navActive' },
   actions: { text: 'Actions', styles: 'background-color: #FFAE33; color: white', icon: icons.gears, state: 'actionsActive' },
   filter: { text: 'Filter', styles: 'background-color: rgb(189,189,189); color: white', icon: icons.filter, state: 'filterActive' },
+  // nav: { text: 'Navigation', styles: 'color: white', icon: icons.bars, state: 'navActive' },
+  // actions: { text: 'Actions', styles: 'color: white', icon: icons.gears, state: 'actionsActive' },
+  // filter: { text: 'Filter', styles: 'color: white', icon: icons.filter, state: 'filterActive' },
 };
 
 function addItem(type) {
@@ -49,6 +65,10 @@ function addItem(type) {
       menuItems.value.splice(menuItems.value.indexOf(itemToRemove), 1);
     }
   }
+}
+
+function setBackgroundState(state){
+  backgroundSet.value = state
 }
 
 watch(() => menu, () => {
@@ -89,29 +109,52 @@ function showSideBar(item){
   left: 250px;
   height: 50px;
   width: calc(100vw - 250px);
+  display: flex;
   #logo-img {
     display: none;
   }
-}
-.menu-btn{
-  display: flex; 
-  align-items: center; 
-  padding: 6px;
-  width: 120px;
-}
-.item {
-  position: static;
-  display: inline-block;
-  height: 38px;
-  margin-right: 5px;
-  cursor: pointer;
-  &:last-of-type {
-    border-radius: 0px 0px 15px;
+  #item-group {
+    // background-color: green;
+    .item {
+      position: static;
+      display: inline-block;
+      height: 38px;
+      margin-right: 5px;
+      cursor: pointer;
+      .menu-btn{
+        display: flex; 
+        align-items: center; 
+        padding: 6px;
+        width: 120px;
+        .icon {
+          height: 25px;
+          width: 25px;
+        }
+      }
+      &:last-of-type {
+        border-radius: 0px 0px 15px;
+      }
+    }
   }
-}
-.icon {
-  height: 25px;
-  width: 25px;
+  #profile-section {
+    flex-grow: 1;
+    padding-right: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 2rem;
+    .background-screen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
 }
 /* action toggle rotate */
 .rotate {

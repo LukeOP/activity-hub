@@ -5,7 +5,7 @@
     </div>
     <div class="avatar" :class="{mouseHover: hover}" v-else @mouseenter="hover = true" @mouseleave="hover = false">{{ initials }}</div>
     <div v-if="hover && name" class="dropdown-names">
-      <span>{{ user.attributes.first_name }} {{ user.attributes.last_name }}</span>
+      <span class="unselectable">{{ user.attributes.first_name }} {{ user.attributes.last_name }}</span>
     </div>
   </span>
 </template>
