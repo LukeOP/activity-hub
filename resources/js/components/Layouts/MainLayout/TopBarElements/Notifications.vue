@@ -14,9 +14,12 @@
             <div class="drop-down-content">
                 <header id="notification-header" class="unselectable">
                     <h1>Notifications</h1>
-                    <!-- <i class="fa-solid fa-ellipsis options"></i> -->
+                    <!-- <i class="fa-solid fa-ellipsis options">
+                        <div class="options-drop-down">Some Options</div>
+                    </i> -->
                 </header>
                 <div class="notification-body">
+                    <span class="ah-link" @click="handleRouteChange">View all</span>
                     <span v-if="notifications.length > 0">
                         <NotificationTile v-for="(notification, index) in notifications" :key="index" :notification="notification" @click="handleIconClick"/>
                     </span>
@@ -31,14 +34,13 @@
 <script setup>
 import { ref, watch } from 'vue';
 import NotificationTile from './NotificationTile.vue'
+import { useRouter } from 'vue-router';
+import { notifications } from './demoNotifications';
 
-const notifications = [
-    // {icon: 'fa-regular fa-star', header: 'Lesson Updated', details: 'The lesson details have been updated.', route: 'LessonDetails', dataType: 'lesson', dataId: '01540814-23ec-40c8-a240-9372a576a538', created_at: '2024-05-24 03:55:03'},
-    // {icon: 'fa-regular fa-star', header: 'Overdue Event Jobs', details: 'You have some overdue event jobs. Check them out', route: 'EventDetails', dataType: 'event', dataId: '07ff128f-a794-42c0-9c10-91c364827f27', created_at: '2024-05-22 03:55:03'}
-]
 
 const props = defineProps({backgroundStatus:Boolean})
 const emit = defineEmits(['setBackground'])
+const router = useRouter()
 
 const iconHover = ref(false)
 const showDropDown = ref(false)
@@ -46,6 +48,13 @@ const showDropDown = ref(false)
 function handleIconClick(){
   showDropDown.value = !showDropDown.value
   emit('setBackground', !props.backgroundStatus)
+}
+
+function handleRouteChange(){
+    handleIconClick()
+    router.push({
+        name: 'Notifications'
+    })
 }
 
 watch(() => props.backgroundStatus, () => {
@@ -132,6 +141,7 @@ watch(() => props.backgroundStatus, () => {
             }
           }
           .notification-body {
+            padding: 0 20px;
                 overflow: hidden;
                 overflow-y: auto;
                 max-height: calc(80vh - 157px);

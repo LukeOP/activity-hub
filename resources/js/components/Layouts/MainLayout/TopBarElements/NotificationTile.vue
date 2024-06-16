@@ -46,7 +46,7 @@ function setStoreData(){
 
 <style lang="scss" scoped>
 .notification {
-    padding: 10px 10px 10px 20px;
+    padding: 10px 0px;
     display: flex;
     min-height: 70px;
     border-radius: 0.5rem;

@@ -17,8 +17,9 @@ function getState(){
         schools: [],
       },
       permissions: [],
+      notifications: [],
       token: sessionStorage.getItem('AHT') || '',
-      timezone: ''
+      timezone: '',
     }
 }
 
@@ -35,6 +36,7 @@ export const useUserStore = defineStore('user', {
       this.setUser(res.data.data.user)
       this.setToken(res.data.data.token)
       this.setPermissions(res.data.data.user.permissions)
+      this.setNotificationPreferences(res.data.data.user.notifications)
       this.timezone = res.data.data.user.timezone
     },
     setUser(user){
@@ -56,6 +58,9 @@ export const useUserStore = defineStore('user', {
     },
     setPermissions(permissions){
       this.permissions = permissions
+    },
+    setNotificationPreferences(notifications){
+      this.notifications = notifications
     },
     setToken(token){
       this.token = token
@@ -91,6 +96,13 @@ export const useUserStore = defineStore('user', {
         return true
       }
       else return false
+    },
+    hasPermissionFromArray(permissionArray, school){
+      let results = []
+      permissionArray.forEach(permission => {
+        results.push(this.permissions.some(p => ((p.type === permission || p.type === 'Administrator') && p.school_id === school))) 
+      });
+      return results.includes(true);
     },
     addFundingData(data){
       let school = this.attributes.schools.find(s => s.id === data.school_id)

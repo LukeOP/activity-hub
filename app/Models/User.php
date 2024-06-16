@@ -87,6 +87,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(UserPermission::class, 'user_id');
     }
 
+    public function userNotifications()
+    {
+        return $this->hasMany(UserNotificationPreference::class, 'user_id');
+    }
+
     public function permissionsForSchool($schoolId)
     {
         $permissions = $this->userPermissions()->where('school_id', $schoolId)->get();

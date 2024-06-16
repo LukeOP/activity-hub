@@ -1,8 +1,8 @@
 <template>
 <div>
-  <HeaderLine :heading="user.attributes.first_name + ' ' + user.attributes.last_name + ' Profile'" />
+  <HeaderLine heading="Profile Information" />
   
-  <div class="d-flex mb-3">
+  <section id="details" class="d-flex mb-3">
     <!-- <div class="justify-content-center" id="user-image-container">
       <div id="user-img" @click="handleProfile">
         <span id="icon-text">{{initials}}</span>
@@ -10,11 +10,13 @@
     </div> -->
     <div class="mt-2">
       <h2 class="text-primary">Your Details:</h2>
+      <h3 class="heading">Name: </h3><span>{{user.attributes.first_name + ' ' + user.attributes.last_name}}</span><br/>
       <h3 class="heading">Login Email: </h3><span class="data">{{user.attributes.email}}</span><br/>
       <h3 class="heading">Phone: </h3><span class="data">{{user.attributes.phone}}</span>
     </div>
-  </div>
-  <div>
+  </section>
+
+  <section id="schools">
     <div class="col col-12">
       <h2 class="text-primary mt-2">Associated Schools:</h2>
       <div class="associated-schools">
@@ -24,12 +26,20 @@
             <div class="school-name">{{school.name}}</div> 
             <div class="admin-flag" v-if="isAdmin(school)">{{isAdmin(school)}}</div>
           </div>
-          <i class="fa-solid fa-trash"></i>
+          <!-- <i class="fa-solid fa-trash"></i> -->
         </div>
       </div>
-      <div class="add-school user-element" style="color: #FCFCFC;" @click="handleInviteCodeClick">Use school invite code</div>
+      <!-- <div class="add-school user-element" style="color: #FCFCFC;" @click="handleInviteCodeClick">Use school invite code</div> -->
     </div>
-  </div>
+    <hr>
+  </section>
+
+  <section id="notifications">
+    <h2 class="text-primary mt-2">In-App Notification Preferences</h2>
+    <span>(In Development)</span>
+    <NotificationPreferences />
+  </section>
+
 </div>
   
 </template>
@@ -40,9 +50,16 @@ import { useModalStore } from '../../../stores/modal'
 import { useUserStore } from '../../../stores/user'
 
 import HeaderLine from '../../../components/Layouts/MainLayout/Elements/HeaderLine.vue'
+import NotificationPreferences from './NotificationPreferences.vue'
+import { useActionsStore } from '../../../stores/actions'
 
 const user = useUserStore()
 const modal = useModalStore()
+const actions = useActionsStore()
+
+actions.setItems([
+  { header: 'Use School Code', to: { name: 'Profile' }, modal: 'InviteCodeEntry', icon: 'fa-solid fa-plus'}
+])
 
 const initials = computed(()=>{
   if(user.attributes.first_name) return getFirstLetter(user.attributes.first_name) + getFirstLetter(user.attributes.last_name)
@@ -60,9 +77,6 @@ function isAdmin(school){
   return null
 }
 
-function handleInviteCodeClick(){
-  modal.open('InviteCodeEntry')
-}
 </script>
 
 <style lang="scss" scoped>
@@ -132,11 +146,11 @@ function handleInviteCodeClick(){
   max-width: 400px;
   margin-bottom: 1rem;
   margin-right: 1rem;
-  background-color: $ah-secondary;
+  background-color: $ah-primary;
   color: white;
   text-align: center;
   &:hover {
-    background-color: $ah-secondary-dark;
+    background-color: $ah-primary-dark;
     cursor: pointer;
   }
 }

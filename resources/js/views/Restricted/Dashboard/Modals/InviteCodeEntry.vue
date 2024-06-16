@@ -14,7 +14,7 @@
         required
       /> -->
       <!-- <input type="submit" class="btn btn-secondary submit" value="Submit"> -->
-      <ButtonLoading button-class="btn-secondary submit" style="margin-left: auto; margin-right: auto;" inputmode="submit" :loading="checking" >Submit</ButtonLoading>
+      <ButtonLoading button-class="btn-primary submit" style="margin-left: auto; margin-right: auto;" inputmode="submit" :loading="checking" >Submit</ButtonLoading>
       <p class="text-center error">{{error}}</p>
     </form>
     <div v-if="result" class="result">
@@ -176,7 +176,7 @@ const schoolStore = useSchoolStore()
 <style lang="scss" scoped>
 h2 {
   padding-bottom: 1rem;
-  border-bottom: 2px solid $ah-secondary;
+  border-bottom: 2px solid $ah-primary;
   margin-bottom: 1rem;
 }
 .char-input {

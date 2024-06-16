@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Resources\UserNotificationsResource;
 use App\Http\Resources\UserPermissionsResource;
 use App\Models\School;
 use App\Models\User;
@@ -35,6 +36,7 @@ class AuthController extends Controller
             
             $user->schools = $user->userSchools();
             $user->permissions = UserPermissionsResource::collection($user->userPermissions);
+            $user->notifications = UserNotificationsResource::collection($user->userNotifications);
     
             return $this->success([
                 'user' => $user,

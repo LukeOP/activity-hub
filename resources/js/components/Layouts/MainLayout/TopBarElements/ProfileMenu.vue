@@ -128,7 +128,7 @@ function handleLogout(){
               }
               .drop-down-item {
                 padding: 5px 20px;
-                font-size: 1.2rem;
+                font-size: 1rem;
                 &:hover {
                   cursor: pointer;
                   background-color: $ah-primary-light-background;
