@@ -3,7 +3,7 @@
     <header class="container">
       <div class="logo">
         <ActivityHubIconSVG />
-        <span>Activity Hub</span>
+        <span style="font-family: EB Garamond;; font-weight: 400; font-size: 1.8rem;">Activity Hub</span>
         <!-- <img style="max-width: 200px;" src="/images/ActivityHub_Logo_Main.png" alt=""> -->
           <!-- <span style="font-family: 'Montserrat-Alt1';">Activity Hub</span> -->
         </div>
@@ -11,10 +11,10 @@
           <ul>
             <!-- <li><a href="#">Home</a></li> -->
             <li><a href="#">Features</a></li>
-            <li><a href="#">Pricing</a></li>
+            <!-- <li><a href="#">Pricing</a></li> -->
             <li><a href="#">About</a></li>
-            <li><a href="#" @click="router.push({name: 'Register'})">Log In</a></li>
-            <li><a href="#" @click="router.push({name: 'Login'})" class="cta"><span class="me-2">Get started for free</span>
+            <li><a href="#" @click="router.push({name: 'Login'})">Log In</a></li>
+            <li><a href="#" @click="router.push({name: 'Register'})" class="cta"><span class="me-2">Get started for free</span>
               <i class="fa-solid fa-arrow-right"></i></a></li>
           </ul>
         </nav>

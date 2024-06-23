@@ -34,13 +34,13 @@ class LessonsController extends Controller
             // Else just get the lessons assigned to the tutor
             foreach ($userSchools as $school) {
                 $hasPermission = ($user->hasPermissionForSchool($school->id, 'LESSONS_V') || $user->hasPermissionForSchool($school->id, 'ATTENDANCE_V'));
-    
+                
                 if ($hasPermission || in_array($school->id, $userAdmin)) {
                     $lessonsAtSchool = LessonsResource::collection(Lesson::whereHas('student', function ($query) use ($school) {
                         $query->where('school_id', $school->id);
                     })->get());
+                    $lessonCollection = $lessonCollection->concat($lessonsAtSchool);
                 }
-                $lessonCollection = $lessonCollection->concat($lessonsAtSchool);
             }
 
             $associatedLessons = LessonsResource::collection(Lesson::where('user_id', $user->id)->get());
