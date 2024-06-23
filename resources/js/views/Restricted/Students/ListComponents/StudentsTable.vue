@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Object.keys(studentList).length > 0">
+  <div>
   <section id="table-header-section">
      <table>
       <thead>
