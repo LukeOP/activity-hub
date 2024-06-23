@@ -15,8 +15,11 @@ class UserNotificationsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $request->id,
-            'something' => 'hello'
+            'id' => $this->id,
+            'school_id' => $this->school_id,
+            'option_id' => $this->option_id,
+            'app' => $this->app == 1,
+            'email' => $this->email == 1,
         ];
     }
 }

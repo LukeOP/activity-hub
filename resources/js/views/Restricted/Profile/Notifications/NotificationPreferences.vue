@@ -5,15 +5,40 @@
             <img :src="school.logo" />
         </div>
     </div>
-    <NotificationPreference v-for="(notification, index) in notificationOptions" :key="index" :notification="notification"/>
+    <div v-for="(section, index) in notificationSections" :key="index" v-if="notificationOptions">
+        <h3>{{ section }} Notifications</h3>
+        <NotificationPreference v-for="(notification, index) in notificationsInSection(section)" :key="index" :notification="notification"/>
+    </div>
+    <!-- <NotificationPreference v-for="(notification, index) in notificationOptions" :key="index" :notification="notification"/> -->
 </template>
 
 <script setup>
 import { useUserStore } from '../../../../stores/user';
 import NotificationPreference from './NotificationPreference.vue';
-import { notificationOptions } from './NotificationOptions';
+// import { notificationOptions } from './NotificationOptions';
+import useApi from '../../../../composables/useApi';
+import useSorter from '../../../../composables/useSorter';
 
 const user = useUserStore()
+const sorter = useSorter()
+
+const {data: notificationOptions, fetchData} = useApi('notification-options');
+fetchData().then(()=>{
+    sorter.sort(notificationOptions.value, 'type')
+})
+
+function notificationsInSection(section){
+    return notificationOptions.value.filter(o => o.type == section.toLowerCase())
+}
+
+const notificationSections = [
+    'Lesson',
+    'Event',
+    'Hire',
+    'User'
+]
+
+
 
 </script>
 
@@ -31,5 +56,9 @@ img {
         min-width: 100px;
         text-align: center;
     }
+}
+h3 {
+    margin-top: 1rem;
+    border-bottom: 1px solid $ah-grey;
 }
 </style>

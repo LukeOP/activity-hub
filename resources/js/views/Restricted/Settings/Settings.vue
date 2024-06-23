@@ -5,6 +5,15 @@
       @link1="routeChange('Privacy')"
       @link2="routeChange('IPPolicy')"
       />
+    <div class="user-element" @click="routeChange('NotificationPreferences')">
+      <div class="icon">
+        <i class="fa-solid fa-bell fa-2x"></i>
+      </div>
+      <div class="content">
+        <div class="setting-name">Notification Preferences</div>
+        <div class="setting-description">Select what you are notified about.</div>
+      </div>
+    </div>
     <div class="user-element" @click="routeChange('SchoolSetup')">
       <div class="icon">
         <i class="fa-solid fa-gear fa-2x"></i>

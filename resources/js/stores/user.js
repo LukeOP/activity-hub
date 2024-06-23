@@ -17,7 +17,10 @@ function getState(){
         schools: [],
       },
       permissions: [],
-      notifications: [],
+      notifications: {
+        preferences: [],
+        active: []
+      },
       token: sessionStorage.getItem('AHT') || '',
       timezone: '',
     }
@@ -60,7 +63,7 @@ export const useUserStore = defineStore('user', {
       this.permissions = permissions
     },
     setNotificationPreferences(notifications){
-      this.notifications = notifications
+      this.notifications.preferences = notifications
     },
     setToken(token){
       this.token = token
@@ -69,9 +72,10 @@ export const useUserStore = defineStore('user', {
     async resetUserWithToken(){
       if(sessionStorage.getItem('AHT')) {
         const res = await axiosClient.get('token-user/' + sessionStorage.getItem('AHT'))
-        // console.log('reset: ', res.data.permissions)
+        // console.log('reset: ', res.data)
         this.setUser(res.data.user)
         this.setPermissions(res.data.permissions)
+        this.notifications.preferences = res.data.notifications
         this.setToken(sessionStorage.getItem('AHT'))
         this.timezone = res.data.user.timezone
       }
@@ -100,7 +104,7 @@ export const useUserStore = defineStore('user', {
     hasPermissionFromArray(permissionArray, school){
       let results = []
       permissionArray.forEach(permission => {
-        results.push(this.permissions.some(p => ((p.type === permission || p.type === 'Administrator') && p.school_id === school))) 
+        results.push(this.getUser.permissions.some(p => ((p.type === permission || p.type === 'Administrator') && p.school_id === school))) 
       });
       return results.includes(true);
     },
@@ -115,6 +119,16 @@ export const useUserStore = defineStore('user', {
         school.data.funding.splice(dataIndex, 1)
       }
     },
+    addNotificationPreference(preference){
+      this.getUser.notifications.preferences.push(preference)
+    },
+    updateNotificationPreference(preference){
+      let index = this.notifications.preferences.findIndex(n => n.id == preference.id)
+      if (index !== -1){
+        this.notifications.preferences.splice(index, 1)
+      }
+      this.notifications.preferences.push(preference)
+    },
     resetStores(){
       const mainStore = useMainStore()
       mainStore.resetStores()
@@ -126,7 +140,8 @@ export const useUserStore = defineStore('user', {
         attributes: this.attributes,
         permissions: this.permissions,
         token: this.token,
-        timezone: this.timezone
+        timezone: this.timezone,
+        notifications: this.notifications
       }
     },
     getToken(){

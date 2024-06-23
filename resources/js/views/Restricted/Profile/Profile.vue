@@ -31,13 +31,6 @@
       </div>
       <!-- <div class="add-school user-element" style="color: #FCFCFC;" @click="handleInviteCodeClick">Use school invite code</div> -->
     </div>
-    <hr>
-  </section>
-
-  <section id="notifications">
-    <h2 class="text-primary mt-2">In-App Notification Preferences</h2>
-    <span>(In Development)</span>
-    <NotificationPreferences />
   </section>
 
 </div>
@@ -45,30 +38,17 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import { useModalStore } from '../../../stores/modal'
 import { useUserStore } from '../../../stores/user'
 
 import HeaderLine from '../../../components/Layouts/MainLayout/Elements/HeaderLine.vue'
-import NotificationPreferences from './Notifications/NotificationPreferences.vue'
 import { useActionsStore } from '../../../stores/actions'
 
 const user = useUserStore()
-const modal = useModalStore()
 const actions = useActionsStore()
 
 actions.setItems([
   { header: 'Use School Code', to: { name: 'Profile' }, modal: 'InviteCodeEntry', icon: 'fa-solid fa-plus'}
 ])
-
-const initials = computed(()=>{
-  if(user.attributes.first_name) return getFirstLetter(user.attributes.first_name) + getFirstLetter(user.attributes.last_name)
-  return ''
-})
-
-function getFirstLetter(string){
-  return string[0]
-}
 
 function isAdmin(school){
   if(user.permissions.find(p => p.school_id == school.id && p.type === 'Administrator')) {

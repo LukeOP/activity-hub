@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\StaffResource;
+use App\Http\Resources\UserNotificationsResource;
 use App\Http\Resources\UserPermissionsResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Models\UserNotificationPreference;
 use App\Traits\HttpResponses;
 use Exception;
 use Illuminate\Auth\Events\PasswordReset;
@@ -72,8 +74,13 @@ class UsersController extends Controller
         }
 
         $permissions = UserPermissionsResource::collection($user->userPermissions);
+        $notifications = UserNotificationsResource::collection(UserNotificationPreference::where('user_id', $user->id)->get());
 
-        return ['user' => new UserResource($user), 'permissions' => $permissions];
+        return [
+            'user' => new UserResource($user), 
+            'permissions' => $permissions,
+            'notifications' => $notifications
+        ];
     }
 
     public function searchForUser($search)

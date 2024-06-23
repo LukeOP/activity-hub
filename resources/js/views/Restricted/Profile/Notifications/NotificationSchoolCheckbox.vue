@@ -1,10 +1,12 @@
 <template>
     <div class="school-column">
-        <span v-if="user.hasPermissionFromArray(notification.requiresPermission, school.id) || notification.requiresPermission.includes('all')">
+        <span v-if="user.hasPermissionFromArray(JSON.parse(notification.requires_permission), school.id) || JSON.parse(notification.requires_permission).includes('all')">
             <CheckBox :state="userNotificationState" @newState="setState" />
         </span>
         <span v-else>
-            <i class="fa-solid fa-square fa-2x disabled"></i>
+            <ToolTip tip="Your access permissions prevent this option.">
+                <i class="fa-solid fa-square fa-2x disabled"></i>
+            </ToolTip>
         </span>
     </div>
 </template>
@@ -13,24 +15,40 @@
 import CheckBox from '../CheckBox.vue';
 import { useUserStore } from '../../../../stores/user';
 import { computed } from 'vue';
+import useApi from '../../../../composables/useApi';
+import ToolTip from '../../../../components/Layouts/MainLayout/Elements/ToolTip.vue';
 
 const props = defineProps({school:Object, notification: Object})
 
 const user = useUserStore()
 
 const userNotificationState = computed(() => {
-    return user.notifications.find(n => (n.school_id == props.school.id && n.description == props.notification.id))?.app
+    return user.notifications.preferences.find(n => (n.school_id == props.school.id && n.option_id == props.notification.id))?.app
 })
 
 function setState(value){
-    let notificationToggle = user.notifications.find(n => (n.school_id == props.school.id && n.description == props.notification.id))
+    let notificationToggle = user.notifications.preferences.find(n => (n.school_id == props.school.id && n.option_id == props.notification.id))
     if(notificationToggle) {
-        notificationToggle.app = value
-        console.log('TODO add API call to update notification record.');
+        const {data, fetchData} = useApi('notifications/' + notificationToggle.id,{
+            app: value
+        }, 'PATCH')
+        fetchData()
+        .then(()=>{
+            user.updateNotificationPreference(data.value.data)
+        })
     }
     else {
-        //TODO add API call to create new notification record.
-        console.log('TODO add API call to create new notification record.');
+        // API call to create new notification record.
+        const {data, fetchData} = useApi('notifications',{
+            user_id: user.getUser.attributes.id,
+            school_id: props.school.id,
+            option_id: props.notification.id,
+            app: value ? 1 : 0
+        }, 'POST')
+        fetchData()
+        .then(()=>{
+            user.addNotificationPreference(data.value.data)
+        })
     }
 }
 

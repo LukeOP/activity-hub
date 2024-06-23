@@ -5,7 +5,6 @@ use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\DataProcessingController;
 use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EventJobController;
 use App\Http\Controllers\EventJobUsersController;
@@ -27,6 +26,7 @@ use App\Http\Controllers\SchoolTermsController;
 use App\Http\Controllers\StudentContactsController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TasksController;
+use App\Http\Controllers\UserNotificationPreferenceController;
 use App\Http\Controllers\UserPermissionsController;
 use App\Http\Controllers\UserPositionController;
 use App\Http\Controllers\UserSchoolInvitationsController;
@@ -156,6 +156,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/user-position/{user}/{school}', [UserPositionController::class, 'getUserPositionAtSchool']);
     Route::resource('user-school', UserSchoolsController::class);
     Route::resource('/avatar', AvatarController::class);
+
+    // NOTIFICATIONS
+    Route::resource('notifications', UserNotificationPreferenceController::class);
+    Route::get('notification-options', [UserNotificationPreferenceController::class, 'getNotificationOptions']);
 
     // TASKS
     Route::resource('/tasks', TasksController::class);

@@ -8,6 +8,7 @@ use App\Http\Resources\UserNotificationsResource;
 use App\Http\Resources\UserPermissionsResource;
 use App\Models\School;
 use App\Models\User;
+use App\Models\UserNotificationPreference;
 use App\Models\UserSchool;
 use App\Traits\HttpResponses;
 use Illuminate\Auth\Events\Registered;
@@ -36,7 +37,7 @@ class AuthController extends Controller
             
             $user->schools = $user->userSchools();
             $user->permissions = UserPermissionsResource::collection($user->userPermissions);
-            $user->notifications = UserNotificationsResource::collection($user->userNotifications);
+            $user->notifications = UserNotificationsResource::collection(UserNotificationPreference::where('user_id', $user->id)->get());
     
             return $this->success([
                 'user' => $user,

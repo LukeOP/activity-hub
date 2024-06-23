@@ -11,19 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications', function (Blueprint $table) {
-            $table->string('id', 36)->primary();
-            $table->string('user_id', 36)->index('user_id');
-            $table->string('icon');
-            $table->string('header', 100);
-            $table->text('details');
-            $table->string('route')->nullable();
-            $table->string('dataType')->nullable();
-            $table->string('dataId', 36)->nullable();
-            $table->boolean('seenStatus')->default(false);
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
-        });
+        if (! Schema::hasTable('notifications')) {
+            Schema::create('notifications', function (Blueprint $table) {
+                $table->string('id', 36)->primary();
+                $table->string('user_id', 36)->index('user_id');
+                $table->string('icon');
+                $table->string('header', 100);
+                $table->text('details');
+                $table->string('route')->nullable();
+                $table->string('dataType')->nullable();
+                $table->string('dataId', 36)->nullable();
+                $table->boolean('seenStatus')->default(false);
+                $table->timestamp('created_at')->useCurrent();
+                $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
+            });
+        }
     }
 
     /**
