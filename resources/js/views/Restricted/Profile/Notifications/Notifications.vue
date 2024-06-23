@@ -10,10 +10,10 @@
 </template>
 
 <script setup>
-import HeaderLine from '../../../components/Layouts/MainLayout/Elements/HeaderLine.vue';
-import NotificationTile from '../../../components/Layouts/MainLayout/TopBarElements/NotificationTile.vue';
-import { notifications } from '../../../components/Layouts/MainLayout/TopBarElements/demoNotifications';
-import useSorter from '../../../composables/useSorter';
+import HeaderLine from '@/components/Layouts/MainLayout/Elements/HeaderLine.vue';
+import NotificationTile from '@/components/Layouts/MainLayout/TopBarElements/NotificationTile.vue';
+import { notifications } from '../../../../components/Layouts/MainLayout/TopBarElements/demoNotifications';
+import useSorter from '../../../../composables/useSorter';
 
 const sorter = useSorter()
 sorter.sort(notifications, 'created_at', 'desc')

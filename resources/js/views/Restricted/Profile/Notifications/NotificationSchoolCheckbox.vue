@@ -10,8 +10,8 @@
 </template>
 
 <script setup>
-import CheckBox from './CheckBox.vue';
-import { useUserStore } from '../../../stores/user';
+import CheckBox from '../CheckBox.vue';
+import { useUserStore } from '../../../../stores/user';
 import { computed } from 'vue';
 
 const props = defineProps({school:Object, notification: Object})

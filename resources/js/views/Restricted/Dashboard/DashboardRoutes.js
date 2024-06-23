@@ -1,6 +1,6 @@
 import Dashboard from './Dashboard.vue'
 import Profile from '../Profile/Profile.vue'
-import Notifications from '../Profile/Notifications.vue'
+import Notifications from '../Profile/Notifications/Notifications.vue'
 
 
 const dashboardRoutes = [

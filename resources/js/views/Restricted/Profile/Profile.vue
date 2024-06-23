@@ -50,7 +50,7 @@ import { useModalStore } from '../../../stores/modal'
 import { useUserStore } from '../../../stores/user'
 
 import HeaderLine from '../../../components/Layouts/MainLayout/Elements/HeaderLine.vue'
-import NotificationPreferences from './NotificationPreferences.vue'
+import NotificationPreferences from './Notifications/NotificationPreferences.vue'
 import { useActionsStore } from '../../../stores/actions'
 
 const user = useUserStore()
