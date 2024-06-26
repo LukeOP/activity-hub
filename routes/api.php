@@ -20,6 +20,7 @@ use App\Http\Controllers\LessonNotesController;
 use App\Http\Controllers\LessonRequestsController;
 use App\Http\Controllers\LessonRequestsFormsController;
 use App\Http\Controllers\LessonsController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\SchoolDataController;
 use App\Http\Controllers\SchoolsController;
 use App\Http\Controllers\SchoolTermsController;
@@ -57,6 +58,7 @@ Route::post('user-email-verify-check', [AuthController::class, 'checkEmailVerifi
 
 Route::post('convertLessonData', [DataProcessingController::class, 'convertLessonData']);
 Route::post('lessons-mark-incomplete', [LessonAttendanceController::class, 'setUnmarkedLessonsIncomplete']);
+Route::post('set-notification', [NotificationsController::class, 'setNotification']);
 
 // Emails
 Route::post('email-lesson-request-received/{form_id}', [EmailController::class, 'newLessonRequestReceived']);
@@ -158,8 +160,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/avatar', AvatarController::class);
 
     // NOTIFICATIONS
-    Route::resource('notifications', UserNotificationPreferenceController::class);
+    Route::resource('notification-preferences', UserNotificationPreferenceController::class);
     Route::get('notification-options', [UserNotificationPreferenceController::class, 'getNotificationOptions']);
+    Route::resource('notifications', NotificationsController::class);
+    Route::get('notifications-new/{timeStamp}', [NotificationsController::class, 'newNotifications']);
 
     // TASKS
     Route::resource('/tasks', TasksController::class);

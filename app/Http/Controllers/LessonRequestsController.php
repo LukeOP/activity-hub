@@ -38,8 +38,8 @@ class LessonRequestsController extends Controller
                         LessonRequest::where('school_id', $school->id)
                                ->orderBy('created_at')
                                ->get());
+                    $requestCollection = $requestCollection->concat($requestsForSchool);
                 }
-                $requestCollection = $requestCollection->concat($requestsForSchool);
             }
             // return compiled list of lesson requests the user has access to
             return $this->success($requestCollection, 'Lesson requests Found');

@@ -106,8 +106,8 @@
 import { computed, ref } from 'vue';
 import useApi from '/resources/js/composables/useApi';
 import { useRoute } from 'vue-router';
+import { newLessonRequestTemplate } from '/resources/js/composables/useNotificationTemplates'
 import moment from 'moment';
-import axiosClient from '/resources/js/axios';
 import LoadingSpinner from '../../../components/Layouts/MainLayout/Elements/LoadingSpinner.vue';
 import ButtonLoading from '../../../components/Layouts/MainLayout/Elements/Buttons/ButtonLoading.vue';
 
@@ -173,14 +173,14 @@ async function submitForm(){
   submittingForm.value = true
   const {data:requestData, error: requestError, fetchData} = useApi('lesson-request-form/create-public-request', formData.value, 'POST')
   await fetchData().then(()=>{
-    if(!requestError.value){
       submitted.value = true
-      console.log(requestData.value);
-    } else console.error(requestError.value);
   })
   await useApi('email-lesson-request-received/' + form.value.id, requestData.value.data, 'POST').fetchData()
+  await useApi('set-notification', newLessonRequestTemplate(formData.value.instrument, requestData.value.data.id, form.value.school.id), 'POST' ).fetchData()
   submittingForm.value = false
 }
+
+
 
 </script>
 

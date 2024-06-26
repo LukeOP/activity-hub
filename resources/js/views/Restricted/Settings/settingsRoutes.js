@@ -4,6 +4,7 @@ import Settings from './Settings.vue'
 import SchoolSetup from './SchoolSetup.vue'
 import SchoolDetails from './SchoolSetup/SchoolDetails.vue'
 import NotificationPreferences from './NotificationPreferences.vue'
+import Notifications from './Notifications/Notifications.vue'
 
 
 const settingsRoutes = [
@@ -13,6 +14,7 @@ const settingsRoutes = [
     { path: 'ip-policy', name: 'IPPolicy', component: IPPolicy, meta: {breadcrumb: ' / Intellectual Property Policy', section: 'Settings', depth: 2}},
     { path: 'school-setup', name: 'SchoolSetup', component: SchoolSetup, meta: {breadcrumb: ' / School Setup', section: 'Settings', depth: 2}},
     { path: 'school-details', name: 'SchoolDetails', component: SchoolDetails, meta: {breadcrumb: ' / School Details', section: 'Settings', depth: 3}},
+    {path: 'notifications', name: 'Notifications', component: Notifications, meta: {breadcrumb: ' / Notifications', title: 'Notifications', section: "Settings", depth: 2}},
     { path: 'user-notifications', name: 'NotificationPreferences', component: NotificationPreferences, meta: {breadcrumb: ' / Notification Preferences', section: 'Settings', depth: 2}},
   ]},
 ] 

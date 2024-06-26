@@ -7,6 +7,9 @@ import authRoutes from "./authRoutes";
 import Test from '../views/Public/Test.vue'
 import { useFilterStore } from "../stores/filter";
 import { useMenuStore } from "../stores/menu";
+import { checkForNotifications } from "../composables/notificationCheck"
+import { useAppStore } from "../stores/appStore";
+import moment from "moment";
 
 const routes = [
   {
@@ -43,6 +46,9 @@ router.beforeEach((to, from, next) => {
   menuStore.resetMenu()
   const filter = useFilterStore()
   filter.reset()
+  const appStore = useAppStore()
+  checkForNotifications()
+  appStore.routeChangeTime = moment().format('YYYY-MM-DD HH:mm:ss')
   if(to.meta.requiresAuth && !user.token){
     next({name: 'Login'})
   } else {

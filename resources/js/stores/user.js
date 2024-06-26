@@ -39,7 +39,8 @@ export const useUserStore = defineStore('user', {
       this.setUser(res.data.data.user)
       this.setToken(res.data.data.token)
       this.setPermissions(res.data.data.user.permissions)
-      this.setNotificationPreferences(res.data.data.user.notifications)
+      this.setNotifications(res.data.data.user.notifications)
+      this.setNotificationPreferences(res.data.data.user.notificationPreferences)
       this.timezone = res.data.data.user.timezone
     },
     setUser(user){
@@ -65,6 +66,9 @@ export const useUserStore = defineStore('user', {
     setNotificationPreferences(notifications){
       this.notifications.preferences = notifications
     },
+    setNotifications(notifications){
+      this.notifications.active = notifications
+    },
     setToken(token){
       this.token = token
       sessionStorage.setItem('AHT', token)
@@ -75,7 +79,8 @@ export const useUserStore = defineStore('user', {
         // console.log('reset: ', res.data)
         this.setUser(res.data.user)
         this.setPermissions(res.data.permissions)
-        this.notifications.preferences = res.data.notifications
+        this.notifications.preferences = res.data.notificationPreferences
+        this.notifications.active = res.data.notifications
         this.setToken(sessionStorage.getItem('AHT'))
         this.timezone = res.data.user.timezone
       }
@@ -128,6 +133,9 @@ export const useUserStore = defineStore('user', {
         this.notifications.preferences.splice(index, 1)
       }
       this.notifications.preferences.push(preference)
+    },
+    markNotificationAsRead(notification_id) {
+      this.notifications.active.find(n => n.id == notification_id).seenStatus = 1
     },
     resetStores(){
       const mainStore = useMainStore()

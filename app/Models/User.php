@@ -101,7 +101,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function hasPermissionForSchool($schoolId, $permission)
     {
         // return $this->userPermissions()->where('school_id', $schoolId)->first();
-        return $this->userPermissions()->where('school_id', $schoolId)->where('permission_type', $permission)->first() ? true : false;
+        return (
+            $this->userPermissions()->where('school_id', $schoolId)->where('permission_type', $permission)->first()
+            || $this->userPermissions()->where('school_id', $schoolId)->where('permission_type', 'Administrator')->first())
+            ? true : false;
     }
 
     public function getSubjects()

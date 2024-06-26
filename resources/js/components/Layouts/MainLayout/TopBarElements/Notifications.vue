@@ -32,15 +32,21 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import NotificationTile from './NotificationTile.vue'
 import { useRouter } from 'vue-router';
-import { notifications } from './demoNotifications';
+// import { notifications } from './demoNotifications';
+import { useUserStore } from '../../../../stores/user';
 
 
 const props = defineProps({backgroundStatus:Boolean})
 const emit = defineEmits(['setBackground'])
 const router = useRouter()
+const user = useUserStore()
+
+const notifications = computed(() =>{
+    return user.notifications.active.filter(n => n.seenStatus == false)
+})
 
 const iconHover = ref(false)
 const showDropDown = ref(false)
@@ -141,24 +147,26 @@ watch(() => props.backgroundStatus, () => {
             }
           }
           .notification-body {
-            padding: 0 20px;
-                overflow: hidden;
-                overflow-y: auto;
-                max-height: calc(80vh - 157px);
-                -ms-overflow-style: none;  /* IE and Edge */
-                scrollbar-track-color: transparent;  /* Firefox */
-                &::-webkit-scrollbar-track {
-                    display: none; /* Chrome, Safari and Opera */
-                }
-    
-                .no-notifications {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 10px;
-                    height: 67px;
-                    font-size: 1.25rem;
-                }
+            .ah-link {
+                padding: 0px 20px;
+            }
+            overflow: hidden;
+            overflow-y: auto;
+            max-height: calc(80vh - 157px);
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-track-color: transparent;  /* Firefox */
+            &::-webkit-scrollbar-track {
+                display: none; /* Chrome, Safari and Opera */
+            }
+
+            .no-notifications {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 10px;
+                height: 67px;
+                font-size: 1.25rem;
+            }
             }
       }
 

@@ -1,9 +1,11 @@
+import moment from "moment";
 import { defineStore } from "pinia";
 
 function getState(){
     return {
       items: [],
-      loading: false
+      loading: false,
+      routeChangeTime: moment().format('YYYY-MM-DD HH:mm:ss')
     }
 }
 

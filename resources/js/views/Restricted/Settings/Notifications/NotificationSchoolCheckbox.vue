@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import CheckBox from '../CheckBox.vue';
+import CheckBox from '../../../../components/Layouts/MainLayout/Elements/CheckBox.vue';
 import { useUserStore } from '../../../../stores/user';
 import { computed } from 'vue';
 import useApi from '../../../../composables/useApi';
@@ -29,7 +29,7 @@ const userNotificationState = computed(() => {
 function setState(value){
     let notificationToggle = user.notifications.preferences.find(n => (n.school_id == props.school.id && n.option_id == props.notification.id))
     if(notificationToggle) {
-        const {data, fetchData} = useApi('notifications/' + notificationToggle.id,{
+        const {data, fetchData} = useApi('notification-preferences/' + notificationToggle.id,{
             app: value
         }, 'PATCH')
         fetchData()
@@ -39,7 +39,7 @@ function setState(value){
     }
     else {
         // API call to create new notification record.
-        const {data, fetchData} = useApi('notifications',{
+        const {data, fetchData} = useApi('notification-preferences',{
             user_id: user.getUser.attributes.id,
             school_id: props.school.id,
             option_id: props.notification.id,

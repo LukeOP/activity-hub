@@ -11,7 +11,7 @@
 
 <script setup>
 import HeaderLine from '../../../components/Layouts/MainLayout/Elements/HeaderLine.vue';
-import NotificationPreferences from '../Profile/Notifications/NotificationPreferences.vue';
+import NotificationPreferences from './Notifications/NotificationPreferences.vue';
 
 
 </script>
